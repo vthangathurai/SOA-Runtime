@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<service-config
+	service-name="{http://www.ebayopensource.org/turmeric/common/v1/services}Test1Service"
+	xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<service-impl-class-name>
+		org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1ServiceImpl
+	</service-impl-class-name>
+	<service-interface-class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service</service-interface-class-name>
+	<current-version>1.0.0</current-version>
+	<service-instance-config>
+		<provider-options>
+			<supported-data-bindings>XML</supported-data-bindings>
+			<supported-data-bindings>NV</supported-data-bindings>
+			<supported-data-bindings>JSON</supported-data-bindings>
+			<supported-data-bindings>
+				FAST_INFOSET
+			</supported-data-bindings>
+			<error-mapping-handler-class-name>
+				org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+			</error-mapping-handler-class-name>
+		<version-check-handler>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.NumericVersionCheckHandler</version-check-handler>
+		<header-mapping-options>
+			<option name="X-TURMERIC-OPERATION-NAME">queryop</option>
+			<option name="X-TURMERIC-SERVICE-VERSION">query[ver]</option>
+			<option name="X-TURMERIC-RESPONSE-DATA-FORMAT">path[2]</option>
+			<option name="X-TURMERIC-REQUEST-DATA-FORMAT">query[reqbind]</option>
+		</header-mapping-options>
+	</provider-options>
+	<pipeline-config>
+		<request-handlers>
+			<handler name="G11N">
+				<class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+			</handler>
+		
+			<handler name="TestRequestObjectNodeAccess">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.RequestObjectNodeAccessHandler</class-name>
+			</handler>
+			<handler name="TestRequestHeaderRead">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+			</handler>
+			<handler name="TestExceptionContinueOnError" continue-on-error="true">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+			</handler>
+			<handler name="TestExceptionStopOnError" continue-on-error="false">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+			</handler>
+		</request-handlers>
+		<response-handlers>
+			<handler name="TestResponseHeaderSet">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+			</handler>
+			<handler name="TestResponseObjectNodeAccess">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ResponseObjectNodeAccessHandler</class-name>
+			</handler>
+		</response-handlers>
+	</pipeline-config>
+</service-instance-config>
+</service-config>

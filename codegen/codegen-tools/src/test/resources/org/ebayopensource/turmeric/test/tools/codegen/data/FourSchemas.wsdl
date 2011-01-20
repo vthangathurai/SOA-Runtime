@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ax27="http://abc.com/sql" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax24="http://abc.com/io" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax21="http://abc.com/awt" xmlns:ns="http://www.ebay.com/marketplace/services" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" targetNamespace="http://www.ebay.com/marketplace/services">
+    <wsdl:types>
+        <xs:schema xmlns:ax29="http://abc.com/sql" xmlns:ax26="http://abc.com/io" xmlns:ax23="http://abc.com/awt" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services">
+            <xs:import namespace="http://abc.com/awt"/>
+            <xs:import namespace="http://abc.com/io"/>
+            <xs:import namespace="http://abc.com/sql"/>
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="AWTException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="AWTException" nillable="true" type="ax21:AWTException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="IOException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="IOException" nillable="true" type="ax24:IOException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="SQLException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="SQLException" nillable="true" type="ax27:SQLException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="calculateInterest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="param0" nillable="true" type="ns:CalculateInterestRequestType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="CalculateInterestRequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="param0" type="xs:int"/>
+                    <xs:element minOccurs="0" name="param1" type="xs:float"/>
+                    <xs:element minOccurs="0" name="param2" type="xs:float"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="calculateInterestResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:float"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax22="http://www.ebay.com/marketplace/services" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://abc.com/awt">
+            <xs:import namespace="http://www.ebay.com/marketplace/services"/>
+            <xs:complexType name="AWTException">
+                <xs:complexContent>
+                    <xs:extension base="ns:Exception">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax28="http://www.ebay.com/marketplace/services" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://abc.com/sql">
+            <xs:import namespace="http://www.ebay.com/marketplace/services"/>
+            <xs:complexType name="SQLException">
+                <xs:complexContent>
+                    <xs:extension base="ns:Exception">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="errorCode" type="xs:int"/>
+                            <xs:element minOccurs="0" name="nextException" nillable="true" type="ax27:SQLException"/>
+                            <xs:element minOccurs="0" name="sQLState" nillable="true" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax25="http://www.ebay.com/marketplace/services" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://abc.com/io">
+            <xs:import namespace="http://www.ebay.com/marketplace/services"/>
+            <xs:complexType name="IOException">
+                <xs:complexContent>
+                    <xs:extension base="ns:Exception">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="calculateInterestRequest">
+        <wsdl:part name="parameters" element="ns:calculateInterest"/>
+    </wsdl:message>
+    <wsdl:message name="calculateInterestResponse">
+        <wsdl:part name="parameters" element="ns:calculateInterestResponse"/>
+    </wsdl:message>
+    <wsdl:message name="AWTException">
+        <wsdl:part name="parameters" element="ns:AWTException"/>
+    </wsdl:message>
+    <wsdl:message name="IOException">
+        <wsdl:part name="parameters" element="ns:IOException"/>
+    </wsdl:message>
+    <wsdl:message name="SQLException">
+        <wsdl:part name="parameters" element="ns:SQLException"/>
+    </wsdl:message>
+    <wsdl:portType name="FourSchemasPortType">
+        <wsdl:operation name="calculateInterest">
+            <wsdl:input message="ns:calculateInterestRequest" wsaw:Action="urn:calculateInterest"/>
+            <wsdl:output message="ns:calculateInterestResponse" wsaw:Action="urn:calculateInterestResponse"/>
+            <wsdl:fault message="ns:AWTException" name="AWTException" wsaw:Action="urn:calculateInterestAWTException"/>
+            <wsdl:fault message="ns:IOException" name="IOException" wsaw:Action="urn:calculateInterestIOException"/>
+            <wsdl:fault message="ns:SQLException" name="SQLException" wsaw:Action="urn:calculateInterestSQLException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="FourSchemasHttpSoap11Binding" type="ns:FourSchemasPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="calculateInterest">
+            <soap:operation soapAction="urn:calculateInterest" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="SQLException">
+                <soap:fault use="literal" name="SQLException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="FourSchemasHttpSoap12Binding" type="ns:FourSchemasPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="calculateInterest">
+            <soap12:operation soapAction="urn:calculateInterest" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="SQLException">
+                <soap12:fault use="literal" name="SQLException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="FourSchemasHttpBinding" type="ns:FourSchemasPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="calculateInterest">
+            <http:operation location="FourSchemas/calculateInterest"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="calculateInterest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="calculateInterest"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="FourSchemas">
+        <wsdl:port name="FourSchemasHttpSoap11Endpoint" binding="ns:FourSchemasHttpSoap11Binding">
+            <soap:address location="http://localhost:8080/FourSchemas"/>
+        </wsdl:port>
+        <wsdl:port name="FourSchemasHttpSoap12Endpoint" binding="ns:FourSchemasHttpSoap12Binding">
+            <soap12:address location="http://localhost:8080/FourSchemas"/>
+        </wsdl:port>
+        <wsdl:port name="FourSchemasHttpEndpoint" binding="ns:FourSchemasHttpBinding">
+            <http:address location="http://localhost:8080/FourSchemas"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

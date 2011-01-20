@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions targetNamespace="http://www.virtuoz.fr/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s1="http://www.virtuoz.com" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.virtuoz.fr/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.virtuoz.fr/">
+      <s:import namespace="http://www.virtuoz.com"/>
+      <s:element name="TalkXml">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" ref="s1:Input"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TalkXmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" ref="s1:TalkXmlResult"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.virtuoz.com">
+      <s:element name="Input">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="unbounded" minOccurs="0" name="InputElement" type="s1:InputFields"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="InputFields">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="Name" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Value" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TalkXmlResult">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="UserInteractiveResponse" type="s1:ArrayOfTalkXmlResponseField"/>
+            <s:element maxOccurs="1" minOccurs="0" name="ConversationData">
+              <s:complexType>
+                <s:sequence>
+                  <s:element maxOccurs="1" minOccurs="1" name="InteractionCount" type="s:int"/>
+                  <s:element maxOccurs="1" minOccurs="1" name="TotalInteractionCount" type="s:int"/>
+                  <s:element maxOccurs="1" minOccurs="0" name="TopicId" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="0" name="Keywords" type="s1:ArrayOfString"/>
+                  <s:element maxOccurs="1" minOccurs="0" name="IsNewKeywordIdentified" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="0" name="IsIssueFullyIdentified" type="s:string"/>
+                  <s:element maxOccurs="unbounded" minOccurs="0" name="ContentNodeId" type="s:long"/>
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element maxOccurs="unbounded" minOccurs="0" name="UserInputFields">
+              <s:complexType>
+                <s:sequence>
+                  <s:element maxOccurs="1" minOccurs="0" name="Name" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="0" name="Value" type="s:string"/>
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element maxOccurs="1" minOccurs="0" name="ErrorCode" type="s:string"/>
+          </s:sequence>
+          <s:attribute name="InterlocutorId" type="s:string"/>
+          <s:attribute name="ContextId" type="s:string"/>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTalkXmlResponseField">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="Field">
+            <s:complexType>
+              <s:sequence>
+                <s:element maxOccurs="1" minOccurs="0" name="Name" type="s:string"/>
+                <s:element maxOccurs="unbounded" minOccurs="0" name="Value">
+                  <s:complexType>
+                    <s:sequence>
+                      <s:element maxOccurs="1" minOccurs="0" name="Label" type="s:string"/>
+                      <s:element maxOccurs="1" minOccurs="0" name="ValueCode" type="s:string"/>
+                    </s:sequence>
+                  </s:complexType>
+                </s:element>
+                <s:element maxOccurs="1" minOccurs="0" name="InputType" type="s:string"/>
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="Keyword" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TalkXmlSoapOut">
+    <wsdl:part name="parameters" element="tns:TalkXmlResponse"/>
+  </wsdl:message>
+  <wsdl:message name="TalkXmlSoapIn">
+    <wsdl:part name="parameters" element="tns:TalkXml"/>
+  </wsdl:message>
+  <wsdl:portType name="BotServiceSoap">
+    <wsdl:operation name="TalkXml">
+      <wsdl:input message="tns:TalkXmlSoapIn"/>
+      <wsdl:output message="tns:TalkXmlSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="BotServiceHttpGet">
+  </wsdl:portType>
+  <wsdl:portType name="BotServiceHttpPost">
+  </wsdl:portType>
+  <wsdl:binding name="BotServiceSoap" type="tns:BotServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TalkXml">
+      <soap:operation soapAction="http://www.virtuoz.fr/TalkXml" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BotServiceSoap12" type="tns:BotServiceSoap">
+    <soap12:binding xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TalkXml">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://www.virtuoz.fr/TalkXml" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BotServiceHttpGet" type="tns:BotServiceHttpGet">
+    <http:binding verb="GET"/>
+  </wsdl:binding>
+  <wsdl:binding name="BotServiceHttpPost" type="tns:BotServiceHttpPost">
+    <http:binding verb="POST"/>
+  </wsdl:binding>
+  <wsdl:service name="BotService">
+    <wsdl:port name="BotServiceSoap12" binding="tns:BotServiceSoap12">
+    <soap12:address xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" location="http://vtz10.virtuoz.com/ebay_wa_us/WBH-cu/botservice.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="BotServiceSoap" binding="tns:BotServiceSoap">
+      <soap:address location="http://vtz10.virtuoz.com/ebay_wa_us/WBH-cu/botservice.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="BotServiceHttpPost" binding="tns:BotServiceHttpPost">
+      <http:address location="http://vtz10.virtuoz.com/ebay_wa_us/WBH-cu/botservice.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="BotServiceHttpGet" binding="tns:BotServiceHttpGet">
+      <http:address location="http://vtz10.virtuoz.com/ebay_wa_us/WBH-cu/botservice.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

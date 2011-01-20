@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-service-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<monitor-config>
+		<storage-provider name="myprovider1">
+			<class-name>com.ebay.blah.blah</class-name>
+				<storage-options>
+					<option name="name1">value1</option>
+					<option name="name2">value2</option>
+				</storage-options>
+		</storage-provider>
+		<snapshot-interval>60</snapshot-interval>
+	</monitor-config>
+<service-config-groups>
+	<service-group name="SOAWebService">
+         <service-config>
+		<provider-options>
+			<supported-data-bindings>SOAP</supported-data-bindings>
+			<supported-data-bindings>XML</supported-data-bindings>
+			<supported-data-bindings>REST</supported-data-bindings>
+			<monitoring-level>Fine</monitoring-level>
+			<default-request-data-binding>NV</default-request-data-binding>
+		</provider-options>
+		<G11N-options>
+			<supported-global-id>2</supported-global-id>
+			<supported-global-id>3</supported-global-id>
+			<default-encoding>UTF-8</default-encoding>
+		</G11N-options>
+		<pipeline-config>
+			<request-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</request-pipeline>
+			<response-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</response-pipeline>
+			<request-dispatcher>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.ReqDispImpl
+				</class-name>
+			</request-dispatcher>
+			<response-dispatcher>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.RespDispImpl
+				</class-name>
+			</response-dispatcher>
+			<request-handlers>
+				<handler name="Authentication" presence="Mandatory">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+					<options>
+						<option name="myoption1">myvalue1</option>
+						<option name="myoption2">myvalue2</option>
+					</options>
+				</handler>
+				<handler name="RateLimiter" presence="Mandatory">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+					<options>
+						<option name="myoption3">myvalue3</option>
+					</options>
+				</handler>
+				<handler name="Logging" presence="Replaceable">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+				</handler>
+				<chain name="AppSpecific1" presence="Replaceable"/>
+				<handler name="SOAMetrics" presence="Replaceable">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+				</handler>
+				<chain name="AppSpecific2" presence="Replaceable"/>
+			</request-handlers>
+			<logging-handler>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.LoggingHandlerImpl
+				</class-name>
+				<options>
+					<option name="name1">value1</option>
+					<option name="name2">value2</option>
+				</options>
+			</logging-handler>
+			<logging-handler>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.LoggingHandlerImpl2
+				</class-name>
+			</logging-handler>
+		</pipeline-config>
+		<protocol-processor name="SOAP" version="1.1">
+			<indicator>
+				<transport-header name="X-TURMERIC-API-PROTOCOL">soap1.1</transport-header>
+			</indicator>
+			<class-name>
+				com.ebay.kernel.soap.blah.blah
+			</class-name>
+		</protocol-processor>
+		<transport name="HTTP_1_1">
+			<class-name>com.ebay.my.transport.http_1_1</class-name>
+		</transport>
+		<transport name="HTTP_1_0">
+			<class-name>com.ebay.my.transport.http_1_0</class-name>
+		</transport>
+		<data-binding-config>
+			<data-binding name="XML">
+				<mime-type>text/xml</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+				</deserializer-factory-class-name>
+				<options>
+					<option name="seropt1">servalue1</option>
+					<option name="seropt2">servalue2</option>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+			<data-binding name="NV">
+				<mime-type>text/plain</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.NVSerializerImpl
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.NVDeserializerImpl
+				</deserializer-factory-class-name>
+				<options>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+		</data-binding-config>
+	</service-config>
+   </service-group>
+</service-config-groups>
+</global-service-config>

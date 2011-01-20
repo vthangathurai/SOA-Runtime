@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<client-config-list xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<client-config
+			service-name="test1"
+			group="SOAWebServiceClient-transportHeaders"
+			xmlns="http://www.ebayopensource.org/turmeric/common/config">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="LOCAL">
+					<override-options>
+						<num-connect-retries>3</num-connect-retries>
+					</override-options>
+					<override-header-options>
+                    <option name="X-TURMERIC-ESB-Routing-Profile-Name">ESB&amp;Preferred&gt;Config_Profile</option>
+                    <option name="X-TURMERIC-Routing-Profile-Name">SOA&amp;Preferred&gt;Config_Profile</option>
+					</override-header-options>
+				</preferred-transport>
+			</invocation-options>
+			<pipeline-config>
+              <request-handlers>
+                <handler name="ClientHandler">
+                  <class-name>org.ebayopensource.turmeric.runtime.tests.common.sif.header.TransportHeadersRequestHandler</class-name>
+                  <options>
+                    <option name="testValueSOA">SOA&amp;Preferred&gt;Config_Profile</option>
+                    <option name="testValueESB">ESB&amp;Preferred&gt;Config_Profile</option>
+                  </options>
+                </handler>
+              </request-handlers>
+            </pipeline-config>
+			<transport name="LOCAL">
+				<class-name>
+					org.ebayopensource.turmeric.runtime.spf.impl.transport.local.LocalTransport
+				</class-name>
+				<default-options>
+					<socket-connect-timeout-msec>2000</socket-connect-timeout-msec>
+					<socket-read-timeout-msec>7000</socket-read-timeout-msec>
+					<num-connect-retries>1</num-connect-retries>
+				</default-options>
+				<header-options>
+                    <option name="X-TURMERIC-ESB-Routing-Profile-Name">ESB&amp;Client&gt;Config_Profile</option>
+                    <option name="X-TURMERIC-Routing-Profile-Name">SOA&amp;Client&gt;Config_Profile</option>
+				</header-options>
+			</transport>
+		</client-instance-config>
+	</client-config>
+</client-config-list>

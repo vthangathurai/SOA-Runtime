@@ -1,0 +1,1470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions name="SOAAsyncService"
+	targetNamespace="http://www.ebay.com/marketplace/services"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.ebay.com/marketplace/services"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/services"
+			xmlns:tns="http://www.ebay.com/marketplace/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+			<!-- 
+				<xs:import namespace="http://www.ebay.com/soa/test/user"></xs:import>
+				<xs:import
+				namespace="http://www.ebay.com/soa/test/payment">
+				</xs:import>
+			-->
+			<xs:element name="downloadFileResponse"
+				type="tns:DownloadFileResponse" />
+			<xs:element name="uploadFile" type="tns:UploadFileRequest" />
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errors" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								If true, errors occurred when the
+								request was processed and there is error
+								or warning information to process in the
+								response. Information for an individual
+								error and warning is returned in
+								errorMessage.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string"
+						minOccurs="0">
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime"
+						minOccurs="0">
+					</xs:element>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning
+						occured as part of service call. Any run time
+						error will not be reported here, but will be
+						reported aspart of soap fault.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:CommonErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CommonErrorData">
+				<xs:annotation></xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:ErrorData">
+						<xs:sequence>
+							<xs:element name="errorName"
+								type="xs:string">
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="1"
+								name="cause" type="xs:string">
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="1"
+								name="resolution" type="xs:string">
+							</xs:element>
+							<xs:element name="organization"
+								type="xs:string">
+							</xs:element>
+							<xs:any minOccurs="0" maxOccurs="unbounded"
+								processContents="lax">
+							</xs:any>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CustomErrorData">
+				<xs:annotation></xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:CommonErrorData">
+						<xs:sequence>
+							<xs:element name="customErrorName"
+								type="xs:string">
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="1"
+								name="customErrorResolution" type="xs:string">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the
+								particular error condition that
+								occurred. Your application can use error
+								codes as identifiers in your customized
+								error-handling algorithms.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain upon which the error
+								occurred. &lt;dl&gt; &lt;lh&gt;Domains
+								include:&lt;/lh&gt; &lt;dt&gt;
+								Marketplace &lt;/dt&gt; &lt;dd&gt; A
+								business or validation error occurred
+								for the Merchandising Service.
+								&lt;/dd&gt; &lt;dt&gt; SOA &lt;/dt&gt;
+								&lt;dd&gt; An exception occurred in the
+								Service Oriented Architecture (SOA)
+								framework. &lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error caused the
+								request to fail (Error) or not
+								(Warning). &lt;br&gt;&lt;br&gt; If the
+								request fails and the source of the
+								problem is within the application (such
+								as a missing required element), please
+								change the application before you retry
+								the request. If the problem is due to
+								end-user input data, please alert the
+								end-user to the problem and provide the
+								means for them to correct the data. Once
+								the problem in the application or data
+								is resolved, you can attempt to re- send
+								the request to eBay.
+								&lt;br&gt;&lt;br&gt; If the source of
+								the problem is on eBay's side, you can
+								retry the request as-is a reasonable
+								number of times (eBay recommends twice).
+								If the error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+								&lt;br&gt;&lt;br&gt; When a warning
+								occurs, the error is returned in
+								addition to the business data. In this
+								case, you do not need to retry the
+								request (as the original request was
+								successful). However, depending on the
+								cause or nature of the warning, you
+								might need to contact either the end
+								user or eBay to effect a long term
+								solution to the problem to prevent it
+								from reoccurring in the future.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors:
+								request errors, application errors, and
+								system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition
+								that resulted in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain upon which the
+								error occurred. &lt;dl&gt;
+								&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+								&lt;dt&gt; Merchandising &lt;/dt&gt;
+								&lt;dd&gt; The error is specific to the
+								Merchandising service. &lt;/dd&gt;
+								&lt;dt&gt; MarketplaceCommon &lt;/dt&gt;
+								&lt;dd&gt; The error is common to all
+								Marketplace services. &lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception
+								associated with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Some warning and error messages return
+								one or more variables that contain
+								contextual information about the error.
+								This is often the field or value that
+								triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The name of the parameter in the
+									list of parameter types returned
+									within the error type.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls />
+										<Returned>
+											Conditionally
+										</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user. For
+								example, eBay may have changed a value
+								the user sent in. In this case, eBay
+								returns a normal, successful response
+								and also returns the warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of error: request
+						errors, application errors, and system errors.
+						Request and application errors are caused
+						primarily by invalid data passed in the request.
+						System errors are caused primarily by
+						application failures and cannot be corrected by
+						changing request values.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on
+								the eBay system side, such as a database
+								or server down. An application can retry
+								the request as-is a reasonable number of
+								times (eBay recommends twice). If the
+								error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as missing or invalid
+								fields. The problem must be corrected
+								before the request can be made again. If
+								the problem is due to something in the
+								application (such as a missing required
+								field), the application must be changed.
+								Once the problem in the application or
+								data is resolved, resend the corrected
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as invalid or missing
+								data. The problem must be corrected
+								before the request can be made again. If
+								the problem is a result of end-user
+								data, the application must alert the
+								end-user to the problem and provide the
+								means for the end-user to correct the
+								data. Once the problem in the data is
+								resolved, resend the request to eBay
+								with the corrected data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+
+			<xs:element name="ItemNotFoundException">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:ErrorMessage">
+							<xs:sequence></xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:complexType name="MyTestErrorMessage">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="ErrorCode"
+						type="xs:int" />
+					<xs:element minOccurs="0" name="ErrorId"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="ErrorDescription"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="InvalidItemName">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="Exception"
+							type="tns:MyTestErrorMessage" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="findItemPrice">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="itemName" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="findItemPriceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="itemPrice" type="xs:float" />
+						<xs:element name="version" type="xs:string"
+							minOccurs="0">
+						</xs:element>
+						<xs:element name="timestamp" type="xs:dateTime"
+							minOccurs="0">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateItemPrice">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="itemName" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="updateItemPriceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="updatePriceStatus"
+							type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getVersion">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getVersionResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="Inparams">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="value1" type="xs:int"></xs:element>
+						<xs:element name="value2" type="xs:int"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Response">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return" type="xs:int"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getSOAPFaultResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getSOAPFaultNoActorResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="downloadFile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="DownloadFileResponse">
+				<xs:sequence>
+					<xs:element name="fileAttachment"
+						type="tns:FileAttachment" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UploadFileRequest">
+				<xs:sequence>
+					<xs:element name="fileAttachment"
+						type="tns:FileAttachment" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="uploadFileResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="FileAttachment">
+				<xs:annotation>
+					<xs:documentation>
+						The name of the attached file.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="Size"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The size of the attached file.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="Data"
+						type="xs:base64Binary"
+						xmime:expectedContentTypes="application/any">
+						<xs:annotation>
+							<xs:documentation>
+								The data in the attached file.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="fileName" type="xs:string"></xs:element>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="GetAccountDetailsRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="accountId"
+							type="xs:string" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="fieldsToReturn" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="GetAccountDetailsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="primaryStreetAddresses" type="tns:PrimaryStreetAddress" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="anotherStreetAddresses" type="tns:AnotherStreetAddress" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:complexType name="PrimaryStreetAddress">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="type" type="tns:addressType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AnotherStreetAddress">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="type" type="tns:addressType" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="addressType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="HOME" />
+					<xs:enumeration value="GIFT" />
+					<xs:enumeration value="THIRD_PARTY" />
+					<xs:enumeration value="SMI_OWNER" />
+					<xs:enumeration value="SMI_SUPPLIER" />
+					<xs:enumeration value="SMI_PREV_BUSINESS" />
+					<xs:enumeration value="SMI_ADDITIONAL_BUSINESS" />
+					<xs:enumeration value="WAX" />
+					<xs:enumeration value="WAX_GIFT" />
+					<xs:enumeration value="THIRD_PARTY_NO_ADDRESSEE" />
+					<xs:enumeration value="VERISIGN_BILLING" />
+					<xs:enumeration value="BILLING" />
+				</xs:restriction>
+			</xs:simpleType>
+
+
+			<xs:element name="getItemPriceRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="itemNum" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getItemPriceResponse">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseServiceResponse">
+							<xs:sequence>
+								<xs:element name="itemPrice"
+									type="xs:string">
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="checkItemAvailabilityRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="itemNum" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="checkItemAvailabilityResponse">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseServiceResponse">
+							<xs:sequence>
+								<xs:element name="availableCount"
+									type="xs:int">
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="updateDateRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="newDate" type="xs:dateTime"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="updateDateResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="updatedDate"
+							type="xs:dateTime">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="UserDetailsRequestType">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<source typeLibrary="SOATestUserTypeLibrary"
+							namespace="http://www.ebay.com/soa/test/user" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="UserInfo" type="tns:UserInfoType">
+					</xs:element>
+					<xs:any minOccurs="0" maxOccurs="unbounded"
+						processContents="lax">
+					</xs:any>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UserDetailsResponseType">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<source typeLibrary="SOATestUserTypeLibrary"
+							namespace="http://www.ebay.com/soa/test/user" />
+						<source typeLibrary="SOATestPaymentTypeLibrary"
+							namespace="http://www.ebay.com/soa/test/payment" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="PaymentInfo" type="tns:PaymentInfoType">
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="UserInfo" type="tns:UserInfoType">
+					</xs:element>
+					<xs:any minOccurs="0" maxOccurs="unbounded"
+						processContents="lax">
+					</xs:any>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getUserDetails">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in"
+							type="tns:UserDetailsRequestType">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserDetailsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out"
+							type="tns:UserDetailsResponseType">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		<xs:complexType name="UserInfoType">
+			<xs:annotation>
+				<xs:documentation></xs:documentation>
+				<xs:appinfo>
+					<source typeLibrary="SOATestUserTypeLibrary"
+						namespace="http://www.ebay.com/soa/test/user" />
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" name="UserName"	type="xs:string">
+				</xs:element>
+				<xs:element minOccurs="0" maxOccurs="unbounded" name="RegInfo" type="tns:RegistrationInfoType">
+				</xs:element>
+				<xs:element minOccurs="0" maxOccurs="unbounded" name="Country" type="xs:string">
+				</xs:element>
+				<xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax">
+				</xs:any>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="RegistrationInfoType">
+			<xs:annotation>
+				<xs:documentation></xs:documentation>
+				<xs:appinfo>
+					<source typeLibrary="SOATestUserTypeLibrary"
+						namespace="http://www.ebay.com/soa/test/user" />
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" name="Feedback"
+					type="xs:float">
+				</xs:element>
+				<xs:element minOccurs="1" maxOccurs="1" name="Site"
+					nillable="true" type="xs:int">
+				</xs:element>
+				<xs:element minOccurs="0" maxOccurs="1" name="Email"
+					type="xs:string">
+				</xs:element>
+				<xs:element minOccurs="1" maxOccurs="1" name="UserID"
+					type="xs:string">
+				</xs:element>
+				<xs:any minOccurs="0" maxOccurs="unbounded"
+					processContents="lax">
+				</xs:any>
+			</xs:sequence>
+			<xs:attribute use="optional" name="SellerType"
+				type="xs:string">
+			</xs:attribute>
+		</xs:complexType>
+		<xs:complexType name="PaymentInfoType">
+			<xs:annotation>
+				<xs:documentation></xs:documentation>
+				<xs:appinfo>
+					<source typeLibrary="SOATestPaymentTypeLibrary"
+						namespace="http://www.ebay.com/soa/test/payment" />
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="1" name="userName"
+					type="xs:string">
+				</xs:element>
+				<xs:element minOccurs="0" maxOccurs="unbounded"
+					name="payType" type="tns:PaymentType">
+				</xs:element>
+				<xs:any minOccurs="0" maxOccurs="unbounded"
+					processContents="lax">
+				</xs:any>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="PaymentType">
+			<xs:annotation>
+				<xs:documentation></xs:documentation>
+				<xs:appinfo>
+					<source typeLibrary="SOATestPaymentTypeLibrary"
+						namespace="http://www.ebay.com/soa/test/payment" />
+
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="PaymentMethod"
+						type="xs:string">
+
+					</xs:attribute>
+					<xs:attribute name="PaymentType" type="xs:string">
+					</xs:attribute>
+					<xs:attribute name="Balance" type="xs:float">
+
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="ItemNotFoundException">
+		<wsdl:part name="parameters"
+			element="tns:ItemNotFoundException" />
+	</wsdl:message>
+
+	<wsdl:message name="InvalidItemName">
+		<wsdl:part name="parameters" element="tns:InvalidItemName" />
+	</wsdl:message>
+
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="parameters" element="tns:getVersion">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findItemPriceResponse">
+		<wsdl:part name="parameters"
+			element="tns:findItemPriceResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateItemPriceResponse">
+		<wsdl:part name="parameters"
+			element="tns:updateItemPriceResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateItemPriceRequest">
+		<wsdl:part name="parameters" element="tns:updateItemPrice">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findItemPriceRequest">
+		<wsdl:part name="parameters" element="tns:findItemPrice">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="parameters" element="tns:getVersionResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="Inparams">
+		<wsdl:part name="Inparams" element="tns:Inparams"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="Response">
+		<wsdl:part name="Response" element="tns:Response"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getSOAPFaultResponse">
+		<wsdl:part name="parameters"
+			element="tns:getSOAPFaultResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getSOAPFaultNoActorResponse">
+		<wsdl:part name="parameters"
+			element="tns:getSOAPFaultNoActorResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="downloadFileRequest">
+		<wsdl:part name="parameters" element="tns:downloadFile"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="downloadFileResponse">
+		<wsdl:part name="parameters"
+			element="tns:downloadFileResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="uploadFileRequest">
+		<wsdl:part name="parameters" element="tns:uploadFile"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="uploadFileResponse">
+		<wsdl:part name="parameters" element="tns:uploadFileResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetAccountDetailsRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetAccountDetailsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetAccountDetailsResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetAccountDetailsResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getItemPriceRequest">
+		<wsdl:part name="parameters"
+			element="tns:getItemPriceRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getItemPriceResponse">
+		<wsdl:part name="parameters"
+			element="tns:getItemPriceResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkItemAvailabilityRequest">
+		<wsdl:part name="parameters"
+			element="tns:checkItemAvailabilityRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="checkItemAvailabilityResponse">
+		<wsdl:part name="parameters"
+			element="tns:checkItemAvailabilityResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateDateRequest">
+		<wsdl:part name="parameters" element="tns:updateDateRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateDateResponse">
+		<wsdl:part name="parameters" element="tns:updateDateResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserDetailsRequest">
+		<wsdl:part name="parameters" element="tns:getUserDetails"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserDetailsResponse">
+		<wsdl:part name="parameters"
+			element="tns:getUserDetailsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="SimpleAsyncServiceInterface">
+		<wsdl:operation name="findItemPrice">
+			<wsdl:input message="tns:findItemPriceRequest"></wsdl:input>
+			<wsdl:output message="tns:findItemPriceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateItemPrice">
+			<wsdl:input message="tns:updateItemPriceRequest">
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:output message="tns:getVersionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="add">
+			<wsdl:input message="tns:Inparams"></wsdl:input>
+			<wsdl:output message="tns:Response"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSOAPFault">
+
+			<wsdl:output message="tns:getSOAPFaultResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSOAPFaultNoActor">
+
+			<wsdl:output message="tns:getSOAPFaultNoActorResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="downloadFile">
+			<wsdl:input message="tns:downloadFileRequest"></wsdl:input>
+			<wsdl:output message="tns:downloadFileResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="uploadFile">
+			<wsdl:input message="tns:uploadFileRequest"></wsdl:input>
+			<wsdl:output message="tns:uploadFileResponse"></wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="testSOAPFault">
+			<wsdl:input message="tns:findItemPriceRequest"></wsdl:input>
+			<wsdl:output message="tns:findItemPriceResponse"></wsdl:output>
+			<wsdl:fault message="tns:ItemNotFoundException"
+				name="Exception" />
+		</wsdl:operation>
+
+		<wsdl:operation name="testCustomErrorMsgInSOAPFault">
+			<wsdl:input message="tns:findItemPriceRequest"></wsdl:input>
+			<wsdl:output message="tns:findItemPriceResponse"></wsdl:output>
+			<wsdl:fault message="tns:InvalidItemName"
+				name="CustomMessageException" />
+		</wsdl:operation>
+
+		<wsdl:operation name="testCommonCustomSOAPFault">
+			<wsdl:input message="tns:findItemPriceRequest"></wsdl:input>
+			<wsdl:output message="tns:findItemPriceResponse"></wsdl:output>
+			<wsdl:fault message="tns:ItemNotFoundException"
+				name="Exception" />
+		</wsdl:operation>
+
+
+		<wsdl:operation name="GetAccountDetails">
+			<wsdl:input message="tns:GetAccountDetailsRequest"></wsdl:input>
+			<wsdl:output message="tns:GetAccountDetailsResponse"></wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getItemPrice">
+			<wsdl:input message="tns:getItemPriceRequest"></wsdl:input>
+			<wsdl:output message="tns:getItemPriceResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkItemAvailability">
+			<wsdl:input message="tns:checkItemAvailabilityRequest"></wsdl:input>
+			<wsdl:output message="tns:checkItemAvailabilityResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDate">
+			<wsdl:input message="tns:updateDateRequest"></wsdl:input>
+			<wsdl:output message="tns:updateDateResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserDetails">
+			<wsdl:input message="tns:getUserDetailsRequest"></wsdl:input>
+			<wsdl:output message="tns:getUserDetailsResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="SOAAsyncServiceSOAPBinding"
+		type="tns:SimpleAsyncServiceInterface">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="testSOAPFault">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/testSOAPFault" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="Exception">
+				<soap:fault use="literal" name="Exception" />
+			</wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="testCustomErrorMsgInSOAPFault">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/testCustomErrorMsgInSOAPFault" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="CustomMessageException">
+				<soap:fault use="literal" name="CustomMessageException" />
+			</wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="testCommonCustomSOAPFault">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/testCommonCustomSOAPFault" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="Exception">
+				<soap:fault use="literal" name="Exception" />
+			</wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="findItemPrice">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/findItemPrice" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateItemPrice">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/updateItemPrice" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getVersion" />
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="add">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/add" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSOAPFault">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getSOAPFault" />
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSOAPFaultNoActor">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getSOAPFaultNoActor" />
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="downloadFile">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/downloadFile" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="uploadFile">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/uploadFile" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccountDetails">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/GetAccountDetails" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getItemPrice">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getItemPrice" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="checkItemAvailability">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/checkItemAvailability" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDate">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/updateDate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserDetails">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getUserDetails" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="SOAAsyncServiceHTTPBinding"
+		type="tns:SimpleAsyncServiceInterface">
+		<http:binding verb="GET" />
+
+		<wsdl:operation name="findItemPrice">
+			<http:operation location="/findItemPrice" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="findItemPrice" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateItemPrice">
+			<http:operation location="/updateItemPrice" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+		</wsdl:operation>
+
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:output>
+				<mime:content part="getVersion" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="add">
+			<http:operation location="/add" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="add" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getSOAPFault">
+			<http:operation location="/getSOAPFault" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getSOAPFault" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getSOAPFaultNoActor">
+			<http:operation location="/getSOAPFaultNoActor" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getSOAPFaultNoActor"
+					type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="downloadFile">
+			<http:operation location="/downloadFile" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="downloadFile" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="uploadFile">
+			<http:operation location="/uploadFile" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="uploadFile" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccountDetails">
+
+			<http:operation location="/GetAccountDetails" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="GetAccountDetails" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="testSOAPFault">
+			<http:operation location="/testSOAPFault" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="testSOAPFault" type="text/xml" />
+			</wsdl:output>
+			<wsdl:fault name="Exception"></wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="testCustomErrorMsgInSOAPFault">
+			<http:operation location="/testCustomErrorMsgInSOAPFault" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="testCustomErrorMsgInSOAPFault"
+					type="text/xml" />
+			</wsdl:output>
+			<wsdl:fault name="CustomMessageException"></wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="testCommonCustomSOAPFault">
+			<http:operation location="/testCommonCustomSOAPFault" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="testCommonCustomSOAPFault"
+					type="text/xml" />
+			</wsdl:output>
+			<wsdl:fault name="Exception"></wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="getItemPrice">
+			<http:operation location="/getItemPrice" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getItemPrice" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="checkItemAvailability">
+			<http:operation location="/checkItemAvailability" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="checkItemAvailability"
+					type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateDate">
+			<http:operation location="/updateDate" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="updateDateRequest" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserDetails">
+			<http:operation location="/getUserDetails" />
+			<wsdl:input>
+				<http:urlEncoded />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="SOATestNSFoldingService">
+		<wsdl:port name="SOAAsyncServiceHTTP"
+			binding="tns:SOAAsyncServiceHTTPBinding">
+			<http:address
+				location="http://svcs.ebay.com/SOAAsyncService" />
+		</wsdl:port>
+		<wsdl:port name="SOAAsyncServiceSOAP"
+			binding="tns:SOAAsyncServiceSOAPBinding">
+			<soap12:address
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				location="http://svcs.ebay.com/SOAAsyncService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

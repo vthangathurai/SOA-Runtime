@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ebay.soa.typelib</groupId>
+  <artifactId>sampleTypeLibrary</artifactId>
+  <version>1.0.0</version>
+  <name>sampleTypeLibrary</name>
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.runtime</groupId>
+      <artifactId>soa-client</artifactId>
+      <version>1.0.1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>gen-src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>meta-src</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.ebayopensource.turmeric.maven</groupId>
+        <artifactId>turmeric-maven-plugin</artifactId>
+        <version>1.0.1.0-SNAPSHOT</version>
+   
+        <executions>
+          <execution>
+            <goals>
+              <goal>gen-typelibrary</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <verbose>true</verbose>
+          <legacy>true</legacy>
+           <resourcesOutputDirectory>${project.basedir}/gen-meta-src</resourcesOutputDirectory>
+           <outputDirectory>${project.basedir}/gen-src</outputDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

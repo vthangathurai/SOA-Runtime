@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-client-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+<client-config-groups>
+	<client-group name="SOAWebServiceClient">
+	   <client-config>
+		<invocation-options>
+			<G11N-options>
+				<preferred-encoding>CP-1252</preferred-encoding>
+				<preferred-locale>en-CA</preferred-locale>
+			</G11N-options>
+		</invocation-options>
+		<pipeline-config>
+			<request-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</request-pipeline>
+			<response-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</response-pipeline>
+			<request-handlers>
+				<handler name="Logging" presence="Replaceable">
+				</handler>
+				<chain name="AppSpecific1" presence="Replaceable"/>
+				<!-- handler name="SOAMetrics" presence="Replaceable">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+				</handler-->
+				<chain name="AppSpecific2" presence="Replaceable"/>
+			</request-handlers>
+		</pipeline-config>
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+	   </client-config>
+	</client-group>
+</client-config-groups>
+</global-client-config>

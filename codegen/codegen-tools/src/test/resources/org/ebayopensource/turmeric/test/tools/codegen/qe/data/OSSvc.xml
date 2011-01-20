@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<service-code-gen
+        xmlns="http://www.ebayopensource.org/turmeric/runtime/codegen/common"
+        xmlns:ccfg="http://www.ebayopensource.org/turmeric/common/config"
+        xmlns:cts="http://www.ebayopensource.org/turmeric/common/v1/types"
+        xmlns:scfg="http://www.ebayopensource.org/turmeric/common/config"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ebayopensource.org/turmeric/runtime/codegen/common/ServiceCodeGen.xsd">
+        <service-info>
+               <service-name>OSAPIInterfaceService</service-name>
+               <service-location>https://api.ebayopensource.com/wsapi</service-location>
+               <wsdl-location>https://api.ebayopensource.com/wsapi?wsdl</wsdl-location>
+               <pkg-ns-map-list>
+                       <pkg-ns-map>
+                               <package>org.ebayopensource.apis.eblbasecomponents</package>
+                               <namespace>urn:ebayopensource:apis:eBLBaseComponents</namespace>
+                       </pkg-ns-map>
+    
+               </pkg-ns-map-list>
+        </service-info>
+        <interface-info>
+               <wsdl-def>
+                       <wsdl-file>./Vanilla-Codegen/ServiceInputFiles/OSSvc.wsdl</wsdl-file>
+               </wsdl-def>
+        </interface-info>
+        <config-info>
+               <client-cfg>
+                   <ccfg:client-config service-name="{urn:ebayopensource:apis:eBLBaseComponents}OSAPIInterfaceService">
+                       <ccfg:service-interface-class-name>org.ebayopensource.apis.eblbasecomponents.TradingServiceIf</ccfg:service-interface-class-name>
+                       <ccfg:service-location>https://api.ebayopensource.com/wsapi</ccfg:service-location>
+                       <ccfg:wsdl-location>https://api.ebayopensource.com/wsapi?wsdl</ccfg:wsdl-location>
+                       <ccfg:client-instance-config>
+                           <ccfg:invocation-options>
+                               <ccfg:preferred-transport name="HTTP11">
+                                   <ccfg:override-options>
+                                      <ccfg:other-options>
+                                              <ccfg:option name="USE_HTTPS">TRUE</ccfg:option>
+                                              <ccfg:option name="VERIFY_TRUST_FOR_HTTPS">FALSE</ccfg:option>
+                                      </ccfg:other-options>
+                                   </ccfg:override-options>
+                               </ccfg:preferred-transport>
+                               <ccfg:invocation-use-case>TradingServiceClient</ccfg:invocation-use-case>
+                           </ccfg:invocation-options>
+                       </ccfg:client-instance-config>
+                   </ccfg:client-config>
+               </client-cfg>
+        </config-info>
+        <tool-input-info>
+               <gen-type>Client</gen-type>
+               <dest-location>AntTests/out</dest-location>
+               <bin-location>target/classes</bin-location>
+               <service-curr-version>1.0.0</service-curr-version>
+               <gen-interface-name>TradingServiceIf</gen-interface-name>
+               <gen-interface-pkg-name>org.ebayopensource.apis.eblbasecomponents</gen-interface-pkg-name>
+               <client-name>TradingServiceClient</client-name>
+        </tool-input-info>
+</service-code-gen>
+

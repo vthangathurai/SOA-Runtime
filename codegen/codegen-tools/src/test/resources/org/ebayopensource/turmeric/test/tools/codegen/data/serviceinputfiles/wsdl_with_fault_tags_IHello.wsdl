@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.ebay.com/soaframework/common/types" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns="http://intf.helloworld.qaservices.ebay.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://intf.helloworld.qaservices.ebay.com">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/soaframework/common/types">
+            <xsd:complexType name="ErrorMessage">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:ErrorData">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                        This is documentation for ErrorMessage element present in wsdl:types tags in
+                        generated
+                        CalcService.wsdl file ***
+                    </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ErrorData">
+                <xsd:sequence>
+                    <xsd:element name="error-id" type="long"/>
+                    <xsd:element name="domain" type="string"/>
+                    <xsd:element minOccurs="0" name="sub-domain" type="string"/>
+                    <xsd:element name="severity" type="tns:ErrorSeverity"/>
+                    <xsd:element name="category" type="tns:ErrorCategory"/>
+                    <xsd:element name="message" type="string"/>
+                    <xsd:element minOccurs="0" name="exception-id" type="token"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="parameter" nillable="true" type="tns:ErrorParameter"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ErrorParameter">
+                <xsd:simpleContent>
+                    <xsd:extension base="string">
+                        <xsd:attribute name="name" type="string"/>
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+            <xsd:simpleType name="ErrorSeverity">
+                <xsd:restriction base="string">
+                    <xsd:enumeration value="Error"/>
+                    <xsd:enumeration value="Warning"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="ErrorCategory">
+                <xsd:restriction base="string">
+                    <xsd:enumeration value="System"/>
+                    <xsd:enumeration value="Application"/>
+                    <xsd:enumeration value="Request"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:schema>
+        <xs:schema xmlns:ax21="http://www.ebay.com/soaframework/common/types" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://intf.helloworld.qaservices.ebay.com">
+            <xs:import namespace="http://www.ebay.com/soaframework/common/types"/>
+            <xs:element name="Exception">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="Exception" nillable="true" type="ax21:ErrorMessage"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="helloWorld">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="param0" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="helloWorldResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="helloWorldRequest">
+        <wsdl:part name="parameters" element="ns:helloWorld"/>
+    </wsdl:message>
+    <wsdl:message name="helloWorldResponse">
+        <wsdl:part name="parameters" element="ns:helloWorldResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Exception">
+        <wsdl:part name="parameters" element="ns:Exception"/>
+    </wsdl:message>
+    <wsdl:portType name="IHelloWorldPortType">
+        <wsdl:operation name="helloWorld">
+            <wsdl:input message="ns:helloWorldRequest" wsaw:Action="urn:helloWorld"/>
+            <wsdl:output message="ns:helloWorldResponse" wsaw:Action="urn:helloWorldResponse"/>
+            <wsdl:fault message="ns:Exception" name="Exception" wsaw:Action="urn:helloWorldException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="IHelloWorldHttpSoap11Binding" type="ns:IHelloWorldPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="helloWorld">
+            <soap:operation soapAction="urn:helloWorld" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="IHelloWorldHttpSoap12Binding" type="ns:IHelloWorldPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="helloWorld">
+            <soap12:operation soapAction="urn:helloWorld" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap12:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="IHelloWorldHttpBinding" type="ns:IHelloWorldPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="helloWorld">
+            <http:operation location="IHelloWorld/helloWorld"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="helloWorld"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="helloWorld"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="IHelloWorld123">
+        <wsdl:port name="IHelloWorldHttpSoap11Endpoint" binding="ns:IHelloWorldHttpSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/IHelloWorld"/>
+        </wsdl:port>
+        <wsdl:port name="IHelloWorldHttpSoap12Endpoint" binding="ns:IHelloWorldHttpSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/IHelloWorld"/>
+        </wsdl:port>
+        <wsdl:port name="IHelloWorldHttpEndpoint" binding="ns:IHelloWorldHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/IHelloWorld"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

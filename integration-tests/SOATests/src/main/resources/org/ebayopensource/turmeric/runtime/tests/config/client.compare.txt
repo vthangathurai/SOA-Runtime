@@ -1,0 +1,463 @@
+Test case: configtest1
+***** SERVICE: {http://www.ebayopensource.org/turmeric/common/v1/services}test2
+serviceInterfaceClassName=com.ebay.soa.my.interface
+========== Custom Serializers ==========
+Binding=XML
+	customSer java type=com.ebay.mytypes.FooType
+		ser=com.ebay.soa.blah.serializers.MyFooTypeSerializer
+		ser=com.ebay.soa.blah.deserializers.MyFooTypeDeserializer
+	customSer java type=com.ebay.mytypes.ItemType
+		ser=com.ebay.soa.blah.serializers.MyItemTypeSerializer2
+		ser=com.ebay.soa.blah.deserializers.MyItemTypeDeserializer2
+========== Type converters ==========
+Binding=XML
+	customSer bound type=com.ebay.mytypes.bound1
+		value type=com.ebay.mytypes.value1
+		ype conv=com.ebay.soa.blah.converters.converter1
+		XML type=xml3
+	customSer bound type=com.ebay.mytypes.bound2
+		value type=com.ebay.mytypes.value2
+		ype conv=com.ebay.soa.blah.converters.converter2
+		XML type=xml4
+========== Pipeline ==========
+Request Pipeline Tree:
+	Chain=AppSpecific1
+		{name=AffiliateTracking,class=com.ebay.myhandlers.affiliatetrackinghandler}
+	Chain=AppSpecific2
+		{name=DoSomething1,class=com.ebay.myhandlers.dosomething1handler}
+		{name=DoSomething2,class=com.ebay.myhandlers.dosomething1handler}
+Request Handler List:
+	{name=AffiliateTracking,class=com.ebay.myhandlers.affiliatetrackinghandler}
+	{name=DoSomething1,class=com.ebay.myhandlers.dosomething1handler}
+	{name=DoSomething2,class=com.ebay.myhandlers.dosomething1handler}
+========== Data Bindings ==========
+Data Bindings:
+========== Protocol Processors ==========
+========== Transports ==========
+Transports:
+	name=EXTRA class=com.ebay.my.transport.extra
+		connectTimeout=36000
+		numConnectRetries=1
+		receiveTimeout=50000
+		invocationTimeout=0
+
+	name=HTTP10 class=org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport
+		connectTimeout=36000
+		numConnectRetries=1
+		receiveTimeout=50000
+		invocationTimeout=0
+			key=HTTP_VERSION value=HTTP10
+
+	name=HTTP11 class=org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport
+		connectTimeout=7000
+		numConnectRetries=9
+		receiveTimeout=8000
+		invocationTimeout=0
+			key=HTTP_VERSION value=HTTP11
+			key=name1 value=value1
+			key=name2 value=value2
+
+	name=LOCAL class=org.ebayopensource.turmeric.runtime.spf.impl.transport.local.LocalTransport
+		connectTimeout=36000
+		numConnectRetries=1
+		receiveTimeout=50000
+		invocationTimeout=0
+
+========== Type Mappings ==========
+nsFolding: false
+Operation: Method1
+  Request: java=com.ebay.mypackage.classname1 xml={http://www.ebay.com/my/name/space}xmltypename1 has-attachment
+  Response: java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename2
+  Error: java=com.ebay.mypackage.classname3 xml={http://www.ebay.com/my/name/space}xmltypename3
+  Request headers:
+    element: {http://www.ebay.com/my/name/space2}xmlelementname2, java=com.ebay.mypackage2.classname1 xml={http://www.ebay.com/my/name/space2}xmltypename2
+    element: {http://www.ebay.com/my/name/space3}xmlelementname3, java=com.ebay.mypackage3.classname1 xml={http://www.ebay.com/my/name/space3}xmltypename3
+    element: {http://www.ebay.com/my/name/space4}xmlelementname4, java=com.ebay.mypackage4.classname1 xml={http://www.ebay.com/my/name/space4}xmltypename4
+  Response headers:
+    element: {http://www.ebay.com/my/name/space}xmlelementname5, java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename5
+    element: {http://www.ebay.com/my/name/space2}xmlelementname6, java=com.ebay.mypackage2.classname2 xml={http://www.ebay.com/my/name/space2}xmltypename6
+Operation: getCachePolicy
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}CachePolicy
+Operation: getVersion
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}VersionString
+Package Info:
+  java=com.ebay.mypackage xml=http://www.ebay.com/my/name/space
+  java=com.ebay.mypackage2 xml=http://www.ebay.com/my/name/space2
+  java=com.ebay.mypackage3 xml=http://www.ebay.com/my/name/space3
+  java=com.ebay.mypackage4 xml=http://www.ebay.com/my/name/space4
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+========== Meta Data ==========
+	key=service_interface_class_name value=com.ebay.test.soaframework.tools.codegen.EBayAPIInterfaceServiceSkeletonInterface
+	key=service_layer value=BUSINESS
+	key=service_name value=REService
+	key=service_version value=1.0.0
+========== Monitoring Config ==========
+========== Error Status Options ==========
+clientName=default
+========== Invocation Options ==========
+preferredLocale=en-CA
+serviceLocation=http://localhost:9090/ws/spf
+wsdlLocation=webservices/latest/eBaySvc.wsdl
+========== Transport Override Options ==========
+	connectTimeout=7000
+	numConnectRetries=9
+	receiveTimeout=8000
+		key=name1 value=value1
+		key=name2 value=value2
+preferredEncoding=CP-1252
+========== Retry options ==========
+========== Markdown options ==========
+========== Data Bindings ==========
+requestDataBinding=XML
+preferredTransport=HTTP11
+serviceVersion=3.0.0
+disableCacheOnLocal=true
+skipCacheOnError=false
+========== Global Monitoring Config ==========
+========== Global local-binding thread pool config ==========
+
+========== Global Layer Config ==========
+layers=COMMON INTERMEDIATE BUSINESS 
+Test case: configtest2
+***** SERVICE: {http://www.ebayopensource.org/turmeric/common/v1/services}test2
+serviceInterfaceClassName=com.ebay.soa.my.interface
+========== Custom Serializers ==========
+Binding=XML
+	customSer java type=com.ebay.mytypes.FooType
+		ser=com.ebay.soa.blah.serializers.MyFooTypeSerializer
+		ser=com.ebay.soa.blah.deserializers.MyFooTypeDeserializer
+	customSer java type=com.ebay.mytypes.ItemType
+		ser=com.ebay.soa.blah.serializers.MyItemTypeSerializer2
+		ser=com.ebay.soa.blah.deserializers.MyItemTypeDeserializer2
+	customSer java type=com.ebay.mytypes.UserType
+		ser=com.ebay.soa.blah.serializers.MyUserTypeSerializer
+		ser=com.ebay.soa.blah.deserializers.MyUserTypeDeserializer
+========== Type converters ==========
+Binding=XML
+	customSer bound type=com.ebay.mytypes.bound1
+		value type=com.ebay.mytypes.value1
+		ype conv=com.ebay.soa.blah.converters.converter1
+		XML type=xml3
+	customSer bound type=com.ebay.mytypes.bound2
+		value type=com.ebay.mytypes.value2
+		ype conv=com.ebay.soa.blah.converters.converter2
+		XML type=xml4
+========== Pipeline ==========
+requestPipelineClassName=org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+responsePipelineClassName=org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+Request Pipeline Tree:
+	{name=Logging,class=com.ebay.myhandlers.blah.blah,presence=REPLACEABLE}
+	Chain=AppSpecific1
+		{name=AffiliateTracking,class=com.ebay.myhandlers.affiliatetrackinghandler}
+	Chain=AppSpecific2
+		{name=DoSomething1,class=com.ebay.myhandlers.dosomething1handler}
+		{name=DoSomething2,class=com.ebay.myhandlers.dosomething1handler}
+Request Handler List:
+	{name=Logging,class=com.ebay.myhandlers.blah.blah,presence=REPLACEABLE}
+	{name=AffiliateTracking,class=com.ebay.myhandlers.affiliatetrackinghandler}
+	{name=DoSomething1,class=com.ebay.myhandlers.dosomething1handler}
+	{name=DoSomething2,class=com.ebay.myhandlers.dosomething1handler}
+========== Data Bindings ==========
+Data Bindings:
+	name=NV mimeType=text/plain
+		serFactory=org.ebayopensource.turmeric.runtime.common.impl.pipeline.NVSerializerImpl
+		deserFactory=org.ebayopensource.turmeric.runtime.common.impl.pipeline.NVDeserializerImpl
+		Options:
+			key=elementFormDefault value=UNQUALIFIED
+
+	name=XML mimeType=application/xml
+		serFactory=org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+		deserFactory=org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+		Options:
+			key=elementFormDefault value=UNQUALIFIED
+
+========== Protocol Processors ==========
+{name=SOAP version=1.1
+	url-indicator=ws/soa/soap/*
+	classname=com.ebay.kernel.soap.blah.blah}
+========== Transports ==========
+Transports:
+	name=EXTRA class=com.ebay.my.transport.extra
+
+	name=HTTP10 class=com.ebay.my.transport.http_1_0
+		connectTimeout=1000
+		numConnectRetries=3
+		receiveTimeout=2000
+			key=HTTP_VERSION value=HTTP10
+
+	name=HTTP11 class=com.ebay.my.transport.http_1_1
+		connectTimeout=7000
+		numConnectRetries=9
+		receiveTimeout=8000
+		invocationTimeout=9000
+		skipSerialization=true
+			key=HTTP_VERSION value=HTTP11
+			key=name1 value=value1
+			key=name2 value=value2
+
+	name=LOCAL class=org.ebayopensource.turmeric.runtime.spf.impl.transport.local.LocalTransport
+
+========== Type Mappings ==========
+nsFolding: false
+Operation: Method1
+  Request: java=com.ebay.mypackage.classname1 xml={http://www.ebay.com/my/name/space}xmltypename1 has-attachment
+  Response: java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename2
+  Error: java=com.ebay.mypackage.classname3 xml={http://www.ebay.com/my/name/space}xmltypename3
+  Request headers:
+    element: {http://www.ebay.com/my/name/space2}xmlelementname2, java=com.ebay.mypackage2.classname1 xml={http://www.ebay.com/my/name/space2}xmltypename2
+    element: {http://www.ebay.com/my/name/space3}xmlelementname3, java=com.ebay.mypackage3.classname1 xml={http://www.ebay.com/my/name/space3}xmltypename3
+    element: {http://www.ebay.com/my/name/space4}xmlelementname4, java=com.ebay.mypackage4.classname1 xml={http://www.ebay.com/my/name/space4}xmltypename4
+  Response headers:
+    element: {http://www.ebay.com/my/name/space}xmlelementname5, java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename5
+    element: {http://www.ebay.com/my/name/space2}xmlelementname6, java=com.ebay.mypackage2.classname2 xml={http://www.ebay.com/my/name/space2}xmltypename6
+Operation: getCachePolicy
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}CachePolicy
+Operation: getVersion
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}VersionString
+Package Info:
+  java=com.ebay.mypackage xml=http://www.ebay.com/my/name/space
+  java=com.ebay.mypackage2 xml=http://www.ebay.com/my/name/space2
+  java=com.ebay.mypackage3 xml=http://www.ebay.com/my/name/space3
+  java=com.ebay.mypackage4 xml=http://www.ebay.com/my/name/space4
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+========== Meta Data ==========
+	key=service_interface_class_name value=com.ebay.test.soaframework.tools.codegen.EBayAPIInterfaceServiceSkeletonInterface
+	key=service_layer value=BUSINESS
+	key=service_name value=REService
+	key=service_version value=1.0.0
+========== Monitoring Config ==========
+monitoringLevel=FINE
+========== Error Status Options ==========
+clientName=default
+========== Invocation Options ==========
+preferredLocale=en-US
+serviceLocation=http://localhost:9090/ws/spf
+wsdlLocation=webservices/latest/eBaySvc.wsdl
+useREST=true
+maxUrlLengthForREST=2048
+========== Transport Override Options ==========
+	connectTimeout=7000
+	numConnectRetries=9
+	receiveTimeout=8000
+	invocationTimeout=9000
+	skipSerialization=true
+		key=name1 value=value1
+		key=name2 value=value2
+preferredEncoding=CP-1252
+========== Retry options ==========
+appLevelNumRetries=5
+retryHandlerClass=org.ebayopensource.turmeric.runtime.sif.impl.pipeline.DefaultApplicationRetryHandler
+retry transport status codes=500,502
+exception classes=com.exception1,com.exception2
+error ids=2005
+========== Markdown options ==========
+========== Data Bindings ==========
+requestDataBinding=NV
+responseDataBinding=XML
+preferredTransport=HTTP11
+serviceVersion=3.0.0
+invocationUseCase=my_use_case
+preferredGlobalId=eBay-CA
+messageProtocol=SOAP11
+responseTransport=HTTP11
+customErrorResponseAdapter=org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.CustomErrorResponseAdapterImpl
+disableCacheOnLocal=true
+skipCacheOnError=false
+========== Global Monitoring Config ==========
+monitorSnapshotInterval=60
+========== Global local-binding thread pool config ==========
+Storage provider: myprovider1
+  className=com.ebay.blah.blah
+  key=name1 value=value1
+  key=name2 value=value2
+
+========== Global Layer Config ==========
+layers=COMMON INTERMEDIATE BUSINESS 
+Test case: configtest3
+Test case: configtest4
+***** SERVICE: {http://www.ebayopensource.org/turmeric/common/v1/services}test2
+serviceInterfaceClassName=com.ebay.soa.my.interface
+========== Custom Serializers ==========
+Binding=XML
+========== Type converters ==========
+Binding=XML
+========== Pipeline ==========
+========== Data Bindings ==========
+Data Bindings:
+========== Protocol Processors ==========
+{name=foo version=bar
+	url-indicator=foo
+	classname=}
+========== Transports ==========
+Transports:
+	name=HTTP10 class=org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport
+			key=HTTP_VERSION value=HTTP10
+
+	name=HTTP11 class=org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport
+			key=HTTP_VERSION value=HTTP11
+
+	name=LOCAL class=org.ebayopensource.turmeric.runtime.spf.impl.transport.local.LocalTransport
+
+	name=TEST class=
+		connectTimeout=36000
+		numConnectRetries=1
+		receiveTimeout=50000
+		invocationTimeout=0
+
+========== Type Mappings ==========
+nsFolding: false
+Operation: Method1
+  Request: java=com.ebay.mypackage.classname1 xml={http://www.ebay.com/my/name/space}xmltypename1 has-attachment
+  Response: java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename2
+  Error: java=com.ebay.mypackage.classname3 xml={http://www.ebay.com/my/name/space}xmltypename3
+  Request headers:
+    element: {http://www.ebay.com/my/name/space2}xmlelementname2, java=com.ebay.mypackage2.classname1 xml={http://www.ebay.com/my/name/space2}xmltypename2
+    element: {http://www.ebay.com/my/name/space3}xmlelementname3, java=com.ebay.mypackage3.classname1 xml={http://www.ebay.com/my/name/space3}xmltypename3
+    element: {http://www.ebay.com/my/name/space4}xmlelementname4, java=com.ebay.mypackage4.classname1 xml={http://www.ebay.com/my/name/space4}xmltypename4
+  Response headers:
+    element: {http://www.ebay.com/my/name/space}xmlelementname5, java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename5
+    element: {http://www.ebay.com/my/name/space2}xmlelementname6, java=com.ebay.mypackage2.classname2 xml={http://www.ebay.com/my/name/space2}xmltypename6
+Operation: getCachePolicy
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}CachePolicy
+Operation: getVersion
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}VersionString
+Package Info:
+  java=com.ebay.mypackage xml=http://www.ebay.com/my/name/space
+  java=com.ebay.mypackage2 xml=http://www.ebay.com/my/name/space2
+  java=com.ebay.mypackage3 xml=http://www.ebay.com/my/name/space3
+  java=com.ebay.mypackage4 xml=http://www.ebay.com/my/name/space4
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+========== Meta Data ==========
+	key=service_interface_class_name value=com.ebay.test.soaframework.tools.codegen.EBayAPIInterfaceServiceSkeletonInterface
+	key=service_layer value=BUSINESS
+	key=service_name value=REService
+	key=service_version value=1.0.0
+========== Monitoring Config ==========
+========== Error Status Options ==========
+clientName=default
+========== Invocation Options ==========
+serviceLocation=http://localhost:9090/ws/spf
+wsdlLocation=webservices/latest/eBaySvc.wsdl
+========== Transport Override Options ==========
+========== Retry options ==========
+========== Markdown options ==========
+========== Data Bindings ==========
+preferredTransport=HTTP11
+disableCacheOnLocal=true
+skipCacheOnError=false
+========== Global Monitoring Config ==========
+========== Global local-binding thread pool config ==========
+
+========== Global Layer Config ==========
+layers=COMMON INTERMEDIATE BUSINESS 
+Test case: configtest5
+***** SERVICE: {http://www.ebayopensource.org/turmeric/common/v1/services}test2
+serviceInterfaceClassName=com.ebay.soa.my.interface
+========== Custom Serializers ==========
+Binding=XML
+	customSer java type=com.ebay.mytypes.FooType
+		ser=com.ebay.soa.blah.serializers.MyFooTypeSerializer
+		ser=com.ebay.soa.blah.deserializers.MyFooTypeDeserializer
+	customSer java type=com.ebay.mytypes.ItemType
+		ser=com.ebay.soa.blah.serializers.MyItemTypeSerializer2
+		ser=com.ebay.soa.blah.deserializers.MyItemTypeDeserializer2
+========== Type converters ==========
+Binding=XML
+	customSer bound type=com.ebay.mytypes.bound1
+		value type=com.ebay.mytypes.value1
+		ype conv=com.ebay.soa.blah.converters.converter1
+		XML type=xml3
+	customSer bound type=com.ebay.mytypes.bound2
+		value type=com.ebay.mytypes.value2
+		ype conv=com.ebay.soa.blah.converters.converter2
+		XML type=xml4
+========== Pipeline ==========
+Request Pipeline Tree:
+	Chain=AppSpecific1
+		{name=AffiliateTracking,class=com.ebay.myhandlers.affiliatetrackinghandler}
+	Chain=AppSpecific2
+		{name=DoSomething1,class=com.ebay.myhandlers.dosomething1handler}
+		{name=DoSomething2,class=com.ebay.myhandlers.dosomething1handler}
+Request Handler List:
+	{name=AffiliateTracking,class=com.ebay.myhandlers.affiliatetrackinghandler}
+	{name=DoSomething1,class=com.ebay.myhandlers.dosomething1handler}
+	{name=DoSomething2,class=com.ebay.myhandlers.dosomething1handler}
+========== Data Bindings ==========
+Data Bindings:
+========== Protocol Processors ==========
+========== Transports ==========
+Transports:
+	name=EXTRA class=com.ebay.my.transport.extra
+
+	name=HTTP10 class=org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport
+			key=HTTP_VERSION value=HTTP10
+
+	name=HTTP11 class=org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport
+		connectTimeout=7000
+		numConnectRetries=9
+		receiveTimeout=8000
+			key=HTTP_VERSION value=HTTP11
+			key=name1 value=value1
+			key=name2 value=value2
+
+	name=LOCAL class=org.ebayopensource.turmeric.runtime.spf.impl.transport.local.LocalTransport
+
+========== Type Mappings ==========
+nsFolding: false
+Operation: Method1
+  Request: java=com.ebay.mypackage.classname1 xml={http://www.ebay.com/my/name/space}xmltypename1 has-attachment
+  Response: java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename2
+  Error: java=com.ebay.mypackage.classname3 xml={http://www.ebay.com/my/name/space}xmltypename3
+  Request headers:
+    element: {http://www.ebay.com/my/name/space2}xmlelementname2, java=com.ebay.mypackage2.classname1 xml={http://www.ebay.com/my/name/space2}xmltypename2
+    element: {http://www.ebay.com/my/name/space3}xmlelementname3, java=com.ebay.mypackage3.classname1 xml={http://www.ebay.com/my/name/space3}xmltypename3
+    element: {http://www.ebay.com/my/name/space4}xmlelementname4, java=com.ebay.mypackage4.classname1 xml={http://www.ebay.com/my/name/space4}xmltypename4
+  Response headers:
+    element: {http://www.ebay.com/my/name/space}xmlelementname5, java=com.ebay.mypackage.classname2 xml={http://www.ebay.com/my/name/space}xmltypename5
+    element: {http://www.ebay.com/my/name/space2}xmlelementname6, java=com.ebay.mypackage2.classname2 xml={http://www.ebay.com/my/name/space2}xmltypename6
+Operation: getCachePolicy
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}CachePolicy
+Operation: getVersion
+  Response: java=java.lang.String xml={http://www.w3.org/2001/XMLSchema}VersionString
+Package Info:
+  java=com.ebay.mypackage xml=http://www.ebay.com/my/name/space
+  java=com.ebay.mypackage2 xml=http://www.ebay.com/my/name/space2
+  java=com.ebay.mypackage3 xml=http://www.ebay.com/my/name/space3
+  java=com.ebay.mypackage4 xml=http://www.ebay.com/my/name/space4
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+  java=java.lang xml=http://www.w3.org/2001/XMLSchema
+========== Meta Data ==========
+	key=service_interface_class_name value=com.ebay.test.soaframework.tools.codegen.EBayAPIInterfaceServiceSkeletonInterface
+	key=service_layer value=BUSINESS
+	key=service_name value=REService
+	key=service_version value=1.0.0
+========== Monitoring Config ==========
+========== Error Status Options ==========
+clientName=default
+========== Invocation Options ==========
+preferredLocale=en-CA
+serviceLocation=http://localhost:9090/ws/spf
+wsdlLocation=webservices/latest/eBaySvc.wsdl
+========== Transport Override Options ==========
+	connectTimeout=7000
+	numConnectRetries=9
+	receiveTimeout=8000
+		key=name1 value=value1
+		key=name2 value=value2
+preferredEncoding=CP-1252
+========== Retry options ==========
+========== Markdown options ==========
+========== Data Bindings ==========
+requestDataBinding=XML
+preferredTransport=HTTP11
+serviceVersion=3.0.0
+disableCacheOnLocal=true
+skipCacheOnError=false
+========== Global Monitoring Config ==========
+========== Global local-binding thread pool config ==========
+
+========== Global Layer Config ==========
+layers=COMMON INTERMEDIATE BUSINESS 

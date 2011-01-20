@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ebayopensource.turmeric</groupId>
+    <artifactId>turmeric-project</artifactId>
+    <version>0.9.0-Beta-RC4</version>
+    <relativePath>../turmeric-project/pom.xml</relativePath>
+  </parent>
+  <groupId>org.ebayopensource.turmeric.runtime</groupId>
+  <artifactId>turmeric-runtime-parent</artifactId>
+  <version>0.9.0.4-Beta-SNAPSHOT</version>
+  <name>Turmeric Parent :: Runtime</name>
+  <packaging>pom</packaging>
+  <scm>
+    <connection>scm:svn:http://www.ebayopensource.org/svn/turmeric/soa-platform/trunk/runtime</connection>
+    <developerConnection>scm:svn:http://www.ebayopensource.org/svn/turmeric/soa-platform/trunk/runtime</developerConnection>
+  </scm>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <tagBase>http://www.ebayopensource.org/svn/turmeric/soa-platform/tags</tagBase>
+        </configuration>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+           <show>package</show>
+           <excludePackageNames>*.impl.*</excludePackageNames>
+        </configuration>
+	<executions>
+	  <execution>
+	    <id>runtime-javadocs</id>
+	    <goals>
+		<goal>jar</goal>
+	    </goals>
+	  </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>ban-old-deps</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <bannedDependencies>
+                  <excludes>
+                    <exclude>com.ebay.soa</exclude>
+                    <exclude>com.ebay.soa.typelib</exclude>
+                    <exclude>com.ebay.soa.errorlib</exclude>
+                    <exclude>com.ebay.soa.client</exclude>
+                    <exclude>com.ebay.soa.externaljars</exclude>
+                  </excludes>
+                </bannedDependencies>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <!-- Transitional: renamed project directories -->
+            <fileset><directory>${basedir}/BindingFwk</directory></fileset>
+            <fileset><directory>${basedir}/SOACommonTypeLibrary</directory></fileset>
+            <fileset><directory>${basedir}/RuntimeErrorLibrary</directory></fileset>
+            <fileset><directory>${basedir}/SOAClient</directory></fileset>
+            <fileset><directory>${basedir}/SOAServer</directory></fileset>
+            <fileset><directory>${basedir}/SOATools</directory></fileset>
+            <fileset><directory>${basedir}/TestServices</directory></fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <modules>
+    <!-- Core Modules -->
+    
+    <module>binding-framework</module>
+    <module>common-type-library</module>
+    <module>runtime-error-library</module>
+    <module>soa-client</module>
+    <module>soa-server</module>
+    <!-- Extra Modules -->
+    <module>config-validation-tests</module>
+    <module>logging-handler-jpa</module>
+    <!-- Codegen and Integration Tests are now handled by profiles.
+         This allows the command line builds to turn off 'codegen'
+         and 'it' builds when doing releases. -->
+    <module>examples</module>
+    <module>turmeric-runtime-dist-war</module>
+    <module>turmeric-runtime-dist</module>
+  </modules>
+  <profiles>
+    <profile>
+      <id>codegen</id>
+      <activation>
+        <!-- Default behavior is to always build codegen -->
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>codegen</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>it</id>
+      <activation>
+        <!-- Default behavior is to always build integration tests -->
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>integration-tests</module>
+      </modules>
+    </profile>
+  </profiles>
+</project>

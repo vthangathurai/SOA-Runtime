@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config" 
+ elementFormDefault="qualified"
+ xmlns="http://www.w3.org/2001/XMLSchema" 
+ xmlns:tns="http://www.ebayopensource.org/turmeric/common/config"
+ xmlns:Q1="http://www.ebayopensource.org/turmeric/common/config">
+
+    <include schemaLocation="../common/CommonSOAConfig.xsd"/>
+    
+    <element name="security-policy" type="tns:ServiceSecurityConfig"/>
+
+    <complexType name="ServiceSecurityConfig">
+    	<sequence>
+    		<element name="authentication-options" type="tns:AuthenticationConfig" minOccurs="0" />
+    		<element name="authorization-options" type="tns:AuthorizationConfig" minOccurs="0" />
+    	</sequence>
+    </complexType>
+
+    <complexType name="AuthenticationConfig">
+    	<sequence>
+    		<element name="operation" type="tns:OperationSecurityConfig" minOccurs="0" maxOccurs="unbounded"/>
+    	</sequence>
+    </complexType>
+
+    <complexType name="AuthorizationConfig">
+    	<sequence>
+    		<element name="operation" type="tns:OperationSecurityConfig" minOccurs="0" maxOccurs="unbounded"/>
+    	</sequence>
+    </complexType>
+
+    <complexType name="OperationSecurityConfig">
+    	<complexContent>
+    		<extension base="Q1:OptionList">
+    			<sequence/>
+    			<attribute name="name" type="token" use="required"/>
+    		</extension>
+    	</complexContent>
+    </complexType>
+</schema>

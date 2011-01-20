@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://www.ebay.com/marketplace/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ebay.com/soaframework/common/types" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" targetNamespace="http://www.ebay.com/marketplace/services">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.ebay.com/marketplace/services">
+          <xs:import namespace="http://www.ebay.com/soaframework/common/types"/>
+            <xs:complexType name="calculateInterestRequestType">
+                <xs:sequence>
+                    <xs:element name="param0" type="xs:int"/>
+                    <xs:element name="param1" type="xs:float"/>
+                    <xs:element name="param2" type="xs:float"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ErrorMessage" nillable="true" type="tns:ErrorMessage"/>
+            <xs:element name="calculateInterest" nillable="true" type="ns0:calculateInterestRequestType"/>
+            <xs:element name="calculateInterestResponse" type="xs:float"/>
+        </xs:schema>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/soaframework/common/types">
+            <xs:complexType name="ErrorMessage">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:ErrorData"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorData">
+                <xs:sequence>
+                    <xs:element name="errorId" type="xs:long"/>
+                    <xs:element name="domain" type="xs:string"/>
+                    <xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+                    <xs:element name="severity" type="tns:ErrorSeverity"/>
+                    <xs:element name="category" type="tns:ErrorCategory"/>
+                    <xs:element name="message" type="xs:string"/>
+                    <xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" nillable="true" type="tns:ErrorParameter"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorParameter">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="name" type="xs:string"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="ErrorSeverity">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error"/>
+                    <xs:enumeration value="Warning"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="System"/>
+                    <xs:enumeration value="Application"/>
+                    <xs:enumeration value="Request"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="calculateInterestRequest">
+        <wsdl:part name="parameters" element="ns0:calculateInterest"/>
+    </wsdl:message>
+    <wsdl:message name="calculateInterestResponse">
+        <wsdl:part name="parameters" element="ns0:calculateInterestResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ErrorMessage">
+        <wsdl:part name="parameters" element="ns0:ErrorMessage"/>
+    </wsdl:message>
+    <wsdl:portType name="SOAFrameworkCommonPortType">
+        <wsdl:operation name="calculateInterest">
+            <wsdl:input message="ns0:calculateInterestRequest" wsaw:Action="urn:calculateInterest"/>
+            <wsdl:output message="ns0:calculateInterestResponse" wsaw:Action="urn:calculateInterestResponse"/>
+            <wsdl:fault message="ns0:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:calculateInterestErrorMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="SOAFrameworkCommonHttpSoap11Binding" type="ns0:SOAFrameworkCommonPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="calculateInterest">
+            <soap:operation soapAction="urn:calculateInterest" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="SOAFrameworkCommonHttpSoap12Binding" type="ns0:SOAFrameworkCommonPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="calculateInterest">
+            <soap12:operation soapAction="urn:calculateInterest" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="SOAFrameworkCommonHttpBinding" type="ns0:SOAFrameworkCommonPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="calculateInterest">
+            <http:operation location="SOAFrameworkCommon/calculateInterest"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="calculateInterest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="calculateInterest"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="SOAFrameworkCommon">
+        <wsdl:port name="SOAFrameworkCommonHttpSoap11Endpoint" binding="ns0:SOAFrameworkCommonHttpSoap11Binding">
+            <soap:address location="http://localhost:8080/SOAFrameworkCommon"/>
+        </wsdl:port>
+        <wsdl:port name="SOAFrameworkCommonHttpSoap12Endpoint" binding="ns0:SOAFrameworkCommonHttpSoap12Binding">
+            <soap12:address location="http://localhost:8080/SOAFrameworkCommon"/>
+        </wsdl:port>
+        <wsdl:port name="SOAFrameworkCommonHttpEndpoint" binding="ns0:SOAFrameworkCommonHttpBinding">
+            <http:address location="http://localhost:8080/SOAFrameworkCommon"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

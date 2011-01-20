@@ -1,0 +1,31 @@
+<service-config-groups>
+	<service-group name="@@GROUP_NAME@@">
+		<service-config>
+			<provider-options>
+				<version-check-handler>@@NumericVersionCheckHandler@@</version-check-handler>
+			</provider-options>
+			<pipeline-config>
+				<request-handlers>
+					<handler name="G11N">
+						<class-name>@@G11nHandler@@</class-name>
+					</handler>
+				</request-handlers>
+				<logging-handler>
+					<class-name>@@ServerLoggingHandler@@</class-name>
+				</logging-handler>
+			</pipeline-config>
+			<protocol-processor name="@@SOAP11@@" version="@@SOAP11_VERSION@@">
+				<indicator> 	
+				    <transport-header name="@@MESSAGE_PROTOCOL@@">@@SOAP11@@</transport-header>
+				</indicator> 	
+    			<class-name>@@ServerSOAPProtocolProcessor@@</class-name>
+	        </protocol-processor> 
+			<protocol-processor name="@@SOAP12@@" version="@@SOAP12_VERSION@@">
+				<indicator> 	
+				    <transport-header name="@@MESSAGE_PROTOCOL@@">@@SOAP12@@</transport-header>
+				</indicator> 	
+    			<class-name>@@ServerSOAPProtocolProcessor@@</class-name>
+	        </protocol-processor> 
+		</service-config>
+	</service-group>
+</service-config-groups>

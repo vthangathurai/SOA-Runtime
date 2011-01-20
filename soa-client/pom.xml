@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ebayopensource.turmeric.runtime</groupId>
+    <artifactId>turmeric-runtime-parent</artifactId>
+    <version>0.9.0.4-Beta-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <groupId>org.ebayopensource.turmeric.runtime</groupId>
+  <artifactId>soa-client</artifactId>
+  <name>Turmeric Runtime :: SOA Client</name>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+        <excludes>
+          <!-- do not add schemas from meta-src dir, add from schema dir 
+            instead. -->
+          <exclude>META-INF/soa/schema/**/*.xsd</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/schemas</directory>
+        <targetPath>META-INF/soa/schema</targetPath>
+        <includes>
+          <include>**/*.xsd</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>1.3</version>
+        <executions>
+          <execution>
+            <id>gen-source-from-schemas</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+            <configuration>
+              <schemaFiles>message/CommonMessageTypes.xsd,client/ClientConfig.xsd,client/GlobalClientConfig.xsd,common/CommonSOAConfig.xsd,common/TypeMappings.xsd,common/GlobalRegistry.xsd,server/ServiceConfig.xsd,server/SecurityPolicy.xsd,server/CachePolicy.xsd,server/GlobalServiceConfig.xsd</schemaFiles>
+              <schemaDirectory>${basedir}/src/main/schemas</schemaDirectory>
+              <clearOutputDir>false</clearOutputDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <axiom-version>1.2.9-wso2v1</axiom-version>
+    <axis2-version>1.6-wso2v2</axis2-version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.runtime</groupId>
+      <artifactId>binding-framework</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.errorlib</groupId>
+      <artifactId>runtime-error-library</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.neethi</groupId>
+      <artifactId>neethi</artifactId>
+      <version>2.0.4</version>
+      <exclusions>
+        <!-- Use the more modern version of woodstox arriving via BindingFwk -->
+        <exclusion>
+          <groupId>org.codehaus.woodstox</groupId>
+          <artifactId>wstx-asl</artifactId>
+        </exclusion>
+        <!-- Use a more modern version of axiom comming in via the wso2 axis2 jars -->
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ws.commons.schema</groupId>
+      <artifactId>XmlSchema</artifactId>
+      <version>1.4.2</version>
+    </dependency>
+    <dependency>
+      <groupId>backport-util-concurrent</groupId>
+      <artifactId>backport-util-concurrent</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-simple</artifactId>
+    	<version>1.4.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ws.commons.axiom</groupId>
+      <artifactId>axiom-api</artifactId>
+      <version>${axiom-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ws.commons.axiom</groupId>
+      <artifactId>axiom-impl</artifactId>
+      <version>${axiom-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ws.commons.axiom</groupId>
+      <artifactId>axiom-dom</artifactId>
+      <version>${axiom-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-kernel</artifactId>
+      <version>${axis2-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-transport-http</artifactId>
+      <version>${axis2-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>wsdl4j</groupId>
+      <artifactId>wsdl4j</artifactId>
+      <version>1.6.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.runtime</groupId>
+      <artifactId>config-validation-tests</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric</groupId>
+      <artifactId>turmeric-junit</artifactId>
+      <version>1.0.3</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

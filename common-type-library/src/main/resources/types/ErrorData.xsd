@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/types" xmlns:tns="http://www.ebayopensource.org/turmeric/common/v1/types" version="1.0.0">
+    <xs:include schemaLocation="typelib://common-type-library//ErrorParameter.xsd"></xs:include>
+    <xs:include schemaLocation="typelib://common-type-library//ErrorCategory.xsd"></xs:include>
+    <xs:include schemaLocation="typelib://common-type-library//ErrorSeverity.xsd"></xs:include>
+    
+    <xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			<xs:appinfo></xs:appinfo>
+		</xs:annotation>
+	
+	  <xs:sequence>
+        	<xs:element name="errorId" type="xs:long"/>
+		  	<xs:element name="domain" type="xs:string"/>
+			<xs:element name="subdomain" type="xs:string" minOccurs="0"/>
+			<xs:element name="severity" type="tns:ErrorSeverity"/>
+	  		<xs:element name="category" type="tns:ErrorCategory"/>
+	  		<xs:element name="message" type="xs:string"/>
+	  		<xs:element name="exceptionId" type="xs:token" minOccurs="0"/>
+	  		<xs:element name="parameter" type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	
+	
+	</xs:complexType>
+</xs:schema>

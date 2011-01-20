@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ebayopensource.org/turmeric/common/config" xmlns:tns="http://www.ebayopensource.org/turmeric/common/config" elementFormDefault="qualified">
+
+    <element name="OrganizationErrorBlocks">
+      <complexType>
+    	<sequence>
+    		<element name="ReservedErrorBlockList">
+    			<complexType>
+    				<sequence>
+    					<element name="ReservedErrorBlock" type="tns:ReservedErrorBlock" minOccurs="0" maxOccurs="unbounded"></element>
+    				</sequence>
+    			</complexType>
+    		</element>
+    		<element name="UsedErrorBlockList">
+    			<complexType>
+    				<sequence>
+    					<element name="UsedErrorBlock" type="tns:UsedErrorBlock" minOccurs="0" maxOccurs="unbounded"></element>
+    				</sequence>
+    			</complexType>
+    		</element>
+    		<any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+    	</sequence>
+    	<attribute name="organization" type="string" use="required"/>
+    	<attribute name="defaultBlockSize" type="long" use="required"/>
+      </complexType>
+    </element>
+
+    <complexType name="ReservedErrorBlock">
+    	<attribute name="start" type="long" use="required"></attribute>
+    	<attribute name="end" type="long" use="required"></attribute>
+    </complexType>
+
+    <complexType name="UsedErrorBlock">
+    	<attribute name="domain" type="string" use="required"></attribute>
+    	<attribute name="start"  type="long"   use="required"></attribute>
+    	<attribute name="end"    type="long"   use="required"></attribute>
+    	<attribute name="last"   type="long"   use="required"></attribute>
+    </complexType>
+
+</schema>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-service-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+<service-config-groups>
+	<service-group name="SOAWebService">
+   </service-group>
+   <service-group name="SOAWebService-consumerid">
+         <service-config>
+
+
+
+	<provider-options>
+		<supported-data-bindings>XML</supported-data-bindings>
+		<supported-data-bindings>NV</supported-data-bindings>
+		<supported-data-bindings>JSON</supported-data-bindings>
+		<supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+		<monitoring-level>Normal</monitoring-level>
+	</provider-options>
+	<G11N-options>
+		<supported-global-id>EBAY-US</supported-global-id>
+		<supported-global-id>EBAY-CA</supported-global-id>
+		<supported-locale>en-US_US</supported-locale>
+		<supported-locale>en-CA_CA</supported-locale>
+		<supported-locale>fr-CA_CA</supported-locale>
+		<supported-locale>zh-Hant_US</supported-locale>
+	</G11N-options>
+	<pipeline-config>
+		<request-handlers>
+			<handler name="G11N">
+				<class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+			</handler>
+			<handler name="ServerConsumerIdHandler" presence="Mandatory" run-on-error="true">
+			    <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerConsumerIdentificationHandler</class-name>
+            </handler>
+			<chain name="servicehandlers">
+				<!-- placeholder chain for service  instances to configure  specific handlers -->
+			</chain>
+			<handler name="ServerUseCaseHeaderHandler" presence="Mandatory" run-on-error="true">
+				<class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerUseCaseHeaderHandler</class-name>
+            </handler>                         			
+		</request-handlers>
+		<!-- 
+		 <logging-handler>
+			<class-name>
+				org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler
+			</class-name>
+			<options>
+			    <option name="cal-request-trans-type">URL</option>
+			    <option name="cal-call-trans-type">IMPL_CALL</option>
+			    <option name="suppress-client-info">false</option>
+			    <option name="cal-client-info-event-type">SOAServer</option>
+			    <option name="cal-log-id">true</option>
+			</options>
+                    </logging-handler>
+                     -->
+                 <logging-handler>
+		                <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+        	    </logging-handler>
+	</pipeline-config>
+
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+
+	</service-config>
+   </service-group>
+   <service-group name="SOAWebService-consumerid4">
+         <service-config>
+
+
+
+	<provider-options>
+		<supported-data-bindings>XML</supported-data-bindings>
+		<supported-data-bindings>NV</supported-data-bindings>
+		<supported-data-bindings>JSON</supported-data-bindings>
+		<supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+		<monitoring-level>Normal</monitoring-level>
+	</provider-options>
+	<G11N-options>
+		<supported-global-id>EBAY-US</supported-global-id>
+		<supported-global-id>EBAY-CA</supported-global-id>
+		<supported-locale>en-US_US</supported-locale>
+		<supported-locale>en-CA_CA</supported-locale>
+		<supported-locale>fr-CA_CA</supported-locale>
+		<supported-locale>zh-Hant_US</supported-locale>
+	</G11N-options>
+	<pipeline-config>
+		<request-handlers>
+			<handler name="G11N">
+				<class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+			</handler>
+			<handler name="ServerConsumerIdHandler" presence="Mandatory" run-on-error="true">
+			    <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerConsumerIdentificationHandler</class-name>
+            </handler>
+			<chain name="servicehandlers">
+				<!-- placeholder chain for service  instances to configure  specific handlers -->
+			</chain>
+			<handler name="ServerUseCaseHeaderHandler" presence="Mandatory" run-on-error="true">
+				<class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerUseCaseHeaderHandler</class-name>
+            </handler>  			
+		</request-handlers>
+		 <!-- 
+		 <logging-handler>
+			<class-name>
+				org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler
+			</class-name>
+			<options>
+			    <option name="cal-request-trans-type">URL</option>
+			    <option name="cal-call-trans-type">IMPL_CALL</option>
+			    <option name="suppress-client-info">false</option>
+			    <option name="cal-client-info-event-type">SOAServer</option>
+			    <option name="cal-log-id">true</option>
+			</options>
+                    </logging-handler>
+                     -->
+                 <logging-handler>
+		                <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+        	    </logging-handler>
+	</pipeline-config>
+
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+
+	</service-config>
+   </service-group>
+</service-config-groups>
+</global-service-config> 

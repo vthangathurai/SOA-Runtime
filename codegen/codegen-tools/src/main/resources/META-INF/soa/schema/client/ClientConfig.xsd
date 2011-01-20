@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ccg="http://www.ebayopensource.org/turmeric/common/config"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/common/config" xmlns:Q1="http://www.ebayopensource.org/turmeric/common/config">
+
+    <include schemaLocation="GlobalClientConfig.xsd"></include>
+    <element name="client-config-list" type="tns:ClientConfigList"></element>
+
+	<complexType name="ClientConfigList">
+		<sequence>
+			<element name="client-config" type="tns:ClientConfig"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ClientConfig">
+		<sequence>
+    			<element name="service-interface-class-name" type="token" minOccurs="0" maxOccurs="1"/>
+    			<element name="service-location" type="anyURI" minOccurs="0" maxOccurs="1"/>
+    			<element name="service-location-mappings" type="ccg:ServiceLocationMappingList" minOccurs="0" maxOccurs="1"/>
+    			<element name="wsdl-location" type="anyURI" minOccurs="0" maxOccurs="1"/>
+			<element name="client-instance-config" type="ccg:ClientGroupConfig"
+				maxOccurs="1" minOccurs="0">
+			</element>
+		</sequence>
+		<attribute name="group" type="string" use="optional"/>
+		<!-- If not specified, the config applies to all services used by the client -->
+		<attribute name="service-name" type="token" use="optional"/>
+	</complexType>
+
+</schema>

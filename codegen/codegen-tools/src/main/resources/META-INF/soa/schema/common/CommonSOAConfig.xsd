@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebayopensource.org/turmeric/common/config" elementFormDefault="qualified">
+	<complexType name="PipelineConfig">
+		<sequence>
+			<element name="request-pipeline" type="tns:PipelineClassConfig" minOccurs="0"/>
+			<element name="response-pipeline" type="tns:PipelineClassConfig" minOccurs="0"/>
+			<element name="request-dispatcher" type="tns:PipelineClassConfig" minOccurs="0"/>
+			<element name="response-dispatcher" type="tns:PipelineClassConfig" minOccurs="0"/>
+			<element name="request-handlers" type="tns:PipelineTreeConfig" minOccurs="0"/>
+			<element name="response-handlers" type="tns:PipelineTreeConfig" minOccurs="0"/>
+			<element name="logging-handler" type="tns:FrameworkHandlerConfig" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="PipelineTreeConfig">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element name="handler" type="tns:HandlerConfig"/>
+			<element name="chain" type="tns:ChainConfig"/>
+		</choice>
+	</complexType>
+	<complexType name="PipelineClassConfig">
+		<sequence>
+			<element name="class-name" type="token"/>
+		</sequence>
+	</complexType>
+	<complexType name="FrameworkHandlerConfig">
+		<sequence>
+			<element name="class-name" type="token" minOccurs="0"/>
+			<element name="options" type="tns:OptionList" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="HandlerConfig">
+		<sequence>
+			<element name="class-name" type="token" minOccurs="0"/>
+			<element name="options" type="tns:OptionList" minOccurs="0"/>
+			<!-- class name is optional, allowing the template to create a placeholder - no impl. -->
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="presence" type="tns:PresenceConfig" use="optional"/>
+		<attribute name="continue-on-error" type="boolean" use="optional"/>
+		<attribute name="run-on-error" type="boolean" use="optional"/>
+	</complexType>
+	<complexType name="ChainConfig">
+		<sequence>
+			<element name="handler" type="tns:HandlerConfig" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="presence" type="tns:PresenceConfig" use="optional"/>
+	</complexType>
+	<simpleType name="PresenceConfig">
+		<restriction base="token">
+			<enumeration value="Mandatory"/>
+			<enumeration value="Replaceable"/>
+			<enumeration value="Removed"/>
+		</restriction>
+	</simpleType>
+	<complexType name="ProtocolProcessorConfig">
+		<sequence>
+			<element name="indicator" type="tns:FeatureIndicatorConfig"/>
+			<element name="class-name" type="token"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="version" type="string" use="required"/>
+	</complexType>
+	<complexType name="FeatureIndicatorConfig">
+		<choice>
+			<element name="URL-pattern" type="token"/>
+			<element name="transport-header" type="tns:NameValue"/>
+			<!-- header selection given as the header name to be checked and the value to match, separated
+				by equal signs. -->
+		</choice>
+	</complexType>
+	<complexType name="DataBindingConfig">
+		<sequence>
+			<element name="data-binding" type="tns:SerializerConfig" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="SerializerConfig">
+		<sequence>
+			<element name="mime-type" type="token"/>
+			<element name="serializer-factory-class-name" type="token" minOccurs="0"/>
+			<element name="deserializer-factory-class-name" type="token" minOccurs="0"/>
+			<element name="options" type="tns:OptionList" minOccurs="0"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	<complexType name="TransportConfig">
+		<sequence>
+			<element name="class-name" type="token"/>
+			<element name="default-options" type="tns:TransportOptionConfig" minOccurs="0"/>
+			<element name="header-options" type="tns:OptionList" minOccurs="0"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	<complexType name="TransportOptionConfig">
+		<sequence>
+			<element name="socket-connect-timeout-msec" type="int" minOccurs="0"/>
+			<element name="socket-read-timeout-msec" type="int" minOccurs="0"/>
+			<element name="invocation-timeout-msec" type="int" minOccurs="0"/>
+			<element name="num-connect-retries" type="int" minOccurs="0"/>
+			<element name="skip-serialization" type="boolean" minOccurs="0"/>
+			<element name="use-detached-local-binding" type="boolean" minOccurs="0"/>
+			<element name="other-options" type="tns:OptionList" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="CustomSerializerConfigList">
+		<sequence>
+			<element name="custom-serializer-deserializer" type="tns:CustomSerializerConfig" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="type-converter" type="tns:TypeConverterConfig" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="binding" type="string" use="required"/>
+	</complexType>
+	<complexType name="CustomSerializerConfig">
+		<sequence>
+			<element name="java-type-name" type="token"/>
+			<element name="serializer-class-name" type="token" minOccurs="0"/>
+			<element name="deserializer-class-name" type="token" minOccurs="0"/>
+			<element name="xml-type-name" type="token"/>
+		</sequence>
+	</complexType>
+	<complexType name="TypeConverterConfig">
+		<sequence>
+			<element name="bound-java-type-name" type="token"/>
+			<element name="value-java-type-name" type="token"/>
+			<element name="type-converter-class-name" type="token"/>
+			<element name="xml-type-name" type="token"/>
+		</sequence>
+	</complexType>
+	<complexType name="OptionList">
+		<sequence>
+			<element name="option" type="tns:NameValue" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="NameValue">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="MonitorConfig">
+		<sequence>
+			<element name="storage-provider" type="tns:StorageProviderConfig" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="snapshot-interval" type="int" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="StorageProviderConfig">
+		<sequence>
+			<element name="class-name" type="token"/>
+			<element name="storage-options" type="tns:OptionList" minOccurs="0"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	<simpleType name="MonitorLevelConfig">
+		<restriction base="token">
+			<enumeration value="Normal"/>
+			<enumeration value="Fine"/>
+			<enumeration value="Finest"/>
+		</restriction>
+	</simpleType>
+	<complexType name="ErrorStatusOptions">
+		<sequence>
+			<element name="metric" type="string" minOccurs="0"/>
+			<element name="threshold" type="string"/>
+			<element name="sample-size" type="int" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="RestOptionType">
+		<simpleContent>
+			<extension base="boolean">
+				<attribute name="max-url-byte-length" type="int" use="optional"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="ThreadPoolConfig">
+		<sequence>
+			<element name="keep-alive-time-in-secs" type="long" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="ServiceLocationMapping">
+		<sequence>
+			<element name="name" type="string"/>
+			<element name="url" type="anyURI"/>
+		</sequence>
+	</complexType>
+	<complexType name="ServiceLocationMappingList">
+		<sequence>
+			<element name="service-location-mapping" type="tns:ServiceLocationMapping" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+</schema>

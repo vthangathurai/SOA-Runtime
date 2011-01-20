@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions name="Calculator" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/services" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebayopensource.org/turmeric/common/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/services" xmlns="http://www.ebayopensource.org/turmeric/common/v1/services" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element name="Inparams">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="value1" type="xsd:int"/>
+                        <xsd:element name="value2" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="return" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="Inparams">
+    <wsdl:part name="Inparams" element="tns:Inparams"/>
+  </wsdl:message>
+  <wsdl:message name="Response">
+    <wsdl:part name="Response" element="tns:Response"/>
+  </wsdl:message>
+  <wsdl:portType name="Calculator">
+    <wsdl:operation name="add">
+      <wsdl:input name="inparams" message="tns:Inparams"/>
+      <wsdl:output name="Response" message="tns:Response"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="add">
+      <soap:operation soapAction="add" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+   </wsdl:binding>
+  <wsdl:service name="CalcService">
+    <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+      <soap:address location="http://localhost:8080/calculator"/>
+    <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

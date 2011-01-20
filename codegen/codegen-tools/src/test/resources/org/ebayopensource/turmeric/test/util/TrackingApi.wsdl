@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://iop.pb.com/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://iop.pb.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://iop.pb.com/">
+      <s:element name="TrackPackage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="TrackingRequestDataList" nillable="true" type="tns:TrackingRequestDataList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TrackingRequestDataList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TrackingRequestData" type="tns:TrackingRequestData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TrackingRequestData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PackageIdentifier" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PackageIdentifierType" type="tns:enumPackageIdentifierType" />
+          <s:element minOccurs="1" maxOccurs="1" name="ReportScans" type="tns:enumReportScan" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipDateRangeBegin" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipDateRangeEnd" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CarrierName" type="tns:enumCarrierName" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DestinationCountryCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="enumPackageIdentifierType">
+        <s:restriction base="s:string">
+          <s:enumeration value="TrackingNumber" />
+          <s:enumeration value="ReferenceNumber" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="enumReportScan">
+        <s:restriction base="s:string">
+          <s:enumeration value="SummaryOnly" />
+          <s:enumeration value="SummaryAndDetails" />
+          <s:enumeration value="SummaryAndMostRecentDetail" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="enumCarrierName">
+        <s:restriction base="s:string">
+          <s:enumeration value="USPS" />
+          <s:enumeration value="FedEx" />
+          <s:enumeration value="UPS" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="TrackPackageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TrackPackageResult" type="tns:TrackPackageResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TrackPackageResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TrackingResponseDataList" type="tns:TrackingResponseDataList" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TrackingResponseDataList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TrackingResponseData" type="tns:TrackingResponseData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TrackingResponseData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PackageCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PackageIdentifier" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PackageIdentifierType" type="tns:enumPackageIdentifierType" />
+          <s:element minOccurs="1" maxOccurs="1" name="CarrierName" type="tns:enumCarrierName" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PackageTrackDataList" type="tns:PackageTrackDataList" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PackageTrackDataList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PackageTrackData" type="tns:PackageTrackData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PackageTrackData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PackageIdentifier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PackageStatus" type="tns:enumPackageStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EstimatedDeliveryDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EstimatedDeliveryTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeliveryDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeliveryTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeliveryLocation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeliveryLocationDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SignedForBy" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Weight" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="WeightUOM" type="tns:enumWeightUOM" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReattemptDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReattemptTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DestinationAddress" type="tns:DestinationAddress" />
+          <s:element minOccurs="0" maxOccurs="1" name="SenderAddress" type="tns:SenderAddress" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScanDetailsList" type="tns:ScanDetailsList" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="enumPackageStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Manifest" />
+          <s:enumeration value="InTransit" />
+          <s:enumeration value="Delivered" />
+          <s:enumeration value="ReturnToSender" />
+          <s:enumeration value="Exception" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="enumWeightUOM">
+        <s:restriction base="s:string">
+          <s:enumeration value="LBS" />
+          <s:enumeration value="KGS" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="DestinationAddress">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvince" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AlternateCityNameList" type="tns:AlternateCityNameList" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AlternateCityNameList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AlternateCityName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SenderAddress">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvince" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AlternateCityNameList" type="tns:AlternateCityNameList" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ScanDetailsList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ScanDetails" type="tns:ScanDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ScanDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="EventDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EventTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EventCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AlternateCityNameList" type="tns:AlternateCityNameList" />
+          <s:element minOccurs="0" maxOccurs="1" name="EventStateOrProvince" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EventPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EventCountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScanType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScanDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="RequestHeader" type="tns:RequestHeader" />
+      <s:complexType name="RequestHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PartnerID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PartnerTransactionID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WSVersionNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PartnerTransactionDate" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ResponseHeader" type="tns:ResponseHeader" />
+      <s:complexType name="ResponseHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PartnerID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PartnerTransactionID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WSVersionNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionDate" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TrackPackageSoapIn">
+    <wsdl:part name="parameters" element="tns:TrackPackage" />
+  </wsdl:message>
+  <wsdl:message name="TrackPackageSoapOut">
+    <wsdl:part name="parameters" element="tns:TrackPackageResponse" />
+  </wsdl:message>
+  <wsdl:message name="TrackPackageRequestHeader">
+    <wsdl:part name="RequestHeader" element="tns:RequestHeader" />
+  </wsdl:message>
+  <wsdl:message name="TrackPackageResponseHeader">
+    <wsdl:part name="ResponseHeader" element="tns:ResponseHeader" />
+  </wsdl:message>
+  <wsdl:portType name="TrackingAPISoap">
+    <wsdl:operation name="TrackPackage">
+      <wsdl:input message="tns:TrackPackageSoapIn" />
+      <wsdl:output message="tns:TrackPackageSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TrackingAPISoap" type="tns:TrackingAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="TrackPackage">
+      <soap:operation soapAction="http://iop.pb.com/TrackPackage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:TrackPackageRequestHeader" part="RequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:TrackPackageResponseHeader" part="ResponseHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TrackingAPI">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/" />
+    <wsdl:port name="TrackingAPISoap" binding="tns:TrackingAPISoap">
+      <soap:address location="https://bnbuspro4trk.test.pb.com/webservice/trackingapi.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

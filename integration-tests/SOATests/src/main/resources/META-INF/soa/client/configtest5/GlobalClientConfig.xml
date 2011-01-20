@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-client-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<!-- <monitor-config>
+		<storage-provider name="myprovider1">
+			<class-name>com.ebay.blah.blah</class-name>
+				<storage-options>
+					<option name="name1">value1</option>
+					<option name="name2">value2</option>
+				</storage-options>
+		</storage-provider>
+		<snapshot-interval>60</snapshot-interval>
+	</monitor-config>
+  -->	
+	<client-config-groups xmlns="http://www.ebayopensource.org/turmeric/common/config">
+		<client-group name="SOAWebServiceClient">
+			<client-config/>
+   		</client-group>
+   	<client-group name="SOAWebServiceClient-consumerid">
+	   <client-config>
+		<invocation-options>
+		</invocation-options>
+		<pipeline-config>
+			<request-handlers>
+				<handler name="MessageContext" presence="Mandatory">
+					<class-name>org.ebayopensource.turmeric.runtime.sif.impl.handlers.MessageContextHandler</class-name>
+					<options>
+						<option name="transport-headers">chained_header</option>
+						<option name="context-properties">chained_property</option>
+						<option name="cookies">chained_cookie</option>
+					</options>
+				</handler>
+				<handler name="ClientConsumerIdHandler" presence="Mandatory">
+					<class-name>org.ebayopensource.turmeric.runtime.extended.sif.impl.handlers.ClientConsumerIdentificationHandler</class-name>
+					<options>
+						<option name="blocking">false</option>
+					</options>
+				</handler>
+				<chain name="clienthandlers">
+					<!-- placeholder chain for service client instances to configure client specific handlers -->
+				</chain>
+			</request-handlers>
+		</pipeline-config>
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<protocol-processor name="SOAP12" version="1.2">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<data-binding-config>
+			<data-binding name="XML">
+				<mime-type>text/xml</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+				</deserializer-factory-class-name>
+				<options>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+
+		</data-binding-config>
+	   </client-config>
+	</client-group> 
+	<client-group name="SOAWebServiceClient-consumerid3">
+	   <client-config>
+		<invocation-options>
+		</invocation-options>
+		<pipeline-config>
+			<request-handlers>
+				<handler name="MessageContext" presence="Mandatory">
+					<class-name>org.ebayopensource.turmeric.runtime.sif.impl.handlers.MessageContextHandler</class-name>
+					<options>
+						<option name="transport-headers">chained_header</option>
+						<option name="context-properties">chained_property</option>
+						<option name="cookies">chained_cookie</option>
+					</options>
+				</handler>
+				<handler name="ClientConsumerIdHandler" presence="Mandatory">
+					<class-name>org.ebayopensource.turmeric.runtime.extended.sif.impl.handlers.ClientConsumerIdentificationHandler</class-name>
+					<options>
+						<option name="blocking">true</option>
+					</options>
+				</handler>
+				<chain name="clienthandlers">
+					<!-- placeholder chain for service client instances to configure client specific handlers -->
+				</chain>
+			</request-handlers>
+		</pipeline-config>
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<protocol-processor name="SOAP12" version="1.2">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<data-binding-config>
+			<data-binding name="XML">
+				<mime-type>text/xml</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+				</deserializer-factory-class-name>
+				<options>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+
+		</data-binding-config>
+	   </client-config>
+	</client-group>
+	<client-group name="SOAWebServiceClient-consumerid4">
+	   <client-config>
+		<invocation-options>
+		</invocation-options>
+		<pipeline-config>
+			<request-handlers>
+				<handler name="MessageContext" presence="Mandatory">
+					<class-name>org.ebayopensource.turmeric.runtime.sif.impl.handlers.MessageContextHandler</class-name>
+					<options>
+						<option name="transport-headers">chained_header</option>
+						<option name="context-properties">chained_property</option>
+						<option name="cookies">chained_cookie</option>
+					</options>
+				</handler>
+				<handler name="ClientConsumerIdHandler" presence="Replaceable">
+					<class-name>org.ebayopensource.turmeric.runtime.extended.sif.impl.handlers.ClientConsumerIdentificationHandler</class-name>
+					<options>
+						<option name="blocking">false</option>
+					</options>
+				</handler>
+				<chain name="clienthandlers">
+					<!-- placeholder chain for service client instances to configure client specific handlers -->
+				</chain>
+			</request-handlers>
+		</pipeline-config>
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<protocol-processor name="SOAP12" version="1.2">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<data-binding-config>
+			<data-binding name="XML">
+				<mime-type>text/xml</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+				</deserializer-factory-class-name>
+				<options>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+
+		</data-binding-config>
+	   </client-config>
+	</client-group> 
+	</client-config-groups>
+
+</global-client-config>

@@ -1,0 +1,2262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <wsdl:definitions targetNamespace="urn:ebay:apis:eBLBaseComponents"
+    xmlns="urn:ebay:apis:eBLBaseComponents"
+    xmlns:ns="urn:ebay:apis:eBLBaseComponents"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified"
+            elementFormDefault="qualified"
+            targetNamespace="urn:ebay:apis:eBLBaseComponents"
+            xmlns="urn:ebay:apis:eBLBaseComponents"
+            xmlns:ns="urn:ebay:apis:eBLBaseComponents" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="RequesterCredentials" type="ns:CustomSecurityHeaderType">
+                <xs:annotation>
+                    <xs:documentation>
+				Authentication information for the user on whose behalf the
+				application is making the request. Only registered eBay users are
+				allowed to make API calls. To verify that a user is registered,
+				your application needs to pass a user-specific value called an
+				"authentication token" in the request. This is equivalent to
+				signing in on the eBay Web site. As API calls do not pass session
+				information, you need to pass the user's authentication token every
+				time you invoke a call on their behalf. All calls require an
+				authentication token, except the calls you use to retrieve a token
+				in the first place. (For such calls, you use the eBay member's
+				username and password instead.)
+			</xs:documentation>
+                    <xs:appinfo>
+                        <CallInfo>
+                            <AllCalls/>
+                            <RequiredInput>Yes</RequiredInput>
+                        </CallInfo>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="GetFeesRequest" type="ns:GetFeesRequestType"/>
+            <xs:complexType name="GetFeesRequestType">
+                <xs:annotation>
+                    <xs:documentation>
+				The input for the rating engine service API
+			</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+                    <xs:extension base="ns:AbstractRequestType">
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded"
+                                minOccurs="0" name="FixedFee" type="ns:RatingEngineFeeType">
+                                <xs:annotation>
+                                    <xs:documentation>
+								A fixed fee request. Can contain attributes specific for this fee code,
+								like equipTypeCode, quantity etc.
+							</xs:documentation>
+                                    <xs:appinfo>
+                                    <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                    </CallInfo>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element maxOccurs="unbounded"
+                                minOccurs="0" name="RangeFee" type="ns:RatingEngineFeeType">
+                                <xs:annotation>
+                                    <xs:documentation>
+								A range fee request. Can contain attributes specific for this fee code,
+								like equipTypeCode, quantity etc.
+							</xs:documentation>
+                                    <xs:appinfo>
+                                    <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                    </CallInfo>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element maxOccurs="unbounded"
+                                minOccurs="0" name="FinalValueFee" type="ns:RatingEngineFeeType">
+                                <xs:annotation>
+                                    <xs:documentation>
+								A final value fee request. Can contain attributes specific for this fee
+								code, like equipTypeCode, quantity etc.
+							</xs:documentation>
+                                    <xs:appinfo>
+                                    <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                    </CallInfo>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="GetFeesResponse" type="ns:GetFeesResponseType"/>
+            <xs:complexType name="GetFeesResponseType">
+                <xs:annotation>
+                    <xs:documentation>
+				Contains the output from the rating engine
+			</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+                    <xs:extension base="ns:AbstractResponseType">
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded"
+                                minOccurs="0" name="FixedFee" type="ns:RatingEngineFeeType">
+                                <xs:annotation>
+                                    <xs:documentation>
+								The fees for the specified fixed fee codes.
+							</xs:documentation>
+                                    <xs:appinfo>
+                                    <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                    </CallInfo>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element maxOccurs="unbounded"
+                                minOccurs="0" name="RangeFee" type="ns:RatingEngineFeeType">
+                                <xs:annotation>
+                                    <xs:documentation>
+								The fees for the specified range fee codes.
+							</xs:documentation>
+                                    <xs:appinfo>
+                                    <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                    </CallInfo>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element maxOccurs="unbounded"
+                                minOccurs="0" name="FinalValueFee" type="ns:RatingEngineFeeType">
+                                <xs:annotation>
+                                    <xs:documentation>
+								The fees for the specified final value fee code for all specified sales prices.
+							</xs:documentation>
+                                    <xs:appinfo>
+                                    <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                    </CallInfo>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:simpleType name="ActionPriorityCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+				Priority of the action call. High or Low
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="High">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Low">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Reserved for internal or future use.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="BotBlockRequestType">
+                <xs:annotation>
+                    <xs:documentation>
+				Container of token and user reply.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="BotBlockToken" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						An encrypted token that eBay generates and that applications 
+						need to pass as input to subsquent calls. One use of this might 
+						be to block users from the site due to multiple call requests. 
+					</xs:documentation>
+                            <!-- PRIVATE -->
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <RequiredInput>Conditionally</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                            <!-- PRIVATE -->
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="BotBlockUserInput" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+            The user's response to being asked to type the message
+            in the botblock challenge image (BotBlockUrl).
+					</xs:documentation>
+                            <!-- PRIVATE -->
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <RequiredInput>Conditionally</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                            <!-- PRIVATE -->
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="BotBlockResponseType">
+                <xs:annotation>
+                    <xs:documentation>
+				Container of token and image URL and Audio URL. Please note that this response
+				is returned for all calls that trigger traffic limiter rules. Although
+				CallInfo just mentions PlaceOffer.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="BotBlockToken" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						An encrypted token generated by eBay when the botblock
+						mechanism is triggered.
+					</xs:documentation>
+                            <!-- PRIVATE -->
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                            <!-- PRIVATE -->
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="BotBlockUrl" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The URL of the image your application should display to
+						the user for a botblock challenge.
+					</xs:documentation>
+                            <!-- PRIVATE -->
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                            <!-- PRIVATE -->
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="BotBlockAudioUrl" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The URL of the audio clip your application should provide for sight-impaired users.
+						The audio clip corresponds to the image.
+					</xs:documentation>
+                            <!-- PRIVATE -->
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                            <!-- PRIVATE -->
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="AbstractRequestType">
+                <xs:annotation>
+                    <xs:documentation>
+				Base type definition of the request payload, which can carry any type of payload
+				content plus optional versioning information and detail level requirements. All
+				concrete request types (e.g., AddItemRequestType) are derived from the abstract
+				request type. The naming convention we use for the concrete type names is the name
+				of the service (the verb or call name) followed by "RequestType":
+				VerbNameRequestType
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0"
+                        name="DetailLevel" type="ns:DetailLevelCodeType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Detail levels are instructions that define standard subsets of
+						data to return for particular data components (e.g., each
+						Item, Transaction, or User) within the response payload.
+						For example, a particular detail level might cause the
+						response to include buyer-related data in every result
+						(e.g., for every Item), but no seller-related data.
+						Specifying a detail level is like using a
+						predefined attribute list in the SELECT clause of an SQL query.
+						Use the DetailLevel element to specify the required detail level
+						that the client application needs pertaining to the data components
+						that are applicable to the request.&lt;br&gt;
+						&lt;br&gt;
+						The DetailLevelCodeType defines the
+						global list of available detail levels for all request types.
+						Most request types support certain detail
+						levels or none at all. If you pass a detail level that exists
+						in the schema but that isn't valid for a particular request,
+						eBay ignores it processes the request without it.
+						For each request type, see the detail level tables in the
+						Input/Output Reference to determine which detail levels are
+						applicable and which elements are returned for each applicable
+						detail level. (Some detail level tables are still in the
+						eBay Web Services guide. They will be moved to the
+						Input/Output Reference in a future release.)&lt;br&gt;
+						&lt;br&gt;Note that DetailLevel is required input for
+						GetMyMessages. &lt;br&gt;
+						&lt;br&gt;
+						With GetSellerList and other calls that retrieve large data sets,
+						please avoid using ReturnAll when possible. For example, if you use
+						GetSellerList, use a GranularityLevel or use the
+						GetSellerEvents call instead. If you do use ReturnAll with
+						GetSellerList, use a small EntriesPerPage value and a short
+						EndTimeFrom/EndTimeTo range for better performance.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <PresentDetails>Yes</PresentDetails>
+                                <CallInfo>
+                                    <CallName>GetMyMessages</CallName>
+                                    <!-- it does not support 'none' -->
+                                    <OnlyTheseValues>ReturnSummary, ReturnHeaders, ReturnMessages</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetAdFormatLeads</CallName>
+                                    <CallName>GetAttributesCS</CallName>
+                                    <CallName>GetAttributesXSL</CallName>
+                                    <CallName>GetCategories</CallName>
+                                    <CallName>GetCategory2CS</CallName>
+                                    <CallName>GetCategory2FinanceOffer</CallName>
+                                    <CallName>GetCategoryMappings</CallName>
+                                    <CallName>GetFeedback</CallName>
+                                    <CallName>GetFinanceOffers</CallName>
+                                    <CallName>GetOrders</CallName>
+                                    <CallName>GetProductFinder</CallName>
+                                    <CallName>GetProductFinderXSL</CallName>
+                                    <CallName>GetProductSearchPage</CallName>
+                                    <CallName>GetSellerEvents</CallName>
+                                    <CallName>GetTaxTable</CallName>
+                                    <OnlyTheseValues>ReturnAll, none</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetCategoryFeatures</CallName>
+                                    <CallName>GetMyeBayBuying</CallName>
+                                    <CallName>GetMyeBaySelling</CallName>
+                                    <CallName>GetUser</CallName>
+                                    <CallName>GetUserDisputes</CallName>
+                                    <OnlyTheseValues>ReturnAll, ReturnSummary, none</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetItemTransactions</CallName>
+                                    <CallName>GetSellerList</CallName>
+                                    <CallName>GetSellerTransactions</CallName>
+                                    <OnlyTheseValues>ItemReturnDescription, ReturnAll, none</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetOrderTransactions</CallName>
+                                    <OnlyTheseValues>ItemReturnDescription, ReturnAll, none</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetItem</CallName>
+                                    <OnlyTheseValues>ItemReturnAttributes, ItemReturnDescription, ReturnAll, none</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetSearchResults</CallName>
+                                    <OnlyTheseValues>ItemReturnAttributes, ItemReturnCategories, ReturnAll, none</OnlyTheseValues>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ErrorLanguage" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Use ErrorLanguage to return error strings for the call in a different language
+						from the language commonly associated with the site that the requesting user
+						is registered with. Specify the standard RFC 3066 language identification tag
+						(e.g., en_US).
+						&lt;br&gt;
+						ID--- country&lt;br&gt;
+						----- -----&lt;br&gt;
+						de_AT Austria&lt;br&gt;
+						de_CH Switzerland&lt;br&gt;
+						de_DE Germany &lt;br&gt;
+						en_AU Australia &lt;br&gt;
+						en_CA Canada &lt;br&gt;
+						en_GB United Kingdom&lt;br&gt;
+						en_SG Singapore&lt;br&gt;
+						en_US United States &lt;br&gt;
+						es_ES Spain &lt;br&gt;
+						fr_BE Belgium (French)&lt;br&gt;
+						fr_CA Canada (French) &lt;br&gt;
+						fr_FR France &lt;br&gt;
+						it_IT Italy &lt;br&gt;
+						nl_BE Belgium (Dutch)&lt;br&gt;
+						nl_NL Netherlands &lt;br&gt;
+						zh_TW Taiwan&lt;br&gt;
+						zh_CN China&lt;br&gt;
+						en_IN India&lt;br&gt;
+						en_IE Ireland&lt;br&gt;
+						zh_HK Hong Kong
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <SeeLink>
+                                    <URL>http://www.ietf.org/rfc/rfc3066.txt</URL>
+                                    <Title>Tags for the Identification of Languages</Title>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="MessageID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						In most cases, all calls support a MessageID element in the request and a
+						CorrelationID element in the response. If you pass a message ID in a request,
+						we will return the same value in CorrelationID in the response. You can use
+						this for tracking that a response is returned for every request and to match
+						particular responses to particular requests. If you do not pass MessageID in
+						the request, CorrelationID is not returned. &lt;br&gt;
+						&lt;br&gt;
+						&lt;span class="tablenote"&gt;&lt;b&gt;Note:&lt;/b&gt;
+						GetCategories, GetAttributesCS, GetCategory2CS, GetAttributesXSL,
+						GetProductFinder, GetProductFinderXSL, and GetProductSearchPage
+						are designed to retrieve very large sets of metadata
+						that change once a day or less often. To improve performance,
+						these calls return cached responses when you request all available data
+						(with no filters). When this occurs, the MessageID and CorrelationID
+						fields aren't applicable.
+						However, if you specify an input filter to reduce the amount of data
+						returned, the calls retrieve the latest data (not cached).
+						When this occurs, MessageID and CorrelationID are applicable.
+						&lt;/span&gt;
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Version" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The version you specify for a call has these basic effects:&lt;br&gt;
+						- It indicates the version of the code lists and other
+						data that eBay should use to process your request.&lt;br&gt;
+						- It indicates the schema version you are using.&lt;br&gt;
+						You need to use a version that is greater than or equal to the
+						lowest supported version.&lt;br&gt;
+						&lt;br&gt;
+						&lt;b&gt;For the SOAP API:&lt;/b&gt; If you are using the SOAP API,
+						this field is required. Specify the version of the WSDL your
+						application is using.&lt;br&gt;
+						&lt;br&gt;
+						&lt;b&gt;For the XML API:&lt;/b&gt; If you are using the XML API,
+						this field has no effect. Instead, specify the version in the
+						X-TURMERIC-API-COMPATIBILITY-LEVEL HTTP header.
+						(If you specify Version in the body of an XML API request and it
+						is different from the value in the HTTP header, eBay returns an
+						informational warning that the value in the HTTP header was used
+						instead.)
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <RequiredInput>Conditionally</RequiredInput>
+                                </CallInfo>
+                                <SeeLink>
+                                    <Title>HTTPHeaders</Title>
+                                    <URL>UseTopicAlias</URL>
+                                </SeeLink>
+                                <SeeLink>
+                                    <Title>eBay Schema Versioning Strategy</Title>
+                                    <URL>../../HowTo/eBayWS/eBaySchemaVersioning.html</URL>
+                                </SeeLink>
+                                <SeeLink>
+                                    <Title>Lowest Supported Version</Title>
+                                    <URL>../../HowTo/eBayWS/eBaySchemaVersioning.html#VersionSupportSchedule</URL>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0" name="EndUserIP" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The IP address of the machine from which the end user is sending the request.
+						Wireless: For PlaceOffer, this is required.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <RequiredInput>Conditionally</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0" name="BotBlock" type="ns:BotBlockRequestType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Container of token and user reply.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <RequiredInput>Conditionally</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0" name="PostTransactionData" type="xs:string"/>
+                    <xs:element minOccurs="0" name="UsageData" type="xs:string"/>
+                    <xs:element minOccurs="0" name="BulkJobID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="BulkTaskID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="GUID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="HTTPUserAgent" type="xs:string"/>
+                    <xs:element minOccurs="0" name="HTTPAccept" type="xs:string"/>
+                    <xs:element minOccurs="0" name="HTTPAcceptLanguage" type="xs:string"/>
+                    <xs:element minOccurs="0" name="HTTPAcceptCharset" type="xs:string"/>
+                    <xs:element minOccurs="0" name="HTTPAcceptEncoding" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Priority" type="ns:ActionPriorityCodeType"/>
+                    <!-- PRIVATE -->
+                    <!-- XML_ONLY -->
+                    <xs:element minOccurs="0"
+                        name="RequesterCredentials" type="ns:XMLRequesterCredentialsType">
+                        <xs:annotation>
+                            <xs:documentation>
+					Authentication information for the user on whose behalf the application is
+					making the request. Only registered eBay users are allowed to make API calls. To
+					verify that a user is registered, your application needs to pass a user-specific
+					value called an "authentication token" in the request. This is equivalent to
+					signing in on the eBay Web site. As API calls do not pass session information,
+					you need to pass the user's authentication token every time you invoke a call on
+					their behalf. All calls require an authentication token, except the calls you
+					use to retrieve a token in the first place. (For such calls, you use the eBay
+					member's username and password instead.)
+				</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                                <SeeLink>
+                                    <URL>UseTopicAlias</URL>
+                                    <Title>AuthNAuth</Title>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- XML_ONLY -->
+                    <xs:element minOccurs="0" name="ErrorHandling" type="ns:ErrorHandlingCodeType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Error tolerance level for the call. This is a preference
+						that specifies how eBay should handle requests that contain
+						invalid data or that could partially fail. This gives you some control
+						over whether eBay returns warnings or blocking errors
+						and how eBay processes the invalid data.&lt;br&gt;
+						&lt;br&gt;
+						For AddItem and related calls, this field is only applicable when
+						the listing includes Item Specifics and Pre-filled Item Information
+						(such as AttributeSetArray and ProductListingDetails).
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <CallName>VerifyAddItem</CallName>
+                                    <Default>BestEffort</Default>
+                                    <RequiredInput>No</RequiredInput>
+                                    <SeeLink>
+                                    <Title>AttributeErrorHandling</Title>
+                                    <URL>UseTopicAlias</URL>
+                                    </SeeLink>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>CompleteSale</CallName>
+                                    <OnlyTheseValues>BestEffort, FailOnError</OnlyTheseValues>
+                                    <Default>FailOnError</Default>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="InvocationID" type="ns:UUIDType">
+                        <xs:annotation>
+                            <xs:documentation>
+						A unique identifer for a particular call. If the same InvocationID is passed
+						in after it has been passed in once on a call that succeeded for a particular
+						application and user, then an error will be returned. The identifier can
+						only contain digits from 0-9 and letters from A-F. The
+						identifier must be 32 characters long.  For example,
+						1FB02B2-9D27-3acb-ABA2-9D539C374228.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>32</MaxLength>
+                                <CallInfo>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddMemberMessage</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddOrder</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddTemplate</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddToItemDescription</CallName>
+                                    <CallName>PlaceOffer</CallName>
+                                    <CallName>ReviseCheckoutStatus</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <xs:element maxOccurs="unbounded" minOccurs="0"
+                        name="OutputSelector" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Another way of specifying the detail level.  Value of each OutputSelector is x-path.
+						It's additive - to see more than one detail level, specify all of them:
+						"User.PayPalInfo.* User.FeedbackInfo" etc.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0" name="WarningLevel" type="ns:WarningLevelCodeType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Controls whether or not to return warnings when the application passes
+						unrecognized elements in a request (i.e., elements that are not defined in the
+						schema). (This does not control warnings related to unrecognized values within
+						elements.) Schema element names are case-sensitive, so this option can also
+						help you remove any potential hidden bugs within your application due to
+						incorrect case or spelling in tag names before you put your application into
+						the Production environment. Note that this setting only validates elements; it
+						does not validate XML attributes.&lt;br&gt;
+						&lt;br&gt;
+						We recommend that you only use this during development and debugging. Do not
+						use this in requests in your production code.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <SeeLink>
+                                    <URL>https://ebay.custhelp.com/cgi-bin/ebay.cfg/php/enduser/std_adp.php?p_faqid=499</URL>
+                                    <Title>Warning Level</Title>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="AbstractResponseType">
+                <xs:annotation>
+                    <xs:documentation>
+				Base type definition of a response payload that can carry any
+				type of payload content with following optional elements:&lt;br&gt;
+				- timestamp of response message&lt;br&gt;
+				- application-level acknowledgement&lt;br&gt;
+				- application-level (business-level) errors and warnings
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:documentation>
+						This value represents the date and time when eBay processed the
+						request. The time zone of this value is GMT and the format is the
+						ISO 8601 date and time format (YYYY-MM-DDTHH:MM:SS.SSSZ). See Time
+						Values in the eBay Web Services guide for information about this
+						time format and converting to and from the GMT time zone. &lt;br&gt;
+						&lt;br&gt;
+						&lt;span class="tablenote"&gt;&lt;b&gt;Note:&lt;/b&gt;
+						GetCategories, GetAttributesCS, GetCategory2CS, GetAttributesXSL,
+						GetProductFinder, GetProductFinderXSL, and GetProductSearchPage
+						are designed to retrieve very large sets of metadata
+						that change once a day or less often. To improve performance,
+						these calls return cached responses when you request all available data
+						(with no filters). When this occurs, this time value reflects the
+						time the cached response was created. Thus, this value is not
+						necessarily when the request was processed.
+						However, if you specify an input filter to reduce the amount of data
+						returned, the calls retrieve the latest data (not cached).
+						When this occurs, this time value does reflect when the request
+						was processed.&lt;/span&gt;
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Ack" type="ns:AckCodeType">
+                        <xs:annotation>
+                            <xs:documentation>
+						A token representing the application-level acknowledgement code that indicates
+						the response status (e.g., success). The AckCodeType list specifies
+						the possible values for Ack.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCallsExcept>CompleteSale, GetPopularKeywords</AllCallsExcept>
+                                    <AllValuesExcept>PartialFailure</AllValuesExcept>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <!-- PRIVATE -->
+                                <!-- [DocInternal] Ron provided the list of applicable public calls.
+						for PartialFailure. [LT 2006-05-30] -->
+                                <!-- PRIVATE -->
+                                <CallInfo>
+                                    <CallName>CompleteSale</CallName>
+                                    <CallName>GetPopularKeywords</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <!-- PRIVATE -->
+                                <CallInfo>
+                                    <CallName>DeleteSiteHostedPictures</CallName>
+                                    <CallName>ExtendSiteHostedPictures</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                                <!-- PRIVATE -->
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="CorrelationID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						In most cases, all calls support a MessageID element in the request
+						and a CorrelationID element in the response. If you pass a message
+						ID in a request, we will return the same value in CorrelationID in
+						the response. You can use this for tracking that a response is
+						returned for every request and to match particular responses to
+						particular requests. If you do not pass MessageID in the request,
+						CorrelationID is not returned.&lt;br&gt;
+						&lt;br&gt;
+						&lt;span class="tablenote"&gt;&lt;b&gt;Note:&lt;/b&gt;
+						GetCategories, GetAttributesCS, GetCategory2CS, GetAttributesXSL,
+						GetProductFinder, GetProductFinderXSL, and GetProductSearchPage
+						are designed to retrieve very large sets of metadata
+						that change once a day or less often. To improve performance,
+						these calls return cached responses when you request all available data
+						(with no filters). When this occurs, the MessageID and CorrelationID
+						fields aren't applicable.
+						However, if you specify an input filter to reduce the amount of data
+						returned, the calls retrieve the latest data (not cached).
+						When this occurs, MessageID and CorrelationID are applicable.
+						&lt;/span&gt;
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0"
+                        name="Errors" type="ns:ErrorType">
+                        <xs:annotation>
+                            <xs:documentation>
+						A list of application-level errors (if any) that occurred when eBay
+						processed the request.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                                <SeeLink>
+                                    <URL>UseTopicAlias</URL>
+                                    <Title>ErrorHandling</Title>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Message" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Supplemental information from eBay, if applicable. May elaborate on errors or
+						provide useful hints for the seller. This data can accompany the call's normal
+						data result set or a result set that contains only errors. The string can
+						return HTML, including TABLE, IMG, and HREF elements. In this case, an HTML-
+						based application should be able to include the HTML as-is in the HTML page
+						that displays the results. A non-HTML application would need to parse the HTML
+						and convert the table elements and image references into UI elements
+						particular to the programming language used. Because this data is returned as
+						a string, the HTML markup elements are escaped with character entity
+						references (e.g.,&amp;lt;table&amp;gt;&amp;lt;tr&amp;gt;...). See the
+						appendices in the eBay Web Services guide for general information about string
+						data types.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <CallName>AddToItemDescription</CallName>
+                                    <CallName>EndItem</CallName>
+                                    <CallName>PlaceOffer</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>RespondToWantItNowPost</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <CallName>VerifyAddItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <!-- [DocInternal] All SYI/RYI listing calls, EndItem, and PlaceOffer
+									 support this tag, per Xin Han. [LT] -->
+                                    <CallName>AddItemFromStoreInventory</CallName>
+                                    <CallName>AddItemFromTemplate</CallName>
+                                    <CallName>AddTemplate</CallName>
+                                    <CallName>VerifyRelistItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Version" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The version of the response payload schema. Indicates the version of the
+						schema that eBay used to process the request.
+						See "Standard Data for All Calls" in the eBay Web Services Guide for information
+						on using the response version when troubleshooting "CustomCode" values that appear
+						in the response.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Build" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						This refers to the specific software build that eBay used when processing the request
+						and generating the response. This includes the version number plus additional
+						information. eBay Developer Support may request the build information
+						when helping you resolve technical issues.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0" name="BotBlock" type="ns:BotBlockResponseType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Container of token, image URL and audio URL. For PlaceOffer,
+						a bot block is triggered on bids if the site is CN and if the seller has
+						contacted Customer Support and asked that they make this a Value
+						Drive Zone listing.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>PlaceOffer</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0" name="PostTransactionData" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="UsageData" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="GUID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0"
+                        name="FilteredElement" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="JobID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Complexity" type="xs:double">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:element>
+                    <!-- PRIVATE -->
+                    <xs:element minOccurs="0"
+                        name="NotificationEventName" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Event name of the notification. Only returned by Platform Notifications.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0"
+                        name="DuplicateInvocationDetails" type="ns:DuplicateInvocationDetailsType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Information that explains a failure due to a duplicate InvocationID being
+						passed in.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddMemberMessage</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddOrder</CallName>
+                                    <CallName>AddSecondChanceItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddTemplate</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddToItemDescription</CallName>
+                                    <CallName>PlaceOffer</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>ReviseCheckoutStatus</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="RecipientUserID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Recipient user ID of the notification. Only returned by Platform Notifications.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="EIASToken" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Unique Identifier of Recipient user ID of the notification. Only returned by
+						Platform Notifications (not for regular API call responses).
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0"
+                        name="NotificationSignature" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						A Base64-encoded MD5 hash that allows the recipient of a Platform
+						Notification to verify this is a valid Platform Notification sent by
+						eBay.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0"
+                        name="HardExpirationWarning" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Expiration date of the user's authentication token. Only returned
+						within the 7-day period prior to a token's expiration. To ensure
+						that user authentication tokens are secure and to help avoid a
+						user's token being compromised, tokens have a limited life span. A
+						token is only valid for a period of time (set by eBay). After this
+						amount of time has passed, the token expires and must be replaced
+						with a new token.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCallsExcept>FetchToken, GetReturnURL, GetRuName, SetReturnURL</AllCallsExcept>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="AckCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+				This code identifies the acknowledgement code types that
+				eBay could use to communicate the status of processing a
+				(request) message to an application. This code would be used
+				as part of a response message that contains an
+				application-level acknowledgement element.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Success">
+                        <xs:annotation>
+                            <xs:documentation>
+					 (out) Request processing succeeded
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Failure">
+                        <xs:annotation>
+                            <xs:documentation>
+					 (out) Request processing failed
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Warning">
+                        <xs:annotation>
+                            <xs:documentation>
+						(out) Request processing completed with warning information
+						being included in the response message
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PartialFailure">
+                        <xs:annotation>
+                            <xs:documentation>
+						(out) Request processing completed with some failures.
+						See the Errors data to determine which portions of the request failed.
+					 </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode">
+                        <xs:annotation>
+                            <xs:documentation>
+						(out) Reserved for internal or future use.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="CustomSecurityHeaderType">
+                <xs:annotation>
+                    <xs:documentation>
+				Security header used for SOAP API calls.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="eBayAuthToken" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Authentication token representing the user who is making the
+						request. The user's token must be retrieved from eBay. To determine
+						a user's authentication token, see the Authentication and
+						Authorization information in the eBay Web Services guide. For calls
+						that list or retrieve item or transaction data, the user usually
+						needs to be the seller of the item in question or, in some cases,
+						the buyer. Similarly, calls that retrieve user or account data may
+						be restricted to the user whose data is being requested. The
+						documentation for each call includes information about such
+						restrictions.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>2000</MaxLength>
+                                <CallInfo>
+                                    <AllCallsExcept>FetchToken, GetReturnURL, GetRuName, SetReturnURL</AllCallsExcept>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                                <SeeLink>
+                                    <URL>UseTopicAlias</URL>
+                                    <Title>AuthNAuth</Title>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0"
+                        name="HardExpirationWarning" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Expiration date of the user's authentication token. Only returned
+						within the 7-day period prior to a token's expiration. To ensure
+						that user authentication tokens are secure and to help avoid a
+						user's token being compromised, tokens have a limited life span. A
+						token is only valid for a period of time (set by eBay). After this
+						amount of time has passed, the token expires and must be replaced
+						with a new token.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCallsExcept>FetchToken, GetReturnURL, GetRuName, SetReturnURL</AllCallsExcept>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Credentials" type="ns:UserIdPasswordType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Authentication information for the user on whose behalf the
+						application is making the request, and authorization information for
+						the application making the request. Only registered eBay users are
+						allowed to make API calls. To verify that a user is registered, your
+						application normally needs to pass a user-specific value called an
+						"authentication token" in the request. This is equivalent to signing
+						in on the eBay Web site. As API calls do not pass session
+						information, you need to pass the user's authentication token every
+						time you invoke a call on their behalf. All calls require an
+						authentication token, except the calls you use to retrieve a token
+						in the first place. For such calls, you use the eBay member's
+						username and password instead.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>FetchToken</CallName>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0"
+                        name="NotificationSignature" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						A Base64-encoded MD5 hash that allows the recepient of a Platform
+						Notification to verify this is a valid Platform Notification sent by
+						eBay.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="DetailLevelCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+				Specifies standard subsets of data to return for each result
+				within the set of results in the response payload. If no
+				detail level is specified, a base set of data is returned.
+				The base set of data varies per call.
+			</xs:documentation>
+                    <xs:appinfo>
+                        <ForceToFile/>
+                    </xs:appinfo>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="ReturnAll">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Returns all available data.
+						With GetSellerList and other calls that retrieve large data sets,
+						please avoid using ReturnAll when possible. For example, if you use
+						GetSellerList, use a GranularityLevel or use the
+						GetSellerEvents call instead. If you use ReturnAll with GetSellerList,
+						use a small EntriesPerPage value and a short
+						EndTimeFrom/EndTimeTo range for better performance.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ItemReturnDescription">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Returns Description, plus the
+						ListingDesigner node and some additional information if applicable
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ItemReturnAttributes">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) For GetItem, returns Item Specifics and
+						Pre-filled Item Information, if any.
+						For GetSearchResults, only returns Item Specifics (if any) that
+						are applicable to search results, and only under certain conditions.
+						See the description of Item.AttributeSetArray for details about
+						the effects for applicable calls. Also see the description of
+						Item.ProductListingDetails for GetItem.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ItemReturnCategories">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) For the GetSearchResults call, returns the primary category and, if applicable, the secondary category
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ReturnSummary">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Returns the summary data.
+						For GetMyMessages, this detail level returns the same data
+						whether or not you include MessageIDs or AlertIDs in the
+						request. Returns up to 10 FolderID and FolderName values.
+						Currently, this detail level is the only way to retrieve
+						FolderID and FolderName values. See "GetMyMessages" in the
+						eBay Web Services Guide for a code sample that demonstrates
+						this.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ReturnHeaders">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Returns message headers.
+						For GetMyMessages, if you include MessageIDs or AlertIDs in
+						the request, this detail level returns header information,
+						without body text, for the specified message ID or alert ID
+						values. If you include a FolderID, header information is
+						returned only for the messages and alerts in the specified
+						folder.
+						If you do not include MessageIDs or AlertIDs, this detail
+						level returns header information for:
+						- All alerts in priority order with the highest priority
+						  alerts first
+						- All messages in ascending order by date received with the
+						  oldest messages first.
+						Note that even when restricted by this detail level to
+						return only header information, GetMyMessages may return a
+						high volume of data.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ReturnMessages">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Returns full message information.
+						For GetMyMessages, if you include MessageIDs or AlertIDs in
+						the request, this detail level returns message information
+						for the specified message ID or alert ID values. If you
+						include a FolderID, message information is returned only for
+						the messages and alerts in the specified folder.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="DuplicateInvocationDetailsType">
+                <xs:annotation>
+                    <xs:documentation>
+				Contains properties that provide information on duplicate uses of InvocationIDs.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0"
+                        name="DuplicateInvocationID" type="ns:UUIDType">
+                        <xs:annotation>
+                            <xs:documentation>
+						The duplicate InvocationID.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddMemberMessage</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddOrder</CallName>
+                                    <CallName>AddSecondChanceItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddTemplate</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddToItemDescription</CallName>
+                                    <CallName>PlaceOffer</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <CallName>ReviseCheckoutStatus</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Status" type="ns:InvocationStatusType">
+                        <xs:annotation>
+                            <xs:documentation>
+						The status of the previous call that used the InvocationID.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddMemberMessage</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddOrder</CallName>
+                                    <CallName>AddSecondChanceItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddTemplate</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddToItemDescription</CallName>
+                                    <CallName>PlaceOffer</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>ReviseCheckoutStatus</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0"
+                        name="InvocationTrackingID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The id that identifies the business item the previous API invocation 
+						created. For example, the ItemID of the item created by an AddItem call.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddMemberMessage</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddOrder</CallName>
+                                    <CallName>AddSecondChanceItem</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddTemplate</CallName>
+                                    <!-- PRIVATE -->
+                                    <CallName>AddToItemDescription</CallName>
+                                    <CallName>PlaceOffer</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>ReviseCheckoutStatus</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ErrorClassificationCodeType">
+                <xs:annotation>
+                    <xs:documentation/>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="RequestError">
+                        <xs:annotation>
+                            <xs:documentation>
+						An error has occurred either as a result of a problem in the sending
+						application or because the application's end-user has attempted to submit
+						invalid data (or missing data). In these cases, do not retry the request. The
+						problem must be corrected before the request can be made again. If the problem
+						is due to something in the application (such as a missing required field), the
+						application must be changed. If the problem is a result of end-user data, the
+						application must alert the end-user to the problem and provide the means for
+						the end-user to correct the data. Once the problem in the application or data
+						is resolved, resend the request to eBay with the corrected data.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SystemError">
+                        <xs:annotation>
+                            <xs:documentation>
+						Indicates that an error has occurred on the eBay system side, such as a
+						database or server down. An application can retry the request as-is a
+						reasonable number of times (eBay recommends twice). If the error persists,
+						contact Developer Technical Support. Once the problem has been resolved, the
+						request may be resent in its original form.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode">
+                        <xs:annotation>
+                            <xs:documentation>
+						(out) Reserved for internal or future use.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorHandlingCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+				Preferences that specify how eBay should handle certain requests that contain
+				invalid data or that could partially fail. These preferences give you some control
+				over whether eBay returns warnings or errors in response to invalid data and how
+				eBay handles listing requests when such data is passed in. For example, these
+				preferences are applicable to AddItem and related calls when Item Specifics are
+				specified, and to CompleteSale. See the eBay Web Services Guide
+				for details about these preferences and their effects.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Legacy">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Apply validation rules that were in effect prior to the time
+						the call started supporting ErrorHandling.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BestEffort">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) Drop the invalid data, continue processing the request with the
+						valid data. If dropping the invalid data leaves the request in a
+						state where required data is missing, reject the request.&lt;br&gt;
+						&lt;br&gt;
+						If BestEffort is specified for CompleteSale, the Ack field in the
+						response could return PartialFailure if one change fails but
+						another succeeds. For example, if the seller attempts to
+						leave feedback twice for the same transaction, the feedback changes
+						would fail but any paid or shipped status changes would succeed.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AllOrNothing">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) If any attribute data is invalid, drop the entire attribute set and
+						proceed with listing the item. If the category has required attributes
+						and the attribute set is dropped, reject the listing.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FailOnError">
+                        <xs:annotation>
+                            <xs:documentation>
+						(in) If any data is invalid, reject the request.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="ErrorParameterType">
+                <xs:annotation>
+                    <xs:documentation>
+				A variable that contains specific information about the context of this error.
+				For example, if you pass in an attribute set ID that does not match
+				the specified category, the attribute set ID might be returned as an error parameter.
+				Use error parameters to flag fields that users need to correct.
+				Also use error parameters to distinguish between errors when multiple
+				errors are returned.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Value" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The value of the variable (e.g., the attribute set ID)
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+                <xs:attribute name="ParamID" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+				The index of the parameter in the list of parameter types returned
+				within the error type.
+				</xs:documentation>
+                        <xs:appinfo>
+                            <CallInfo>
+                                <AllCalls/>
+                                <Returned>Conditionally</Returned>
+                            </CallInfo>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:complexType>
+            <xs:complexType name="ErrorType">
+                <xs:annotation>
+                    <xs:documentation>
+				These are request errors (as opposed to system errors) that occur due to problems
+				with business-level data (e.g., an invalid combination of arguments) that
+				the application passed in.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ShortMessage" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						A brief description of the condition that raised the error.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="LongMessage" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						A more detailed description of the condition that raised the error.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ErrorCode" type="xs:token">
+                        <xs:annotation>
+                            <xs:documentation>
+						A unique code that identifies the particular error condition that occurred.
+						Your application can use error codes as identifiers
+						in your customized error-handling algorithms.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="UserDisplayHint" type="xs:boolean">
+                        <xs:annotation>
+                            <xs:documentation>
+						Indicates whether the error message text is intended to be displayed to an end user
+						or intended only to be parsed by the application. If true or not present (the default),
+						the message text is intended for the end user. If false, the message text is intended for
+						the application, and the application should translate the error into a more appropriate message.
+						Only applicable to Item Specifics errors and warnings returned from listing requests.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>AddItem</CallName>
+                                    <CallName>AddLiveAuctionItem</CallName>
+                                    <CallName>RelistItem</CallName>
+                                    <CallName>ReviseItem</CallName>
+                                    <CallName>ReviseLiveAuctionItem</CallName>
+                                    <CallName>VerifyAddItem</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="SeverityCode" type="ns:SeverityCodeType">
+                        <xs:annotation>
+                            <xs:documentation>
+						Indicates whether the error is a severe error (causing the request to fail)
+						or an informational error (a warning) that should be communicated to the user.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0"
+                        name="ErrorParameters" type="ns:ErrorParameterType">
+                        <xs:annotation>
+                            <xs:documentation>
+						This optional element carries a list of context-specific
+						error variables that indicate details about the error condition.
+						These are useful when multiple instances of ErrorType are returned.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ErrorClassification" type="ns:ErrorClassificationCodeType">
+                        <xs:annotation>
+                            <xs:documentation>
+						API errors are divided between two classes: system errors and request errors.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="InvocationStatusType">
+                <xs:annotation>
+                    <xs:documentation/>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="InProgress">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Success">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Failure">
+                        <xs:annotation>
+                            <xs:documentation/>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="SeverityCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+SeverityCodeType - Type declaration to be used by other schema.
+This code identifies the severity of an API error. A code indicates
+whether there is an API-level error or warning that needs to be
+communicated to the client.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Warning">
+                        <xs:annotation>
+                            <xs:documentation>
+					   (out) Warning or informational error
+				      </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Error">
+                        <xs:annotation>
+                            <xs:documentation>
+					   (out) Application-level error
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode">
+                        <xs:annotation>
+                            <xs:documentation>
+						  (out) Reserved for internal or future use
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="UUIDType">
+                <xs:annotation>
+                    <xs:documentation>
+		  	Specifies a universally unique identifier. The identifier can 
+        only contain digits from 0-9 and letters from A-F. The 
+        identifier must be 32 characters long.  For example, 
+        9CEBD9A6825644EC8D06C436D6CF494B.        
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+            <xs:complexType name="UserIdPasswordType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="AppId" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The application ID that is unique to each application you (or your company)
+						has registered with the eBay Developers Program. If you are executing a call
+						in the Sandbox, this is the "AppId" value that eBay issued to you when you
+						received your Sandbox keys. If you are executing a call in Production, this is
+						the "AppId" value that eBay issued to you when you received your Production
+						keys.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>FetchToken</CallName>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="DevId" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						The unique developer ID that the eBay Developers Program issued to you (or
+						your company). If you are executing a call in the Sandbox, this is the "DevId"
+						value that eBay issued to you when you received your Sandbox keys. Typically,
+						you receive your Sandbox keys when you register as a new developer. If you are
+						executing a call in Production, this is the "DevId" value that eBay issued to
+						you when you received your Production keys. Typically, you receive your
+						Production keys when you certify an application.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>FetchToken</CallName>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AuthCert" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Authentication certificate that authenticates the application when making API
+						calls. If you are executing a call in the Sandbox, this is the "CertId" value
+						that eBay issued to you when you received your Sandbox keys. If you are
+						executing a call in Production, this is the "CertId" value that eBay issued to
+						you when you received your Production keys. This is unrelated to auth tokens.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>FetchToken</CallName>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Username" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						eBay user ID (i.e., eBay.com Web site login name) for the user the application
+						is retrieving a token for. This is typically the application's end-user (not
+						the developer).
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>64</MaxLength>
+                                <CallInfo>
+                                    <CallName>FetchToken</CallName>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Password" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Password for the user specified in Username.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>64</MaxLength>
+                                <CallInfo>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                    <!-- N/A: FetchToken -->
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="WarningLevelCodeType">
+                <xs:annotation>
+                    <xs:documentation/>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Low">
+                        <xs:annotation>
+                            <xs:documentation>
+					Do not return warnings when the application passes
+					unrecognized elements in a request.
+					This is the default value if WarningLevel is not specified.
+ 					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="High">
+                        <xs:annotation>
+                            <xs:documentation>
+					Return warnings when the application passes
+					unrecognized elements in a request.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="XMLRequesterCredentialsType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Username" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						eBay user ID (i.e., eBay.com Web site login name) for the user the application
+						is retrieving a token for. This is typically the application's end-user (not
+						the developer).
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>64</MaxLength>
+                                <CallInfo>
+                                    <CallName>FetchToken</CallName>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Password" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Password for the user specified in Username.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>64</MaxLength>
+                                <CallInfo>
+                                    <CallName>GetReturnURL</CallName>
+                                    <CallName>GetRuName</CallName>
+                                    <CallName>SetReturnURL</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                    <!-- N/A: FetchToken -->
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="eBayAuthToken" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+						Authentication token representing the user who is making the request. The
+						user's token must be retrieved from eBay. To determine a user's authentication
+						token, see the Authentication and Authorization information in the eBay Web
+						Services guide. For calls that list or retrieve item or transaction data, the
+						user usually needs to be the seller of the item in question or, in some cases,
+						the buyer. Similarly, calls that retrieve user or account data may be
+						restricted to the user whose data is being requested. The documentation for
+						each call includes information about such restrictions.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <MaxLength>2000</MaxLength>
+                                <CallInfo>
+                                    <AllCallsExcept>FetchToken, GetReturnURL, GetRuName, SetReturnURL</AllCallsExcept>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                                <SeeLink>
+                                    <URL>UseTopicAlias</URL>
+                                    <Title>AuthNAuth</Title>
+                                </SeeLink>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RatingEngineFeeType">
+                <xs:annotation>
+                    <xs:documentation>
+        Container for one rating engine fee
+			</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="FeeCode" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The rating engine fee code 
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Quantity" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The quantity for this fee code 
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="CategoryID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The global category id for this fee code
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SiteID" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+							Specifies the eBay site for which to retrieve the fees.
+							Use the numeric site code (e.g., 77 for eBay Germany). 
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="PartnerID" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+						Specifies the eBay partner for which to retrieve the fees.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AccountID" type="xs:long">
+                        <xs:annotation>
+                            <xs:documentation>
+						Specifies the eBay account Id for which to retrieve the fees.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="CurrencyCode" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+						Specifies the ISO numeric currency code for which to retrieve the fees.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="PowerSellerLevel" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+						Specifies the power seller level for the user/account
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="EquipTypeCode" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+						Equip Type code in the rating engine - Currently used to store the duration of the listing
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="EquipClassCode" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+						Equip Class code in the rating engine - Currently not used 
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="RateClass" type="xs:int">
+                        <xs:annotation>
+                            <xs:documentation>
+						Rate class in the rating engine - Currently not used
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ListingPrice" type="xs:double">
+                        <xs:annotation>
+                            <xs:documentation>
+						Listing price for insertion fee/reserve fee - not the final sales price used for final value fees 
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ActionTime" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:documentation>
+						The date time to use for getting the rates.
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>Yes</RequiredInput>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="SalesPrice" type="xs:double">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The sales price in case of final value fee
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="FeeAmount" type="xs:double">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The rating engine fee amount
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="BaseFeeAmount" type="xs:double">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The rating engine fee base amount - without the promotion if any
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="UnroundedFeeAmount" type="xs:double">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The rating engine amount - unrounded with six decimals
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="PromotionID" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation> 
+						The rating engine promotion Id - S - standard, P - Promotion etc
+					</xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                                <CallInfo>
+                                    <CallName>GetFees</CallName>
+                                    <RequiredInput>No</RequiredInput>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+					eBay Listing Enhancements Codes
+				</xs:documentation>
+            </xs:annotation>
+            <xs:annotation>
+                <xs:documentation>
+					Code List Agency - eBay, Inc.
+				</xs:documentation>
+            </xs:annotation>
+            <xs:annotation>
+                <xs:documentation>
+					Code List Version - 1.0
+				</xs:documentation>
+            </xs:annotation>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="GetFeesResponse">
+        <wsdl:part element="ns:GetFeesResponse" name="GetFeesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetFeesRequest">
+        <wsdl:part element="ns:GetFeesRequest" name="GetFeesRequest"/>
+    </wsdl:message>
+        <wsdl:message name="RequesterCredentials">
+        <wsdl:part element="ns:RequesterCredentials" name="RequesterCredentials"/>
+    </wsdl:message>
+    <wsdl:portType name="eBayAPIInterface">
+        <wsdl:operation name="GetFees">
+            <wsdl:input message="ns:GetFeesRequest"/>
+            <wsdl:output message="ns:GetFeesResponse"/>
+            <wsdl:documentation>This is GetFees methods documentation</wsdl:documentation>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="eBayAPISoapBinding" type="ns:eBayAPIInterface">
+        <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="GetFees">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input>
+                <wsdlsoap:header message="ns:RequesterCredentials"
+                    part="RequesterCredentials" use="literal"/>
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <wsdlsoap:header message="ns:RequesterCredentials"
+                    part="RequesterCredentials" use="literal"/>
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="eBayAPIInterfaceService">
+        <wsdl:port binding="ns:eBayAPISoapBinding" name="eBayAPI">
+            <wsdlsoap:address location="http://localhost:8080/ws/websvc/eBayAPI"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

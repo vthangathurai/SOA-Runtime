@@ -1,0 +1,20 @@
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# as is, without appending extra path information to
+# it.
+|PathMustNotExistRule|${mojo.outputDirectory}
+gen-src | Indicates bug with -dest argument 
+client  | Indicates bug with -jdest argument
+
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# and not hardcoded paths within the codegen tooling
+|PathMustNotExistRule|${project.basedir}
+gen-src
+gen-meta-src
+
+|ClassMustExistRule|${mojo.outputDirectory}
+org.ebayopensource.turmeric.v1.services.sampleturmericservicev1.impl.gen.SampleTurmericServiceV1RequestDispatcher
+
+#|PathMustExistRule|${mojo.resourcesOutputDirectory}
+#META-INF/soa/services/config/SampleTurmericServiceV1/service_operations.properties

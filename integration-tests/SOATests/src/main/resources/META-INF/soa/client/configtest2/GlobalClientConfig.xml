@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-client-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<monitor-config>
+		<storage-provider name="myprovider1">
+			<class-name>com.ebay.blah.blah</class-name>
+				<storage-options>
+					<option name="name1">value1</option>
+					<option name="name2">value2</option>
+				</storage-options>
+		</storage-provider>
+		<snapshot-interval>60</snapshot-interval>
+	</monitor-config>
+
+<client-config-groups>
+	<client-group name="SOAWebServiceClient">
+	   <client-config>
+		<invocation-options>
+			<G11N-options>
+				<preferred-encoding>CP-1252</preferred-encoding>
+				<preferred-locale>en-CA</preferred-locale>
+			</G11N-options>
+			<custom-serializers binding="XML">
+			  <custom-serializer-deserializer>
+				<java-type-name>com.ebay.mytypes.ItemType</java-type-name>
+				<serializer-class-name>com.ebay.soa.blah.serializers.MyItemTypeSerializer2</serializer-class-name>
+				<deserializer-class-name>com.ebay.soa.blah.deserializers.MyItemTypeDeserializer2</deserializer-class-name>
+				<xml-type-name>a</xml-type-name>
+			  </custom-serializer-deserializer>
+			  <custom-serializer-deserializer>
+				<java-type-name>com.ebay.mytypes.UserType</java-type-name>
+				<serializer-class-name>com.ebay.soa.blah.serializers.MyUserTypeSerializer</serializer-class-name>
+				<deserializer-class-name>com.ebay.soa.blah.deserializers.MyUserTypeDeserializer</deserializer-class-name>
+				<xml-type-name>b</xml-type-name>
+			  </custom-serializer-deserializer>
+			</custom-serializers>
+			<monitoring-level>Fine</monitoring-level>
+			<invocation-use-case>my_use_case</invocation-use-case>
+			<retry-options>
+				<app-level-num-retries>5</app-level-num-retries>
+				<app-level-retry-handler>org.ebayopensource.turmeric.runtime.sif.impl.pipeline.DefaultApplicationRetryHandler</app-level-retry-handler>
+				<retry-transport-status-code>502</retry-transport-status-code>
+				<retry-transport-status-code>500</retry-transport-status-code>
+				<retry-exception-class>com.exception1</retry-exception-class>
+				<retry-exception-class>com.exception2</retry-exception-class>
+				<retry-error-id>2005</retry-error-id>
+			</retry-options>
+			<custom-error-response-adapter>org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.CustomErrorResponseAdapterImpl</custom-error-response-adapter>
+		</invocation-options>
+		<pipeline-config>
+			<request-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</request-pipeline>
+			<response-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</response-pipeline>
+			<request-handlers>
+				<handler name="Logging" presence="Replaceable">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+				</handler>
+				<chain name="AppSpecific1" presence="Replaceable"/>
+				<handler name="SOAMetrics" presence="Replaceable">
+					<class-name>com.ebay.myhandlers.blah.blah</class-name>
+				</handler>
+				<chain name="AppSpecific2" presence="Replaceable"/>
+			</request-handlers>
+		</pipeline-config>
+		<protocol-processor name="SOAP" version="1.1">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>
+				com.ebay.kernel.soap.blah.blah
+			</class-name>
+		</protocol-processor>
+		<transport name="HTTP10">
+			<class-name>com.ebay.my.transport.http_1_0</class-name>
+			<default-options>
+				<socket-connect-timeout-msec>1000</socket-connect-timeout-msec>
+				<socket-read-timeout-msec>2000</socket-read-timeout-msec>
+				<num-connect-retries>3</num-connect-retries>
+			</default-options>
+		</transport>
+		<transport name="HTTP11">
+			<class-name>com.ebay.my.transport.http_1_1</class-name>
+			<default-options>
+				<socket-connect-timeout-msec>4000</socket-connect-timeout-msec>
+				<socket-read-timeout-msec>5000</socket-read-timeout-msec>
+				<num-connect-retries>6</num-connect-retries>
+			</default-options>
+		</transport>
+		<data-binding-config>
+			<data-binding name="XML">
+				<mime-type>application/xml</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+				</deserializer-factory-class-name>
+				<options>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+			<data-binding name="NV">
+			    <mime-type>text/plain</mime-type>
+				<serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.NVSerializerImpl
+				</serializer-factory-class-name>
+				<deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.NVDeserializerImpl
+				</deserializer-factory-class-name>
+				<options>
+					<option name="elementFormDefault">UNQUALIFIED</option>
+				</options>
+			</data-binding>
+		</data-binding-config>
+	   </client-config>
+	</client-group>
+</client-config-groups>
+</global-client-config>

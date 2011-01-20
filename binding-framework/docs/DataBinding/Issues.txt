@@ -1,0 +1,85 @@
+1.  Nested collection types as input parameters in an interface method are not supported. For example,
+
+	void setItems(HashMap<String, ArrrayList<ItemType>> itemMap);
+
+    This is a limitation on Jaxb 2.1 that (de)serialization of nested type is not happening properly.
+
+    Workaround: Define this interface as follows:
+
+	public class MyItemList {
+		ArrrayList<ItemType> itemList;
+		...
+	}
+
+	void setItems(HashMap<String, MyItemList> itemMap);
+
+    Our code generation tools will attempt to check this nested collection types and warns the user.
+
+
+2.  Collection as a return type is not supported
+
+	HashMap<String, ItemType> findItems(...);
+
+    This is a limitation on Jaxb 2.1 that schemagen doesn't take interfaces as inputs. We have to 
+    find all the list of types from the interface and then pass it to schemagen. But colleciton 
+    as above is a type we can pass to schemagen.
+
+    Workaround: Defines the interface as follows:
+
+	public class FindItemResponse {
+		HashMap<String, ItemType> result;
+	} 
+
+ 	FindItemResponse findItems(...);
+
+    Our code generation tools will attempt to check collection return types and stop the code generation 
+    process with error.
+
+3.  How to registered XmlJavaTypeAdapter(for our type converter) programmatically at runtime without modifying 
+    the user's java class with annotations. This is an open issue that TypeConverter implementation is blocked
+    on.
+	
+
+4.  Nested collection types inside the exposed java beans (input or output in interface methods) not supported. 
+    For example, 
+ 	
+	public class HashMapOfArrayList {
+		private HashMap<String, ArrayList<String>> myNestedCollection;
+  		...
+	}
+
+    HashMapOfArrayList cann't be used as any input or output parameters in service interface.
+
+    This is a limitation on Jaxb 2.1 that (de)serialization of nested type is not happening properly.
+
+    Workaround: Define a wrapper class for your inner collection as follows:
+
+	public class MyArrayList {
+		ArrrayList<String> list;
+		...
+	}
+
+ 	
+	public class HashMapOfArrayList {
+		private HashMap<String, MyArrayList> myNestedCollection;
+  		...
+	}
+
+    This issue is the same as #1 except that it occurs inside a type.
+
+5.  Collection type as interface parameter types are not supported. 
+	
+	void addItems(ArrayList<ItemType>);
+
+    This is a limitation on Jaxb 2.1 that schemagen doesn't take interfaces as inputs. 
+
+    Workaround: defines a wrapper class
+
+	public class ItemList {
+		ArrrayList<ItemType> items;
+		...
+	}
+
+    	void addItems(ItemList items);
+
+

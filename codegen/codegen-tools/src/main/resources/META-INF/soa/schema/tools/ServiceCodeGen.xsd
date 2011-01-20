@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <xs:schema targetNamespace="http://www.ebayopensource.org/turmeric/runtime/codegen/common" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:scg="http://www.ebayopensource.org/turmeric/runtime/codegen/common" xmlns:cfg="http://www.ebayopensource.org/turmeric/common/config" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:import namespace="http://www.ebayopensource.org/turmeric/common/config" schemaLocation="../client/ClientConfig.xsd"/>
+	<xs:import namespace="http://www.ebayopensource.org/turmeric/common/config" schemaLocation="../server/ServiceConfig.xsd"/>
+	<xs:import namespace="http://www.ebayopensource.org/turmeric/common/config" schemaLocation="../server/SecurityPolicy.xsd"/>
+	<xs:annotation>
+		<xs:documentation>
+		  Schema for defining Code Generation Tools input for generating Service Classes, Configuration files and Deployment descriptors for SOA Service.
+		 </xs:documentation>
+	</xs:annotation>
+	<xs:element name="service-code-gen" type="scg:ServiceCodeGenDefType"/>
+	<xs:complexType name="ServiceCodeGenDefType">
+		<xs:sequence>
+			<xs:element name="service-info" type="scg:ServiceType"/>
+			<xs:element name="interface-info" type="scg:InterfaceType"/>
+			<xs:element name="config-info" type="scg:ConfigType" minOccurs="0"/>
+			<xs:element name="security-policy-info" type="scg:SecurityConfigType" minOccurs="0"/>
+			<xs:element name="tool-input-info" type="scg:ToolInputType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying service details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="service-name" type="xs:QName"/>
+			<xs:element name="service-location" type="xs:anyURI"/>
+			<xs:element name="wsdl-location" type="xs:anyURI"/>
+			<xs:element name="pkg-ns-map-list" type="scg:PkgToNSMappingList" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InterfaceType">
+		<xs:annotation>
+			<xs:documentation>Type definition to indicate type of interface input for Service Code Gen Tools</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="interface-class-def" type="scg:InterfaceClassDefType" minOccurs="0"/>
+			<xs:element name="impl-class-def" type="scg:ImplClassDefType" minOccurs="0"/>
+			<xs:element name="interface-def" type="scg:InterfaceDefType" minOccurs="0"/>
+			<xs:element name="wsdl-def" type="scg:WSDLDefType" minOccurs="0"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ConfigType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying service configuration details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="client-cfg" type="cfg:ClientConfigList" minOccurs="0"/>
+			<xs:element name="server-cfg" type="cfg:ServiceConfig" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SecurityConfigType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying security policy details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="security-cfg" type="cfg:ServiceSecurityConfig" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ToolInputType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying input options for Code Generation Tool</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="gen-type" type="scg:CodeGenOptionType"/>
+			<xs:element name="src-location" type="xs:string" minOccurs="0"/>
+			<xs:element name="dest-location" type="xs:string" minOccurs="0"/>
+			<xs:element name="j-dest-location" type="xs:string" minOccurs="0"/>
+			<xs:element name="m-dest-location" type="xs:string" minOccurs="0"/>
+			<xs:element name="bin-location" type="xs:string" minOccurs="0"/>
+			<xs:element name="service-layer-location" type="xs:string" minOccurs="0"/>			
+			<xs:element name="gen-interface-name" type="xs:string" minOccurs="0"/>
+			<xs:element name="gen-interface-pkg-name" type="xs:string" minOccurs="0"/>
+			<xs:element name="service-impl-class-name" type="xs:string" minOccurs="0"/>
+			<xs:element name="client-name" type="xs:string" minOccurs="0"/>
+			<xs:element name="service-curr-version" type="xs:string" minOccurs="0"/>
+			<xs:element name="service-layer" type="scg:ServiceLayerType" minOccurs="0"/>
+			<xs:element name="client-cfg-group-name" type="xs:string" minOccurs="0"/>
+			<xs:element name="service-cfg-group-name" type="xs:string" minOccurs="0"/>
+			<xs:element name="gen-service-skeleton" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="impl-common-svc-interface" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="add-validate-internals" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="gen-test-classes" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="dont-prompt" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="no-global-config" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="no-compile" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="continue-on-error" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="op-name-to-cemc-map-list" type="scg:OpNameToCemcMappingList" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="CodeGenOptionType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="All"/>
+			<xs:enumeration value="Client"/>
+			<xs:enumeration value="Server"/>
+			<xs:enumeration value="Proxy"/>
+			<xs:enumeration value="Dispatcher"/>
+			<xs:enumeration value="ConfigAll"/>
+			<xs:enumeration value="ClientConfig"/>
+			<xs:enumeration value="ServerConfig"/>
+			<xs:enumeration value="GlobalClientConfig"/>
+			<xs:enumeration value="GlobalServerConfig"/>
+			<xs:enumeration value="Schema"/>
+			<xs:enumeration value="Wsdl"/>
+			<xs:enumeration value="SISkeleton"/>
+			<xs:enumeration value="TypeMappings"/>
+			<xs:enumeration value="WebXml"/>
+			<xs:enumeration value="UnitTest"/>
+			<xs:enumeration value="TestClient"/>
+			<xs:enumeration value="TypeDefs"/>
+			<xs:enumeration value="ClientNoConfig"/>
+			<xs:enumeration value="ServerNoConfig"/>
+			<xs:enumeration value="ServiceOpProps"/>
+			<xs:enumeration value="SecurityPolicyConfig"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceLayerType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="APPLICATION"/>
+			<xs:enumeration value="BUSINESS"/>
+			<xs:enumeration value="INFRASTRUCTURE"/>
+			<xs:enumeration value="INTEGRATION"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="InterfaceClassDefType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying interface class as input</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="interface-class-name" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InterfaceDefType">
+		<xs:annotation>
+			<xs:documentation>Type definition to  indicate Legal Service Interface Definition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="interface-name" type="scg:JavaIdentifierType"/>
+			<xs:element name="package-name" type="xs:string"/>
+			<xs:element name="method-def-list" type="scg:MethodDefListType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WSDLDefType">
+		<xs:annotation>
+			<xs:documentation>Type definition to  indicate WSDL input Definition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="wsdl-file" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ImplClassDefType">
+		<xs:annotation>
+			<xs:documentation>Type definition to  indicate implementation class with list of methods to expose for a service</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="interface-name" type="scg:JavaIdentifierType"/>
+			<xs:element name="interface-package" type="xs:string"/>
+			<xs:element name="exposed-methods" type="scg:MethodNameListType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="impl-class-name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PkgToNSMappingList">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying Java package to XML namespaces</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="pkg-ns-map" type="scg:PkgNSMappingType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PkgNSMappingType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying Java package to XML namespaces</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="package" type="xs:token"/>
+			<xs:element name="namespace" type="xs:anyURI"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="NSToPkgMappingList">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying  XML namespaces to Java package </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="pkg-ns-map" type="scg:NSPkgMappingType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NSPkgMappingType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying Java package to XML namespaces</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="namespace" type="xs:anyURI"/>
+			<xs:element name="package" type="xs:token"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="OpNameToCemcMappingList">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying Java package to XML namespaces</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="op-name-cemc-map" type="scg:OpNameCemcMappingType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OpNameCemcMappingType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying operation name to custom error message class mapping</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="operation-name" type="xs:token"/>
+			<xs:element name="custom-err-msg-class" type="xs:token"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MethodDefListType">
+		<xs:annotation>
+			<xs:documentation>Type definition to indicate List of methods.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="method-def" type="scg:MethodDefType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MethodDefType">
+		<xs:annotation>
+			<xs:documentation>Type definition to indicate Legal Method Types of a Service Interface; Overloaded methods are not supported.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="input-type" type="scg:InputParamType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="output-type" type="scg:JavaType"/>
+			<xs:element name="exception-type" type="scg:JavaType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="method-name" type="scg:JavaIdentifierType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MethodNameListType">
+		<xs:annotation>
+			<xs:documentation>Type definition to indicate List of method names.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="method-name" type="scg:JavaIdentifierType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InputParamType">
+		<xs:annotation>
+			<xs:documentation>Type definition for specifying Input Parameter details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="param-name" type="xs:string"/>
+			<xs:element name="param-type" type="scg:JavaType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="JavaIdentifierType">
+		<xs:annotation>
+			<xs:documentation>The java-identifierType defines a Java identifier. The users of this type should further verify that the content does not contain Java reserved keywords.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="($|_|\p{L})(\p{L}|\p{Nd}|_|$)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JavaType">
+		<xs:annotation>
+			<xs:documentation>This is a generic type that designates a Java primitive type or a fully qualified name of a Java interface/type.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[^\p{Z}]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ebay.soa.interface</groupId>
+  <artifactId>TestServcie1V1</artifactId>
+  <version>1.0.0</version>
+  <name>TestServcie1V1</name>
+  <properties>
+    <implProjectName>TestServcie1V1Impl</implProjectName>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ebay.soa</groupId>
+      <artifactId>SOAClient</artifactId>
+      <version>1.0.0.turmeric-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ebay.soa</groupId>
+      <artifactId>SOATools</artifactId>
+      <version>1.0.0.turmeric-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+      <version>2.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.runtime</groupId>
+      <artifactId>common-type-library</artifactId>
+      <version>1.0.0.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
+    <outputDirectory>build/classes</outputDirectory>
+    <testOutputDirectory>build/classes</testOutputDirectory>
+    <resources>
+      <resource>
+        <directory>gen-meta-src</directory>
+      </resource>
+      <resource>
+        <directory>meta-src</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <debug>true</debug>
+          <encoding>UTF-8</encoding>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>gen-src/client</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.ebayopensource.turmeric.maven</groupId>
+        <artifactId>turmeric-maven-plugin</artifactId>
+        <version>1.0.0.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>gen-interface-wsdl</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+        <verbose>true</verbose>
+        <legacy>true</legacy>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<service-code-gen xmlns="http://www.ebayopensource.org/turmeric/runtime/codegen/common" xmlns:ccfg="http://www.ebayopensource.org/turmeric/common/config" xmlns:cts="http://www.ebayopensource.org/soaframework/common/types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ebayopensource.org/turmeric/runtime/codegen/common/ServiceCodeGen.xsd">
+   <service-info>
+      <service-name xmlns:test="http://ebayopensource.org/soaframework/services/test">test:MySimpleService</service-name>
+      <service-location>http://ebayopensource.org/soaframework/services/test</service-location>
+      <wsdl-location>http://ebayopensource.org/soaframework/services/test/TestService1?wsdl</wsdl-location>
+   </service-info>
+   <interface-info>
+      <interface-class-def>
+         <interface-class-name>org.ebayopensource.turmeric.tools.codegen.SimpleServiceInterface</interface-class-name>
+      </interface-class-def>
+   </interface-info>
+   <config-info>
+      <client-cfg>
+         <ccfg:client-config service-name="{http://ebayopensource.org/soaframework/services/test}TestService1">
+            <ccfg:service-interface-class-name>org.ebayopensource.turmeric.tools.codegen.SimpleServiceInterface</ccfg:service-interface-class-name>
+            <ccfg:client-instance-config>
+               <ccfg:invocation-options>
+                  <ccfg:app-level-num-retries>1</ccfg:app-level-num-retries>
+                  <ccfg:preferred-transport name="LOCAL">
+                     <ccfg:override-options>
+                        <ccfg:num-connect-retries>3</ccfg:num-connect-retries>
+                     </ccfg:override-options>
+                  </ccfg:preferred-transport>
+               </ccfg:invocation-options>
+            </ccfg:client-instance-config>
+         </ccfg:client-config>
+         <ccfg:client-config service-name="{http://ebayopensource.org/soaframework/services/test}ItemService">
+            <ccfg:service-interface-class-name>org.ebayopensource.turmeric.tools.codegen.ItemServiceInterface</ccfg:service-interface-class-name>
+            <ccfg:client-instance-config>
+               <ccfg:invocation-options>
+                  <ccfg:app-level-num-retries>1</ccfg:app-level-num-retries>
+                  <ccfg:preferred-transport name="LOCAL">
+                     <ccfg:override-options>
+                        <ccfg:num-connect-retries>3</ccfg:num-connect-retries>
+                     </ccfg:override-options>
+                  </ccfg:preferred-transport>
+               </ccfg:invocation-options>
+            </ccfg:client-instance-config>
+         </ccfg:client-config>
+      </client-cfg>
+      <server-cfg service-name="{http://ebayopensource.org/soaframework/services/test}TestService1">
+         <ccfg:service-impl-class-name>com.ebay.services.samples.greetingservice.impl.GreetingServiceImpl</ccfg:service-impl-class-name>
+         <ccfg:service-interface-class-name>com.ebay.services.samples.greetingservice.intf.GreetingService</ccfg:service-interface-class-name>
+         <ccfg:current-version>1.0</ccfg:current-version>
+      </server-cfg>
+   </config-info>
+   
+   <security-policy-info>
+   		<security-cfg>
+	      	<ccfg:authentication-options>
+				<ccfg:operation name="*" >
+		  	   		<ccfg:option name="authn_level">L0</ccfg:option> 	
+	 	  	   		<ccfg:option name="authn_method">Token</ccfg:option> 	
+	 	         		<ccfg:option name="assertion_type">SimpleAssertion</ccfg:option>
+		         		<ccfg:option name="assertion_level">L1</ccfg:option> 
+				</ccfg:operation>
+			</ccfg:authentication-options>
+			<ccfg:authorization-options>
+				<ccfg:operation name="op1" >
+					<ccfg:option name="1name">1value</ccfg:option>
+				</ccfg:operation>
+				<ccfg:operation name="op2" >
+					<ccfg:option name="2name">2value</ccfg:option>
+				</ccfg:operation>
+			</ccfg:authorization-options>
+		</security-cfg>
+   </security-policy-info>   
+   <tool-input-info>
+      <gen-type>All</gen-type>
+      <src-location>.\\UnitTests\\src</src-location>
+      <dest-location>.</dest-location>
+      <service-curr-version>1.0.0</service-curr-version>
+      <client-name>MySimpleService</client-name>
+      <no-compile>true</no-compile>
+      <continue-on-error>true</continue-on-error>
+      <op-name-to-cemc-map-list>
+	      <op-name-cemc-map>
+		      <operation-name>All</operation-name>
+		      <custom-err-msg-class>org.ebayopensource.turmeric.tools.codegen.CustomErrorMessage</custom-err-msg-class>
+	      </op-name-cemc-map>
+	  </op-name-to-cemc-map-list>
+   </tool-input-info>
+</service-code-gen>

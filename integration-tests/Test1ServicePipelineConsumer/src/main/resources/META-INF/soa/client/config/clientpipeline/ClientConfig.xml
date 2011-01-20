@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<client-config-list xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<client-config
+		service-name="test1"
+		group="SOAWebServiceClient-pipeline"
+		xmlns="http://www.ebayopensource.org/turmeric/common/config">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<service-location>
+			http://localhost:9091/ws/spf
+		</service-location>
+		<wsdl-location>webservices/latest/eBaySvc.wsdl</wsdl-location>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="Local" />
+				<request-data-binding>XML</request-data-binding>
+			</invocation-options>
+			<pipeline-config>
+                   <request-handlers>
+                        <handler name="TestExceptionContinueOnError" continue-on-error="true">
+                            <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ClientExceptionTestHandler</class-name>
+                        </handler>
+                        <handler name="TestExceptionStopOnError" continue-on-error="false">
+                            <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ClientExceptionTestHandler</class-name>
+                        </handler>
+                       
+				
+                    </request-handlers>
+			</pipeline-config>
+		</client-instance-config>
+	</client-config>
+	<client-config
+		service-name="{http://www.ebayopensource.org/turmeric/common/config}test1gen"
+		group="SOAWebServiceClient-pipeline">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="LOCAL">
+					<override-options>
+						<num-connect-retries>3</num-connect-retries>
+					</override-options>
+				</preferred-transport>
+			</invocation-options>
+		</client-instance-config>
+	</client-config>
+</client-config-list>

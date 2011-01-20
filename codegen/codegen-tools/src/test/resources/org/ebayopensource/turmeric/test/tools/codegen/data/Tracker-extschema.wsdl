@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions 
+	name="Tracker2" 
+	xmlns:tns="http://soa.ebay.com/Tracker/" 
+	targetNamespace="http://soa.ebay.com/Tracker/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"> 
+	
+	<wsdl:import namespace="http://soa.ebay.com/Tracker/"
+           location="TrackerTypes.xsd"/>
+	
+  <wsdl:message name="createTicketRequest">
+    <wsdl:part element="tns:createTicket" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="createTicketResponse">
+    <wsdl:part element="tns:createTicketResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="Tracker">
+    <wsdl:operation name="createTicket">
+      <wsdl:input message="tns:createTicketRequest"/>
+      <wsdl:output message="tns:createTicketResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TrackerSOAP" type="tns:Tracker">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createTicket">
+      <soap:operation soapAction="http://soa.ebay.com/Tracker/createTicket"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Tracker2">
+    <wsdl:port binding="tns:TrackerSOAP" name="TrackerSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

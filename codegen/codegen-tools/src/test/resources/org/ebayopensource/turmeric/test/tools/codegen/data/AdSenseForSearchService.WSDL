@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions xmlns:ns1="http://org.apache.axis2/xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:ns0="http://www.google.com/api/adsense/v3"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	targetNamespace="http://www.google.com/api/adsense/v3">
+	<wsdl:types>
+		<xs:schema xmlns:ns="http://www.google.com/api/adsense/v3"
+			attributeFormDefault="qualified" elementFormDefault="unqualified"
+			targetNamespace="http://www.google.com/api/adsense/v3">
+			<xs:element name="getBuiltinSearchResultStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dummy" nillable="true"
+							type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getBuiltinSearchResultStylesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:SearchResultStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SearchResultStyle"
+				type="ns0:SearchResultStyle" />
+			<xs:complexType name="SearchResultStyle">
+				<xs:sequence>
+					<xs:element name="backgroundColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="borderColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="faintTextColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="logoBackgroundColor"
+						nillable="true" type="xs:string" />
+					<xs:element name="logoDestUrl" nillable="true"
+						type="xs:string" />
+					<xs:element name="logoHeight" type="xs:int" />
+					<xs:element name="logoPlacement" nillable="true"
+						type="ns0:LogoPlacement" />
+					<xs:element name="logoUrl" nillable="true"
+						type="xs:string" />
+					<xs:element name="logoWidth" type="xs:int" />
+					<xs:element name="name" nillable="true"
+						type="xs:string" />
+					<xs:element name="textColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="titleColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="urlColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="visitedUrlColor" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="LogoPlacement" type="ns0:LogoPlacement" />
+			<xs:complexType name="LogoPlacement">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="AdSenseApiExceptionFault">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AdSenseApiException"
+							nillable="true" type="ns0:AdSenseApiException" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdSenseApiException"
+				type="ns0:AdSenseApiException" />
+			<xs:complexType name="AdSenseApiException">
+				<xs:complexContent>
+					<xs:extension base="xs:Exception">
+						<xs:sequence>
+							<xs:element name="code" type="xs:int" />
+							<xs:element name="internal"
+								type="xs:boolean" />
+							<xs:element name="message" nillable="true"
+								type="xs:string" />
+							<xs:element name="trigger" nillable="true"
+								type="xs:string" />
+							<xs:element name="triggerDetails"
+								nillable="true" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getSearchResultStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getSearchResultStylesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:SearchResultStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getChannels">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="type" nillable="true"
+							type="ns0:ChannelService_Type" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ChannelService_Type"
+				type="ns0:ChannelService_Type" />
+			<xs:complexType name="ChannelService_Type">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getChannelsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:ChannelService_Data" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ChannelService_Data"
+				type="ns0:ChannelService_Data" />
+			<xs:complexType name="ChannelService_Data">
+				<xs:sequence>
+					<xs:element name="status" nillable="true"
+						type="ns0:ChannelService_Status" />
+					<xs:element name="type" nillable="true"
+						type="ns0:ChannelService_Type" />
+					<xs:element name="name" nillable="true"
+						type="xs:string" />
+					<xs:element name="synServiceId" nillable="true"
+						type="xs:string" />
+					<xs:element name="id" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="ChannelService_Status"
+				type="ns0:ChannelService_Status" />
+			<xs:complexType name="ChannelService_Status">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="generateSearchBoxCode">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="country" nillable="true"
+							type="xs:string" />
+						<xs:element name="searchType" nillable="true"
+							type="ns0:SearchType" />
+						<xs:element name="siteProperties"
+							nillable="true" type="ns0:SiteProperties" />
+						<xs:element name="searchOptions" nillable="true"
+							type="ns0:SearchOptions" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="domains" nillable="true" type="xs:string" />
+						<xs:element name="selectedDomain"
+							nillable="true" type="xs:string" />
+						<xs:element name="searchBoxStyle"
+							nillable="true" type="ns0:SearchBoxStyle" />
+						<xs:element name="channelName" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SearchType" type="ns0:SearchType" />
+			<xs:complexType name="SearchType">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="SiteProperties" type="ns0:SiteProperties" />
+			<xs:complexType name="SiteProperties">
+				<xs:sequence>
+					<xs:element name="encoding" nillable="true"
+						type="xs:string" />
+					<xs:element name="locale" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="SearchOptions" type="ns0:SearchOptions" />
+			<xs:complexType name="SearchOptions">
+				<xs:sequence>
+					<xs:element name="isSafeSearch" type="xs:boolean" />
+					<xs:element name="showResultsInNewWindow"
+						type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="SearchBoxStyle" type="ns0:SearchBoxStyle" />
+			<xs:complexType name="SearchBoxStyle">
+				<xs:sequence>
+					<xs:element name="backgroundColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="isButtonBelow" type="xs:boolean" />
+					<xs:element name="isCustomStyle" type="xs:boolean" />
+					<xs:element name="isLogoAbove" type="xs:boolean" />
+					<xs:element name="logoType" nillable="true"
+						type="ns0:LogoType" />
+					<xs:element name="searchStyleName" nillable="true"
+						type="xs:string" />
+					<xs:element name="textBoxLength" type="xs:int" />
+					<xs:element name="textColor" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="LogoType" type="ns0:LogoType" />
+			<xs:complexType name="LogoType">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="generateSearchBoxCodeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteSearchResultStyle">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="name" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteSearchResultStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="names" nillable="true" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="saveSearchResultStyle">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="searchResultStyle"
+							nillable="true" type="ns0:SearchResultStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="saveSearchResultStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="searchResultStyles" nillable="true"
+							type="ns0:SearchResultStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="generateSearchBoxCodeMessage">
+		<wsdl:part name="part1" element="ns0:generateSearchBoxCode" />
+	</wsdl:message>
+	<wsdl:message name="generateSearchBoxCodeResponse">
+		<wsdl:part name="part1"
+			element="ns0:generateSearchBoxCodeResponse" />
+	</wsdl:message>
+	<wsdl:message name="generateSearchBoxCodeFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="deleteSearchResultStyleMessage">
+		<wsdl:part name="part1" element="ns0:deleteSearchResultStyle" />
+	</wsdl:message>
+	<wsdl:message name="deleteSearchResultStyleFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="saveSearchResultStylesMessage">
+		<wsdl:part name="part1" element="ns0:saveSearchResultStyles" />
+	</wsdl:message>
+	<wsdl:message name="saveSearchResultStylesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getChannelsMessage">
+		<wsdl:part name="part1" element="ns0:getChannels" />
+	</wsdl:message>
+	<wsdl:message name="getChannelsResponse">
+		<wsdl:part name="part1" element="ns0:getChannelsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getChannelsFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getSearchResultStylesMessage">
+		<wsdl:part name="part1" element="ns0:getSearchResultStyles" />
+	</wsdl:message>
+	<wsdl:message name="getSearchResultStylesResponse">
+		<wsdl:part name="part1"
+			element="ns0:getSearchResultStylesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getSearchResultStylesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="deleteSearchResultStylesMessage">
+		<wsdl:part name="part1" element="ns0:deleteSearchResultStyles" />
+	</wsdl:message>
+	<wsdl:message name="deleteSearchResultStylesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getBuiltinSearchResultStylesMessage">
+		<wsdl:part name="part1"
+			element="ns0:getBuiltinSearchResultStyles" />
+	</wsdl:message>
+	<wsdl:message name="getBuiltinSearchResultStylesResponse">
+		<wsdl:part name="part1"
+			element="ns0:getBuiltinSearchResultStylesResponse" />
+	</wsdl:message>
+	<wsdl:message name="saveSearchResultStyleMessage">
+		<wsdl:part name="part1" element="ns0:saveSearchResultStyle" />
+	</wsdl:message>
+	<wsdl:message name="saveSearchResultStyleFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:portType name="v3/AdSenseForSearchServicePortType">
+		<wsdl:operation name="generateSearchBoxCode">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:generateSearchBoxCodeMessage"
+				wsaw:Action="urn:generateSearchBoxCode" />
+			<wsdl:output message="ns0:generateSearchBoxCodeResponse" />
+			<wsdl:fault message="ns0:generateSearchBoxCodeFault"
+				name="generateSearchBoxCodeFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyle">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:deleteSearchResultStyleMessage"
+				wsaw:Action="urn:deleteSearchResultStyle" />
+			<wsdl:fault message="ns0:deleteSearchResultStyleFault"
+				name="deleteSearchResultStyleFault" />
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:saveSearchResultStylesMessage"
+				wsaw:Action="urn:saveSearchResultStyles" />
+			<wsdl:fault message="ns0:saveSearchResultStylesFault"
+				name="saveSearchResultStylesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getChannelsMessage" wsaw:Action="urn:getChannels" />
+			<wsdl:output message="ns0:getChannelsResponse" />
+			<wsdl:fault message="ns0:getChannelsFault"
+				name="getChannelsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getSearchResultStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getSearchResultStylesMessage"
+				wsaw:Action="urn:getSearchResultStyles" />
+			<wsdl:output message="ns0:getSearchResultStylesResponse" />
+			<wsdl:fault message="ns0:getSearchResultStylesFault"
+				name="getSearchResultStylesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:deleteSearchResultStylesMessage"
+				wsaw:Action="urn:deleteSearchResultStyles" />
+			<wsdl:fault message="ns0:deleteSearchResultStylesFault"
+				name="deleteSearchResultStylesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinSearchResultStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getBuiltinSearchResultStylesMessage"
+				wsaw:Action="urn:getBuiltinSearchResultStyles" />
+			<wsdl:output
+				message="ns0:getBuiltinSearchResultStylesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyle">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:saveSearchResultStyleMessage"
+				wsaw:Action="urn:saveSearchResultStyle" />
+			<wsdl:fault message="ns0:saveSearchResultStyleFault"
+				name="saveSearchResultStyleFault" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="v3/AdSenseForSearchServiceSOAP11Binding"
+		type="ns0:v3/AdSenseForSearchServicePortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="generateSearchBoxCode">
+			<soap:operation soapAction="urn:generateSearchBoxCode"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="generateSearchBoxCodeFault">
+				<soap12:fault use="literal"
+					name="generateSearchBoxCodeFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyle">
+			<soap:operation soapAction="urn:deleteSearchResultStyle"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteSearchResultStyleFault">
+				<soap12:fault use="literal"
+					name="deleteSearchResultStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyles">
+			<soap:operation soapAction="urn:saveSearchResultStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveSearchResultStylesFault">
+				<soap12:fault use="literal"
+					name="saveSearchResultStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<soap:operation soapAction="urn:getChannels"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getChannelsFault">
+				<soap12:fault use="literal" name="getChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getSearchResultStyles">
+			<soap:operation soapAction="urn:getSearchResultStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getSearchResultStylesFault">
+				<soap12:fault use="literal"
+					name="getSearchResultStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyles">
+			<soap:operation soapAction="urn:deleteSearchResultStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteSearchResultStylesFault">
+				<soap12:fault use="literal"
+					name="deleteSearchResultStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinSearchResultStyles">
+			<soap:operation
+				soapAction="urn:getBuiltinSearchResultStyles" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyle">
+			<soap:operation soapAction="urn:saveSearchResultStyle"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveSearchResultStyleFault">
+				<soap12:fault use="literal"
+					name="saveSearchResultStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="v3/AdSenseForSearchServiceSOAP12Binding"
+		type="ns0:v3/AdSenseForSearchServicePortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="generateSearchBoxCode">
+			<soap12:operation soapAction="urn:generateSearchBoxCode"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="generateSearchBoxCodeFault">
+				<soap12:fault use="literal"
+					name="generateSearchBoxCodeFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyle">
+			<soap12:operation soapAction="urn:deleteSearchResultStyle"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteSearchResultStyleFault">
+				<soap12:fault use="literal"
+					name="deleteSearchResultStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyles">
+			<soap12:operation soapAction="urn:saveSearchResultStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveSearchResultStylesFault">
+				<soap12:fault use="literal"
+					name="saveSearchResultStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<soap12:operation soapAction="urn:getChannels"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getChannelsFault">
+				<soap12:fault use="literal" name="getChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getSearchResultStyles">
+			<soap12:operation soapAction="urn:getSearchResultStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getSearchResultStylesFault">
+				<soap12:fault use="literal"
+					name="getSearchResultStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyles">
+			<soap12:operation soapAction="urn:deleteSearchResultStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteSearchResultStylesFault">
+				<soap12:fault use="literal"
+					name="deleteSearchResultStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinSearchResultStyles">
+			<soap12:operation
+				soapAction="urn:getBuiltinSearchResultStyles" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyle">
+			<soap12:operation soapAction="urn:saveSearchResultStyle"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveSearchResultStyleFault">
+				<soap12:fault use="literal"
+					name="saveSearchResultStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="v3/AdSenseForSearchServiceHttpBinding"
+		type="ns0:v3/AdSenseForSearchServicePortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="generateSearchBoxCode">
+			<http:operation location="generateSearchBoxCode" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyle">
+			<http:operation location="deleteSearchResultStyle" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyles">
+			<http:operation location="saveSearchResultStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<http:operation location="getChannels" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSearchResultStyles">
+			<http:operation location="getSearchResultStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteSearchResultStyles">
+			<http:operation location="deleteSearchResultStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinSearchResultStyles">
+			<http:operation location="getBuiltinSearchResultStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="saveSearchResultStyle">
+			<http:operation location="saveSearchResultStyle" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="v3/AdSenseForSearchService">
+		<wsdl:port name="v3/AdSenseForSearchServiceSOAP11port_https"
+			binding="ns0:v3/AdSenseForSearchServiceSOAP11Binding">
+			<soap:address
+				location="https://www.google.com/api/adsense/v3/AdSenseForSearchService" />
+		</wsdl:port>
+		<wsdl:port name="v3/AdSenseForSearchServiceSOAP12port_https"
+			binding="ns0:v3/AdSenseForSearchServiceSOAP12Binding">
+			<soap12:address
+				location="https://www.google.com/api/adsense/v3/AdSenseForSearchService" />
+		</wsdl:port>
+		<wsdl:port name="v3/AdSenseForSearchServiceHttpport"
+			binding="ns0:v3/AdSenseForSearchServiceHttpBinding">
+			<http:address
+				location="https://www.google.com/api/adsense/v3/AdSenseForSearchService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

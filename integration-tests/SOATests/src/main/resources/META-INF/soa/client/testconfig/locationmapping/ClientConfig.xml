@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<client-config-list xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<client-config
+		service-name="test1ext"
+		group="SOAWebServiceClient"
+		xmlns="http://www.ebayopensource.org/turmeric/common/config">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<service-location>
+		</service-location>
+		<service-location-mappings>
+			  <service-location-mapping>
+			  		<name>feature</name>
+			  		<url>http://fp001-v3a.qa.ebay.com:8080/ws/spf</url>
+			  </service-location-mapping>
+			  <service-location-mapping>
+			  		<name>dev</name>
+			  		<url>http://d-sjc-xhan2.corp.com:8080/ws/spf</url>
+			  </service-location-mapping>
+			  <service-location-mapping>
+			  		<name>production</name>
+			  		<url>http://fp001-v3a.qa.ebay.com:8080/ws/spf</url>
+			  </service-location-mapping>		
+		</service-location-mappings>
+		<wsdl-location>webservices/latest/eBaySvc.wsdl</wsdl-location>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="Local" />
+				<request-data-binding>XML</request-data-binding>
+				<custom-error-response-adapter>org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.CustomErrorResponseAdapterImpl</custom-error-response-adapter>
+			</invocation-options>
+			<pipeline-config></pipeline-config>
+			<data-binding-config>
+				<data-binding name="XML">
+					<mime-type>text/xml</mime-type>
+					<serializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+								</serializer-factory-class-name>
+					<deserializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+								</deserializer-factory-class-name>
+				     <options>
+					 <option name="elementFormDefault">UNQUALIFIED</option>
+				    </options>
+				</data-binding>
+				    <data-binding name="NV">
+					<mime-type>text/plain</mime-type>
+					<serializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+								</serializer-factory-class-name>
+					<deserializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+								</deserializer-factory-class-name>
+				     <options>
+					 <option name="elementFormDefault">UNQUALIFIED</option>
+				    </options>
+				   </data-binding>
+				    <data-binding name="JSON">
+					<mime-type>application/json</mime-type>
+					<serializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+								</serializer-factory-class-name>
+					<deserializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+								</deserializer-factory-class-name>
+								<options>
+								<option name="useSchemaInfo">true</option>
+								 <option name="elementFormDefault">UNQUALIFIED</option>
+					</options>
+				   </data-binding>
+				    <data-binding name="FAST_INFOSET">
+					<mime-type>application/fastinfoset</mime-type>
+					<serializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+								</serializer-factory-class-name>
+					<deserializer-factory-class-name>
+									org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+								</deserializer-factory-class-name>
+				     <options>
+					 <option name="elementFormDefault">UNQUALIFIED</option>
+				    </options>
+				    </data-binding>
+               		</data-binding-config>
+		</client-instance-config>
+	</client-config>
+</client-config-list>

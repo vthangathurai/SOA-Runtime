@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <xs:schema elementFormDefault="qualified"
+	attributeFormDefault="unqualified"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.ebayopensource.org/turmeric/common/config"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/common/config">
+	<xs:element name="serviceCachePolicy" type="tns:ServiceCachePolicyType"  />
+	<xs:complexType name="ServiceCachePolicyType">
+		<xs:annotation>
+			<xs:documentation>
+				Cache policy for the service
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="operationCachePolicy"
+				maxOccurs="unbounded" minOccurs="0" 
+				type="tns:OperationCachePolicyType" />
+		</xs:sequence>
+		<!-- service name, it should be in the FQSN format 
+		i.e fully qualified service name -->
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="OperationCachePolicyType">
+		<xs:sequence>
+			<xs:element name="TTL" type="xs:long" />
+			<xs:element name="keyExpressionSet"
+				type="tns:KeyExpressionSetType" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="KeyExpressionSetType">
+		<xs:annotation>
+			<xs:documentation>
+				Set of Key expressions, the grouping for the keys
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="keyExpression" type="xs:string"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

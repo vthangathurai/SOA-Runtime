@@ -1,0 +1,4446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<definitions name="RIMApplicationProcessService" targetNamespace="http://www.ebayopensource.com/turmeric/mobile/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.ebayopensource.com/turmeric/mobile/v1/services" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types>
+    <schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.com/turmeric/mobile/v1/services" xmlns="http://www.w3.org/2001/XMLSchema">
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class container for all service operation requests.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations.
+						Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								A token representing the
+								application-level
+								acknowledgment code
+								that indicates the response status
+								(e.g.,
+								success). Applicable values:
+								CustomCode, Failure, Success,
+								Warning.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred
+								when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The version of the response payload
+								schema.
+								Indicates the version of the
+								schema that eBay used to process the
+								request. See &quot;Standard Data for All
+								Calls&quot; in the eBay Web Services
+								Guide for information on using the
+								response version when troubleshooting
+								&quot;CustomCode&quot; values that
+								appear in the response.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time
+								when eBay processed the request. The
+								time zone of this value is GMT and the
+								format is the ISO 8601 date and time
+								format (YYYY-MM-DDTHH:MM:SS.SSSZ). See
+								Time Values in the eBay Web Services
+								guide for information about this time
+								format and converting to and from the
+								GMT time zone.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo/>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+					<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the error category of an error.
+						Typical values are &quot;System&quot;,
+						&quot;Application&quot;, and &quot;Request&quot;
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:appinfo/>
+					<xs:documentation>
+						Represents the error message contents.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Represents the ID which is associated
+								with an error message.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the domain to which this error
+								message is to be associated.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the sub-domain to which this
+								error message is to be associated.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the severity of this error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the category to which this error
+								belongs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The error message which needs to be
+								returned.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								In case of exceptions, this denotes the
+								exception id and the same will be used
+								for tracking this error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes a list of string values which
+								will be appended to the error message.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:appinfo/>
+					<xs:documentation>
+						Represents the error message obtained while
+						processing the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:appinfo/>
+					<xs:documentation>
+						Represents the error message obtained while
+						processing the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Represents the Severity of an error message
+						obtained while processing the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>                
+                
+                
+          <xs:simpleType name="CountryCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+				Defines the standard 2-letter ISO 3166 country code set, plus
+				some additional country codes that eBay uses.
+				(The additional codes appear at the end of this code list and
+				are noted as non-ISO.)
+				For English names that correspond to each code (e.g., KY=&quot;Cayman Islands&quot;),
+				call GeteBayDetails or see the ISO site:
+				http://www.iso.ch/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="AF">
+                        <xs:annotation>
+                            <xs:documentation>
+						Afghanistan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Albania.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="DZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Algeria.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AS">
+                        <xs:annotation>
+                            <xs:documentation>
+						American Samoa.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Andorra.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Angola.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Anguilla.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AQ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Antarctica.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Antigua and Barbuda.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Argentina.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Armenia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Aruba.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Australia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Austria.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Azerbaijan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bahamas.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bahrain.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bangladesh.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BB">
+                        <xs:annotation>
+                            <xs:documentation>
+						Barbados.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Belarus.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Belgium.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Belize .
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BJ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Benin.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bermuda.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bhutan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bolivia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bosnia and Herzegovina.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Botswana.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BV">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bouvet Island.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Brazil.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IO">
+                        <xs:annotation>
+                            <xs:documentation>
+						British Indian Ocean Territory.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Brunei Darussalam.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Bulgaria.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BF">
+                        <xs:annotation>
+                            <xs:documentation>
+						Burkina Faso.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="BI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Burundi.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cambodia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cameroon.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Canada.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CV">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cape Verde.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cayman Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CF">
+                        <xs:annotation>
+                            <xs:documentation>
+						Central African Republic.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Chad.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Chile.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CN">
+                        <xs:annotation>
+                            <xs:documentation>
+						China.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CX">
+                        <xs:annotation>
+                            <xs:documentation>
+						Christmas Island.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cocos (Keeling) Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Colombia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Comoros.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Congo.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Congo, The Democratic Republic of the.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cook Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Costa Rica.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cote d'Ivoire. 
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Croatia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cuba.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Cyprus.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Czech Republic.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="DK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Denmark.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="DJ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Djibouti.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="DM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Dominica.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="DO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Dominican Republic.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TP">
+                        <xs:annotation>
+                            <xs:documentation>
+						No longer in use.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="EC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Ecuador.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="EG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Egypt.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SV">
+                        <xs:annotation>
+                            <xs:documentation>
+						El Salvador.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GQ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Equatorial Guinea.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ER">
+                        <xs:annotation>
+                            <xs:documentation>
+						Eritrea.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="EE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Estonia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ET">
+                        <xs:annotation>
+                            <xs:documentation>
+						Ethiopia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Falkland Islands (Malvinas).
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Faroe Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FJ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Fiji.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Finland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FR">
+                        <xs:annotation>
+                            <xs:documentation>
+						France.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GF">
+                        <xs:annotation>
+                            <xs:documentation>
+						French Guiana.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PF">
+                        <xs:annotation>
+                            <xs:documentation>
+						French Polynesia. Includes Tahiti.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TF">
+                        <xs:annotation>
+                            <xs:documentation>
+						French Southern Territories.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Gabon.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Gambia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Georgia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="DE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Germany.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Ghana.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Gibraltar.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Greece.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Greenland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Grenada.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GP">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guadeloupe.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guam.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guatemala.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guinea.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guinea-Bissau.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guyana.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Haiti.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Heard Island and Mcdonald Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Holy See (Vatican City state).
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Honduras.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Hong Kong.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Hungary.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Iceland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IN">
+                        <xs:annotation>
+                            <xs:documentation>
+						India.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ID">
+                        <xs:annotation>
+                            <xs:documentation>
+						Indonesia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Iran, Islamic Republic of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IQ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Iraq.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Ireland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Israel.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="IT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Italy.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="JM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Jamaica.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="JP">
+                        <xs:annotation>
+                            <xs:documentation>
+						Japan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="JO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Jordan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Kazakhstan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Kenya.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Kiribati.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KP">
+                        <xs:annotation>
+                            <xs:documentation>
+						Korea, Democratic People's Republic of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Korea, Republic of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Kuwait.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Kyrgyzstan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Lao People's Democratic Republic.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LV">
+                        <xs:annotation>
+                            <xs:documentation>
+						Latvia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LB">
+                        <xs:annotation>
+                            <xs:documentation>
+						Lebanon.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Lesotho.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Liberia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Libyan Arab Jamahiriya.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Liechtenstein.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Lithuania.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Luxembourg.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Macao.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Macedonia, the Former Yugoslav Republic of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Madagascar.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Malawi.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Malaysia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MV">
+                        <xs:annotation>
+                            <xs:documentation>
+						Maldives.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ML">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mali.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Malta.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Marshall Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MQ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Martinique.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mauritania.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mauritius.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="YT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mayotte.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MX">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mexico.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="FM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Micronesia, Federated States of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Moldova, Republic of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Monaco.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mongolia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Montserrat.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Morocco.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Mozambique.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Myanmar.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Namibia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Nauru.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NP">
+                        <xs:annotation>
+                            <xs:documentation>
+						Nepal.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Netherlands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Netherlands Antilles.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NC">
+                        <xs:annotation>
+                            <xs:documentation>
+						New Caledonia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						New Zealand.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Nicaragua.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Niger.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Nigeria.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Niue.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NF">
+                        <xs:annotation>
+                            <xs:documentation>
+						Norfolk Island.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="MP">
+                        <xs:annotation>
+                            <xs:documentation>
+						Northern Mariana Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="NO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Norway.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="OM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Oman.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Pakistan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Palau.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Palestinian territory, Occupied.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Panama.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Papua New Guinea.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Paraguay.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Peru.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Philippines.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Pitcairn.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Poland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Portugal.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Puerto Rico.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="QA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Qatar.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="RE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Reunion.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="RO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Romania.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="RU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Russian Federation.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="RW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Rwanda.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Saint Helena.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="KN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Saint Kitts and Nevis.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Saint Lucia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Saint Pierre and Miquelon.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Saint Vincent and the Grenadines.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="WS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Samoa.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SM">
+                        <xs:annotation>
+                            <xs:documentation>
+						San Marino.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ST">
+                        <xs:annotation>
+                            <xs:documentation>
+						Sao Tome and Principe.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Saudi Arabia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Senegal.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Seychelles.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SL">
+                        <xs:annotation>
+                            <xs:documentation>
+						Sierra Leone.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Singapore.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Slovakia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Slovenia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SB">
+                        <xs:annotation>
+                            <xs:documentation>
+						Solomon Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Somalia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ZA">
+                        <xs:annotation>
+                            <xs:documentation>
+						South Africa.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GS">
+                        <xs:annotation>
+                            <xs:documentation>
+						South Georgia and the South Sandwich Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ES">
+                        <xs:annotation>
+                            <xs:documentation>
+						Spain.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="LK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Sri Lanka.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SD">
+                        <xs:annotation>
+                            <xs:documentation>
+						Sudan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Suriname.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SJ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Svalbard and Jan Mayen.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Swaziland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Sweden.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Switzerland.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="SY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Syrian Arab Republic.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Taiwan, Province of China.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TJ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Tajikistan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Tanzania, United Republic of.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Thailand.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Togo.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TK">
+                        <xs:annotation>
+                            <xs:documentation>
+						Tokelau.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TO">
+                        <xs:annotation>
+                            <xs:documentation>
+						Tonga.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TT">
+                        <xs:annotation>
+                            <xs:documentation>
+						Trinidad and Tobago.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Tunisia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TR">
+                        <xs:annotation>
+                            <xs:documentation>
+						Turkey.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Turkmenistan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TC">
+                        <xs:annotation>
+                            <xs:documentation>
+						Turks and Caicos Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="TV">
+                        <xs:annotation>
+                            <xs:documentation>
+						Tuvalu.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="UG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Uganda.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="UA">
+                        <xs:annotation>
+                            <xs:documentation>
+						Ukraine.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AE">
+                        <xs:annotation>
+                            <xs:documentation>
+						United Arab Emirates.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GB">
+                        <xs:annotation>
+                            <xs:documentation>
+						United Kingdom.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="US">
+                        <xs:annotation>
+                            <xs:documentation>
+						United States.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="UM">
+                        <xs:annotation>
+                            <xs:documentation>
+						United States Minor Outlying Islands.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="UY">
+                        <xs:annotation>
+                            <xs:documentation>
+						Uruguay.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="UZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Uzbekistan.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VU">
+                        <xs:annotation>
+                            <xs:documentation>
+						Vanuatu.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Venezuela.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VN">
+                        <xs:annotation>
+                            <xs:documentation>
+						Viet Nam.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Virgin Islands, British.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="VI">
+                        <xs:annotation>
+                            <xs:documentation>
+						Virgin Islands, U.S.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="WF">
+                        <xs:annotation>
+                            <xs:documentation>
+						Wallis and Futuna.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="EH">
+                        <xs:annotation>
+                            <xs:documentation>
+						Western Sahara.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="YE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Yemen.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="YU">
+                        <xs:annotation>
+                            <xs:documentation>
+						No longer in use. See RS for Serbia and ME for Montenegro.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ZM">
+                        <xs:annotation>
+                            <xs:documentation>
+						Zambia.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ZW">
+                        <xs:annotation>
+                            <xs:documentation>
+						Zimbabwe.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="AA">
+                        <xs:annotation>
+                            <xs:documentation>
+						NOTE: APO/FPO was defined in eBay list previously
+						but they are not defined in ISO 3166. This country
+						will remain on eBay country code list for backward
+						compatibility.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="QM">
+                        <xs:annotation>
+                            <xs:documentation>
+						NOTE	: Guernsey was defined in eBay list previously
+						but they are not defined in ISO 3166. This country
+						will remain on eBay country list for backward
+						compatibility.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="QN">
+                        <xs:annotation>
+                            <xs:documentation>
+						NOTE: Jan Mayen was defined in eBay list previously
+						but they are not defined in ISO 3166. This country
+						will remain on eBay country list for backward
+						compatibility.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="QO">
+                        <xs:annotation>
+                            <xs:documentation>
+						NOTE: Jersey was defined in eBay list previously
+						but they are not defined in ISO 3166. This country
+						will remain on eBay country list for backward
+						compatibility.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="QP">
+                        <xs:annotation>
+                            <xs:documentation>
+						NOTE: Tahiti was defined in eBay list previously
+						but they are not defined in ISO 3166. This country
+						will remain on eBay country list for backward
+						compatibility. This Code is currently deprecated
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="JE">
+                        <xs:annotation>
+                            <xs:documentation>
+						Jersey
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="GG">
+                        <xs:annotation>
+                            <xs:documentation>
+						Guernsey
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ZZ">
+                        <xs:annotation>
+                            <xs:documentation>
+						Unknown country
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="RS">
+                        <xs:annotation>
+                            <xs:documentation>
+						Serbia
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="ME">
+                        <xs:annotation>
+                            <xs:documentation>
+						Montenegro.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode">
+                        <xs:annotation>
+                            <xs:documentation>
+						(out) Reserved for internal or future use
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+                
+      <xs:simpleType name="FeedbackRatingStarCodeType">
+		<xs:annotation>
+			<xs:documentation>
+					 FeedbackRatingStarCodeType - Type declaration to be used by other
+					 schema. The color of a feedback score star visually denotes the
+					 range in which the member's summary feedback score falls. The score
+					 is the net positive feedback minus the net negative feedback left
+					 for the member.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="None">
+				<xs:annotation>
+					<xs:documentation>
+								No graphic displayed, feedback score 0-9.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Yellow">
+				<xs:annotation>
+					<xs:documentation>
+								Yellow Star, feedback score 10-49.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Blue">
+				<xs:annotation>
+					<xs:documentation>
+								Blue Star, feedback score 50-99.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Turquoise">
+				<xs:annotation>
+					<xs:documentation>
+								Turquoise Star, feedback score 100-499.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Purple">
+				<xs:annotation>
+					<xs:documentation>
+								Purple Star, feedback score 500-999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Red">
+				<xs:annotation>
+					<xs:documentation>
+								Red Star, feedback score 1,000-4,999
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Green">
+				<xs:annotation>
+					<xs:documentation>
+								Green Star, feedback score 5,000-9,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="YellowShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Yellow Shooting Star, feedback score 10,000-24,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TurquoiseShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Turquoise Shooting Star, feedback score 25,000-49,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PurpleShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Purple Shooting Star, feedback score 50,000-99,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RedShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Red Shooting Star, feedback score 100,000-499,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="GreenShooting">
+				<xs:annotation>
+					<xs:documentation>
+						Green Shooting Star, feedback score 500,000-900,000.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SilverShooting">
+				<xs:annotation>
+					<xs:documentation>
+						Silver Shooting Star, feedback score 1,000,000 and above.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>			
+			
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Placeholder value. See
+						&lt;a href=&quot;types/simpleTypes.html#token&quot;&gt;token&lt;/a&gt;.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="FeedbackRatingDetailCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				Applicable to sites that support the Detailed Seller Ratings feature.
+				The FeedbackRatingDetailCodeType is the list of areas for detailed seller ratings. When buyers leave an overall Feedback rating (positive, neutral, or negative) for a seller, they also can leave ratings in four areas: item as described, communication, shipping time, and charges for shipping and handling. Users retrieve detailed ratings as averages of the ratings left by buyers. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="ItemAsDescribed">
+				<xs:annotation>
+					<xs:documentation>
+						Detailed seller rating in the area of &quot;item as described.&quot;
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Communication">
+				<xs:annotation>
+					<xs:documentation>
+						Detailed seller rating in the area of &quot;communication.&quot;
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ShippingTime">
+				<xs:annotation>
+					<xs:documentation>
+						Detailed seller rating in the area of &quot;shipping time.&quot; Inapplicable to 
+						motor vehicle items.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ShippingAndHandlingCharges">
+				<xs:annotation>
+					<xs:documentation>
+						Detailed seller rating in the area of &quot;charges for shipping and handling.&quot;
+						Inapplicable to motor vehicle items. 
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Reserved for internal or future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="FeedbackHistoryType">
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="0" name="periodsInDays" type="int"/>
+			<xs:element minOccurs="0" name="uniqueNegativeFeedbackCount" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>
+						Total number of negative Feedback comments received by the user, including weekly repeats.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>GetUserProfile</CallName>
+							<Details>IncludeSelector: FeedbackHistory</Details>										
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="uniquePositiveFeedbackCount" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>
+						Total number of positive Feedback comments received by the user, including weekly repeats.
+				</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>GetUserProfile</CallName>
+							<Details>IncludeSelector: FeedbackHistory</Details>										
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="uniqueNeutralFeedbackCount" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>
+						Total number of neutral Feedback comments received by the user, including weekly repeats. 
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>GetUserProfile</CallName>
+							<Details>IncludeSelector: FeedbackHistory</Details>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="averageRatingDetails" type="tns:FeedbackRatingDetailCodeType">
+				<xs:annotation>
+					<xs:documentation>
+					    URL?
+						Container for information about detailed seller ratings (DSRs)
+						that buyers have left for a seller.
+						Sellers have access to the number of ratings they've received, as well as
+						to the averages of DSRs they've received in each
+						DSR area (i.e., to the average of ratings in the item-description area, etc.).  
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>GetUserProfile</CallName>
+							<Details>IncludeSelector: FeedbackHistory</Details>										
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="rating" type="xs:double"/>
+			<xs:element minOccurs="0" name="count" type="xs:long"/>
+		</xs:sequence>
+	</xs:complexType>
+	    <xs:simpleType name="UserIDType">
+                <xs:annotation>
+                    <xs:documentation>
+				An eBay ID that uniquely identifies a user. &lt;br&gt;&lt;br&gt;For GetAllBidders,
+				some bidder information is anonymous, to protect bidders from fraud. If the seller makes this API call, the actual ids of all bidders on the seller's item will be returned. If a bidder makes this API call, the bidder's actual id will be returned, but information for all competing bidders or outside watchers will be returned as anonymized userIDs.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+            
+         <xs:simpleType name="SiteCodeType">
+                <xs:annotation>
+                    <xs:documentation>
+				eBay sites (by the country in which each resides) on which a user is registered
+				and on which items can be listed.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="US">
+                        <xs:annotation>
+                            <xs:documentation>
+						USA, site ID 0, abbreviation US, currency USD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Canada">
+                        <xs:annotation>
+                            <xs:documentation>
+						Canada, site ID 2, abbreviation CA, currencies CAD and USD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="UK">
+                        <xs:annotation>
+                            <xs:documentation>
+						United Kingdom, site ID 3, abbreviation UK, currency GBP.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Australia">
+                        <xs:annotation>
+                            <xs:documentation>
+						Australia, site ID 15, abbreviation AU, currency AUD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Austria">
+                        <xs:annotation>
+                            <xs:documentation>
+						Austria, site ID 16, abbreviation AT, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Belgium_French">
+                        <xs:annotation>
+                            <xs:documentation>
+						Belgium (French), site ID 23, abbreviation BEFR, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="France">
+                        <xs:annotation>
+                            <xs:documentation>
+						France, site ID 71, abbreviation FR, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Germany">
+                        <xs:annotation>
+                            <xs:documentation>
+						Germany, site ID 77, abbreviation DE, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Italy">
+                        <xs:annotation>
+                            <xs:documentation>
+						Italy, site ID 101, abbreviation IT, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Belgium_Dutch">
+                        <xs:annotation>
+                            <xs:documentation>
+						Belgium (Dutch), site ID 123, abbreviation BENL, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Netherlands">
+                        <xs:annotation>
+                            <xs:documentation>
+						Netherlands, site ID 146, abbreviation NL, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Spain">
+                        <xs:annotation>
+                            <xs:documentation>
+						Spain, site ID 186, abbreviation ES, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Switzerland">
+                        <xs:annotation>
+                            <xs:documentation>
+						Switzerland, site ID 193, abbreviation CH, currency CHF.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Taiwan">
+                        <xs:annotation>
+                            <xs:documentation>
+						Taiwan, currency TWD. Note that the old eBay Taiwan site is no longer in operation, and the new site does not use this API.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="eBayMotors">
+                        <xs:annotation>
+                            <xs:documentation>
+						eBay Motors, site ID 100, currency USD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="HongKong">
+                        <xs:annotation>
+                            <xs:documentation>
+						Hong Kong, site ID 201, abbreviation HK, currency HKD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Singapore">
+                        <xs:annotation>
+                            <xs:documentation>
+						Singapore, site ID 216, abbreviation SG, currency SGD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="India">
+                        <xs:annotation>
+                            <xs:documentation>
+						India, site ID 203, abbreviation IN, currency INR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="China">
+                        <xs:annotation>
+                            <xs:documentation>
+						China, currency CNY. Note that there is no longer an eBay China site.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Ireland">
+                        <xs:annotation>
+                            <xs:documentation>
+						Ireland, site ID 205, abbreviation IE, currency EUR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Malaysia">
+                        <xs:annotation>
+                            <xs:documentation>
+						Malaysia, site ID 207, abbreviation MY, currency MYR.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Philippines">
+                        <xs:annotation>
+                            <xs:documentation>
+						Philippines, site ID 211, abbreviation PH, currency PHP.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Poland">
+                        <xs:annotation>
+                            <xs:documentation>
+						Poland, site ID 212, abbreviation PL, currency PLN.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Sweden">
+                        <xs:annotation>
+                            <xs:documentation>
+						Sweden, site ID 218, abbreviation SE, currency SEK.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CustomCode">
+                        <xs:annotation>
+                            <xs:documentation>
+						Reserved for internal or future use
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="CanadaFrench">
+                        <xs:annotation>
+                            <xs:documentation>
+						CanadaFrench, site ID 210, abbreviation CAFR, currencies CAD and USD.
+					</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+             
+			<complexType name="UserInfo">
+				<sequence>
+                    <element name="userID" type="tns:UserIDType"/>
+                    <element name="email" type="string"/>
+                    <element name="site" type="tns:SiteCodeType"/>
+                    <element name="postalCode" type="string"/>
+                    <element name="country" type="tns:CountryCodeType"/>
+                </sequence>
+			</complexType>
+			
+			<complexType name="UserProfile">
+				<sequence>
+                    <element name="sserID" type="string"/>
+                    <element name="myWorldSmallImage" type="string"/>
+                    <element name="feedbackScore" type="int"/>
+                    <element name="feedbackRatingStar" type="tns:FeedbackRatingStarCodeType"/>
+                    <element name="registrationDate" type="date"/>
+                    <element name="positiveFeedbackPercent" type="float"/>
+                    <element name="feedbackHistory" type="tns:FeedbackHistoryType"/>
+                </sequence>
+			</complexType>
+			
+	<xs:simpleType name="CurrencyCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the standard 3-letter ISO 4217 currency code set.
+				However, only certain currency codes are currently valid for use on eBay.
+				The valid codes are documented below with the notation &quot;(in/out)&quot;.
+				Other codes in this list are for future use.
+				The documentation below specifies English names for each currency.
+				Alternatively, use GeteBayDetails to retrieve the names programmatically.
+				A reference: http://www.xe.com/iso4217.htm
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="AFA"/>
+			<xs:enumeration value="ALL"/>
+			<xs:enumeration value="DZD"/>
+			<xs:enumeration value="ADP"/>
+			<xs:enumeration value="AOA"/>
+			<xs:enumeration value="ARS"/>
+			<xs:enumeration value="AMD"/>
+			<xs:enumeration value="AWG"/>
+			<xs:enumeration value="AZM"/>
+			<xs:enumeration value="BSD"/>
+			<xs:enumeration value="BHD"/>
+			<xs:enumeration value="BDT"/>
+			<xs:enumeration value="BBD"/>
+			<xs:enumeration value="BYR"/>
+			<xs:enumeration value="BZD"/>
+			<xs:enumeration value="BMD"/>
+			<xs:enumeration value="BTN"/>
+			<xs:enumeration value="INR">
+				<xs:annotation>
+					<xs:documentation>
+					Indian Rupee.
+					For eBay, you can only specify this currency for listings you submit to the
+					India site (site ID 203).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BOV"/>
+			<xs:enumeration value="BOB"/>
+			<xs:enumeration value="BAM"/>
+			<xs:enumeration value="BWP"/>
+			<xs:enumeration value="BRL"/>
+			<xs:enumeration value="BND"/>
+			<xs:enumeration value="BGL"/>
+			<xs:enumeration value="BGN"/>
+			<xs:enumeration value="BIF"/>
+			<xs:enumeration value="KHR"/>
+			<xs:enumeration value="CAD">
+				<xs:annotation>
+					<xs:documentation>
+						Canadian Dollar.
+						For eBay, you can only specify this currency for listings you submit to the
+						Canada site (site ID 2)
+						(Items listed on the Canada site can also specify USD.)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CVE"/>
+			<xs:enumeration value="KYD"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="CLF"/>
+			<xs:enumeration value="CLP"/>
+			<xs:enumeration value="CNY"/>
+			<xs:enumeration value="COP"/>
+			<xs:enumeration value="KMF"/>
+			<xs:enumeration value="CDF"/>
+			<xs:enumeration value="CRC"/>
+			<xs:enumeration value="HRK"/>
+			<xs:enumeration value="CUP"/>
+			<xs:enumeration value="CYP"/>
+			<xs:enumeration value="CZK"/>
+			<xs:enumeration value="DKK"/>
+			<xs:enumeration value="DJF"/>
+			<xs:enumeration value="DOP"/>
+			<xs:enumeration value="TPE"/>
+			<xs:enumeration value="ECV"/>
+			<xs:enumeration value="ECS"/>
+			<xs:enumeration value="EGP"/>
+			<xs:enumeration value="SVC"/>
+			<xs:enumeration value="ERN"/>
+			<xs:enumeration value="EEK"/>
+			<xs:enumeration value="ETB"/>
+			<xs:enumeration value="FKP"/>
+			<xs:enumeration value="FJD"/>
+			<xs:enumeration value="GMD"/>
+			<xs:enumeration value="GEL"/>
+			<xs:enumeration value="GHC"/>
+			<xs:enumeration value="GIP"/>
+			<xs:enumeration value="GTQ"/>
+			<xs:enumeration value="GNF"/>
+			<xs:enumeration value="GWP"/>
+			<xs:enumeration value="GYD"/>
+			<xs:enumeration value="HTG"/>
+			<xs:enumeration value="HNL"/>
+			<xs:enumeration value="HKD">
+				<xs:annotation>
+					<xs:documentation>
+						Hong Kong Dollar.
+						For eBay, you can only specify this currency for listings you submit to the
+						Hong Kong site (site ID 201).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HUF"/>
+			<xs:enumeration value="ISK"/>
+			<xs:enumeration value="IDR"/>
+			<xs:enumeration value="IRR"/>
+			<xs:enumeration value="IQD"/>
+			<xs:enumeration value="ILS"/>
+			<xs:enumeration value="JMD"/>
+			<xs:enumeration value="JPY"/>
+			<xs:enumeration value="JOD"/>
+			<xs:enumeration value="KZT"/>
+			<xs:enumeration value="KES"/>
+			<xs:enumeration value="AUD">
+				<xs:annotation>
+					<xs:documentation>
+						Australian Dollar.
+						For eBay, you can only specify this currency for listings you submit to the
+						Australia site (site ID 15).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="KPW"/>
+			<xs:enumeration value="KRW"/>
+			<xs:enumeration value="KWD"/>
+			<xs:enumeration value="KGS"/>
+			<xs:enumeration value="LAK"/>
+			<xs:enumeration value="LVL"/>
+			<xs:enumeration value="LBP"/>
+			<xs:enumeration value="LSL"/>
+			<xs:enumeration value="LRD"/>
+			<xs:enumeration value="LYD"/>
+			<xs:enumeration value="CHF">
+				<xs:annotation>
+					<xs:documentation>
+						Swiss Franc.
+						For eBay, you can only specify this currency for listings you submit to the
+						Switzerland site (site ID 193).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LTL"/>
+			<xs:enumeration value="MOP"/>
+			<xs:enumeration value="MKD"/>
+			<xs:enumeration value="MGF"/>
+			<xs:enumeration value="MWK"/>
+			<xs:enumeration value="MYR">
+				<xs:annotation>
+					<xs:documentation>
+						Malaysian Ringgit.
+						For eBay, you can only specify this currency for listings you submit to the
+						Malaysia site (site ID 207).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MVR"/>
+			<xs:enumeration value="MTL"/>
+			<xs:enumeration value="EUR">
+				<xs:annotation>
+					<xs:documentation>
+						Euro.
+						For eBay, you can only specify this currency for listings you submit to these sites:
+						Austria (site 16), Belgium_French (site 23),
+						France (site 71), Germany (site 77), Italy (site 101), Belgium_Dutch (site 123),
+						Netherlands (site 146), Spain (site 186), Ireland (site 205).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MRO"/>
+			<xs:enumeration value="MUR"/>
+			<xs:enumeration value="MXN"/>
+			<xs:enumeration value="MXV"/>
+			<xs:enumeration value="MDL"/>
+			<xs:enumeration value="MNT"/>
+			<xs:enumeration value="XCD"/>
+			<xs:enumeration value="MZM"/>
+			<xs:enumeration value="MMK"/>
+			<xs:enumeration value="ZAR"/>
+			<xs:enumeration value="NAD"/>
+			<xs:enumeration value="NPR"/>
+			<xs:enumeration value="ANG"/>
+			<xs:enumeration value="XPF"/>
+			<xs:enumeration value="NZD"/>
+			<xs:enumeration value="NIO"/>
+			<xs:enumeration value="NGN"/>
+			<xs:enumeration value="NOK"/>
+			<xs:enumeration value="OMR"/>
+			<xs:enumeration value="PKR"/>
+			<xs:enumeration value="PAB"/>
+			<xs:enumeration value="PGK"/>
+			<xs:enumeration value="PYG"/>
+			<xs:enumeration value="PEN"/>
+			<xs:enumeration value="PHP">
+				<xs:annotation>
+					<xs:documentation>
+						Philippines Peso.
+						For eBay, you can only specify this currency for listings you submit to the
+						Philippines site (site ID 211).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PLN">
+				<xs:annotation>
+					<xs:documentation>
+						Poland, Zloty.
+						For eBay, you can only specify this currency for listings you submit to the
+						Poland site (site ID 212).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="USD">
+				<xs:annotation>
+					<xs:documentation>
+						US Dollar.
+						For eBay, you can only specify this currency for listings you submit to the
+						US (site ID 0), eBayMotors (site 100), and Canada (site 2) sites.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="QAR"/>
+			<xs:enumeration value="ROL"/>
+			<xs:enumeration value="RUB"/>
+			<xs:enumeration value="RUR"/>
+			<xs:enumeration value="RWF"/>
+			<xs:enumeration value="SHP"/>
+			<xs:enumeration value="WST"/>
+			<xs:enumeration value="STD"/>
+			<xs:enumeration value="SAR"/>
+			<xs:enumeration value="SCR"/>
+			<xs:enumeration value="SLL"/>
+			<xs:enumeration value="SGD">
+				<xs:annotation>
+					<xs:documentation>
+						Singapore Dollar.
+						For eBay, you can only specify this currency for listings you submit to the
+						Singapore site (site 216).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SKK"/>
+			<xs:enumeration value="SIT"/>
+			<xs:enumeration value="SBD"/>
+			<xs:enumeration value="SOS"/>
+			<xs:enumeration value="LKR"/>
+			<xs:enumeration value="SDD"/>
+			<xs:enumeration value="SRG"/>
+			<xs:enumeration value="SZL"/>
+			<xs:enumeration value="SEK">
+				<xs:annotation>
+					<xs:documentation>
+						 Swedish Krona.
+						 For eBay, you can only specify this currency for listings you submit to the
+						 Sweden site (site 218).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SYP"/>
+			<xs:enumeration value="TWD">
+				<xs:annotation>
+					<xs:documentation>
+						New Taiwan Dollar. Note that there is no longer an eBay Taiwan site.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TJS"/>
+			<xs:enumeration value="TZS"/>
+			<xs:enumeration value="THB"/>
+			<xs:enumeration value="XOF"/>
+			<xs:enumeration value="TOP"/>
+			<xs:enumeration value="TTD"/>
+			<xs:enumeration value="TND"/>
+			<xs:enumeration value="TRL"/>
+			<xs:enumeration value="TMM"/>
+			<xs:enumeration value="UGX"/>
+			<xs:enumeration value="UAH"/>
+			<xs:enumeration value="AED"/>
+			<xs:enumeration value="GBP">
+				<xs:annotation>
+					<xs:documentation>
+						Pound Sterling.
+						For eBay, you can only specify this currency for listings you submit to the
+						UK site (site ID 3).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="USS"/>
+			<xs:enumeration value="USN"/>
+			<xs:enumeration value="UYU"/>
+			<xs:enumeration value="UZS"/>
+			<xs:enumeration value="VUV"/>
+			<xs:enumeration value="VEB"/>
+			<xs:enumeration value="VND"/>
+			<xs:enumeration value="MAD"/>
+			<xs:enumeration value="YER"/>
+			<xs:enumeration value="YUM"/>
+			<xs:enumeration value="ZMK"/>
+			<xs:enumeration value="ZWD"/>
+			<xs:enumeration value="ATS"/>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for internal or future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+			
+			<xs:complexType name="AmountType">
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyID" type="tns:CurrencyCodeType">
+						</xs:attribute>
+						</xs:extension>
+						</xs:simpleContent>
+		  </xs:complexType>
+		
+	<xs:complexType name="BuyingSummaryType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="biddingCount" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+				     	The number of items the user has bid on.
+					</xs:documentation>
+				 <xs:appinfo>
+					<CallInfo>
+						<CallName>GetMyeBayBuying</CallName>
+						<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="winningCount" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+					 The number of items the user has bid on and is winning, but that have not yet ended.
+					</xs:documentation>
+					 <xs:appinfo>
+						<CallInfo>
+							<CallName>GetMyeBayBuying</CallName>
+							<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="totalWinningCost" type="tns:AmountType">
+				<xs:annotation>
+					<xs:documentation>
+				     	The total cost of items the user is presently winning.
+					</xs:documentation>
+					 <xs:appinfo>
+						<CallInfo>
+							<CallName>GetMyeBayBuying</CallName>
+							<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="wonCount" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+					The number of items the user has bid on and won.
+					</xs:documentation>
+					 <xs:appinfo>
+						<CallInfo>
+							<CallName>GetMyeBayBuying</CallName>
+							<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="totalWonCost" type="tns:AmountType">
+				<xs:annotation>
+					<xs:documentation>
+					 The total cost of items the user has bid on and won.
+					</xs:documentation>
+					 <xs:appinfo>
+						<CallInfo>
+							<CallName>GetMyeBayBuying</CallName>
+							<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="wonDurationInDays" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+					The time period for which won items are displayed. Default is 31 days.
+					</xs:documentation>
+					 <xs:appinfo>
+						<CallInfo>
+							<CallName>GetMyeBayBuying</CallName>
+							<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="bestOfferCount" type="xs:int">
+			  	<xs:annotation>
+			    		<xs:documentation>
+			    		The number of items the user has made best offers on.
+			    		</xs:documentation>
+					 <xs:appinfo>
+						<CallInfo>
+							<CallName>GetMyeBayBuying</CallName>
+							<Details>DetailLevel: none, ReturnSummary, ReturnAll</Details>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+			  	</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="outBid" type="xs:int"/>
+			<xs:element minOccurs="0" name="watchingCount" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="SellingSummaryType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="activeCount" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="soldCount" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="unSoldCount" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="scheduledCount" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	  
+	  
+	  <xs:simpleType name="ListingTypeCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Unknown">
+			</xs:enumeration>
+			<xs:enumeration value="Chinese">
+			</xs:enumeration>
+			<xs:enumeration value="Dutch">
+			</xs:enumeration>
+			<xs:enumeration value="Live">
+			</xs:enumeration>
+			<xs:enumeration value="Auction">
+			</xs:enumeration>
+			<xs:enumeration value="AdType">
+			</xs:enumeration>
+			<xs:enumeration value="StoresFixedPrice">
+			</xs:enumeration>
+			<xs:enumeration value="PersonalOffer">
+			</xs:enumeration>
+			<xs:enumeration value="FixedPriceItem">
+			</xs:enumeration>
+			<xs:enumeration value="Half">
+			</xs:enumeration>
+			<xs:enumeration value="LeadGeneration">
+			</xs:enumeration>
+			<xs:enumeration value="Express">
+			</xs:enumeration>
+			<xs:enumeration value="Shopping">
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
+	<xs:simpleType name="SellerBusinessCodeType">
+			<xs:annotation>
+				<xs:documentation>
+					Type of seller account. This value is returned if the user is a 
+					business seller with a site ID of 77 (Germany), 3 (UK), 205 (Ireland) or 100 (Motors).
+				</xs:documentation>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="Undefined">
+					<xs:annotation>
+						<xs:documentation>
+							Type of seller account not defined.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Private">
+					<xs:annotation>
+						<xs:documentation>
+							Private seller account.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Commercial">
+					<xs:annotation>
+						<xs:documentation>
+							Commercial seller account.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CustomCode">
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType>
+	  
+	  <xs:complexType name="ListingDetailsType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="convertedBuyItNowPrice" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="reservePrice" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="startTime" type="xs:dateTime">
+			</xs:element>
+			<xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+			<xs:element minOccurs="0" name="buyItNowAvailable" type="xs:boolean">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	  
+	  
+	  <xs:simpleType name="ItemIDType">
+		<xs:annotation>
+			<xs:documentation>
+				Type that represents the unique identifier for a single item listing.
+			</xs:documentation>
+			<!-- PRIVATE -->
+			<!-- This is just a string wrapper, so don't insert CallInfo here.
+					Put the CallInfo on the elements that reference this type. -->
+			<!-- PRIVATE -->
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	 <xs:complexType name="ItemType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="autoPay" type="xs:boolean"/>
+			<xs:element minOccurs="0" name="buyItNowPrice" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="country" type="tns:CountryCodeType"/>
+			<xs:element minOccurs="0" name="itemID" type="tns:ItemIDType">
+			</xs:element>
+			<xs:element minOccurs="0" name="listingDetails" type="tns:ListingDetailsType">
+			</xs:element>
+			<xs:element minOccurs="0" name="listingDuration" type="xs:token"/>
+			<xs:element minOccurs="0" name="listingType" type="tns:ListingTypeCodeType">
+			</xs:element>
+
+			<xs:element minOccurs="0" name="location" type="xs:string"/>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="paymentMethod" type="tns:BuyerPaymentMethodCodeType">
+			</xs:element>
+			<xs:element minOccurs="0" name="pictureDetails" type="tns:PictureDetailsType"/>
+			
+			<xs:element minOccurs="0" name="primaryCategory" type="tns:CategoryType">
+			</xs:element>
+			<xs:element minOccurs="0" name="quantity" type="xs:int"/>
+			<xs:element minOccurs="0" name="seller" type="tns:UserType"/>
+			<xs:element minOccurs="0" name="sellingStatus" type="tns:SellingStatusType"/>
+			<xs:element minOccurs="0" name="shippingDetails" type="tns:ShippingDetailsType"/>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="shipToLocation" type="xs:string"/>		
+			<xs:element minOccurs="0" name="site" type="tns:SiteCodeType">
+			</xs:element>
+			<xs:element minOccurs="0" name="startPrice" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="subTitle" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="timeLeft" type="xs:duration">
+			</xs:element>
+			<xs:element minOccurs="0" name="title" type="xs:string"/>
+			<element maxOccurs="1" minOccurs="0" name="paymentDetails" type="tns:PaymentDetailsType">
+            </element>
+			<xs:element minOccurs="0" name="itemWatched" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="maxBid" type="tns:AmountType"/>
+			<xs:element minOccurs="0" name="convertedMaxBid" type="tns:AmountType"/>
+			<xs:element minOccurs="0" name="myMaxBid" type="tns:AmountType"/>
+			<xs:element minOccurs="0" name="sellerAllowsContact" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="ShippingDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				Type for the shipping-related details for an item or transaction,
+				including flat and calculated shipping costs.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+				<xs:element minOccurs="0" name="thirdPartyCheckout" type="xs:boolean"/>
+				<xs:element minOccurs="0" name="shippingType" type="tns:ShippingTypeCodeType"/>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="shippingServiceOption" type="tns:ShippingServiceOptionsType"/>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="internationalShippingServiceOption" type="tns:InternationalShippingServiceOptionsType"/>
+			</xs:sequence>
+			</xs:complexType>
+			
+	<xs:complexType name="ShippingServiceOptionsType">
+
+		<xs:sequence>
+			<xs:element minOccurs="0" name="shippingInsuranceCost" type="tns:AmountType">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingService" type="xs:token">
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingServiceCost" type="tns:AmountType">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingServiceAdditionalCost" type="tns:AmountType">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingServicePriority" type="xs:int">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="expeditedService" type="xs:boolean">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingTimeMin" type="xs:int">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingTimeMax" type="xs:int">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingSurcharge" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="freeShipping" type="xs:boolean">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+			
+	<xs:complexType name="InternationalShippingServiceOptionsType">
+
+		<xs:sequence>
+			<xs:element minOccurs="0" name="shippingService" type="xs:token">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingServiceCost" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingServiceAdditionalCost" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingServicePriority" type="xs:int">
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="shipToLocation" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="shippingInsuranceCost" type="tns:AmountType">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:simpleType name="ShippingTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				The shipping cost model offered by the seller.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Flat">
+				<xs:annotation>
+					<xs:documentation>
+						Flat shipping model: the seller establishes the cost
+						of shipping and cost of shipping insurance, regardless of
+						what any buyer-selected shipping service might charge the
+						seller.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Calculated">
+				<xs:annotation>
+					<xs:documentation>
+						Calculated shipping model: the cost of shipping is
+						determined in large part by the seller-offered and
+						buyer-selected shipping service. The seller might assess an
+						additional fee via PackagingHandlingCosts.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Freight">
+				<xs:annotation>
+					<xs:documentation>
+						Freight shipping model: the cost of shipping is
+						determined by a third party, FreightQuote.com, based on the item
+						location (zip code). Currently, Freight can only be specified
+						on input via eBay Web site, not API.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Free">
+				<xs:annotation>
+					<xs:documentation>
+						Free shipping. Returned only by GetSearchResults and GetProducts.
+						This field is output-only so if you want to use AddItem to specify a free
+						Shipping Cost, specify 0 in
+						Item.ShippingDetails.ShippingServiceOptions.ShippingServiceCost.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NotSpecified">
+				<xs:annotation>
+					<xs:documentation>
+						The seller did not specify the shipping type.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FlatDomesticCalculatedInternational">
+				<xs:annotation>
+					<xs:documentation>
+						The seller specified one or more flat domestic shipping services
+						and one or more calculated international shipping services.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CalculatedDomesticFlatInternational">
+				<xs:annotation>
+					<xs:documentation>
+						The seller specified one or more calculated domestic shipping services
+						and one or more flat international shipping services.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FreightFlat">
+				<xs:annotation>
+					<xs:documentation>
+						Freight shipping model: freight shipping may be used when
+						flat or calculated shipping cannot be used due to the greater weight
+						of the item.  See &quot;Specifying Freight Shipping&quot; in the Shipping
+						chapter for details on freight shipping.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>	
+			
+			
+	<xs:complexType name="CategoryType">
+	
+		<xs:sequence>
+			<xs:element minOccurs="0" name="bestOfferEnabled" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="autoPayEnabled" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="b2BVATEnabled" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="catalogEnabled" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="categoryID" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="categoryLevel" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="categoryName" type="xs:string">
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="categoryParentID" type="xs:string">
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="categoryParentName" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="productSearchPageAvailable" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="expired" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="intlAutosFixedCat" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="leafCategory" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="virtual" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="numOfItems" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="sellerGuaranteeEligible" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="ORPA" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="ORRA" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="LSD" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="keywords" type="xs:string">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="BusinessSellerDetailsType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="address" type="tns:AddressType">
+			</xs:element>
+			<xs:element minOccurs="0" name="fax" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="email" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="tradeRegistrationNumber" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="VATDetails" type="tns:VATDetailsType">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="VATDetailsType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="businessSeller" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="restrictedToBusiness" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="VATPercent" type="xs:float">
+			</xs:element>
+			<xs:element minOccurs="0" name="VATSite" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="VATID" type="xs:string">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PictureDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				Contains the data for a picture associated with an item.
+				Replaces the deprecated SiteHostedPicture and
+				VendorHostedPicture.
+				Not applicable to Half.com.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" name="galleryURL" type="xs:anyURI"/>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="pictureURL" type="xs:anyURI"/>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AddressType">
+	  <xs:sequence>
+		<xs:element minOccurs="0" name="name" type="xs:string">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="street" type="xs:string">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="street1" type="xs:string">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="street2" type="xs:string">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="cityName" type="xs:string">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="county" type="xs:string">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="stateOrProvince" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="country" type="tns:CountryCodeType">
+		</xs:element>
+		<xs:element minOccurs="0" name="countryName" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phone" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phoneCountryCode" type="tns:CountryCodeType">
+
+		</xs:element>
+		<xs:element minOccurs="0" name="phoneCountryPrefix" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phoneAreaOrCityCode" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phoneLocalNumber" type="xs:string">
+		</xs:element>
+		<!-- phone number set 2 -->
+		<xs:element minOccurs="0" name="phone2CountryCode" type="tns:CountryCodeType">
+		</xs:element>
+		<xs:element minOccurs="0" name="phone2CountryPrefix" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phone2AreaOrCityCode" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phone2LocalNumber" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="postalCode" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="addressID" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="addressOwner" type="tns:AddressOwnerCodeType">
+		</xs:element>
+		<xs:element minOccurs="0" name="addressStatus" type="tns:AddressStatusCodeType">
+		</xs:element>
+		<xs:element minOccurs="0" name="externalAddressID" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="internationalName" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="internationalStateAndCity" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="internationalStreet" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="companyName" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="addressRecordType" type="tns:AddressRecordTypeCodeType">
+		</xs:element>
+		<xs:element minOccurs="0" name="firstName" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="lastName" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="phone2" type="xs:string">
+		</xs:element>
+		<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="AddressOwnerCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates who owns the user's address.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="PayPal">
+				<xs:annotation>
+					<xs:documentation>
+						PayPal owns the address.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="eBay">
+				<xs:annotation>
+					<xs:documentation>
+						eBay owns the address.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for internal or future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+<!--
+
+##### from file eBLBaseComponents/public/AddressRecordTypeCodeList.xsd #####
+
+-->
+	<xs:simpleType name="AddressRecordTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				Codes indicate the address type.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Residential">
+			</xs:enumeration>
+			<xs:enumeration value="Business"/>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Reserved for internal or future use
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+<!--
+
+##### from file eBLBaseComponents/public/AddressStatusCodeList.xsd #####
+
+-->
+	<xs:simpleType name="AddressStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				PayPal address status.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="None"/>
+			<xs:enumeration value="Confirmed"/>
+			<xs:enumeration value="Unconfirmed"/>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Reserved for internal or future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	
+	<xs:complexType name="SellingStatusType">
+
+		<xs:sequence>
+			<xs:element minOccurs="0" name="bidCount" type="xs:int">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="bidIncrement" type="tns:AmountType">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="convertedCurrentPrice" type="tns:AmountType">
+
+			</xs:element>
+			<xs:element minOccurs="0" name="currentPrice" type="tns:AmountType">
+			
+			</xs:element>
+			<xs:element minOccurs="0" name="highBidder" type="tns:UserType">
+			</xs:element>
+	
+			<xs:element minOccurs="0" name="minimumToBid" type="tns:AmountType">
+		
+			</xs:element>
+			<xs:element minOccurs="0" name="quantitySold" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="reserveMet" type="xs:boolean">
+			</xs:element>
+			<xs:element minOccurs="0" name="bidderCount" type="xs:long">
+			</xs:element>
+			<xs:element minOccurs="0" name="listingStatus" type="tns:ListingStatusCodeType">
+			</xs:element>
+		
+
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="ListingStatusCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Active">
+
+			</xs:enumeration>
+			<xs:enumeration value="Ended">
+	
+			</xs:enumeration>
+			<xs:enumeration value="Completed">
+
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+
+			</xs:enumeration>
+			<xs:enumeration value="Custom">
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="UserType">
+		<xs:annotation>
+			<xs:documentation>
+				Type to contain the data for one eBay user. Depending on the context, the user
+				might be the seller or the buyer in a transaction, or the bidder or winning bidder
+				in a listing. An object of this type is returned by a number of calls, including
+				the GetUser call.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+		
+			<xs:element minOccurs="0" name="email" type="xs:string">
+			
+			</xs:element>
+			<xs:element minOccurs="0" name="feedbackScore" type="xs:int">
+			
+			</xs:element>
+			<xs:element minOccurs="0" name="uniqueNegativeFeedbackCount" type="xs:int">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="uniquePositiveFeedbackCount" type="xs:int">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="positiveFeedbackPercent" type="xs:float">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="feedbackPrivate" type="xs:boolean">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="feedbackRatingStar" type="tns:FeedbackRatingStarCodeType">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="idVerified" type="xs:boolean">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="eBayGoodStanding" type="xs:boolean">
+			</xs:element>
+		
+			<xs:element minOccurs="0" name="site" type="tns:SiteCodeType">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="status" type="tns:UserStatusCodeType">
+				
+			</xs:element>
+			<xs:element minOccurs="0" name="userID" type="tns:UserIDType">
+			
+			</xs:element>
+		</xs:sequence>
+		</xs:complexType>
+		
+		
+		<xs:simpleType name="UserStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				These codes indicate the current state or status of a an eBay
+				user account.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Unknown">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User properties have never been set; this value should
+						seldom, if ever, be returned and typically represents a
+						problem
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Suspended">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has been suspended from selling and buying, such as
+						for violations of eBay terms or agreement
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Confirmed">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed online registration and has properly
+						responded to confirmation email; most users should fall
+						in this category
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unconfirmed">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed online registration, but has either
+						not responded to confirmation email or has not yet been
+						sent the confirmation email
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Ghost">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Registered users of AuctionWeb (pre-eBay) who never
+						re-registered on eBay
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="InMaintenance">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Temporary user record state indicating the record is in
+						the process of being changed by eBay; query user
+						information again to get new status
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Deleted">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Records for the specified user have been deleted
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CreditCardVerify">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed registration and confirmation, but is
+						pending a verification of credit card information
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AccountOnHold">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User's account is on hold, such as for non-payment of
+						amounts due eBay; user cannot sell or buy items
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Merged">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User record has been merged with another account record
+						for the same user
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RegistrationCodeMailOut">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed online registration and has been sent
+						the confirmation email, but has not yet responded to the
+						confirmation email
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TermPending">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has been scheduled for account closure (typically
+						when a user has requested to have their account closed)
+						A user in this state should not be considered an active
+						user
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnconfirmedHalfOptIn">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed the registration for Half.com and opted
+						to automatically also be registered with eBay, but the
+						registration confirmation is still pending
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CreditCardVerifyHalfOptIn">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed the registration for Half.com and opted
+						to automatically also be registered with eBay, but the
+						verification of credit card information is still pending
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnconfirmedPassport">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Signing in with Microsoft Passport is no longer supported.
+					</xs:documentation>
+					<xs:appinfo>
+						<DeprecationVersion>415</DeprecationVersion>
+						<DeletionVersion/>
+						<EndOfLifeVersion/>
+						<DeprecationDetails>NotReturned</DeprecationDetails>
+						<UseInstead/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CreditCardVerifyPassport">
+				<xs:annotation>
+					<xs:documentation>
+					 (out) Signing in with Microsoft Passport is no longer supported.
+					</xs:documentation>
+					<xs:appinfo>
+						<DeprecationVersion>415</DeprecationVersion>
+						<DeletionVersion/>
+						<EndOfLifeVersion/>
+						<DeprecationDetails>NotReturned</DeprecationDetails>
+						<UseInstead/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnconfirmedExpress">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Half.com User; user has completed the registration for Half.com
+						and opted to automatically also be registered with eBay, but the
+						registration confirmation is still pending
+					</xs:documentation>
+					<xs:appinfo>
+						<DeprecationVersion>579</DeprecationVersion>
+						<DeprecationDetails>NoOp</DeprecationDetails>
+						<UseInstead/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Guest">
+				<xs:annotation>
+					<xs:documentation>
+						(out) The user is a guest user. The user has not added a password and has not confirmed an email address.
+						The user has not signed up as a regular user, but has agreed to the User Agreement and Privacy Policy.
+						The user has been through the buying flow for a guest;
+						the user has been through checkout using the streamlined Buy-It-Now flow.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						  (out) Reserved for internal or future use
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>				
+	  
+	   <!--  element name="item" type="tns:ItemType"/ -->
+	  
+	  
+	  <xs:complexType name="ItemArrayType">
+		<xs:annotation>
+			<xs:documentation>
+				Container for a list of items. Can contain zero, one, or multiple
+				ItemType objects, each of which conveys the data for one item listing.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:ItemType">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	  
+		<xs:complexType name="PaginatedItemArrayType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="itemArray" type="tns:ItemArrayType">
+			</xs:element>
+			<xs:element minOccurs="0" name="paginationResult" type="tns:PaginationResultType">
+				<xs:annotation>
+					<xs:documentation>
+						Provides information about the list, including number of pages and number
+						of entries.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PaginationResultType">
+		<xs:annotation>
+			<xs:documentation>
+				Shows the pagination of data returned by requests.
+				Pagination of returned data is not needed in and not
+				supported for every call. See the documentation for
+				individual calls to determine whether pagination is
+				supported, required, or desirable.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" name="totalNumberOfPages" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="totalNumberOfEntries" type="xs:int">
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="PaginatedOrderTransactionArrayType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="orderTransactionArray" type="tns:OrderTransactionArrayType">
+			</xs:element>
+			<xs:element minOccurs="0" name="paginationResult" type="tns:PaginationResultType">
+				<xs:annotation>
+					<xs:documentation>
+						Provides information about the list, including number of pages and number
+						of entries.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+ 
+ <xs:complexType name="OrderTransactionArrayType">
+		<xs:annotation>
+			<xs:documentation>
+				Contains a list of orders, transactions, or both, each of OrderTransactionType.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="orderTransaction" type="tns:OrderTransactionType">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="OrderTransactionType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains an order or a transaction. A transaction is the sale of one or
+			more items from a seller's listing to a buyer. An order combines two or more transactions
+			into a single payment.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="transaction" type="tns:TransactionType">
+		</xs:element>
+		<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="TransactionArrayType">
+		<xs:annotation>
+			<xs:documentation>
+				Contains an array of transactions.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="transaction" type="tns:TransactionType">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="TransactionStatusType">
+		<xs:annotation>
+			<xs:documentation>
+				Contains the transaction status, e.g. the buyer's online
+				payment and whether the checkout process for the transaction is complete.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" name="eBayPaymentStatus" type="tns:PaymentStatusCodeType">
+			</xs:element>
+			<xs:element minOccurs="0" name="checkoutStatus" type="tns:CheckoutStatusCodeType">
+			</xs:element>	
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="amountPaid" type="tns:AmountType">
+			</xs:element>	
+			<xs:element minOccurs="0" name="createdDate" type="xs:dateTime">
+			</xs:element>
+			<xs:element minOccurs="0" name="item" type="tns:ItemType">
+			</xs:element>
+			<xs:element minOccurs="0" name="quantityPurchased" type="xs:int">
+			</xs:element>
+			<xs:element minOccurs="0" name="status" type="tns:TransactionStatusType">
+			</xs:element>
+			<xs:element minOccurs="0" name="transactionID" type="xs:string">
+			</xs:element>
+			<xs:element minOccurs="0" name="transactionPrice" type="tns:AmountType">
+			</xs:element>
+			<xs:element minOccurs="0" name="buyerPaidStatus" type="tns:PaidStatusCodeType">
+			</xs:element>
+			<xs:element minOccurs="0" name="totalPrice" type="tns:AmountType">
+			</xs:element>
+	
+			<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="PaymentStatusCodeType">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the success or failure of the buyer's online payment for a transaction.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="NoPaymentFailure">
+					<xs:annotation>
+						<xs:documentation>
+							(out) No payment failure.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BuyerECheckBounced">
+					<xs:annotation>
+						<xs:documentation>
+							(out) The buyer's eCheck bounced.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BuyerCreditCardFailed">
+					<xs:annotation>
+						<xs:documentation>
+							(out) The buyer's credit card failed.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BuyerFailedPaymentReportedBySeller">
+					<xs:annotation>
+						<xs:documentation>
+							(out) The seller reports that the buyer's payment failed.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PayPalPaymentInProcess">
+					<xs:annotation>
+						<xs:documentation>
+							(out) The payment from buyer to seller is in PayPal process, but has not
+							yet been completed.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaymentInProcess">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Currently for eBay Germany only.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CustomCode">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Reserved for internal or future use.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="CheckoutStatusCodeType">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the current state of the checkout process for a transaction.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="CheckoutComplete">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Checkout complete.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CheckoutIncomplete">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Checkout incomplete--no details specified.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BuyerRequestsTotal">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Buyer requests total from seller.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="SellerResponded">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Seller responded to buyer's request.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CustomCode">
+					<xs:annotation>
+						<xs:documentation>
+							(out) Reserved for future use.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType>
+		
+	<xs:simpleType name="PaidStatusCodeType">
+			<xs:annotation>
+				<xs:documentation>
+				Specifies the payment status of a transaction, as
+				seen by the buyer and seller.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="NotPaid">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has not completed checkout, but has not paid through PayPal or
+							PaisaPay (but please also see the documentation for PaymentHoldStatus and its applicable values).
+							The buyer might have paid using another method, but the payment
+							might not have been received or cleared.
+							Important: Please see the documentation for PaymentHoldStatus and its applicable values.
+							PaymentHoldStatus contains the current status of a hold on a PayPal payment.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BuyerHasNotCompletedCheckout">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has not completed the checkout process and so has not made payment.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaymentPendingWithPayPal">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has made a PayPal payment, but the seller has not yet received it.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaidWithPayPal">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has made a PayPal payment, and the payment is complete.
+							But please also see the documentation for PaymentHoldStatus and its applicable values.
+							PaymentHoldStatus contains the current status of a hold on a PayPal payment.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="MarkedAsPaid">
+					<xs:annotation>
+						<xs:documentation>
+							The transaction is marked as paid by either buyer or seller.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaymentPendingWithEscrow">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has made an escrow payment, but the seller has not yet received it.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaidWithEscrow">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has made an escrow payment, and the seller has received payment.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="EscrowPaymentCancelled">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has made an escrow payment, but has cancelled the payment.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaymentPendingWithPaisaPay">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has paid with PaisaPay, but the payment is still being processed.
+							The seller has not yet received payment.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaidWithPaisaPay">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has paid with PaisaPay, and the payment is complete.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaymentPending">
+					<xs:annotation>
+						<xs:documentation>
+							The buyer has made a payment other than PayPal, escrow, or PaisaPay, but the
+							payment is still being processed.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaymentPendingWithPaisaPayEscrow">
+					<xs:annotation>
+						<xs:documentation>
+							Payment Pending With PaisaPay Escrow
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaidWithPaisaPayEscrow">
+					<xs:annotation>
+						<xs:documentation>
+							Paid With PaisaPay Escrow
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaisaPayNotPaid">
+					<xs:annotation>
+						<xs:documentation>
+							Paisa Pay Not Paid
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Refunded">
+					<xs:annotation>
+						<xs:documentation>
+							Refunded
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="WaitingForCODPayment">
+					<xs:annotation>
+						<xs:documentation>
+							WaitingForCODPayment
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PaidCOD">
+					<xs:annotation>
+						<xs:documentation>
+							PaidCOD
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CustomCode">
+					<xs:annotation>
+						<xs:documentation>
+							Reserved for future use.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType>
+
+		<complexType name="FavoriteSearchesType">
+           	<sequence>
+                  <element maxOccurs="unbounded" minOccurs="0" name="favoriteSearch" type="tns:FavoriteSearchType">
+                  </element>
+              </sequence>
+          </complexType>
+          
+              <complexType name="FavoriteSearchType">
+                 <sequence>
+                     <element name="searchName" type="string"/>
+                     <element name="queryKeywords" type="string"/>
+                 </sequence>
+           	 </complexType>     
+
+			<xs:complexType name="GetItemResponseType">
+				<xs:annotation>
+					<xs:documentation>
+						Contains the item data returned by the call. The data for the specified item
+						listing is returned in an ItemType object.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="item" type="tns:ItemType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+                  
+  
+	<element name="viewItemPageRequest">
+		<complexType>
+		  <xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+			<sequence>
+				<element maxOccurs="1" name="itemID" type="string">
+				</element>
+				<element maxOccurs="1" minOccurs="0" name="errorLanguage" type="string">
+				</element>
+			</sequence>
+			</xs:extension>
+			</xs:complexContent>
+		</complexType>
+	</element>
+	<element name="viewItemPageResponse">
+		<complexType>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<sequence>
+						<element name="timer">
+							<complexType>
+								<sequence>
+									<element name="startTime" type="dateTime"/>
+									<element name="endTime" type="dateTime"/>
+									<element name="getItemStart" type="dateTime"/>
+									<element name="getItemCallReturn" type="dateTime"/>
+									<element name="getItemEnd" type="dateTime"/>
+									<element name="getAllBiddersStart" type="dateTime"/>
+									<element name="getAllBiddersCallReturn" type="dateTime"/>
+									<element name="getAllBiddersEnd" type="dateTime"/>
+								</sequence>
+							</complexType>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="item" type="tns:ItemType">
+						</element>
+					</sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</complexType>
+	</element>
+        
+        
+            <complexType name="PaymentDetailsType">
+            	<sequence>
+            		<element maxOccurs="1" minOccurs="0" name="daysToFullPayment" type="int">
+            		</element>
+            		<element maxOccurs="1" minOccurs="0" name="hoursToDeposit" type="int">
+            		</element>
+            	</sequence>
+            </complexType>
+        
+            <simpleType name="BuyerPaymentMethodCodeType">
+            	<restriction base="token">
+            		<enumeration value="AmEx"/>
+            		<enumeration value="CashInPerson"/>
+            		<enumeration value="CashOnPickup"/>
+            		<enumeration value="CCAccepted"/>
+            		<enumeration value="COD"/>
+            		<enumeration value="CODPrePayDelivery"/>
+            		<enumeration value="CustomCode"/>
+            		<enumeration value="Discover"/>
+            		<enumeration value="ELV"/>
+            		<enumeration value="Escrow"/>
+            		<enumeration value="LoanCheck"/>
+            		<enumeration value="MOCC"/>
+            		<enumeration value="Moneybookers"/>
+            		<enumeration value="MoneyXferAccepted"/>
+            		<enumeration value="MoneyXferAcceptedInCheckout"/>
+            		<enumeration value="None"/>
+            		<enumeration value="Other"/>
+            		<enumeration value="OtherOnlinePayments"/>
+            		<enumeration value="PaisaPayAccepted"/>
+            		<enumeration value="PaisaPayEscrowEMI"/>
+            		<enumeration value="Paymate"/>
+            		<enumeration value="PaymentSeeDescription"/>
+            		<enumeration value="PayPal"/>
+            		<enumeration value="PersonalCheck"/>
+            		<enumeration value="PostalTransfer"/>
+            		<enumeration value="PrePayDelivery"/>
+            		<enumeration value="ProPay"/>
+            		<enumeration value="VisaMC"/>
+            	</restriction>
+            </simpleType>
+        
+        </schema>
+  </types>
+  <message name="viewItemRequest">
+    <part name="payload" element="tns:viewItemPageRequest">
+    </part>
+  </message>
+  <message name="viewItemResponse">
+    <part name="payload" element="tns:viewItemPageResponse">
+    </part>
+  </message>
+  <portType name="RIMApplicationProcessServicePort">
+    <operation name="getViewItemPage">
+      <input message="tns:viewItemRequest">
+    </input>
+      <output message="tns:viewItemResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="RIMApplicationProcessServiceSOAPBinding" type="tns:RIMApplicationProcessServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getViewItemPage">
+      <soap:operation soapAction="http://www.ebayopensource.com/turmeric/mobile/v1/services/getViewItemPage"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="RIMApplicationProcessService">
+    <port name="RIMApplicationProcessServiceSOAPPort" binding="tns:RIMApplicationProcessServiceSOAPBinding">
+      <soap:address location="https://svcs.ebayopensource.com/services/mobile/v1/RIMApplicationProcessService"/>
+    </port>
+  </service>
+    <plnk:partnerLinkType name="RIMApplicationService">
+        <plnk:role name="AggServiceProvider" portType="tns:RIMApplicationProcessServicePort"/>
+    </plnk:partnerLinkType>
+</definitions>

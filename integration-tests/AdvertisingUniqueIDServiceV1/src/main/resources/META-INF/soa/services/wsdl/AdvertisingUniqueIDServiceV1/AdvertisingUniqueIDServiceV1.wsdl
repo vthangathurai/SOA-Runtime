@@ -1,0 +1,1010 @@
+/*******************************************************************************
+ * Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *******************************************************************************/
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/advertising/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UniqueIDService"
+	targetNamespace="http://www.ebayopensource.org/turmeric/advertising/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebayopensource.org/turmeric/advertising/v1/services">
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"></xs:enumeration>
+					<xs:enumeration value="Application"></xs:enumeration>
+					<xs:enumeration value="Request"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"></xs:enumeration>
+					<xs:enumeration value="Warning"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="version" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getItemRequest">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="itemId" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getItemResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="itemId" type="xs:string"></xs:element>
+						<xs:element name="itemName" type="xs:string"></xs:element>
+						<xs:element name="itemPrice" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getRequestIDResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="guid" type="xs:string"></xs:element>
+						<xs:element name="requestID" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="echoMessageRequest">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="echoMessageResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="out" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getGenericClientInfoRequest"
+				type="tns:GetGenericClientInfoRequest" />
+			<xs:complexType name="GetGenericClientInfoRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="id" type="xs:string" />
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="name" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getGenericClientInfoResponse"
+				type="tns:GetGenericClientInfoResponse" />
+			<xs:complexType name="GetGenericClientInfoResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="id" type="xs:string" />
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="name" type="xs:string" />
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="phonenumber" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax">
+					</xs:any>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:element name="getUserInfo">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserInfoResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="out" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserNotFoundException">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:ErrorMessage">
+							<xs:sequence />
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			-->
+			<xs:element name="getTransportHeaders">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTransportHeadersResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="out" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="chainedTransportHeaders">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="chainedTransportHeadersResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="out" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="testAttachment">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in"
+							type="tns:FileAttachmentType"
+							xmime:expectedContentTypes="application/any">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="testAttachmentResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="out"
+							type="tns:FileAttachmentType"
+							xmime:expectedContentTypes="application/any">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="FileAttachmentType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="Size"
+						type="xs:long">
+					</xs:element>
+					<xs:element minOccurs="0" name="Data"
+						type="xs:base64Binary"
+						xmime:expectedContentTypes="application/any">
+					</xs:element>
+					<xs:element name="fileName" type="xs:string" />
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="testEnhancedRest">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="testEnhancedRestResponse">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="out" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="getVersion">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="getRequestID">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getItemRequest">
+		<wsdl:part name="parameters" element="tns:getItemRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getItemResponse">
+		<wsdl:part name="parameters" element="tns:getItemResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getRequestIDResponse">
+		<wsdl:part name="parameters"
+			element="tns:getRequestIDResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="echoMessageRequest">
+		<wsdl:part name="parameters" element="tns:echoMessageRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="echoMessageResponse">
+		<wsdl:part name="parameters"
+			element="tns:echoMessageResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getGenericClientInfoRequest">
+		<wsdl:part name="parameters"
+			element="tns:getGenericClientInfoRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getGenericClientInfoResponse">
+		<wsdl:part name="parameters"
+			element="tns:getGenericClientInfoResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<!--  
+	<wsdl:message name="getUserInfoRequest">
+		<wsdl:part name="parameters" element="tns:getUserInfo"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserInfoResponse1">
+		<wsdl:part name="parameters" element="tns:getUserInfoResponse"></wsdl:part>
+	</wsdl:message>
+    <wsdl:message name="UserNotFoundException">
+		<wsdl:part name="parameters" element="tns:UserNotFoundException" />
+	</wsdl:message>-->
+	<wsdl:message name="getTransportHeadersRequest">
+		<wsdl:part name="parameters" element="tns:getTransportHeaders"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTransportHeadersResponse">
+		<wsdl:part name="parameters" element="tns:getTransportHeadersResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="chainedTransportHeadersRequest">
+		<wsdl:part name="parameters" element="tns:chainedTransportHeaders"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="chainedTransportHeadersResponse">
+		<wsdl:part name="parameters" element="tns:chainedTransportHeadersResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="testAttachmentRequest">
+		<wsdl:part name="parameters" element="tns:testAttachment"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="testAttachmentResponse">
+		<wsdl:part name="parameters" element="tns:testAttachmentResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="testEnhancedRestRequest">
+		<wsdl:part name="parameters" element="tns:testEnhancedRest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="testEnhancedRestResponse">
+		<wsdl:part name="parameters" element="tns:testEnhancedRestResponse"></wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="parameters" element="tns:getVersion"></wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="getRequestIDRequest">
+		<wsdl:part name="parameters" element="tns:getRequestID"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="UniqueIDServicePort">
+		<wsdl:operation name="getVersion">
+            <wsdl:input message="tns:getVersionRequest"></wsdl:input>
+            <wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getItem">
+			<wsdl:input message="tns:getItemRequest"></wsdl:input>
+			<wsdl:output message="tns:getItemResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRequestID">
+            <wsdl:input message="tns:getRequestIDRequest"></wsdl:input>
+            <wsdl:output message="tns:getRequestIDResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="echoMessage">
+			<wsdl:input message="tns:echoMessageRequest"></wsdl:input>
+			<wsdl:output message="tns:echoMessageResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGenericClientInfo">
+			<wsdl:input message="tns:getGenericClientInfoRequest"></wsdl:input>
+			<wsdl:output message="tns:getGenericClientInfoResponse"></wsdl:output>
+		</wsdl:operation>
+		<!--  
+
+		<wsdl:operation name="getUserInfo">
+			<wsdl:input message="tns:getUserInfoRequest"></wsdl:input>
+			<wsdl:output message="tns:getUserInfoResponse1"></wsdl:output>
+            <wsdl:fault message="tns:UserNotFoundException" name="Exception" />
+        </wsdl:operation>-->
+		<wsdl:operation name="getTransportHeaders">
+			<wsdl:input message="tns:getTransportHeadersRequest"></wsdl:input>
+			<wsdl:output message="tns:getTransportHeadersResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="chainedTransportHeaders">
+			<wsdl:input message="tns:chainedTransportHeadersRequest"></wsdl:input>
+			<wsdl:output message="tns:chainedTransportHeadersResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="testAttachment">
+			<wsdl:input message="tns:testAttachmentRequest"></wsdl:input>
+			<wsdl:output message="tns:testAttachmentResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="testEnhancedRest">
+			<wsdl:input message="tns:testEnhancedRestRequest"></wsdl:input>
+			<wsdl:output message="tns:testEnhancedRestResponse"></wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:portType>
+	<wsdl:binding name="UniqueIDServiceHttpBinding"
+		type="tns:UniqueIDServicePort">
+
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+
+			<http:operation location="/getVersion" />
+						<wsdl:input>
+							<mime:content part="parameters"
+								type="application/x-www-form-urlencoded" />
+			
+			
+			
+			
+						</wsdl:input>
+
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getItem">
+
+			<http:operation location="/getItem" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRequestID">
+
+			<http:operation location="/getRequestID" />
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="echoMessage">
+			<http:operation location="/echoMessage" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGenericClientInfo">
+			<http:operation location="/getGenericClientInfo" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<!--  
+			<wsdl:operation name="getUserInfo">
+			<http:operation location="/getUserInfo" />
+			<wsdl:input>
+			<mime:content part="parameters"
+			type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+			<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+			<wsdl:fault name="Exception"></wsdl:fault>
+			</wsdl:operation>-->
+		<wsdl:operation name="getTransportHeaders">
+			<http:operation location="/getTransportHeaders" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="chainedTransportHeaders">
+			<http:operation location="/chainedTransportHeaders" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="testAttachment">
+			<http:operation location="/testAttachment" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="testEnhancedRest">
+			<http:operation location="/testEnhancedRest" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	
+	</wsdl:binding>
+	<wsdl:binding name="UniqueIDServiceSOAPBinding"
+		type="tns:UniqueIDServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/getVersion" />
+				<wsdl:input>
+				
+								<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getItem">
+
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/getItem" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRequestID">
+
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/getRequestID" />
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="echoMessage">
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/echoMessage" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGenericClientInfo">
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/getGenericClientInfo" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<!-- 
+			<wsdl:operation name="getUserInfo">
+			<soap:operation
+			soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/getUserInfo" />
+			<wsdl:input>
+			<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+			<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="Exception">
+			<soap:fault use="literal" name="Exception" />
+			</wsdl:fault>
+			</wsdl:operation>-->
+		<wsdl:operation name="getTransportHeaders">
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/getTransportHeaders" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="chainedTransportHeaders">
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/chainedTransportHeaders" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="testAttachment">
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/testAttachment" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="testEnhancedRest">
+			<soap:operation
+				soapAction="http://www.ebayopensource.org/turmeric/advertising/v1/services/testEnhancedRest" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	
+	</wsdl:binding>
+	<wsdl:service name="UniqueIDService">
+		<wsdl:port binding="tns:UniqueIDServiceHttpBinding"
+			name="UniqueIDServiceHttp">
+			<http:address
+				location="http://svcs.ebay.com/UniqueIDService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:UniqueIDServiceSOAPBinding"
+			name="UniqueIDServiceSOAP">
+			<soap12:address
+				location="http://svcs.ebay.com/UniqueIDService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

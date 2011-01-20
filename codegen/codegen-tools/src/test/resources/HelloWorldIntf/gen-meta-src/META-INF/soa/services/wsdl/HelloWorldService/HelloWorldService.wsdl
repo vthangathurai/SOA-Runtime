@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns="http://www.ebayopensource.org/turmeric/common/v1/services" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/services">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/services">
+            <xs:element name="helloWorld">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="args0" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="helloWorldResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="helloWorldRequest">
+        <wsdl:part name="parameters" element="ns:helloWorld"/>
+    </wsdl:message>
+    <wsdl:message name="helloWorldResponse">
+        <wsdl:part name="parameters" element="ns:helloWorldResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="HelloWorldServicePortType">
+        <wsdl:operation name="helloWorld">
+            <wsdl:input message="ns:helloWorldRequest" wsaw:Action="urn:helloWorld"/>
+            <wsdl:output message="ns:helloWorldResponse" wsaw:Action="urn:helloWorldResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="HelloWorldServiceSoap11Binding" type="ns:HelloWorldServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="helloWorld">
+            <soap:operation soapAction="urn:helloWorld" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HelloWorldServiceSoap12Binding" type="ns:HelloWorldServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="helloWorld">
+            <soap12:operation soapAction="urn:helloWorld" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HelloWorldServiceHttpBinding" type="ns:HelloWorldServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="helloWorld">
+            <http:operation location="helloWorld"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="HelloWorldService">
+        <wsdl:port name="HelloWorldServiceHttpSoap11Endpoint" binding="ns:HelloWorldServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/HelloWorldService"/>
+        </wsdl:port>
+        <wsdl:port name="HelloWorldServiceHttpSoap12Endpoint" binding="ns:HelloWorldServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/HelloWorldService"/>
+        </wsdl:port>
+        <wsdl:port name="HelloWorldServiceHttpEndpoint" binding="ns:HelloWorldServiceHttpBinding">
+            <http:address location="http://localhost:8080/HelloWorldService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<project basedir="." default="run" name="run.xml">
+  <target name="run" description="Run Sample" >
+      <echo message="Running"/>
+  	<property name="jdk.home" value="${env.JAVA_HOME}"/> 
+	<property name="Project.root" value="../../../../../../.."/>
+  	<property name="SOAClient.location" value="${Project.root}/../SOAClient"/> 
+  	<property name="SOAServer.location" value="${Project.root}/../SOAServer"/> 
+	<path id="client.class.path">
+		<pathelement location="${Project.root}/bin"/>
+		<pathelement location="${SOAClient.location}/bin"/>
+		<fileset dir="${Project.root}/../../BuildOutput/Modules50" includes="*.jar"/>
+		<!-- these are needed for runtime but not compile time -->
+		<!-- where to find META-INF in order to get schema -->
+                <pathelement location="${SOAClient.location}"/>
+		<!-- where to find META-INF in order to get instance files -->
+                <pathelement location="${Project.root}"/>
+	</path>
+	<path id="server.class.path">
+		<pathelement location="${Project.root}/bin"/>
+		<!-- server must be given first, for right JAXB object lookup -->
+		<pathelement location="${SOAServer.location}/bin"/>
+		<pathelement location="${SOAClient.location}/bin"/>
+		<fileset dir="${Project.root}/../../BuildOutput/Modules50" includes="*.jar"/>
+		<!-- these are needed for runtime but not compile time -->
+		<!-- where to find META-INF in order to get schema -->
+                <pathelement location="${SOAServer.location}"/>
+		<!-- where to find META-INF in order to get instance files -->
+                <pathelement location="${Project.root}"/>
+	</path>
+      <javac classpathref="client.class.path" debug="true" deprecation="true" nowarn="false" srcdir="." includes="ClientConfigTest.java">
+      </javac>
+      <javac classpathref="server.class.path" debug="true" deprecation="true" nowarn="false" srcdir="." includes="ServerConfigTest.java">
+      </javac>
+      <java classname="org.ebayopensource.turmeric.runtime.tests.config.ClientConfigTest" classpathref="client.class.path" fork="yes" failonerror="false" dir="./" output="client.output.txt">
+      </java>
+      <condition property="files.match">
+                <filesmatch file1="client.output.txt" file2="client.compare.txt"/>
+      </condition>
+      <fail unless="files.match">Client run does not match the baseline output!!</fail>
+      <java classname="org.ebayopensource.turmeric.runtime.tests.config.ServerConfigTest" classpathref="server.class.path" fork="yes" failonerror="false" dir="./" output="server.output.txt">
+      </java>
+      <condition property="files.match2">
+                <filesmatch file1="server.output.txt" file2="server.compare.txt"/>
+      </condition>
+      <fail unless="files.match2">Server run does not match the baseline output!!</fail>
+
+  </target>
+</project>

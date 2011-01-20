@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://ebayopensource.org/soaframework/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://www.ebayopensource.org/soaframework/common/types" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://ebayopensource.org/soaframework/services">
+    <wsdl:types>
+        <xs:schema xmlns:tns="http://www.ebayopensource.org/soaframework/common/types" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/soaframework/common/types">
+            <xs:complexType name="ErrorMessage">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:ErrorData"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorData">
+                <xs:sequence>
+                    <xs:element name="error-id" type="xs:long"/>
+                    <xs:element name="domain" type="xs:string"/>
+                    <xs:element name="severity" type="tns:ErrorSeverity"/>
+                    <xs:element name="category" type="tns:ErrorCategory"/>
+                    <xs:element name="message" type="xs:string"/>
+                    <xs:element minOccurs="0" name="exception-id" type="xs:token"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ErrorSeverity">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error"/>
+                    <xs:enumeration value="Warning"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="System"/>
+                    <xs:enumeration value="Application"/>
+                    <xs:enumeration value="Request"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+        <xs:schema xmlns:ns="http://ebayopensource.org/soaframework/services" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ebayopensource.org/soaframework/services">
+	        <xs:import namespace="http://www.ebayopensource.org/soaframework/common/types"/>
+            <xs:element name="ErrorMessage" nillable="true" type="ns0:ErrorMessage"/>
+            <xs:element name="helloWorld" nillable="true" type="xs:string"/>
+            <xs:element name="helloWorldResponse" nillable="true" type="xs:string"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="helloWorldRequest">
+        <wsdl:part name="parameters" element="ns1:helloWorld"/>
+    </wsdl:message>
+    <wsdl:message name="helloWorldResponse">
+        <wsdl:part name="parameters" element="ns1:helloWorldResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ErrorMessage">
+        <wsdl:part name="parameters" element="ns1:ErrorMessage"/>
+    </wsdl:message>
+    <wsdl:portType name="HelloWorldWSDLServicePortType">
+        <wsdl:operation name="helloWorld">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns1:helloWorldRequest" wsaw:Action="urn:helloWorld"/>
+            <wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns1:helloWorldResponse" wsaw:Action="urn:helloWorldResponse"/>
+            <wsdl:fault xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns1:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:helloWorldErrorMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="HelloWorldWSDLServiceSOAP11Binding" type="ns1:HelloWorldWSDLServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="helloWorld">
+            <soap:operation soapAction="urn:helloWorld" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault  use="literal" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HelloWorldWSDLServiceSOAP12Binding" type="ns1:HelloWorldWSDLServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="helloWorld">
+            <soap12:operation soapAction="urn:helloWorld" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HelloWorldWSDLServiceHttpBinding" type="ns1:HelloWorldWSDLServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="helloWorld">
+            <http:operation location="HelloWorldWSDLService/helloWorld"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="helloWorld"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="helloWorld"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="HelloWorldWSDLService">
+        <wsdl:port name="HelloWorldWSDLServiceSOAP11port_http" binding="ns1:HelloWorldWSDLServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/HelloWorldWSDLService"/>
+        </wsdl:port>
+        <wsdl:port name="HelloWorldWSDLServiceSOAP12port_http" binding="ns1:HelloWorldWSDLServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/HelloWorldWSDLService"/>
+        </wsdl:port>
+        <wsdl:port name="HelloWorldWSDLServiceHttpport" binding="ns1:HelloWorldWSDLServiceHttpBinding">
+            <http:address location="http://localhost:8080/HelloWorldWSDLService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

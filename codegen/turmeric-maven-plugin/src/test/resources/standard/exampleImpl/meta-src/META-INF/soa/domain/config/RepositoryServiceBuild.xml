@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<project name="RepositoryServicePreBuild" default="prebuild">
+	<!-- =================================================================== -->
+	<!-- Entry point -->
+	<!-- =================================================================== -->
+	<target name="prebuild" >
+		<property name="project.root" value="${basedir}"/>
+		<property name="srcDir" value="../../../../../gen-src/service"/>
+		<echo message="BaseDir= ${basedir}"/>
+		<echo message="srcDir= ${srcDir}"/>
+		<antcall target='generate.error.descriptors.java'>
+			<param name="service.errors.filename" value="RepositoryServiceErrorDescriptor" />
+			<param name="error.class.dir" value="${srcDir}/com/ebay/domain/repositoryservice/common/error"/>
+		</antcall>
+	</target>
+	<!-- ===================================================================== -->
+	<!-- Generates the error descriptor registration java class from metadata  -->
+	<!-- ===================================================================== -->
+	<target name="generate.error.descriptors.java">
+		<property name="error.metadata.dir" location="../error"/>
+		<property name="error.metadata.suffix" value="_metadata"/>
+		<property name="error.metadata.ext" value=".xml"/>
+		<property name="error.xsl.dir" location="."/>
+		<property name="error.class.xlt" value="MarketPlaceSOAServiceErrorDescriptor.xsl"/>
+		<property name="error.class.ext" value=".java"/>
+		<echo message="Generate error descriptor registration class for ${service.errors.filename}"/>
+		<echo message="Runtime-classpath= ${runtime-classpath}"/>
+		<echo message="Service.errors.filename= ${service.errors.filename}"/>
+		<echo message="InFile= ../error/${service.errors.filename}${error.metadata.suffix}${error.metadata.ext}"/>
+		<echo message="OutFile= ${error.class.dir}/${service.errors.filename}${error.class.ext}"/>
+		<echo message="StyleFile= ${error.xsl.dir}/${error.class.xlt}"/>
+		
+		<xslt classpath="${runtime-classpath}" 
+			force="yes" 
+			in="../error/${service.errors.filename}${error.metadata.suffix}${error.metadata.ext}"
+			out="${error.class.dir}/${service.errors.filename}${error.class.ext}"
+			style="${error.xsl.dir}/${error.class.xlt}"/>
+	</target>
+	<target name="clean"></target>
+</project>

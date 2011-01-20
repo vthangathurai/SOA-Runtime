@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://www.ebay.com/soaframework/common/types" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://www.ebay.com/marketplace/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.ebay.com/marketplace/services">
+    <wsdl:types>
+        <xs:schema xmlns:ns="http://www.ebay.com/marketplace/services" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services">
+            <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="ns1:ErrorMessage"/>
+            <xs:element minOccurs="0" name="doNothing" nillable="true" type="xs:base64Binary"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://www.ebay.com/soaframework/common/types" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/soaframework/common/types">
+            <xs:complexType name="ErrorMessage">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:ErrorData"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorData">
+                <xs:sequence>
+                    <xs:element name="error-id" type="xs:long"/>
+                    <xs:element name="domain" type="xs:string"/>
+                    <xs:element name="severity" type="tns:ErrorSeverity"/>
+                    <xs:element name="category" type="tns:ErrorCategory"/>
+                    <xs:element name="message" type="xs:string"/>
+                    <xs:element minOccurs="0" name="exception-id" type="xs:token"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ErrorSeverity">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error"/>
+                    <xs:enumeration value="Warning"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="System"/>
+                    <xs:enumeration value="Application"/>
+                    <xs:enumeration value="Request"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="doNothingRequest">
+        <wsdl:part name="parameters" element="ns0:doNothing"/>
+    </wsdl:message>
+    <wsdl:message name="ErrorMessage">
+        <wsdl:part name="parameters" element="ns0:ErrorMessage"/>
+    </wsdl:message>
+    <wsdl:portType name="TestWSasRootPortType">
+        <wsdl:operation name="doNothing">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:doNothingRequest" wsaw:Action="urn:doNothing"/>
+            <wsdl:fault xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:doNothingErrorMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="TestWSasRootSOAP11Binding" type="ns0:TestWSasRootPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="doNothing">
+            <soap:operation soapAction="urn:doNothing" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="TestWSasRootSOAP12Binding" type="ns0:TestWSasRootPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="doNothing">
+            <soap12:operation soapAction="urn:doNothing" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="TestWSasRootHttpBinding" type="ns0:TestWSasRootPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="doNothing">
+            <http:operation location="TestWSasRoot/doNothing"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="doNothing"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="TestWSasRoot">
+        <wsdl:port name="TestWSasRootSOAP11port_http" binding="ns0:TestWSasRootSOAP11Binding">
+            <soap:address location="http://localhost:8080/TestWSasRoot"/>
+        </wsdl:port>
+        <wsdl:port name="TestWSasRootSOAP12port_http" binding="ns0:TestWSasRootSOAP12Binding">
+            <soap12:address location="http://localhost:8080/TestWSasRoot"/>
+        </wsdl:port>
+        <wsdl:port name="TestWSasRootHttpport" binding="ns0:TestWSasRootHttpBinding">
+            <http:address location="http://localhost:8080/TestWSasRoot"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

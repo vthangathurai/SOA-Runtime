@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://www.ebayopensource.org/turmeric/security/v1/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.ebayopensource.org/turmeric/security/v1/services">
+	<wsdl:types>
+        	<xs:schema xmlns:tns="http://www.ebayopensource.org/turmeric/security/v1/services" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/turmeric/security/v1/services">
+
+				<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax">
+					</xs:any>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="common-type-library"
+							namespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+<xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="common-type-library" namespace="http://www.ebayopensource.org/turmeric/common/v1/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="System"></xs:enumeration>
+        <xs:enumeration value="Application"></xs:enumeration>
+        <xs:enumeration value="Request"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="common-type-library" namespace="http://www.ebayopensource.org/turmeric/common/v1/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+	
+	  <xs:sequence>
+        	<xs:element name="errorId" type="xs:long"></xs:element>
+		  	<xs:element name="domain" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="subdomain" type="xs:string"></xs:element>
+			<xs:element name="severity" type="tns:ErrorSeverity"></xs:element>
+	  		<xs:element name="category" type="tns:ErrorCategory"></xs:element>
+	  		<xs:element name="message" type="xs:string"></xs:element>
+	  		<xs:element minOccurs="0" name="exceptionId" type="xs:token"></xs:element>
+	  		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"></xs:element>
+		</xs:sequence>
+	
+	
+	</xs:complexType><xs:complexType name="ErrorMessage">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="common-type-library" namespace="http://www.ebayopensource.org/turmeric/common/v1/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+		
+		<!-- 
+		<xs:sequence>
+			<xs:any maxOccurs="unbounded" minOccurs="0"
+				processContents="lax" />
+		</xs:sequence>
+		-->
+		
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+    		</xs:element>
+    	</xs:sequence>
+		
+	</xs:complexType><xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="common-type-library" namespace="http://www.ebayopensource.org/turmeric/common/v1/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:simpleContent>
+		  <xs:extension base="xs:string">
+		    <xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
+		  </xs:extension>
+		</xs:simpleContent>
+	</xs:complexType><xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="common-type-library" namespace="http://www.ebayopensource.org/turmeric/common/v1/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="Error"></xs:enumeration>
+        <xs:enumeration value="Warning"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType>          
+            	<xs:complexType abstract="true" name="BaseAuthenticationServiceRequestType">
+	    		<xs:annotation>
+				<xs:documentation>
+					This is the base class for request container for all operations in Authentication Service.
+				</xs:documentation>
+			</xs:annotation>
+		    	<xs:complexContent>
+				<xs:extension base="tns:BaseRequest">
+					<xs:sequence>
+					    <xs:element minOccurs="0" name="resourceName" type="xs:string"/>
+					    <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+					    <xs:element minOccurs="0" name="resourceType" type="xs:string"/>
+					</xs:sequence>
+				</xs:extension>
+		    	</xs:complexContent>
+            	</xs:complexType>
+            	
+            	<xs:complexType abstract="true" name="BaseAuthenticationServiceResponseType">
+			<xs:annotation>
+				<xs:documentation>
+					Base response container for all service operations in Authentication Service.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+			    <xs:extension base="tns:BaseResponse">
+			    </xs:extension>
+			</xs:complexContent>
+            	</xs:complexType>
+            
+            	<xs:complexType name="AuthenticateRequestType">
+			<xs:complexContent>
+			    	<xs:extension base="tns:BaseAuthenticationServiceRequestType">
+				<xs:sequence>
+                    			<xs:element minOccurs="0" maxOccurs="unbounded" name="credential" type="tns:CredentialType"/>
+				</xs:sequence>
+			    </xs:extension>
+			</xs:complexContent>
+            	</xs:complexType>
+            	
+            <xs:complexType name="KeyValuePairType">
+				<xs:sequence>
+			    	<xs:element name="key" type="xs:string"/>
+			    	<xs:element name="value" type="xs:string"/>
+				</xs:sequence>
+            </xs:complexType>
+            	
+            <xs:complexType name="AuthenticationExtendedResponseType">
+            	<xs:sequence>
+            		<xs:element name="kvpair" minOccurs="0" maxOccurs="unbounded" type="tns:KeyValuePairType"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+           	<xs:complexType name="AuthenticateResponseType">
+				<xs:complexContent>
+			    	<xs:extension base="tns:BaseAuthenticationServiceResponseType">
+						<xs:sequence>
+	                    	<xs:element minOccurs="0" name="authenticationMethod" type="xs:string"/>
+					    	<xs:element minOccurs="0" maxOccurs="unbounded" name="subject" type="tns:SubjectType"/>
+					    	<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectgroup" type="tns:SubjectGroupType"/>
+					    	<xs:element name="extendedInfo" type="tns:AuthenticationExtendedResponseType"></xs:element>
+						</xs:sequence>
+			    	</xs:extension>
+				</xs:complexContent>
+            </xs:complexType>            
+                                    
+          <xs:complexType name="CredentialType">
+			<xs:sequence>
+			    <xs:element name="name" type="xs:string"/>
+			    <xs:element name="value" type="xs:string"/>
+			</xs:sequence>
+         </xs:complexType>
+
+		<xs:complexType name="SubjectType">
+			<xs:sequence>
+			    <xs:element name="domain" type="xs:string"/>
+			    <xs:element name="value" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:complexType name="SubjectGroupType">
+			<xs:sequence>
+				<xs:element name="domain" type="xs:string" />
+				<xs:element name="name" type="xs:string" />
+			</xs:sequence>
+			<xs:attribute name="calculator" type="xs:string" use="optional" />
+		</xs:complexType>
+            
+		<xs:element name="authenticateRequest" nillable="true" type="tns:AuthenticateRequestType"/>
+		<xs:element name="authenticateResponse" nillable="true" type="tns:AuthenticateResponseType"/>
+        </xs:schema>
+    </wsdl:types>
+    
+    <wsdl:message name="authenticateRequest">
+        <wsdl:part name="parameters" element="ns0:authenticateRequest"/>
+    </wsdl:message>
+    <wsdl:message name="authenticateResponse">
+        <wsdl:part name="parameters" element="ns0:authenticateResponse"/>
+    </wsdl:message>
+    
+    <wsdl:portType name="AuthenticationServicePortType">
+        <wsdl:operation name="authenticate">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:authenticateRequest" wsaw:Action="urn:authenticateRequest"/>
+            <wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:authenticateResponse" wsaw:Action="urn:authenticateResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="AuthenticationServiceSOAP11Binding" type="ns0:AuthenticationServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="authenticate">
+            <soap:operation soapAction="urn:authenticate" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:binding name="AuthenticationServiceSOAP12Binding" type="ns0:AuthenticationServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="authenticate">
+            <soap12:operation soapAction="urn:authenticate" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:binding name="AuthenticationServiceHttpBinding" type="ns0:AuthenticationServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="authenticate">
+            <http:operation location="AuthenticationService/authenticate"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="authenticateRequest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="authenticateResponse"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="AuthenticationService">
+        <wsdl:port name="AuthenticationServiceSOAP11port_http" binding="ns0:AuthenticationServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/AuthenticationService"/>
+        </wsdl:port>
+        <wsdl:port name="AuthenticationServiceSOAP12port_http" binding="ns0:AuthenticationServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/AuthenticationService"/>
+        </wsdl:port>
+        <wsdl:port name="AuthenticationServiceHttpport" binding="ns0:AuthenticationServiceHttpBinding">
+            <http:address location="http://localhost:8080/AuthenticationService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

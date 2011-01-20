@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client-config-list xmlns="http://www.ebay.com/soaframework/common/config">
+	<client-config>
+		<service-interface-class-name>com.ebay.marketplace.services.advertisinguniqueidservicev2.AdvertisingUniqueIDServiceV2
+		</service-interface-class-name>
+		<service-location>http://localhost:8080/services/advertise/UniqueIDService/v2
+		</service-location>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="LOCAL" />
+				<request-data-binding>XML</request-data-binding>
+				<response-data-binding>XML</response-data-binding>
+				<consumer-id>UniqueIDServiceV2Client</consumer-id>
+			</invocation-options>
+			<transport name="LOCAL">
+				<class-name>com.ebay.soaframework.spf.impl.transport.local.LocalTransport
+				</class-name>
+				<header-options>
+					<option name="SVC1">V2</option>
+					<option name="SVC2">V2</option>
+				</header-options>
+			</transport>
+			<pipeline-config>
+				<request-handlers>
+					<handler name="MessageContextHandler">
+						<class-name>com.ebay.soaframework.sif.impl.handlers.MessageContextHandler
+						</class-name>
+						<options>
+							<option name="transport-headers">SVC1</option>
+						</options>
+
+					</handler>
+				</request-handlers>
+			</pipeline-config>
+		</client-instance-config>
+	</client-config>
+</client-config-list>
+

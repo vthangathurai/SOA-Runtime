@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-service-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<monitor-config>
+	<!-- 
+		<storage-provider name="CALLogger">
+			<class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotCALLogger</class-name>
+		</storage-provider>
+		 -->
+<!-- Uncomment me to get aggregated snapshot show on console
+      <storage-provider name="FileLogger">
+            <class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.SnapshotFileLogger</class-name>
+      </storage-provider>
+ -->
+<!-- Uncomment me to get diff snapshot show in console.
+      <storage-provider name="DiffBasedFileLogger">
+            <class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotFileLogger</class-name>
+            <storage-options>
+                <option name="filename">DiffBasedSOAMetrics.log</option>
+                <option name="delimiter">;</option>
+            </storage-options>
+      </storage-provider>
+-->
+
+		<snapshot-interval>60</snapshot-interval>
+	</monitor-config>
+	<service-config-groups>
+        <service-group name="SOAWebService">
+				<provider-options>
+					<supported-data-bindings>XML</supported-data-bindings>
+					<supported-data-bindings>NV</supported-data-bindings>
+					<supported-data-bindings>JSON</supported-data-bindings>
+					<supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+					<error-mapping-handler-class-name>
+							org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+					</error-mapping-handler-class-name>
+					<monitoring-level>Normal</monitoring-level>
+				</provider-options>
+				<G11N-options>
+					<supported-global-id>EBAY-US</supported-global-id>
+					<supported-global-id>EBAY-CA</supported-global-id>
+					<supported-locale>en-US_US</supported-locale>
+					<supported-locale>en-CA_CA</supported-locale>
+					<supported-locale>fr-CA_CA</supported-locale>
+					<supported-locale>zh-Hant_US</supported-locale>
+				</G11N-options>
+				<pipeline-config>
+			<!--
+			        <request-pipeline>
+			            <class-name>
+			                org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+			            </class-name>
+			        </request-pipeline>
+			        <response-pipeline>
+			            <class-name>
+			                org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+			            </class-name>
+			        </response-pipeline>
+			-->
+			        <request-handlers>
+			            <handler name="G11N">
+			                <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+			            </handler>
+			            <handler name="RateLimiterHandler">
+			                <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.RateLimiterHandler</class-name>
+			                <options>
+			                        <option name="rate_limiter_server_name">cal-lab03.arch.ebay.com</option>
+			                </options>
+			            </handler>
+			            <handler name="TestRequestObjectNodeAccess">
+			                <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.RequestObjectNodeAccessHandler</class-name>
+			            </handler>
+			            <handler name="TestRequestHeaderRead">
+			                <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+			            </handler>
+			            <handler name="TestExceptionContinueOnError" continue-on-error="true">
+			                <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+			            </handler>
+			            <handler name="TestExceptionStopOnError" continue-on-error="false">
+			                <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+			            </handler>
+			        </request-handlers>
+			        <response-handlers>
+			            <handler name="TestResponseHeaderSet">
+			                <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+			            </handler>
+			            <handler name="TestResponseObjectNodeAccess">
+			                <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ResponseObjectNodeAccessHandler</class-name>
+			            </handler>
+			        </response-handlers>
+			        <!-- 
+			        <logging-handler>
+			            <class-name>
+			                org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler
+			            </class-name>
+			            <options>
+			                <option name="cal-request-trans-type">URL</option>
+			                <option name="cal-call-trans-type">IMPL_CALL</option>
+			                <option name="suppress-client-info">true</option>
+			                <option name="cal-client-info-event-type">SOAServer</option>
+			                <option name="cal-log-id">true</option>
+			            </options>
+			        </logging-handler>
+			         -->
+			        <logging-handler>
+			            <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+			         </logging-handler>
+			    </pipeline-config>
+			    <protocol-processor name="SOAP11" version="1.1">
+			        <indicator>
+			            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+			        </indicator>
+			        <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+			    </protocol-processor>
+			
+			<!-- Uncomment this block if you want to use the newer version of unordered NV deserializer.
+			    <data-binding-config>
+			        <data-binding name="NV">
+			            <mime-type>text/plain</mime-type>
+			            <serializer-factory-class-name>
+			                org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+			            </serializer-factory-class-name>
+			            <deserializer-factory-class-name>
+			                org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory2
+			            </deserializer-factory-class-name>
+			        </data-binding>
+			    </data-binding-config>
+			-->
+        </service-group>
+
+        <service-group name="SOAWebServiceExtended">
+            <service-config>
+                <provider-options>
+                    <supported-data-bindings>XML</supported-data-bindings>
+                    <supported-data-bindings>NV</supported-data-bindings>
+                    <supported-data-bindings>JSON</supported-data-bindings>
+                    <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+                    <error-mapping-handler-class-name>
+                        org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+                    </error-mapping-handler-class-name>
+                    <monitoring-level>Finest</monitoring-level>
+                </provider-options>
+                <G11N-options>
+                    <supported-global-id>EBAY-US</supported-global-id>
+                    <supported-global-id>EBAY-CA</supported-global-id>
+                    <supported-locale>en-US_US</supported-locale>
+                    <supported-locale>en-CA_CA</supported-locale>
+                    <supported-locale>fr-CA_CA</supported-locale>
+                    <supported-locale>zh-Hant_US</supported-locale>
+                </G11N-options>
+            <pipeline-config>
+                <request-handlers>
+                    <handler name="G11N">
+                        <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+                    </handler>
+                    <handler name="TestRequestHeaderRead">
+                        <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+                    </handler>
+                    <handler name="TestExceptionContinueOnError" continue-on-error="true">
+                        <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+                    </handler>
+                    <handler name="TestExceptionStopOnError" continue-on-error="false">
+                        <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+                    </handler>          
+                    <handler name="RateLimiterHandler">
+                        <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.RateLimiterHandler</class-name>
+                        <options>
+                                <option name="rate_limiter_server_name">cal-lab03.arch.ebay.com</option>
+                        </options>
+                    </handler>
+                    <handler name="ServerSecurityHandler">
+                        <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerSecurityHandler</class-name>
+                    </handler>
+                </request-handlers>
+                <response-handlers>
+                    <handler name="TestResponseHeaderSet">
+                        <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+                    </handler>
+                </response-handlers>
+                <!-- 
+                 <logging-handler>
+                    <class-name>
+                        org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler
+                    </class-name>
+                    <options>
+                        <option name="cal-request-trans-type">URL</option>
+                        <option name="cal-call-trans-type">IMPL_CALL</option>
+                        <option name="suppress-client-info">true</option>
+                        <option name="cal-client-info-event-type">SOAServer</option>
+                        <option name="cal-log-id">true</option>
+                    </options>
+                </logging-handler>
+                 -->
+                <logging-handler>
+                    <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+                </logging-handler>
+            </pipeline-config>
+            <protocol-processor name="SOAP11" version="1.1">
+                <indicator>
+                    <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+                </indicator>
+                <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+            </protocol-processor>
+            </service-config>
+        </service-group>
+    </service-config-groups>
+</global-service-config>

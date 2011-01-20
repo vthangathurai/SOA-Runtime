@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+-->
+<schema targetNamespace="http://www.ebayopensource.org/turmeric/services/repository/config"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/services/repository/config">
+
+    <element name="repository-service-provider-config" type="tns:RepositoryServiceProviderConfig"/>
+    	
+    <complexType name="RepositoryServiceProviderConfig">
+    	<sequence>
+    		<element name="default" type="token"></element>    	
+     		<element name="provider-config-list" type="tns:RepositoryServiceProviderList"/>
+    	</sequence>
+    </complexType>
+    <complexType name="RepositoryServiceProviderList">
+    	<sequence>  	
+     		<element name="provider-config" type="tns:RepositoryServiceProviders" 
+     		minOccurs="1" maxOccurs="unbounded"/>
+    	</sequence>
+    </complexType>
+    <complexType name="RepositoryServiceProviders">
+    	<sequence>
+    		<element name="name" type="token"></element>    	
+     		<element name="provider-impl-class-name" type="token"/>
+    	</sequence>
+    </complexType>
+	
+</schema>

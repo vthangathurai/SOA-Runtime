@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-service-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+  <monitor-config>
+    <!-- Uncomment me to get diff snapshot show as CAL heartbeat -->
+    <!--
+	  <storage-provider name="CALLogger">
+    		<class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotCALLogger</class-name>
+	  </storage-provider>
+-->
+    <!-- Uncomment me to get aggregated snapshot show on console
+	  <storage-provider name="FileLogger">
+    		<class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.SnapshotFileLogger</class-name>
+	  </storage-provider>
+        -->
+    <!-- Uncomment me to get diff snapshot show in console. -->
+    <storage-provider name="DiffBasedFileLogger">
+      <class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotFileLogger</class-name>
+      <storage-options>
+        <option name="filename">DiffBasedSOAMetrics.log</option>
+        <option name="delimiter">;</option>
+      </storage-options>
+    </storage-provider>
+
+    <snapshot-interval>60</snapshot-interval>
+  </monitor-config>
+
+  <service-config-groups>
+    <service-group name="SOAWebService">
+      <service-config>
+        <provider-options>
+          <supported-data-bindings>XML</supported-data-bindings>
+          <supported-data-bindings>NV</supported-data-bindings>
+          <supported-data-bindings>JSON</supported-data-bindings>
+          <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+          <error-mapping-handler-class-name>
+            org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+          </error-mapping-handler-class-name>
+          <monitoring-level>Finest</monitoring-level>
+        </provider-options>
+        <G11N-options>
+          <supported-global-id>EBAY-US</supported-global-id>
+          <supported-global-id>EBAY-CA</supported-global-id>
+          <supported-locale>en-US_US</supported-locale>
+          <supported-locale>en-CA_CA</supported-locale>
+          <supported-locale>fr-CA_CA</supported-locale>
+          <supported-locale>zh-Hant_US</supported-locale>
+        </G11N-options>
+        <pipeline-config>
+          <!--<request-pipeline>
+            <class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+            </class-name>
+          </request-pipeline>
+          <response-pipeline>
+            <class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+            </class-name>
+          </response-pipeline>-->
+          <request-handlers>
+            <handler name="G11N">
+              <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+            </handler>
+            <handler name="TestReadInsertMessageHeader">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ServerReadInsertMessageHeaderHandler</class-name>
+            </handler>
+            <handler name="TestRequestObjectNodeAccess">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.RequestObjectNodeAccessHandler</class-name>
+            </handler>
+            <handler name="TestRequestHeaderRead">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+            </handler>
+            <handler name="TestExceptionContinueOnError" continue-on-error="true">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+            <handler name="TestExceptionStopOnError" continue-on-error="false">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+          </request-handlers>
+          <response-handlers>
+            <handler name="TestResponseHeaderSet">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+            </handler>
+            <handler name="TestResponseObjectNodeAccess">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ResponseObjectNodeAccessHandler</class-name>
+            </handler>
+          </response-handlers>
+
+          <!--<logging-handler>
+            <class-name>
+              org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler
+            </class-name>
+            <options>
+              <option name="cal-request-trans-type">URL</option>
+              <option name="cal-call-trans-type">IMPL_CALL</option>
+              <option name="suppress-client-info">true</option>
+              <option name="cal-client-info-event-type">SOAServer</option>
+              <option name="cal-log-id">true</option>
+              <option name="log-level-call-event">WARNING</option>
+              <option name="payload-log-level">FINE</option>
+              <option name="payload-request-dump-file">c:/serverreq.txt</option>
+              <option name="payload-response-dump-file">c:/serverresp.txt</option>
+              <option name="payload-fail-on-file-error">true</option>
+              <option name="payload-separator">|||</option>
+              <option name="suppress-client-info">false</option>
+            </options>
+          </logging-handler>-->
+			
+          <logging-handler>
+            <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+          </logging-handler>
+        </pipeline-config>
+        <protocol-processor name="SOAP11" version="1.1">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <protocol-processor name="SOAP12" version="1.2">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP12</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <!--
+				Uncomment this block if you want to use the newer version of unordered NV deserializer.
+				-->
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="FAST_INFOSET">
+            <mime-type>application/fastinfoset</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+
+    <service-group name="SOAWebService-noG11n">
+      <service-config>
+        <pipeline-config>
+          <request-handlers>
+            <handler name="G11N">
+              <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+            </handler>
+            <handler name="TestRequestHeaderRead">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+            </handler>
+            <handler name="TestExceptionContinueOnError" continue-on-error="true">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+            <handler name="TestExceptionStopOnError" continue-on-error="false">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+          </request-handlers>
+          <response-handlers>
+            <handler name="TestResponseHeaderSet">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+            </handler>
+          </response-handlers>
+        </pipeline-config>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="FAST_INFOSET">
+            <mime-type>application/fastinfoset</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+
+    <service-group name="SOAWebService-logging">
+      <service-config>
+        <provider-options>
+          <supported-data-bindings>XML</supported-data-bindings>
+          <supported-data-bindings>NV</supported-data-bindings>
+          <supported-data-bindings>JSON</supported-data-bindings>
+          <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+          <error-mapping-handler-class-name>
+            org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+          </error-mapping-handler-class-name>
+          <monitoring-level>Finest</monitoring-level>
+        </provider-options>
+        <pipeline-config>
+          <request-handlers>
+            <handler name="G11N">
+              <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+            </handler>
+            <handler name="TestRequestObjectNodeAccess">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.RequestObjectNodeAccessHandler</class-name>
+            </handler>
+            <handler name="TestRequestHeaderRead">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+            </handler>
+            <handler name="TestExceptionContinueOnError" continue-on-error="true">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+            <handler name="TestExceptionStopOnError" continue-on-error="false">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+          </request-handlers>
+          <response-handlers>
+            <handler name="TestResponseHeaderSet">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+            </handler>
+            <handler name="TestResponseObjectNodeAccess">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ResponseObjectNodeAccessHandler</class-name>
+            </handler>
+          </response-handlers>
+          <logging-handler>
+            <class-name>
+              org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler
+            </class-name>
+            <options>
+              <option name="log-level-call-event">WARNING</option>
+              <option name="payload-log-level">FINE</option>
+              <option name="payload-request-dump-file">c:/serverreq.txt</option>
+              <option name="payload-response-dump-file">c:/serverresp.txt</option>
+              <option name="payload-fail-on-file-error">true</option>
+              <option name="payload-separator">|||</option>
+              <option name="suppress-client-info">false</option>
+            </options>
+          </logging-handler>
+        </pipeline-config>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="FAST_INFOSET">
+            <mime-type>application/fastinfoset</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+
+    <service-group name="SOAWebServiceExtended">
+      <service-config>
+        <provider-options>
+          <supported-data-bindings>XML</supported-data-bindings>
+          <supported-data-bindings>NV</supported-data-bindings>
+          <supported-data-bindings>JSON</supported-data-bindings>
+          <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+          <error-mapping-handler-class-name>
+            org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+          </error-mapping-handler-class-name>
+          <monitoring-level>Finest</monitoring-level>
+        </provider-options>
+        <G11N-options>
+          <supported-global-id>EBAY-US</supported-global-id>
+          <supported-global-id>EBAY-CA</supported-global-id>
+          <supported-locale>en-US_US</supported-locale>
+          <supported-locale>en-CA_CA</supported-locale>
+          <supported-locale>fr-CA_CA</supported-locale>
+          <supported-locale>zh-Hant_US</supported-locale>
+        </G11N-options>
+        <pipeline-config>
+          <request-handlers>
+            <handler name="G11N">
+              <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+            </handler>
+            <handler name="TestReadInsertMessageHeader">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ServerReadInsertMessageHeaderHandler</class-name>
+            </handler>
+            <handler name="TestRequestHeaderRead">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+            </handler>
+            <handler name="TestExceptionContinueOnError" continue-on-error="true">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+            <handler name="TestExceptionStopOnError" continue-on-error="false">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+            </handler>
+            <handler name="ServerCredentialHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerCredentialHandler</class-name>
+              <options>
+                <option name="credential-token">X-TURMERIC-SECURITY-TOKEN</option>
+                <option name="credential-assertion">X-TURMERIC-SECURITY-ASSERTION</option>
+                <option name="credential-appname">X-TURMERIC-SECURITY-APPNAME</option>
+              </options>
+            </handler>
+            <handler name="AuthenticationHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.AuthenticationHandler</class-name>
+            </handler>
+            <handler name="BlacklistHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.BlacklistHandler</class-name>
+            </handler>
+            <handler name="WhitelistHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.WhitelistHandler</class-name>
+            </handler>
+
+            <handler name="AuthorizationHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.AuthorizationHandler</class-name>
+            </handler>
+            <handler name="ClientIpHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ClientIpHandler</class-name>
+            </handler>
+            <handler name="ClientIpTestHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ClientIpTestHandler</class-name>
+            </handler>
+          </request-handlers>
+          <response-handlers>
+            <handler name="TestResponseHeaderSet">
+              <class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+            </handler>
+          </response-handlers>
+          <!--
+	   		<logging-handler>
+	   			<class-name>
+	   				org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler
+	   			</class-name>
+	   			<options>
+	   			    <option name="cal-request-trans-type">URL</option>
+	   			    <option name="cal-call-trans-type">IMPL_CALL</option>
+	   			    <option name="suppress-client-info">true</option>
+	   			    <option name="cal-client-info-event-type">SOAServer</option>
+	   			    <option name="cal-log-id">true</option>
+	   			</options>
+	                       </logging-handler>
+	                    <logging-handler>
+	   		                <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+	           	    </logging-handler>
+	           	    -->
+        </pipeline-config>
+
+        <protocol-processor name="SOAP11" version="1.1">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <protocol-processor name="SOAP12" version="1.2">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP12</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="FAST_INFOSET">
+            <mime-type>application/fastinfoset</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+    <!--
+	<service-group name="SOAWebServiceNVOptions">
+         <service-config>
+	<provider-options>
+		<supported-data-bindings>XML</supported-data-bindings>
+		<supported-data-bindings>NV</supported-data-bindings>
+		<supported-data-bindings>JSON</supported-data-bindings>
+		<supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+		<error-mapping-handler-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+		</error-mapping-handler-class-name>
+		<monitoring-level>Finest</monitoring-level>
+	</provider-options>
+	<G11N-options>
+		<supported-global-id>EBAY-US</supported-global-id>
+		<supported-global-id>EBAY-CA</supported-global-id>
+		<supported-locale>en-US_US</supported-locale>
+		<supported-locale>en-CA_CA</supported-locale>
+		<supported-locale>fr-CA_CA</supported-locale>
+		<supported-locale>zh-Hant_US</supported-locale>
+	</G11N-options>
+	<pipeline-config>
+
+		<request-handlers>
+			<handler name="G11N">
+				<class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.G11nHandler</class-name>
+			</handler>
+			<handler name="TestRequestObjectNodeAccess">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.RequestObjectNodeAccessHandler</class-name>
+			</handler>
+			<handler name="TestRequestHeaderRead">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ReadHeaderHandler</class-name>
+			</handler>
+			<handler name="TestExceptionContinueOnError" continue-on-error="true">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+			</handler>
+			<handler name="TestExceptionStopOnError" continue-on-error="false">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ExceptionTestHandler</class-name>
+			</handler>
+		</request-handlers>
+		<response-handlers>
+			<handler name="TestResponseHeaderSet">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.SetResponseHeaderHandler</class-name>
+			</handler>
+			<handler name="TestResponseObjectNodeAccess">
+				<class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.handlers.ResponseObjectNodeAccessHandler</class-name>
+			</handler>
+		</response-handlers>
+	</pipeline-config>
+
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+		<protocol-processor name="SOAP12" version="1.2">
+		    <indicator>
+			<transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP12</transport-header>
+		    </indicator>
+		    <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+                <data-binding-config>
+                    <data-binding name="NV">
+                        <mime-type>text/plain</mime-type>
+                        <serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+				</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+				</deserializer-factory-class-name>
+						<options>
+			     			<option name="useBrackets">true</option>
+     						<option name="quoteValue">false</option>
+     						<option name="encodeValue">false</option>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+						</options>
+                    </data-binding>
+                    <data-binding name="JSON">
+                        <mime-type>text/plain</mime-type>
+                        <serializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+				</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+				</deserializer-factory-class-name>
+						<options>
+			     			<option name="useSchemaInfo">true</option>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+						</options>
+                <data-binding-config>
+                    <data-binding name="XML">
+                        <mime-type>text/xml</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+               	</data-binding>
+                    <data-binding name="FAST_INFOSET">
+                        <mime-type>application/fastinfoset</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+						</deserializer-factory-class-name>
+ 		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                    </data-binding>
+               </data-binding-config>
+                    </data-binding>
+                </data-binding-config>
+		</service-config>
+   </service-group>
+-->
+    <service-group name="MarketplaceServiceGroup">
+      <service-config>
+        <provider-options>
+          <version-check-handler>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.NumericVersionCheckHandler</version-check-handler>
+          <header-mapping-options>
+            <option name="X-TURMERIC-SERVICE-NAME">query[SERVICE-NAME]</option>
+            <option name="X-TURMERIC-OPERATION-NAME">query[OPERATION-NAME]</option>
+            <option name="X-TURMERIC-SERVICE-VERSION">query[SERVICE-VERSION]</option>
+            <option name="X-TURMERIC-REQUEST-DATA-FORMAT">query[REQUEST-DATA-FORMAT]</option>
+            <option name="X-TURMERIC-RESPONSE-DATA-FORMAT">query[RESPONSE-DATA-FORMAT]</option>
+            <option name="X-TURMERIC-REST-PAYLOAD">query[REST-PAYLOAD]</option>
+            <option name="X-TURMERIC-GLOBAL-ID">query[GLOBAL-ID]</option>
+            <option name="X-TURMERIC-MESSAGE-PROTOCOL">query[MESSAGE-PROTOCOL]</option>
+          </header-mapping-options>
+
+          <!-- Health Check configuration -->
+          <error-status-options>
+            <metric>SoaFwk.Err.Total</metric>
+            <threshold>100</threshold>
+            <sample-size>3</sample-size>
+          </error-status-options>
+
+        </provider-options>
+        <pipeline-config>
+          <request-handlers>
+            <handler name="ClientIpHandler" presence="Mandatory">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ClientIpHandler</class-name>
+            </handler>
+            <chain name="servicehandlers">
+              <!-- placeholder chain for service instances to configure service specific handlers -->
+            </chain>
+            <handler name="ServerUseCaseHeaderHandler" presence="Mandatory">
+              <class-name>org.ebayopensource.turmeric.runtime.extended.spf.impl.handlers.ServerUseCaseHeaderHandler</class-name>
+            </handler>
+          </request-handlers>
+          <logging-handler>
+            <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+            <options>
+              <option name="log-level-call-event">INFO</option>
+              <option name="payload-log-level">WARNING</option>
+              <option name="request-payload-log-level">OFF</option>
+            </options>
+          </logging-handler>
+          <!--
+                    <logging-handler>
+                        <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler</class-name>
+                        <options>
+                            <option name="cal-request-trans-type">URL</option>
+                        </options>
+                    </logging-handler>
+                    -->
+        </pipeline-config>
+        <protocol-processor name="SOAP11" version="1.1">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <protocol-processor name="SOAP12" version="1.2">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP12</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">QUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">QUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">QUALIFIED</option>
+              <!-- added to fix - BUGDB00534833: GetDeals: JSON response returns square brackets around values that are not arrays -->
+              <option name="useSchemaInfo">true</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+
+    <service-group name="SecurityServiceGroup">
+      <service-config>
+        <provider-options>
+          <version-check-handler>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.NumericVersionCheckHandler</version-check-handler>
+          <header-mapping-options>
+            <option name="X-TURMERIC-SERVICE-NAME">query[SERVICE-NAME]</option>
+            <option name="X-TURMERIC-OPERATION-NAME">query[OPERATION-NAME]</option>
+            <option name="X-TURMERIC-SERVICE-VERSION">query[SERVICE-VERSION]</option>
+            <option name="X-TURMERIC-REQUEST-DATA-FORMAT">query[REQUEST-DATA-FORMAT]</option>
+            <option name="X-TURMERIC-RESPONSE-DATA-FORMAT">query[RESPONSE-DATA-FORMAT]</option>
+            <option name="X-TURMERIC-REST-PAYLOAD">query[REST-PAYLOAD]</option>
+            <option name="X-TURMERIC-GLOBAL-ID">query[GLOBAL-ID]</option>
+            <option name="X-TURMERIC-MESSAGE-PROTOCOL">query[MESSAGE-PROTOCOL]</option>
+          </header-mapping-options>
+          <!-- Health Check configuration -->
+          <error-status-options>
+            <metric>SoaFwk.Err.Total</metric>
+            <threshold>100</threshold>
+            <sample-size>3</sample-size>
+          </error-status-options>
+        </provider-options>
+        <pipeline-config>
+          <request-handlers>
+            <chain name="servicehandlers">
+              <!-- placeholder chain for service instances to configure service specific handlers -->
+            </chain>
+          </request-handlers>
+          <logging-handler>
+            <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+            <options>
+              <option name="log-level-call-event">INFO</option>
+              <option name="payload-log-level">WARNING</option>
+              <option name="request-payload-log-level">OFF</option>
+              <option name="response-payload-log-level">OFF</option>
+            </options>
+          </logging-handler>
+          <!--
+                    <logging-handler>
+                        <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler</class-name>
+                        <options>
+				<option name="cal-request-trans-type">URL</option>
+				<option name="cal-request-payload-log-level">OFF</option>
+				<option name="cal-response-payload-log-level">OFF</option>
+			</options>
+                    </logging-handler>
+                    -->
+        </pipeline-config>
+        <protocol-processor name="SOAP11" version="1.1">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <protocol-processor name="SOAP12" version="1.2">
+          <indicator>
+            <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP12</transport-header>
+          </indicator>
+          <class-name>org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">QUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">QUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">QUALIFIED</option>
+              <!-- added to fix - BUGDB00534833: GetDeals: JSON response returns square brackets around values that are not arrays -->
+              <option name="useSchemaInfo">true</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+
+    <service-group name="SOAWebService-RRE">
+      <service-config>
+        <provider-options>
+          <supported-data-bindings>XML</supported-data-bindings>
+          <supported-data-bindings>NV</supported-data-bindings>
+          <supported-data-bindings>JSON</supported-data-bindings>
+          <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+          <error-mapping-handler-class-name>
+            org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+          </error-mapping-handler-class-name>
+          <monitoring-level>Finest</monitoring-level>
+        </provider-options>
+        <pipeline-config>
+          <response-handlers>
+            <handler name="ResponseResidentErrorHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.spf.impl.handlers.ResponseResidentErrorHandler</class-name>
+            </handler>
+          </response-handlers>
+          <logging-handler>
+            <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+            <options>
+              <option name="log-level-call-event">WARNING</option>
+              <option name="payload-log-level">SEVERE</option>
+            </options>
+          </logging-handler>
+          <!--
+                    <logging-handler>
+                        <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerCalLoggingHandler</class-name>
+                        <options>
+                            <option name="cal-request-trans-type">URL</option>
+                        </options>
+                    </logging-handler>
+                    -->
+        </pipeline-config>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="FAST_INFOSET">
+            <mime-type>application/fastinfoset</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+
+    <service-group name="SOAWebService-RRE">
+      <service-config>
+        <provider-options>
+          <supported-data-bindings>XML</supported-data-bindings>
+          <supported-data-bindings>NV</supported-data-bindings>
+          <supported-data-bindings>JSON</supported-data-bindings>
+          <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+          <error-mapping-handler-class-name>
+            org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.TestServerErrorMapper
+          </error-mapping-handler-class-name>
+          <monitoring-level>Finest</monitoring-level>
+        </provider-options>
+        <pipeline-config>
+          <response-handlers>
+            <handler name="ResponseResidentErrorHandler">
+              <class-name>org.ebayopensource.turmeric.runtime.types.common.handler.MarketPlaceRREHandler</class-name>
+              <options>
+                <option name="cal-error-sampling-size">100</option>
+              </options>
+            </handler>
+          </response-handlers>
+          <logging-handler>
+            <class-name>org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerLoggingHandler</class-name>
+            <options>
+              <option name="log-level-call-event">WARNING</option>
+              <option name="payload-log-level">SEVERE</option>
+            </options>
+          </logging-handler>
+        </pipeline-config>
+        <data-binding-config>
+          <data-binding name="XML">
+            <mime-type>text/xml</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="NV">
+            <mime-type>text/plain</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="JSON">
+            <mime-type>application/json</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="useSchemaInfo">true</option>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+          <data-binding name="FAST_INFOSET">
+            <mime-type>application/fastinfoset</mime-type>
+            <serializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+            </serializer-factory-class-name>
+            <deserializer-factory-class-name>
+              org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+            </deserializer-factory-class-name>
+            <options>
+              <option name="elementFormDefault">UNQUALIFIED</option>
+            </options>
+          </data-binding>
+        </data-binding-config>
+      </service-config>
+    </service-group>
+  </service-config-groups>
+
+  <service-layer-config>
+    <layer-name>COMMON</layer-name>
+    <layer-name>INTERMEDIATE</layer-name>
+    <layer-name>BUSINESS</layer-name>
+  </service-layer-config>
+</global-service-config>

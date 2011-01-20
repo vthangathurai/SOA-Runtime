@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<client-config-list xmlns="http://www.ebayopensource.org/turmeric/common/config">
+<client-config service-name="test2" xmlns="http://www.ebayopensource.org/turmeric/common/config">
+<service-interface-class-name>com.ebay.soa.my.interface</service-interface-class-name>
+<service-location>http://localhost:9090/ws/spf</service-location>
+<service-location-mappings>
+  <service-location-mapping>
+  		<name>feature</name>
+  		<url>http://fp001-v3a.qa.ebay.com:8080/ws/spf</url>
+  </service-location-mapping>
+  <service-location-mapping>
+  		<name>dev</name>
+  		<url>http://d-sjc-xhan2.corp.com:8080/ws/spf</url>
+  </service-location-mapping>		
+</service-location-mappings>
+<wsdl-location>webservices/latest/eBaySvc.wsdl</wsdl-location>
+<client-instance-config>
+	<invocation-options>
+		<preferred-transport name="HTTP11">
+			<override-options>
+				<socket-connect-timeout-msec>7000</socket-connect-timeout-msec>
+				<socket-read-timeout-msec>8000</socket-read-timeout-msec>
+				<num-connect-retries>9</num-connect-retries>
+				<other-options>
+					<option name="name1">value1</option>
+					<option name="name2">value2</option>
+				</other-options>
+			</override-options>
+		</preferred-transport>
+		<G11N-options>
+			<preferred-encoding>CP-1252</preferred-encoding>
+			<preferred-locale>en-CA</preferred-locale>
+		</G11N-options>
+		<request-data-binding>XML</request-data-binding>
+		<custom-serializers binding="XML">
+			<custom-serializer-deserializer>
+				<java-type-name>com.ebay.mytypes.ItemType</java-type-name>
+				<serializer-class-name>com.ebay.soa.blah.serializers.MyItemTypeSerializer2</serializer-class-name>
+				<deserializer-class-name>com.ebay.soa.blah.deserializers.MyItemTypeDeserializer2</deserializer-class-name>
+				<xml-type-name>xml1</xml-type-name>
+			</custom-serializer-deserializer>
+			<custom-serializer-deserializer>
+				<java-type-name>com.ebay.mytypes.FooType</java-type-name>
+				<serializer-class-name>com.ebay.soa.blah.serializers.MyFooTypeSerializer</serializer-class-name>
+				<deserializer-class-name>com.ebay.soa.blah.deserializers.MyFooTypeDeserializer</deserializer-class-name>
+				<xml-type-name>xml2</xml-type-name>
+			</custom-serializer-deserializer>
+			<type-converter>
+				<bound-java-type-name>com.ebay.mytypes.bound1</bound-java-type-name>
+				<value-java-type-name>com.ebay.mytypes.value1</value-java-type-name>
+				<type-converter-class-name>com.ebay.soa.blah.converters.converter1</type-converter-class-name>
+				<xml-type-name>xml3</xml-type-name>
+			</type-converter>
+			<type-converter>
+				<bound-java-type-name>com.ebay.mytypes.bound2</bound-java-type-name>
+				<value-java-type-name>com.ebay.mytypes.value2</value-java-type-name>
+				<type-converter-class-name>com.ebay.soa.blah.converters.converter2</type-converter-class-name>
+				<xml-type-name>xml4</xml-type-name>
+			</type-converter>
+		</custom-serializers>
+		<use-service-version>3.0.0</use-service-version>
+	</invocation-options>
+	<pipeline-config>
+		<request-handlers>
+			<chain name="AppSpecific1">
+				<handler name="AffiliateTracking">
+					<class-name>com.ebay.myhandlers.affiliatetrackinghandler</class-name>
+				</handler>
+			</chain>
+			<chain name="AppSpecific2">
+				<handler name="DoSomething1">
+					<class-name>com.ebay.myhandlers.dosomething1handler</class-name>
+				</handler>
+				<handler name="DoSomething2">
+					<class-name>com.ebay.myhandlers.dosomething1handler</class-name>
+				</handler>
+			</chain>
+		</request-handlers>
+	</pipeline-config>
+	<transport name="Extra">
+		<class-name>com.ebay.my.transport.extra</class-name>
+	</transport>
+</client-instance-config>
+</client-config>
+</client-config-list>

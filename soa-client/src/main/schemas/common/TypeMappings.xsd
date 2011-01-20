@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config" 
+ elementFormDefault="qualified"
+ xmlns="http://www.w3.org/2001/XMLSchema" 
+ xmlns:tns="http://www.ebayopensource.org/turmeric/common/config">
+
+    <element name="service" type="tns:ServiceTypeMappingConfig"/>
+
+    <complexType name="ServiceTypeMappingConfig">
+    	<sequence>
+    		<element name="package-map" type="tns:PackageMapConfig"/>
+    		<element name="operation-list" type="tns:OperationListConfig"/>
+    		<element name="java-type-list" type="tns:JavaTypeListConfig"/>
+    	</sequence>
+	<attribute name="name" type="token"/>
+	<attribute name="enable-namespace-folding" type="boolean" use="optional"/>
+    </complexType>
+
+    <complexType name="JavaTypeListConfig">
+    	<sequence>
+    		<element name="java-type-name" type="string" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="PackageMapConfig">
+    	<sequence>
+    		<element name="package" type="tns:PackageConfig" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="PackageConfig">
+    	<sequence/>
+	<attribute name="name" type="string" use="required"/>
+	<attribute name="xml-namespace" type="anyURI" use="required"/>
+    </complexType>
+
+     <complexType name="OperationListConfig">
+    	<sequence>
+    		<element name="operation" type="tns:OperationConfig" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="OperationConfig">
+    	<sequence>
+		<element name="request-message" type="tns:MessageTypeConfig" minOccurs="0"/>
+		<element name="response-message" type="tns:MessageTypeConfig" minOccurs="0"/>
+		<element name="error-message" type="tns:MessageTypeConfig" minOccurs="0"/>
+		<element name="request-header" type="tns:MessageHeaderConfig" minOccurs="0" maxOccurs="unbounded"/>
+		<element name="response-header" type="tns:MessageHeaderConfig" minOccurs="0" maxOccurs="unbounded"/>
+	</sequence>
+	<attribute name="name" type="string" use="required"/>
+    </complexType>
+
+    <complexType name="MessageTypeConfig">
+    	<sequence>
+    		<element name="java-type-name" type="token"/>
+    		<element name="xml-type-name" type="token"/>
+    		<element name="xml-element-name" type="string"/>
+    		<element name="has-attachment" type="boolean" minOccurs="0"/>
+    	</sequence>
+    </complexType>
+    
+        <complexType name="MessageHeaderConfig">
+    	<sequence>
+    		<element name="java-type-name" type="token"/>
+    		<element name="xml-type-name" type="token"/>
+    		<element name="xml-element-name" type="token"/>
+    	</sequence>
+    </complexType>
+</schema>

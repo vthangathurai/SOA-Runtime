@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config" xmlns:tns="http://www.ebayopensource.org/turmeric/common/config" xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<include schemaLocation="../common/CommonSOAConfig.xsd"/>
+	<element name="global-client-config" type="tns:GlobalClientConfig"/>
+	<complexType name="GlobalClientConfig">
+		<sequence>
+			<element name="monitor-config" type="tns:MonitorConfig" minOccurs="0"/>
+			<element name="local-binding-thread-pool" type="tns:ThreadPoolConfig" minOccurs="0"/>
+			<element name="client-config-groups" type="tns:ClientConfigGroups" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<!-- ClientGroups holds the collection of all config groups (templates).  Each group is named,
+      and holds a ClientConfig instance containing the baseline values for that group.  The name of that
+	instance is not significant. -->
+	<complexType name="ClientConfigGroups">
+		<sequence>
+			<element name="client-group" type="tns:ClientConfigGroup" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="ClientConfigGroup">
+		<sequence>
+			<element name="client-config" type="tns:ClientGroupConfig"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	<complexType name="ClientGroupConfig">
+		<sequence>
+			<element name="invocation-options" type="tns:InvocationOptionConfig" minOccurs="0"/>
+			<element name="cache-policy" type="tns:CachePolicyConfig" maxOccurs="1" minOccurs="0"/>
+			<element name="pipeline-config" type="tns:PipelineConfig" minOccurs="0"/>
+			<element name="protocol-processor" type="tns:ProtocolProcessorConfig" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="transport" type="tns:TransportConfig" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="data-binding-config" type="tns:DataBindingConfig" minOccurs="0"/>
+		</sequence>
+		<attribute name="group" type="string" use="optional"/>
+		<attribute name="service-name" type="string" use="optional"/>
+		<!-- If not specified, the config applies to all services used by the client -->
+	</complexType>
+	<complexType name="InvocationOptionConfig"> 
+		<sequence>
+			<element name="timeout" type="int" minOccurs="0"/>
+			<element name="preferred-transport" type="tns:PreferredTransportConfig" minOccurs="0"/>
+			<element name="use-rest" type="tns:RestOptionType" minOccurs="0"/>
+			<element name="G11N-options" type="tns:ClientG11NOptionConfig" minOccurs="0"/>
+			<element name="request-data-binding" type="token" minOccurs="0"/>
+			<element name="response-data-binding" type="token" minOccurs="0"/>
+			<element name="custom-serializers" type="tns:CustomSerializerConfigList" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="error-data-provider-class-name" type="token" maxOccurs="1" minOccurs="0"/>
+			<element name="use-service-version" type="token" minOccurs="0"/>
+			<element name="monitoring-level" type="tns:MonitorLevelConfig" minOccurs="0"/>
+			<!-- SOA2.4, invocation-use-case is deprecated, use consumer-id instead -->
+			<element name="invocation-use-case" type="string" minOccurs="0"/>
+			<element name="consumer-id" type="string" minOccurs="0"/>
+			<element name="message-protocol" type="string" minOccurs="0"/>
+			<element name="response-transport" type="string" minOccurs="0"/>
+			<element name="retry-options" type="tns:RetryOptions" minOccurs="0"/>
+			<element name="custom-error-response-adapter" type="string" minOccurs="0"/>
+			<element name="markdown-options" type="tns:MarkdownOptions" minOccurs="0"/>
+			<element name="request-header-mapping-options" type="tns:OptionList" minOccurs="0"/>
+			<element name="response-header-mapping-options" type="tns:OptionList" minOccurs="0"/>
+			<element name="url-path-info" type="token" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="RetryOptions">
+		<sequence>
+			<element name="app-level-num-retries" type="int" minOccurs="0"/>
+			<element name="app-level-retry-handler" type="token" minOccurs="0"/>
+			<element name="retry-transport-status-code" type="token" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="retry-exception-class" type="token" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="retry-error-id" type="token" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="MarkdownOptions">
+		<sequence>
+			<element name="enable-auto-markdown" type="boolean"/>
+			<element name="state-factory" type="token" minOccurs="0"/>
+			<element name="error-count-threshold" type="int" minOccurs="0"/>
+			<element name="transport-status-code" type="token" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="exception-class" type="token" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="error-id" type="token" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="PreferredTransportConfig">
+		<sequence>
+			<element name="override-options" type="tns:TransportOptionConfig" minOccurs="0"/>
+			<element name="override-header-options" type="tns:OptionList" minOccurs="0"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	<complexType name="ClientG11NOptionConfig">
+		<sequence>
+			<element name="preferred-encoding" type="string" minOccurs="0"/>
+			<element name="preferred-locale" type="string" minOccurs="0"/>
+			<element name="preferred-global-id" type="string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="CachePolicyConfig">
+		<sequence>
+			<element name="cache-provider-class-name" type="token"/>
+			<element name="disable-cache-on-local" type="boolean" minOccurs="0" maxOccurs="1"/>
+			<element name="skip-cache-on-error" type="boolean" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+</schema>

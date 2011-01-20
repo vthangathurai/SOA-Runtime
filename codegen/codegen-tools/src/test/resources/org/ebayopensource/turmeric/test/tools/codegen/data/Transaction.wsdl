@@ -1,0 +1,957 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<wsdl:definitions targetNamespace="http://PitneyBowes.com/" xmlns:s2="http://localhost/IBDS/Types/Address" xmlns:s1="http://localhost/IBDS/Types/Dispense" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://PitneyBowes.com/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:s3="http://localhost/IBDS/Types/Rates">
+  <wsdl:types>
+    <s:schema xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://PitneyBowes.com/">
+      <s:import namespace="http://localhost/IBDS/Types/Dispense"/>
+      <s:import namespace="http://localhost/IBDS/Types/Address"/>
+      <s:import namespace="http://localhost/IBDS/Types/Rates"/>
+      <s:element name="Dispense">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="dispenseTxInfo" type="s1:DispenseTxInfo"/>
+            <s:element maxOccurs="1" minOccurs="1" name="amount" type="s:decimal"/>
+            <s:element maxOccurs="1" minOccurs="0" name="mailDate" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="zipFrom" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="returnAddress" type="s2:Address"/>
+            <s:element maxOccurs="1" minOccurs="0" name="destinationAddress" type="s2:Address"/>
+            <s:element maxOccurs="1" minOccurs="0" name="zone" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="1" name="rotate" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="1" name="pounds" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="1" name="ozs" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="0" name="customMessages" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="rateClass" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="rateOptions" type="tns:ArrayOfString"/>
+            <s:element maxOccurs="1" minOccurs="0" name="specialServiceRatingInput" type="tns:ArrayOfSpecialServiceRatingInput"/>
+            <s:element maxOccurs="1" minOccurs="0" name="packageDimension" type="s3:PackageDimension"/>
+            <s:element maxOccurs="1" minOccurs="1" name="stealthIndicia" type="s:boolean"/>
+            <s:element maxOccurs="1" minOccurs="0" name="additionalTxInfo" type="s1:DispenseTxAdditionalInfo_V0201"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSpecialServiceRatingInput">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="SpecialServiceRatingInput" nillable="true" type="s3:SpecialServiceRatingInput"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DispenseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="DispenseResult" type="s1:DispenseResult_V0201"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CommonTxResponse" type="tns:CommonTxResponse_V0201"/>
+      <s:complexType name="CommonTxResponse_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="WSVersionNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RequestID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="PartnerID" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransactionID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransactionTime" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerUserID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Domain" type="s1:enumDomain"/>
+          <s:element maxOccurs="1" minOccurs="1" name="SiteID" type="s:int"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SecuritySoapHeader" type="tns:SecuritySoapHeader"/>
+      <s:complexType name="SecuritySoapHeader">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="WSVersionNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Signature" type="s:base64Binary"/>
+          <s:element maxOccurs="1" minOccurs="1" name="PartnerID" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerUserID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="SiteID" type="s:int"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="Retry">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="originalDispenseTxInfo" type="s1:DispenseTxInfo"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RetryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="RetryResult" type="s1:DispenseResult_V0201"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BnBRoutingControlHeader" type="tns:BnBRoutingControlHeader"/>
+      <s:complexType name="BnBRoutingControlHeader">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="RoutingAction" type="tns:RoutingActionEnm"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ProcessedSites" type="tns:ArrayOfString"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:simpleType name="RoutingActionEnm">
+        <s:restriction base="s:string">
+          <s:enumeration value="RoutingActionNone"/>
+          <s:enumeration value="RoutingActionRaiseException"/>
+          <s:enumeration value="RoutingActionReturnDummy"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="Reprint">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="originalDispenseTxInfo" type="s1:DispenseTxInfo"/>
+            <s:element maxOccurs="1" minOccurs="0" name="originalPackageID" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReprintResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="ReprintResult" type="s1:DispenseResult_V0201"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DispenseIntl">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="dispenseTxInfo" type="s1:DispenseTxInfo"/>
+            <s:element maxOccurs="1" minOccurs="1" name="amount" type="s:decimal"/>
+            <s:element maxOccurs="1" minOccurs="0" name="mailDate" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="zipFrom" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="senderAddress" type="s2:Address"/>
+            <s:element maxOccurs="1" minOccurs="0" name="destinationAddress" type="s2:AddressIntl"/>
+            <s:element maxOccurs="1" minOccurs="1" name="NonDeliveryOption" type="s1:enumNonDeliveryOption"/>
+            <s:element maxOccurs="1" minOccurs="0" name="altReturnAddress" type="s2:Address"/>
+            <s:element maxOccurs="1" minOccurs="0" name="shippingContents" type="tns:ArrayOfItemDetail"/>
+            <s:element maxOccurs="1" minOccurs="1" name="rotate" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="1" name="pounds" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="1" name="ozs" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="0" name="customMessages" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="rateClass" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="rateOptions" type="tns:ArrayOfString"/>
+            <s:element maxOccurs="1" minOccurs="0" name="additionalCustomsInfo" type="s1:AdditionalCustomsInfo"/>
+            <s:element maxOccurs="1" minOccurs="0" name="specialServiceRatingInput" type="tns:ArrayOfSpecialServiceRatingInput"/>
+            <s:element maxOccurs="1" minOccurs="0" name="packageDimension" type="s3:PackageDimension"/>
+            <s:element maxOccurs="1" minOccurs="1" name="stealthIndicia" type="s:boolean"/>
+            <s:element maxOccurs="1" minOccurs="0" name="additionalTxInfo" type="s1:DispenseTxAdditionalInfo_V0201"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfItemDetail">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="ItemDetail" nillable="true" type="s1:ItemDetail"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DispenseIntlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="DispenseIntlResult" type="s1:DispenseResult_V0201"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DispenseBulk">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="dispenseTxInfo" type="s1:DispenseTxInfo"/>
+            <s:element maxOccurs="1" minOccurs="1" name="isSynchCall" type="s:boolean"/>
+            <s:element maxOccurs="1" minOccurs="0" name="mailDate" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="zipFrom" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="customMessages" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="additionalTxInfo" type="s1:DispenseTxAdditionalInfo_V0201"/>
+            <s:element maxOccurs="1" minOccurs="0" name="dispenseRequestEntries" type="tns:ArrayOfDispenseRequestEntry"/>
+            <s:element maxOccurs="1" minOccurs="1" name="TotalTransactions" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="1" name="TotalAmount" type="s:decimal"/>
+            <s:element maxOccurs="1" minOccurs="0" name="DefaultReturnAddress" type="s2:Address"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDispenseRequestEntry">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="DispenseRequestEntry" nillable="true" type="s1:DispenseRequestEntry"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DispenseBulkResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="DispenseBulkResult" type="s1:DispenseBulkResult"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RetrieveBulk">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="originalDispenseTxInfo" type="s1:DispenseTxInfo"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RetrieveBulkResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="RetrieveBulkResult" type="s1:DispenseBulkResult"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SOSDispenseBulk">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="dispenseTxInfo" type="s1:DispenseTxInfo"/>
+            <s:element maxOccurs="1" minOccurs="1" name="isSynchCall" type="s:boolean"/>
+            <s:element maxOccurs="1" minOccurs="0" name="mailDate" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="zipFrom" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="outputFileMode" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="outputFileFormat" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="customMessages" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="RequestEntries" type="tns:ArrayOfRequestEntry"/>
+            <s:element maxOccurs="1" minOccurs="1" name="TotalTransactions" type="s:int"/>
+            <s:element maxOccurs="1" minOccurs="1" name="TotalAmount" type="s:decimal"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRequestEntry">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="RequestEntry" nillable="true" type="tns:RequestEntry"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RequestEntry">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="BatchIndex" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="StockType" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="AcceptPartialSuccess" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Quantity" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="FirstLabelPosition" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Amount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RateClass" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RateOptions" type="tns:ArrayOfString"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelType" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ImageURL" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ProcessFlag" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RequestEntryDetails" type="tns:ArrayOfRequestEntryDetail"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRequestEntryDetail">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="RequestEntryDetail" nillable="true" type="tns:RequestEntryDetail"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RequestEntryDetail">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Amount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RateClass" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RateOptions" type="tns:ArrayOfString"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SenderAddress" type="s2:Address"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DestAddress" type="s2:Address"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SpecialServices" type="tns:ArrayOfSpecialServiceRatingInput"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PkgDimension" type="s3:PackageDimension"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Pounds" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ozs" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelType" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ImageURL" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SOSDispenseBulkResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="SOSDispenseBulkResult" type="s1:DispenseSOSResult"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SOSRetrieveBulk">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="originalDispenseTxInfo" type="s1:DispenseTxInfo"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SOSRetrieveBulkResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="SOSRetrieveBulkResult" type="s1:DispenseSOSResult"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://localhost/IBDS/Types/Dispense">
+      <s:import namespace="http://PitneyBowes.com/"/>
+      <s:import namespace="http://localhost/IBDS/Types/Address"/>
+      <s:import namespace="http://localhost/IBDS/Types/Rates"/>
+      <s:complexType name="DispenseTxInfo">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="PartnerID" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerUserID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerUserName" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransactionID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransactionTime" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Domain" type="s1:enumDomain"/>
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="enumDomain">
+        <s:restriction base="s:string">
+          <s:enumeration value="USPS"/>
+          <s:enumeration value="CPC"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="DispenseTxAdditionalInfo_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="ScheduleInfo" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PaymentAccountNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="UserTargetEnvironment" type="s1:TargetEnvironment"/>
+          <s:element maxOccurs="1" minOccurs="0" name="UserLabelInfo" type="s1:UserLabelInfo_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="CarrierPickupInfo" type="s1:CarrierPickupInfo_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerPackageID" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TargetEnvironment">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="OsName" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="OsVersion" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="OsSPVersion" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="BrowserName" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="BrowserVersion" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="BrowserSPVersion" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UserLabelInfo_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="DispenseOutputFormat" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PlainPaperLabelInfo" type="s1:PlainPaperLabelInfo_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelPrinterLabelInfo" type="s1:LabelPrinterLabelInfo_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="IndiciaInfo" type="s1:IndiciaInfo_V0201"/>
+          <s:element maxOccurs="1" minOccurs="1" name="IncludeBulkScanForm" type="s:boolean"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PlainPaperLabelInfo_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="IncludeReceipt" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelLocation" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LabelPrinterLabelInfo_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PrinterModelAndStock" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="TargetPrinterName" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ReturnAddressOnSeparateLabel" type="s:boolean"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndiciaInfo_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="DataOnly" type="s:boolean"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CarrierPickupInfo_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="DesiredPickupDate" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PackageLocation" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SpecialInstructions" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DispenseResult_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" ref="tns:CommonTxResponse"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PackageID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DeviceID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="AscendingRegister" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DescendingRegister" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="RetryCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ReprintCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Amount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="UserLabelResponse" type="s1:UserLabelResponse_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="CarrierPickupResponse" type="s1:CarrierPickupResponse_V0201"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UserLabelResponse_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="DispenseOutputFormat" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PlainPaperLabelResponse" type="s1:LabelResponse_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelPrinterLabelResponse" type="s1:LabelResponse_V0201"/>
+          <s:element maxOccurs="1" minOccurs="0" name="IndiciaResponse" type="s1:IndiciaResponse_V0201"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LabelResponse_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="HtmlPageContent" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SampleLabelURL" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ShippingLabelURL" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndiciaResponse_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PostageIndicia" type="s:base64Binary"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CarrierPickupResponse_V0201">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PickupConfirmationNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PickupDayOfWeek" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PickupDate" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PickupAddress" type="s2:Address"/>
+          <s:element maxOccurs="1" minOccurs="0" name="CarrierRoute" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PickupErrorCode" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PickupErrorDescription" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="enumNonDeliveryOption">
+        <s:restriction base="s:string">
+          <s:enumeration value="RETURN"/>
+          <s:enumeration value="REDIRECT"/>
+          <s:enumeration value="ABANDON"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ItemDetail">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="Description" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Quanity" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Value" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="HSTariffNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="OriginCountry" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="WeightPounds" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="WeightOunces" type="s:int"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AdditionalCustomsInfo">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="ContentType" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ContentTypeOther" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Comments" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LicenseNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="CertificateNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="InvoiceNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="InsuredNumber" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="InsuredAmount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="SDRValue" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SenderCustomsReference" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ImporterCustomsReference" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DispenseRequestEntry">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ZipFrom" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Amount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="returnAddress" type="s2:Address"/>
+          <s:element maxOccurs="1" minOccurs="0" name="destinationAddress" type="s2:Address"/>
+          <s:element maxOccurs="1" minOccurs="0" name="rateClass" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="rateOptions" type="s1:ArrayOfString"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelCustomMessage" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="LabelScheduleInfo" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="specialServiceRatingInput" type="s1:ArrayOfSpecialServiceRatingInput"/>
+          <s:element maxOccurs="1" minOccurs="0" name="packageDimension" type="s3:PackageDimension"/>
+          <s:element maxOccurs="1" minOccurs="0" name="dispRequestEntryExt" type="s1:DispenseRequestEntryExt"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSpecialServiceRatingInput">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="SpecialServiceRatingInput" nillable="true" type="s3:SpecialServiceRatingInput"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DispenseRequestEntryExt">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="rotate" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="stealthIndicia" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Zone" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Pounds" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Ozs" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="NeedCarrierPickup" type="s:boolean"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DispenseBulkResult">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" ref="tns:CommonTxResponse"/>
+          <s:element maxOccurs="1" minOccurs="1" name="TotalCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="TotalAmount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DispensedCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DispensedAmount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ErrorCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="RequestProcessStatus" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="EstimatedCompletionTime" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DispenseOutputFormat" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="RetryCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ReprintCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ErrorEntry" type="s1:BnBErrorEntry"/>
+          <s:element maxOccurs="1" minOccurs="0" name="BulkPrintingHtmlPageContent" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="dispResponseEntries" type="s1:ArrayOfDispenseResponseEntry"/>
+          <s:element maxOccurs="1" minOccurs="0" name="carrierPickupResponse" type="s1:CarrierPickupResponse_V0201"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="BnBErrorEntry">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="ErrorCode" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ErrorDesc" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDispenseResponseEntry">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="DispenseResponseEntry" nillable="true" type="s1:DispenseResponseEntry"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DispenseResponseEntry">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="RequestID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="IsValid" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PackageID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DeviceID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="AR" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DR" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="PieceCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Amount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PostageIndicia" type="s:base64Binary"/>
+          <s:element maxOccurs="1" minOccurs="0" name="HtmlPageContent" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SampleLabelURL" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ShippingLabelURL" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="ErrorCode" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ErrorDesc" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DispenseSOSResult">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" ref="tns:CommonTxResponse"/>
+          <s:element maxOccurs="1" minOccurs="1" name="TotalCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="TotalAmount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DispensedCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DispensedAmount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="outputFileMode" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="outputFileFormat" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="RequestProcessStatus" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="EstimatedCompletionTime" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ResponseEntries" type="s1:ArrayOfResponseEntry"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Error" type="s1:BnBErrorEntry"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfResponseEntry">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="ResponseEntry" nillable="true" type="s1:ResponseEntry"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ResponseEntry">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="BatchIndex" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="IsPartialSuccess" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ResponseURL" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="NumberOfPages" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ResponseEntryDetails" type="s1:ArrayOfResponseEntryDetail"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Error" type="s1:BnBErrorEntry"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DispensedCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DispensedAmount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="TotalCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="1" name="TotalAmount" type="s:decimal"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfResponseEntryDetail">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="ResponseEntryDetail" nillable="true" type="s1:ResponseEntryDetail"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ResponseEntryDetail">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="PartnerTransID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DeviceID" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="Amount" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="AR" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="DR" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="PieceCount" type="s:int"/>
+          <s:element maxOccurs="1" minOccurs="0" name="ResponseURL" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Error" type="s1:BnBErrorEntry"/>
+          <s:element maxOccurs="1" minOccurs="1" name="IsSuccess" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SurchargeInd" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="InsuredInd" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Zone" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SvrsDesc" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DelconBarcode" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DelconNum" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="DunsNum" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="RecptCharge" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="CODAmt" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="InsureFee" type="s:decimal"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://localhost/IBDS/Types/Address">
+      <s:complexType name="Address">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="Name" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Street" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Street2" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Suite" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="City" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="State" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Zip" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Zip4" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Company" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="UrbanizationName" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Country" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Phone" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Extension" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AddressIntl">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="Name" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Company" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Street" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Street2" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Street3" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="City" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Province" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PostalCode" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Country" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Phone" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Fax" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Email" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://localhost/IBDS/Types/Rates">
+      <s:complexType name="SpecialServiceRatingInput">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="Name" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="InputValue" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="0" name="SpecialServiceOptions" type="s3:ArrayOfString"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="SpecialServiceOption" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PackageDimension">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="1" name="LengthInches" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="WidthInches" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="HeightInches" type="s:decimal"/>
+          <s:element maxOccurs="1" minOccurs="1" name="GirthInches" type="s:decimal"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="RetrySecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseSoapOut">
+    <wsdl:part name="parameters" element="tns:DispenseResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveBulkSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveBulkBnBRoutingControlHeader">
+    <wsdl:part name="BnBRoutingControlHeader" element="tns:BnBRoutingControlHeader"/>
+  </wsdl:message>
+  <wsdl:message name="RetryBnBRoutingControlHeader">
+    <wsdl:part name="BnBRoutingControlHeader" element="tns:BnBRoutingControlHeader"/>
+  </wsdl:message>
+  <wsdl:message name="SOSDispenseBulkSoapIn">
+    <wsdl:part name="parameters" element="tns:SOSDispenseBulk"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseBulkSoapOut">
+    <wsdl:part name="parameters" element="tns:DispenseBulkResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveBulkSoapOut">
+    <wsdl:part name="parameters" element="tns:RetrieveBulkResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RetrySoapOut">
+    <wsdl:part name="parameters" element="tns:RetryResponse"/>
+  </wsdl:message>
+  <wsdl:message name="SOSDispenseBulkSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseBulkSoapIn">
+    <wsdl:part name="parameters" element="tns:DispenseBulk"/>
+  </wsdl:message>
+  <wsdl:message name="ReprintBnBRoutingControlHeader">
+    <wsdl:part name="BnBRoutingControlHeader" element="tns:BnBRoutingControlHeader"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseBulkSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseIntlSoapIn">
+    <wsdl:part name="parameters" element="tns:DispenseIntl"/>
+  </wsdl:message>
+  <wsdl:message name="ReprintSoapIn">
+    <wsdl:part name="parameters" element="tns:Reprint"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseIntlSoapOut">
+    <wsdl:part name="parameters" element="tns:DispenseIntlResponse"/>
+  </wsdl:message>
+  <wsdl:message name="ReprintSoapOut">
+    <wsdl:part name="parameters" element="tns:ReprintResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseSoapIn">
+    <wsdl:part name="parameters" element="tns:Dispense"/>
+  </wsdl:message>
+  <wsdl:message name="ReprintSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseIntlSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="SOSRetrieveBulkBnBRoutingControlHeader">
+    <wsdl:part name="BnBRoutingControlHeader" element="tns:BnBRoutingControlHeader"/>
+  </wsdl:message>
+  <wsdl:message name="DispenseSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="SOSRetrieveBulkSoapIn">
+    <wsdl:part name="parameters" element="tns:SOSRetrieveBulk"/>
+  </wsdl:message>
+  <wsdl:message name="RetrySoapIn">
+    <wsdl:part name="parameters" element="tns:Retry"/>
+  </wsdl:message>
+  <wsdl:message name="SOSRetrieveBulkSoapOut">
+    <wsdl:part name="parameters" element="tns:SOSRetrieveBulkResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveBulkSoapIn">
+    <wsdl:part name="parameters" element="tns:RetrieveBulk"/>
+  </wsdl:message>
+  <wsdl:message name="SOSRetrieveBulkSecuritySoapHeader">
+    <wsdl:part name="SecuritySoapHeader" element="tns:SecuritySoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="SOSDispenseBulkSoapOut">
+    <wsdl:part name="parameters" element="tns:SOSDispenseBulkResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="TransactionSoap">
+    <wsdl:operation name="Dispense">
+      <wsdl:input message="tns:DispenseSoapIn"/>
+      <wsdl:output message="tns:DispenseSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="Retry">
+      <wsdl:input message="tns:RetrySoapIn"/>
+      <wsdl:output message="tns:RetrySoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="Reprint">
+      <wsdl:input message="tns:ReprintSoapIn"/>
+      <wsdl:output message="tns:ReprintSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseIntl">
+      <wsdl:input message="tns:DispenseIntlSoapIn"/>
+      <wsdl:output message="tns:DispenseIntlSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseBulk">
+      <wsdl:input message="tns:DispenseBulkSoapIn"/>
+      <wsdl:output message="tns:DispenseBulkSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveBulk">
+      <wsdl:input message="tns:RetrieveBulkSoapIn"/>
+      <wsdl:output message="tns:RetrieveBulkSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SOSDispenseBulk">
+      <wsdl:input message="tns:SOSDispenseBulkSoapIn"/>
+      <wsdl:output message="tns:SOSDispenseBulkSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SOSRetrieveBulk">
+      <wsdl:input message="tns:SOSRetrieveBulkSoapIn"/>
+      <wsdl:output message="tns:SOSRetrieveBulkSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TransactionSoap12" type="tns:TransactionSoap">
+    <soap12:binding xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Dispense">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/Dispense" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:DispenseSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Retry">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/Retry" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:RetryBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:RetrySecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Reprint">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/Reprint" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:ReprintBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:ReprintSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseIntl">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/DispenseIntl" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:DispenseIntlSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseBulk">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/DispenseBulk" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:DispenseBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveBulk">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/RetrieveBulk" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:RetrieveBulkBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:RetrieveBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SOSDispenseBulk">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/SOSDispenseBulk" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:SOSDispenseBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SOSRetrieveBulk">
+    <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" soapAction="http://PitneyBowes.com/SOSRetrieveBulk" style="document"/>
+      <wsdl:input>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:SOSRetrieveBulkBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal"/>
+    <soap12:header xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" message="tns:SOSRetrieveBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TransactionSoap" type="tns:TransactionSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Dispense">
+      <soap:operation soapAction="http://PitneyBowes.com/Dispense" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:DispenseSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Retry">
+      <soap:operation soapAction="http://PitneyBowes.com/Retry" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:RetryBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal">
+        </soap:header>
+        <soap:header message="tns:RetrySecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Reprint">
+      <soap:operation soapAction="http://PitneyBowes.com/Reprint" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:ReprintBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal">
+        </soap:header>
+        <soap:header message="tns:ReprintSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseIntl">
+      <soap:operation soapAction="http://PitneyBowes.com/DispenseIntl" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:DispenseIntlSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseBulk">
+      <soap:operation soapAction="http://PitneyBowes.com/DispenseBulk" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:DispenseBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveBulk">
+      <soap:operation soapAction="http://PitneyBowes.com/RetrieveBulk" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:RetrieveBulkBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal">
+        </soap:header>
+        <soap:header message="tns:RetrieveBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SOSDispenseBulk">
+      <soap:operation soapAction="http://PitneyBowes.com/SOSDispenseBulk" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:SOSDispenseBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SOSRetrieveBulk">
+      <soap:operation soapAction="http://PitneyBowes.com/SOSRetrieveBulk" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:SOSRetrieveBulkBnBRoutingControlHeader" part="BnBRoutingControlHeader" use="literal">
+        </soap:header>
+        <soap:header message="tns:SOSRetrieveBulkSecuritySoapHeader" part="SecuritySoapHeader" use="literal">
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Transaction">
+    <wsdl:port name="TransactionSoap12" binding="tns:TransactionSoap12">
+    <soap12:address xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" location="http://bnbuspro4web.test.pb.com/WebService/Transaction.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="TransactionSoap" binding="tns:TransactionSoap">
+      <soap:address location="http://bnbuspro4web.test.pb.com/WebService/Transaction.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

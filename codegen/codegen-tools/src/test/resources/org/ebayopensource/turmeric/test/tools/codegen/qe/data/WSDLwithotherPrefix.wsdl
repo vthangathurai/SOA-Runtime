@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="TestWSDL"
+	targetNamespace="http://www.ebayopensource.org/marketplace/services" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xyz="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebayopensource.org/marketplace/services"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xyz:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/marketplace/services"
+			xmlns="http://www.ebayopensource.org/marketplace/services" xmlns:xyz="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://www.ebayopensource.org/marketplace/services">
+
+			<xyz:element name="Input" type="TestType"></xyz:element>
+
+			<xyz:element name="Fun" type="Lib1Type"></xyz:element>
+			<xyz:element name="Fun2" type="Lib1Type_2"></xyz:element>
+
+			<xyz:complexType name="TestType">
+				<xyz:sequence>
+					<xyz:element name="BaseElementOne" type="xyz:int"></xyz:element>
+					<xyz:element name="BaseElementTwo" type="xyz:int"></xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:simpleType name="simpleType">
+				<xyz:annotation>
+					<xyz:appinfo>
+						<typeLibrarySource library="something" namespace="http://www.testing.com/simple" />
+					</xyz:appinfo>
+				</xyz:annotation>
+				<xyz:restriction base="xyz:string"></xyz:restriction>
+			</xyz:simpleType>
+
+			<xyz:complexType name="Lib1Type">
+				<xyz:annotation>
+					<xyz:appinfo>
+						<typeLibrarySource library="Typelib1" namespace="http://www.testing.com/lib1" />
+					</xyz:appinfo>
+				</xyz:annotation>
+				<xyz:sequence>
+					<xyz:annotation>
+						<xyz:documentation></xyz:documentation>
+					</xyz:annotation>
+					<xyz:element name="BasicElement" type="xyz:string">
+					</xyz:element>
+					<xyz:element name="BAsic2" type="Lib1Type_2"></xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:complexType name="Lib1Type_2">
+				<xyz:annotation>
+					<xyz:appinfo>
+						<typeLibrarySource library="Typelib1" namespace="http://www.testing.com/lib1" />
+					</xyz:appinfo>
+				</xyz:annotation>
+				<xyz:sequence>
+					<xyz:annotation>
+						<xyz:documentation></xyz:documentation>
+					</xyz:annotation>
+					<xyz:element name="BasicElement" type="xyz:string">
+					
+					</xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:complexType name="Lib3Type">
+
+
+
+				<xyz:sequence>
+					<xyz:element name="BasicElement2" type="xyz:boolean">
+					</xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:complexType name="Lib4Type">
+				<xyz:annotation>
+					<xyz:appinfo>
+						<typeLibrarySource library="Typelib4" namespace="http://www.testing.com/lib4" />
+					</xyz:appinfo>
+				</xyz:annotation>
+				<xyz:sequence>
+					<xyz:element name="BasicElement3" type="xyz:double">
+					</xyz:element>
+					<xyz:element name="BasicElement4" type="tns:Lib1Type_2">
+					</xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:complexType name="TwolibsType">
+				<xyz:sequence>
+					<xyz:element name="lib3" type="tns:Lib3Type"></xyz:element>
+					<xyz:element name="lib4" type="tns:Lib4Type"></xyz:element>
+					<xyz:element name="simpleType" type="xyz:string"></xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:complexType name="TypelibComplex">
+				<xyz:annotation>
+					<xyz:appinfo>
+						<typeLibrarySource library="Typelib2" namespace="http://www.testing.com/lib2" />
+					</xyz:appinfo>
+				</xyz:annotation>
+			</xyz:complexType>
+
+			<xyz:complexType name="differentType">
+				<xyz:sequence>
+					<xyz:element name="comingfromlib1" type="tns:Lib1Type">
+					</xyz:element>
+					<xyz:element name="comingfromlib2" type="tns:TypelibComplex">
+					</xyz:element>
+				</xyz:sequence>
+			</xyz:complexType>
+
+			<xyz:element name="Response">
+				<xyz:complexType>
+					<xyz:sequence>
+						<xyz:element name="return" type="xyz:int" />
+					</xyz:sequence>
+				</xyz:complexType>
+			</xyz:element>
+		</xyz:schema>
+	</wsdl:types>
+	<wsdl:message name="Input">
+		<wsdl:part name="Input" element="tns:Input" />
+	</wsdl:message>
+	<wsdl:message name="Response">
+		<wsdl:part name="Response" element="tns:Response" />
+	</wsdl:message>
+	<wsdl:portType name="TestWSDL">
+		<wsdl:operation name="add">
+			<wsdl:input name="Input" message="tns:Input" />
+			<wsdl:output name="Response" message="tns:Response" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TestWSDLSoapBinding" type="tns:TestWSDL">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="add">
+			<soap:operation soapAction="add" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TestService3">
+		<wsdl:port name="TestWSDL" binding="tns:TestWSDLSoapBinding">
+			<soap:address location="http://localhost:8080/Axis/services/TestWSDL" />
+			<wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

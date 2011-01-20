@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<!-- Using ANT for this build as maven prevents you from creating this cycle -->
+<project>
+  <target name="buildcycle">
+    <echo>Creating 3 Jars with cyclic manifest classpath references</echo>
+    <delete file="a.jar" />
+    <delete file="b.jar" />
+    <delete file="c.jar" />
+    <jar destfile="a.jar" basedir="${basedir}" includes="**/*.txt">
+      <manifest>
+        <attribute name="Class-Path" value="b.jar" />
+      </manifest>
+    </jar>
+    <jar destfile="b.jar" basedir="${basedir}" includes="**/*.txt">
+      <manifest>
+        <attribute name="Class-Path" value="c.jar" />
+      </manifest>
+    </jar>
+    <jar destfile="c.jar" basedir="${basedir}" includes="**/*.txt">
+      <manifest>
+        <attribute name="Class-Path" value="a.jar" />
+      </manifest>
+    </jar>
+  </target>
+</project>
+<!-- 
+  vim: ts=2 sw=2:
+  -->

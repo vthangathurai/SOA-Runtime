@@ -1,0 +1,48 @@
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# as is, without appending extra path information to
+# it.
+|PathMustNotExistRule|${mojo.outputDirectory}
+gen-src | Indicates bug with -dest argument 
+client  | Indicates bug with -jdest argument
+
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# and not hardcoded paths within the codegen tooling
+|PathMustNotExistRule|${project.basedir}
+gen-src
+gen-meta-src
+
+|ClassMustExistRule|${mojo.outputDirectory}
+org.ebayopensource.turmeric.security.v1.services.AuthenticateRequestType
+org.ebayopensource.turmeric.security.v1.services.AuthenticateResponseType
+org.ebayopensource.turmeric.security.v1.services.AuthenticationExtendedResponseType
+org.ebayopensource.turmeric.security.v1.services.BaseAuthenticationServiceRequestType
+org.ebayopensource.turmeric.security.v1.services.BaseAuthenticationServiceResponseType
+org.ebayopensource.turmeric.security.v1.services.CredentialType
+org.ebayopensource.turmeric.security.v1.services.KeyValuePairType
+org.ebayopensource.turmeric.security.v1.services.ObjectFactory
+org.ebayopensource.turmeric.security.v1.services.package-info
+org.ebayopensource.turmeric.security.v1.services.SubjectGroupType
+org.ebayopensource.turmeric.security.v1.services.SubjectType
+com.ebayopensourcev1.services.authenticationservice.intf.AsyncAuthenticationServicev1
+com.ebayopensourcev1.services.authenticationservice.intf.gen.AuthenticationServicev1Proxy
+com.ebayopensourcev1.services.authenticationservice.intf.gen.AuthenticationServicev1TypeDefsBuilder
+com.ebayopensourcev1.services.authenticationservice.intf.AuthenticationServicev1
+
+|ClassMustNotExistRule|${mojo.outputDirectory}
+org.ebayopensource.turmeric.common.v1.types.AckValue
+org.ebayopensource.turmeric.common.v1.types.BaseRequest
+org.ebayopensource.turmeric.common.v1.types.BaseResponse
+org.ebayopensource.turmeric.common.v1.types.ErrorCategory
+org.ebayopensource.turmeric.common.v1.types.ErrorData
+org.ebayopensource.turmeric.common.v1.types.ErrorMessage
+org.ebayopensource.turmeric.common.v1.types.ErrorParameter
+org.ebayopensource.turmeric.common.v1.types.ErrorSeverity
+org.ebayopensource.turmeric.common.v1.types.ExtensionType
+
+
+|PathMustExistRule|${mojo.resourcesOutputDirectory}
+META-INF/soa/common/config/AuthenticationServicev1/TypeMappings.xml
+META-INF/soa/common/config/AuthenticationServicev1/service_metadata.properties
+

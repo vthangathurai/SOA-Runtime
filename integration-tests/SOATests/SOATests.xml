@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<project basedir="." name="SOATestsPreBuild" default="prebuild">
+	<!-- Set up global properties -->
+	<property file="${user.home}/override.properties"/>
+  <property name="jaxb.lib" value="../../externalv3/xml/sun-jaxb/2.1.070125" />
+  <property name="wstx.lib" value="../../externalv3/xml/wstx/3.1.1"/>
+  <property name="java2wsdl.lib" value="../../externalv3/soap/apache-axis2/1.1.1" />
+  	
+  <path id="classpath">
+    <pathelement location="../SOATools/bin" /> <!-- For the generator -->
+    <pathelement location="bin" /> <!-- For the reference interface Test1Service -->
+    <pathelement location="../SOAClient/bin" /> <!-- For common exceptions, types, etc. -->
+    <pathelement location="../SOAServer/bin" /> <!-- For BaseServiceImpl, etc. -->
+    <fileset dir="${java2wsdl.lib}" includes="*.jar" />
+    <fileset dir="${jaxb.lib}" includes="*.jar" />
+    <fileset dir="${wstx.lib}" includes="*.jar" />
+  </path>
+  
+  <target name="prebuild">
+      <java classname="org.ebayopensource.turmeric.runtime.tools.codegen.ServiceGeneratorFacade" classpathref="classpath" fork="yes" failonerror="true" dir="./">
+		<arg value="-servicename"/>
+		<arg value="test1gen"/>
+		<arg value="-interface"/>
+		<arg value="org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service"/>
+		<arg value="-genType"/>
+		<arg value="ALL"/>
+		<arg value="-src"/>
+		<arg value=".\\UnitTests\\src"/>
+		<arg value="-dest"/>
+		<arg value="."/>
+		<arg value="-sicn"/>
+		<arg value="org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1ServiceImpl"/>
+		<arg value="-namespace"/>
+		<arg value="http://www.ebayopensource.org/turmeric/common/config"/>
+		<arg value="-ccgn"/>
+		<arg value="SOAWebService"/>
+		<arg value="-scgn"/>
+		<arg value="SOAWebService"/>
+	</java>
+
+  	<copy todir="UnitTests\src\com\ebay\test\soaframework\sample\services\message\gen">
+      	<fileset dir="gen-src\service\com\ebay\test\soaframework\sample\services\message\gen">
+			<include name="Test1genImplSkeleton.java"/>
+			<include name="Test1genRequestDispatcher.java"/>
+      	 </fileset>
+    	</copy>
+  	<copy todir="UnitTests\src\com\ebay\test\soaframework\sample\services\message\gen">
+      	<fileset dir="gen-src\client\com\ebay\test\soaframework\sample\services\message\gen">
+			<include name="Test1genProxy.java"/>
+      	 </fileset>
+    	</copy>
+<!--
+  	<copy todir="meta-src\META-INF\soa\client\config">
+      	<fileset dir="gen-meta-src\META-INF\soa\client\config">
+			<include name="ClientConfig.xml"/>
+      	 </fileset>
+    	</copy>
+-->
+  	<copy todir="meta-src\META-INF\soa\common\config\Test1gen">
+      	<fileset dir="gen-meta-src\META-INF\soa\common\config\Test1gen">
+			<include name="TypeMappings.xml"/>
+      	 </fileset>
+    	</copy>
+  	<copy todir="meta-src\META-INF\soa\services\config\Test1gen">
+      	<fileset dir="gen-meta-src\META-INF\soa\services\config\Test1gen">
+			<include name="ServiceConfig.xml"/>
+      	 </fileset>
+    	</copy>
+   </target>
+
+</project>

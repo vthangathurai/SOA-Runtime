@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<wsdl:definitions name="TestWSDL"
+	targetNamespace="http://www.ebayopensource.com/turmeric/services" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebayopensource.com/turmeric/services"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xsd:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.com/turmeric/services"
+			xmlns="http://www.ebayopensource.com/turmeric/services" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://www.ebayopensource.com/turmeric/services">
+
+			<xsd:element name="Input" type="TestType"></xsd:element>
+
+			<xsd:element name="Fun" type="Lib1Type"></xsd:element>
+			<xsd:element name="Fun2" type="Lib1Type_2"></xsd:element>
+
+			<xsd:complexType name="TestType">
+				<xsd:sequence>
+					<xsd:element name="BaseElementOne" type="xsd:int"></xsd:element>
+					<xsd:element name="BaseElementTwo" type="xsd:int"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="simpleType">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="something" namespace="http://www.testing.com/simple" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="Lib1Type">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="Typelib1" namespace="http://www.testing.com/lib1" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:annotation>
+						<xsd:documentation></xsd:documentation>
+					</xsd:annotation>
+					<xsd:element name="BasicElement" type="xsd:string">
+					</xsd:element>
+					<xsd:element name="BAsic2" type="Lib1Type_2"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="Lib1Type_2">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="Typelib1" namespace="http://www.testing.com/lib1" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:annotation>
+						<xsd:documentation></xsd:documentation>
+					</xsd:annotation>
+					<xsd:element name="BasicElement" type="xsd:string">
+					
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="Lib3Type">
+
+
+
+				<xsd:sequence>
+					<xsd:element name="BasicElement2" type="xsd:boolean">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="Lib4Type">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="Typelib4" namespace="http://www.testing.com/lib4" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="BasicElement3" type="xsd:double">
+					</xsd:element>
+					<xsd:element name="BasicElement4" type="tns:Lib1Type_2">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="TwolibsType">
+				<xsd:sequence>
+					<xsd:element name="lib3" type="tns:Lib3Type"></xsd:element>
+					<xsd:element name="lib4" type="tns:Lib4Type"></xsd:element>
+					<xsd:element name="simpleType" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="TypelibComplex">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="Typelib2" namespace="http://www.testing.com/lib2" />
+					</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:complexType>
+
+			<xsd:complexType name="differentType">
+				<xsd:sequence>
+					<xsd:element name="comingfromlib1" type="tns:Lib1Type">
+					</xsd:element>
+					<xsd:element name="comingfromlib2" type="tns:TypelibComplex">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="Response">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="return" type="xsd:int" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="Input">
+		<wsdl:part name="Input" element="tns:Input" />
+	</wsdl:message>
+	<wsdl:message name="Response">
+		<wsdl:part name="Response" element="tns:Response" />
+	</wsdl:message>
+	<wsdl:portType name="TestWSDL">
+		<wsdl:operation name="add">
+			<wsdl:input name="Input" message="tns:Input" />
+			<wsdl:output name="Response" message="tns:Response" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TestWSDLSoapBinding" type="tns:TestWSDL">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="add">
+			<soap:operation soapAction="add" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TestService">
+		<wsdl:port name="TestWSDL" binding="tns:TestWSDLSoapBinding">
+			<soap:address location="http://localhost:8080/Axis/services/TestWSDL" />
+			<wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

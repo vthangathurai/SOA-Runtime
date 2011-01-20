@@ -1,0 +1,42 @@
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# as is, without appending extra path information to
+# it.
+|PathMustNotExistRule|${mojo.outputDirectory}
+gen-src | Indicates bug with -dest argument 
+client  | Indicates bug with -jdest argument
+
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# and not hardcoded paths within the codegen tooling
+|PathMustNotExistRule|${project.basedir}
+gen-src
+gen-meta-src
+
+|ClassMustExistRule|${mojo.outputDirectory}
+org.ebayopensource.turmeric.v1.services.GetVersionRequest
+org.ebayopensource.turmeric.v1.services.GetVersionResponse
+org.ebayopensource.turmeric.v1.services.newservicev1.AsyncNewServiceV1
+org.ebayopensource.turmeric.v1.services.newservicev1.gen.NewServiceV1Proxy
+org.ebayopensource.turmeric.v1.services.newservicev1.gen.NewServiceV1TypeDefsBuilder
+org.ebayopensource.turmeric.v1.services.newservicev1.NewServiceV1
+org.ebayopensource.turmeric.v1.services.newservicev1.newservicev1.gen.SharedNewServiceV1Consumer
+org.ebayopensource.turmeric.v1.services.ObjectFactory
+
+# With enabledNamespaceFolding set to true, these should not be generated here
+|ClassMustNotExistRule|${mojo.outputDirectory}
+org.ebayopensource.turmeric.common.v1.types.AckValue
+org.ebayopensource.turmeric.common.v1.types.AckValue
+org.ebayopensource.turmeric.common.v1.types.BaseRequest
+org.ebayopensource.turmeric.common.v1.types.BaseResponse
+org.ebayopensource.turmeric.common.v1.types.ErrorCategory
+org.ebayopensource.turmeric.common.v1.types.ErrorData
+org.ebayopensource.turmeric.common.v1.types.ErrorMessage
+org.ebayopensource.turmeric.common.v1.types.ErrorParameter
+org.ebayopensource.turmeric.common.v1.types.ErrorSeverity
+org.ebayopensource.turmeric.common.v1.types.ExtensionType
+
+|PathMustExistRule|${mojo.resourcesOutputDirectory}
+META-INF/soa/common/config/NewServiceV1/TypeMappings.xml
+META-INF/soa/common/config/NewServiceV1/service_metadata.properties
+META-INF/soa/services/wsdl/NewServiceV1_mns.wsdl

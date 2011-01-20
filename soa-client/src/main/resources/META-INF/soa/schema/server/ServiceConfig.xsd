@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/common/config"
+	xmlns:scfg="http://www.ebayopensource.org/turmeric/common/config"
+	xmlns:Q1="http://www.ebayopensource.org/turmeric/common/config">
+
+   <include schemaLocation="../common/CommonSOAConfig.xsd"/>
+   <include schemaLocation="GlobalServiceConfig.xsd"></include>
+   <element name="service-config" type="tns:ServiceConfig"></element>
+
+	<complexType name="ServiceConfig">
+		<sequence>
+    		<element name="service-impl-class-name" type="token"
+    			minOccurs="0" maxOccurs="1" />
+    		<element name="service-interface-class-name" type="token"
+    			minOccurs="0" maxOccurs="1" />
+			<element name="current-version" type="token" minOccurs="0"/>
+    		<element name="supported-version" type="token" minOccurs="0"
+    			maxOccurs="unbounded" />
+    		<element name="service-instance-config"
+    			type="scfg:ServiceGroupConfig" minOccurs="0" />
+		</sequence>
+		<attribute name="group" type="string" use="optional"/>
+		<!-- fully qualified name of the service -->
+		<attribute name="service-name" type="token" use="optional"/>
+	</complexType>
+</schema>

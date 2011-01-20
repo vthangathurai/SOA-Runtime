@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *******************************************************************************/
+package org.ebayopensource.turmeric.runtime.spf.impl.pipeline;
+
+import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceException;
+import org.ebayopensource.turmeric.runtime.common.pipeline.MessageContext;
+import org.ebayopensource.turmeric.runtime.spf.pipeline.VersionCheckHandler;
+
+
+/**
+ * An always-happy version check implementation
+ * 
+ * @author ichernyshev
+ */
+public class NullVersionCheckHandler implements VersionCheckHandler {
+
+	private String m_version;
+
+	public void init(InitContext ctx) throws ServiceException
+	{
+		m_version = ctx.getVersion();
+	}
+
+	public String getVersion() {
+		return m_version;
+	}
+
+	public void checkRequestVersion(MessageContext ctx)	throws ServiceException
+	{
+		// all versions are good
+	}
+
+	public boolean isVersionSupported(String version) throws ServiceException {
+		return true;
+	}
+}

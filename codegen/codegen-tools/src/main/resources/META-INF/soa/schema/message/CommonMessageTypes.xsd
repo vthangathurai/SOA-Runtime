@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebayopensource.org/turmeric/common/v1/types" targetNamespace="http://www.ebay.com/soaframework/common/v1/types" elementFormDefault="qualified">
+	<complexType name="ErrorMessage">
+		<sequence>
+			<element name="error" type="tns:CommonErrorData" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="ErrorData">
+		<sequence>
+			<element name="errorId" type="long"/>
+			<element name="domain" type="string"/>
+			<element name="subdomain" type="string" minOccurs="0"/>
+			<element name="severity" type="tns:ErrorSeverity"/>
+			<element name="category" type="tns:ErrorCategory"/>
+			<element name="message" type="string"/>
+			<element name="exceptionId" type="token" minOccurs="0"/>
+			<element name="parameter" type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="CommonErrorData">
+		<annotation>
+			<documentation>Documentation goes here</documentation>
+			<appinfo></appinfo>
+		</annotation>
+	
+		<complexContent>
+			<extension base="tns:ErrorData">
+				<sequence>
+					<element name="errorName" type="string"></element>
+					<element name="cause" type="string" minOccurs="0"></element>
+					<element name="resolution" type="string" minOccurs="0"></element>
+					<element name="errorGroups" type="string" minOccurs="0">
+						<annotation>
+							<documentation>Error group values are whitespace separated</documentation>
+						</annotation>
+					</element>
+					<element name="organization" type="string"></element>
+		    			<any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+			    	</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<simpleType name="ErrorSeverity">
+		<restriction base="token">
+			<enumeration value="Error"/>
+			<enumeration value="Warning"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ErrorCategory">
+		<restriction base="token">
+			<enumeration value="System"/>
+			<enumeration value="Application"/>
+			<enumeration value="Request"/>
+		</restriction>
+	</simpleType>
+	<complexType name="BaseAttachmentType">
+		<simpleContent>
+			<extension base="base64Binary">
+				<attribute name="content-type" use="required"/>
+				<attribute name="content-length" use="optional"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="ErrorParameter">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="optional"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+</schema>

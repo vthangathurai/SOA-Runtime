@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.ebayopensource.org/turmeric/common/config"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/common/config"
+	elementFormDefault="qualified">
+
+	<element name="ErrorBundle" type="tns:ErrorBundle"></element>
+	<complexType name="ErrorBundle">
+		<sequence>
+			<element name="errorlist" type="tns:ErrorList" maxOccurs="1" minOccurs="1" />
+		</sequence>
+		<attribute name="libraryVersion" type="string" use="required"></attribute>
+		<attribute name="organization" type="string" use="required" />
+		<attribute name="domain" type="string" />
+		<attribute name="packageName" type="string" use="required" />
+		<attribute name="errorLibraryName" type="string" use="required" />
+	</complexType>
+
+	<complexType name="Error">
+		<attribute name="id" use="required" type="long"></attribute>
+		<attribute name="severity" type="tns:ErrorSeverity" use="required" />
+		<attribute name="category" type="tns:ErrorCategory" use="required" />
+		<attribute name="subdomain" type="string" use="optional" />
+		<attribute name="name" type="string" use="required" />
+		<attribute name="errorGroup" type="string" use="optional" />
+	</complexType>
+
+	<simpleType name="ErrorCategory">
+		<restriction base="string">
+			<enumeration value="REQUEST" />
+			<enumeration value="SYSTEM" />
+			<enumeration value="APPLICATION" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ErrorSeverity">
+		<restriction base="string">
+			<enumeration value="ERROR" />
+			<enumeration value="WARNING" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="ErrorList">
+		<sequence >
+			<element name="error" type="tns:Error" maxOccurs="unbounded" minOccurs="0"></element>
+		</sequence>
+	</complexType>
+</schema>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<client-config-list xmlns="http://www.ebayopensource.org/turmeric/common/config">
+	<client-config
+		service-name="{http://www.ebayopensource.org/turmeric/common/v1/services}test1"
+		group="SOAWebServiceClient-remote"
+		xmlns="http://www.ebayopensource.org/turmeric/common/config">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<service-location>
+			http://localhost:8080/ws/spf
+		</service-location>
+		<wsdl-location>webservices/latest/eBaySvc.wsdl</wsdl-location>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="HTTP11">
+					<override-options>
+						<socket-connect-timeout-msec>2000</socket-connect-timeout-msec>
+						<socket-read-timeout-msec>2000</socket-read-timeout-msec>
+						<num-connect-retries>2</num-connect-retries>
+						<other-options>
+							<option name="name1">value1</option>
+							<option name="name2">value2</option>
+						</other-options>
+					</override-options>
+				</preferred-transport>
+				<request-data-binding>XML</request-data-binding>
+				<!--retry-options>
+					<app-level-num-retries>2</app-level-num-retries>
+					<app-level-retry-handler>org.ebayopensource.turmeric.runtime.sif.impl.pipeline.DefaultApplicationRetryHandler</app-level-retry-handler>
+					<retry-transport-status-code>404</retry-transport-status-code>
+					<retry-transport-status-code>500</retry-transport-status-code>
+					<retry-exception-class>org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1ServiceException</retry-exception-class>
+					<retry-error-id>2005</retry-error-id>
+				</retry-options-->
+				<custom-error-response-adapter>org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.CustomErrorResponseAdapterImpl</custom-error-response-adapter>
+				<markdown-options>
+					<enable-auto-markdown>true</enable-auto-markdown>
+					<state-factory>org.ebayopensource.turmeric.runtime.tests.common.sample.errors.TestAutoMarkdownStateFactory</state-factory>
+					<error-count-threshold>7</error-count-threshold>
+					<transport-status-code>404</transport-status-code>
+					<!--exception-class></exception-class-->
+					<error-id>comm_connect</error-id>
+				</markdown-options>
+			</invocation-options>
+			<pipeline-config></pipeline-config>
+                <data-binding-config>
+                    <data-binding name="XML">
+                        <mime-type>text/xml</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+               	</data-binding>
+                    <data-binding name="NV">
+                        <mime-type>text/plain</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                   </data-binding>
+                    <data-binding name="JSON">
+                        <mime-type>application/json</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+						</deserializer-factory-class-name>
+						<options>
+			     			<option name="useSchemaInfo">false</option>
+						 <option name="elementFormDefault">UNQUALIFIED</option>
+		    	</options>
+                   </data-binding>
+                    <data-binding name="FAST_INFOSET">
+                        <mime-type>application/fastinfoset</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+						</deserializer-factory-class-name>
+ 		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                    </data-binding>
+               </data-binding-config>
+		</client-instance-config>
+	</client-config>
+	<client-config
+		service-name="{http://www.ebayopensource.org/turmeric/common/v1/services}test1caller"
+		group="SOAWebServiceClient-remote"
+		xmlns="http://www.ebayopensource.org/turmeric/common/config">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<service-location>
+			http://localhost:8080/ws/spf
+		</service-location>
+		<wsdl-location>webservices/latest/eBaySvc.wsdl</wsdl-location>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="HTTP11">
+					<override-options>
+						<socket-connect-timeout-msec>12000</socket-connect-timeout-msec>
+						<socket-read-timeout-msec>12000</socket-read-timeout-msec>
+						<num-connect-retries>2</num-connect-retries>
+						<other-options>
+							<option name="name1">value1</option>
+							<option name="name2">value2</option>
+						</other-options>
+					</override-options>
+				</preferred-transport>
+				<request-data-binding>XML</request-data-binding>
+				<!--retry-options>
+					<app-level-num-retries>2</app-level-num-retries>
+					<app-level-retry-handler>org.ebayopensource.turmeric.runtime.sif.impl.pipeline.DefaultApplicationRetryHandler</app-level-retry-handler>
+					<retry-transport-status-code>404</retry-transport-status-code>
+					<retry-transport-status-code>500</retry-transport-status-code>
+					<retry-exception-class>org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1ServiceException</retry-exception-class>
+					<retry-error-id>2005</retry-error-id>
+				</retry-options-->
+				<custom-error-response-adapter>org.ebayopensource.turmeric.runtime.tests.service1.sample.errors.CustomErrorResponseAdapterImpl</custom-error-response-adapter>
+				<markdown-options>
+					<enable-auto-markdown>true</enable-auto-markdown>
+					<state-factory>org.ebayopensource.turmeric.runtime.tests.common.sample.errors.TestAutoMarkdownStateFactory</state-factory>
+					<error-count-threshold>7</error-count-threshold>
+					<transport-status-code>404</transport-status-code>
+					<!--exception-class></exception-class-->
+					<error-id>comm_connect</error-id>
+				</markdown-options>
+			</invocation-options>
+			<pipeline-config></pipeline-config>
+                <data-binding-config>
+                    <data-binding name="XML">
+                        <mime-type>text/xml</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+               	</data-binding>
+                    <data-binding name="NV">
+                        <mime-type>text/plain</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                   </data-binding>
+                    <data-binding name="JSON">
+                        <mime-type>application/json</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+						</deserializer-factory-class-name>
+						<options>
+			     			<option name="useSchemaInfo">false</option>
+						 <option name="elementFormDefault">UNQUALIFIED</option>
+		    	</options>
+                   </data-binding>
+                    <data-binding name="FAST_INFOSET">
+                        <mime-type>application/fastinfoset</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+						</deserializer-factory-class-name>
+ 		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                    </data-binding>
+               </data-binding-config>
+		</client-instance-config>
+	</client-config>
+	<client-config
+		service-name="{http://www.ebayopensource.org/turmeric/common/config}test1gen"
+		group="SOAWebServiceClient-remote">
+		<service-interface-class-name>
+			org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service
+		</service-interface-class-name>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="HTTP11">
+					<override-options>
+						<socket-connect-timeout-msec>2000</socket-connect-timeout-msec>
+						<socket-read-timeout-msec>2000</socket-read-timeout-msec>
+						<num-connect-retries>2</num-connect-retries>
+						<other-options>
+							<option name="name1">value1</option>
+							<option name="name2">value2</option>
+						</other-options>
+					</override-options>
+				</preferred-transport>
+				<request-data-binding>XML</request-data-binding>
+			</invocation-options>
+                <data-binding-config>
+                    <data-binding name="XML">
+                        <mime-type>text/xml</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+               	</data-binding>
+                    <data-binding name="NV">
+                        <mime-type>text/plain</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                   </data-binding>
+                    <data-binding name="JSON">
+                        <mime-type>application/json</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+						</deserializer-factory-class-name>
+						<options>
+			     			<option name="useSchemaInfo">false</option>
+						 <option name="elementFormDefault">UNQUALIFIED</option>
+		    	</options>
+                   </data-binding>
+                    <data-binding name="FAST_INFOSET">
+                        <mime-type>application/fastinfoset</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+						</deserializer-factory-class-name>
+ 		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                    </data-binding>
+               </data-binding-config>
+		</client-instance-config>
+	</client-config>
+	<client-config service-name="{http://www.ebayopensource.org/turmeric/common/v1/services}Test1Service">
+        <service-interface-class-name>org.ebayopensource.turmeric.runtime.tests.service1.sample.services.message.Test1Service</service-interface-class-name>
+        <service-location>http://localhost/Test1Service</service-location>
+        <client-instance-config>
+            <invocation-options>
+                <preferred-transport name="HTTP11"/>
+                <request-data-binding>XML</request-data-binding>
+                <response-data-binding>XML</response-data-binding>
+            </invocation-options>
+                <data-binding-config>
+                    <data-binding name="XML">
+                        <mime-type>text/xml</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+               	</data-binding>
+                    <data-binding name="NV">
+                        <mime-type>text/plain</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+						</deserializer-factory-class-name>
+		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                   </data-binding>
+                    <data-binding name="JSON">
+                        <mime-type>application/json</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+						</deserializer-factory-class-name>
+						<options>
+			     			<option name="useSchemaInfo">false</option>
+						 <option name="elementFormDefault">UNQUALIFIED</option>
+		    	</options>
+                   </data-binding>
+                    <data-binding name="FAST_INFOSET">
+                        <mime-type>application/fastinfoset</mime-type>
+                        <serializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+						</serializer-factory-class-name>
+                        <deserializer-factory-class-name>
+							org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+						</deserializer-factory-class-name>
+ 		     <options>
+			 <option name="elementFormDefault">UNQUALIFIED</option>
+		    </options>
+                    </data-binding>
+               </data-binding-config>
+        </client-instance-config>
+    </client-config>
+</client-config-list>

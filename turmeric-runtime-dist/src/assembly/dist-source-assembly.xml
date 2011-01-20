@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!-- ================================================================== -->
+<!--  Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.            -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");   -->
+<!--  you may not use this file except in compliance with the License.  -->
+<!--  You may obtain a copy of the License at                           -->
+<!--                                                                    -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0                     -->
+<!-- ================================================================== -->
+<assembly>
+	<id>source</id>
+	<formats>
+		<format>dir</format>
+		<format>zip</format>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>**</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+	
+	<moduleSets>
+		<moduleSet>
+			<includes>
+				<include>org.ebayopensource.turmeric.runtime:*</include>
+				<include>org.ebayopensource.turmeric.codegen:*</include>
+				<include>*:EchoServiceV1</include>
+				<include>*:EchoServiceV1Impl</include>
+                <include>*:EchoServiceClient</include>
+				<include>*:runtime-error-library</include>
+				<include>*:common-type-library</include>
+			</includes>
+			<excludes>
+				<exclude>*:turmeric-runtime-dist</exclude>
+				<exclude>*:turmeric-runtime-dist-war</exclude>
+			</excludes>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<sources>
+				<outputDirectoryMapping>/sources/${module.basedir.name}</outputDirectoryMapping>
+			</sources>
+		</moduleSet>
+	</moduleSets>
+</assembly>

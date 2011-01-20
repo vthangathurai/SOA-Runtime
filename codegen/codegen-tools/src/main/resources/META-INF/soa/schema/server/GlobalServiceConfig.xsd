@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+ <schema targetNamespace="http://www.ebayopensource.org/turmeric/common/config"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.ebayopensource.org/turmeric/common/config">
+
+    <include schemaLocation="../common/CommonSOAConfig.xsd"/>
+    <element name="global-service-config" type="tns:GlobalServiceConfig"/>
+    
+    <complexType name="GlobalServiceConfig">
+    <sequence>
+	  	<element name="monitor-config" type="tns:MonitorConfig" minOccurs="0"/>
+     	<element name="service-config-groups" type="tns:ServiceConfigGroups" minOccurs="0"/>
+     	<element name="service-layer-config" type="tns:ServiceLayerNames" minOccurs="0" maxOccurs="1"/>	
+	</sequence>
+ 	</complexType>
+
+    <!-- ServiceGroups holds the collection of all config groups (templates).  Each group is named,
+      and holds a ServiceConfig instance containing the baseline values for that group.  The name of that
+	instance is not significant. -->
+    <complexType name="ServiceConfigGroups">
+	<sequence>
+		<element name="service-group" type="tns:ServiceConfigGroup" maxOccurs="unbounded" minOccurs="0"/>
+	</sequence>
+    </complexType>
+
+    <complexType name="ServiceConfigGroup">
+	<sequence>
+		<element name="service-config" type="tns:ServiceGroupConfig" minOccurs="0"/>
+	</sequence>
+	<attribute name="name" type="string" use="required"/>
+    </complexType>
+
+	<complexType name="ServiceGroupConfig">
+		<sequence>
+			<element name="provider-options" type="tns:ProviderOptions"
+				maxOccurs="1" minOccurs="0">
+			</element>
+    			<element name="G11N-options"
+    				type="tns:ServerG11NOptions" minOccurs="0">
+    			</element>
+			<element name="pipeline-config" type="tns:PipelineConfig"
+				maxOccurs="1" minOccurs="0">
+			</element>
+    			<element name="protocol-processor"
+    				type="tns:ProtocolProcessorConfig" minOccurs="0"
+    				maxOccurs="unbounded">
+    			</element>
+    			<element name="transport"
+    				type="tns:TransportConfig" minOccurs="0"
+    				maxOccurs="unbounded">
+    			</element>
+			<element name="data-binding-config" type="tns:DataBindingConfig"
+				minOccurs="0"/>
+			<element name="service-layer" type="token" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="ProviderOptions">
+		<sequence>
+			<element name="unsupported-operation" type="string"
+				maxOccurs="unbounded" minOccurs="0"/>
+			<element name="supported-data-bindings" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="custom-serializers" type="tns:CustomSerializerConfigList" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="error-mapping-handler-class-name" type="token"
+				maxOccurs="1" minOccurs="0"/>
+			<element name="error-data-provider-class-name" type="token"
+				maxOccurs="1" minOccurs="0"/>	
+			<element name="monitoring-level" type="tns:MonitorLevelConfig" minOccurs="0"/>
+			<element name="version-check-handler" type="token" minOccurs="0"/>
+			<element name="header-mapping-options" type="tns:OptionList" minOccurs="0"/>
+			<element name="request-header-mapping-options" type="tns:OptionList" minOccurs="0"/>
+			<element name="response-header-mapping-options" type="tns:OptionList" minOccurs="0"/>
+			<element name="default-request-data-binding" type="string" minOccurs="0"/>
+			<element name="default-response-data-binding" type="string" minOccurs="0"/>
+			<element name="error-status-options" type="tns:ErrorStatusOptions" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="ServerG11NOptions">
+		<sequence>
+			<element name="supported-global-id" type="string"
+				maxOccurs="unbounded" minOccurs="0"/>
+			<element name="supported-locale" type="string"
+				maxOccurs="unbounded" minOccurs="0"/>
+			<element name="default-encoding" type="string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+			
+	<complexType name="ServiceLayerNames">
+		<sequence>
+			<element name="layer-name" type="string" maxOccurs="unbounded" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	
+</schema>

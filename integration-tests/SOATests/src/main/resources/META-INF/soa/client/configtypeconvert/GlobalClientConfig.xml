@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+<global-client-config xmlns="http://www.ebayopensource.org/turmeric/common/config">
+  
+  <monitor-config>
+   
+<!-- Uncomment me to get diff snapshot show as CAL heartbeat 
+	  <storage-provider name="CALLogger">
+    		<class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotCALLogger</class-name>
+	  </storage-provider>
+-->
+<!-- Uncomment me to get aggregated snapshot show on console  
+	  <storage-provider name="FileLogger">
+    		<class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.SnapshotFileLogger</class-name>
+	  </storage-provider>
+ -->
+<!-- Uncomment me to get diff snapshot show in console.  
+	  <storage-provider name="DiffBasedFileLogger">
+    		<class-name>org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotFileLogger</class-name>
+			<storage-options>
+				<option name="filename">DiffBasedSOAMetrics.log</option>
+				<option name="delimiter">;</option>
+			</storage-options>
+	  </storage-provider>
+-->
+	  <snapshot-interval>60</snapshot-interval>
+
+   </monitor-config>
+   <client-config-groups >
+	<client-group name="SOAWebServiceClient">
+	   <client-config>
+		<invocation-options>
+		</invocation-options>
+		<pipeline-config>
+			<request-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</request-pipeline>
+			<response-pipeline>
+				<class-name>
+					org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl
+				</class-name>
+			</response-pipeline>
+			<request-handlers>
+				<handler name="MessageContext" presence="Mandatory">
+					<class-name>org.ebayopensource.turmeric.runtime.sif.impl.handlers.MessageContextHandler</class-name>
+					<options>
+						<option name="transport-headers">chained_header</option>
+						<option name="context-properties">chained_property</option>
+						<option name="cookies">chained_cookie</option>
+					</options>
+				</handler>
+			</request-handlers>
+		</pipeline-config>
+		<protocol-processor name="SOAP11" version="1.1">
+			<indicator>
+				<URL-pattern>ws/soa/soap/*</URL-pattern>
+			</indicator>
+			<class-name>org.ebayopensource.turmeric.runtime.sif.impl.protocolprocessor.soap.ClientSOAPProtocolProcessor</class-name>
+		</protocol-processor>
+	   </client-config>
+	</client-group>
+  </client-config-groups>
+</global-client-config>

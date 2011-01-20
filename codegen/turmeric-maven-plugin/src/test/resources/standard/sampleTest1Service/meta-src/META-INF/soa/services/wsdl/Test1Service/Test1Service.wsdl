@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebayopensource.org/turmeric/common/v1/types" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns1="http://org.apache.axis2/xsd" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+            <xs:complexType name="ErrorMessage">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:ErrorData"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorData">
+                <xs:sequence>
+                    <xs:element name="errorId" type="xs:long"/>
+                    <xs:element name="domain" type="xs:string"/>
+                    <xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+                    <xs:element name="severity" type="tns:ErrorSeverity"/>
+                    <xs:element name="category" type="tns:ErrorCategory"/>
+                    <xs:element name="message" type="xs:string"/>
+                    <xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" nillable="true" type="tns:ErrorParameter"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorParameter">
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="name" type="xs:string"/>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:complexType name="CommonErrorData">
+                <xs:complexContent>
+                    <xs:extension base="tns:ErrorData">
+                        <xs:sequence>
+                            <xs:element name="errorName" type="xs:string"/>
+                            <xs:element minOccurs="0" name="cause" type="xs:string"/>
+                            <xs:element minOccurs="0" name="resolution" type="xs:string"/>
+                            <xs:element name="organization" type="xs:string"/>
+                            <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="myMessage">
+                <xs:sequence>
+                    <xs:element form="unqualified" minOccurs="0" name="binaryData" type="xs:base64Binary"/>
+                    <xs:element form="unqualified" minOccurs="0" name="body" type="xs:string"/>
+                    <xs:element form="unqualified" minOccurs="0" name="createTime" type="xs:dateTime"/>
+                    <xs:element form="unqualified" maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:errorType"/>
+                    <xs:element form="unqualified" name="recipients">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="tns:address"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element form="unqualified" minOccurs="0" name="something" type="xs:anyType"/>
+                    <xs:element form="unqualified" minOccurs="0" name="subject" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="errorType">
+                <xs:sequence>
+                    <xs:element form="unqualified" minOccurs="0" name="errorClassification" type="tns:ErrorClassificationCodeType"/>
+                    <xs:element form="unqualified" minOccurs="0" name="errorCode" type="xs:string"/>
+                    <xs:element form="unqualified" maxOccurs="unbounded" minOccurs="0" name="errorParameters" nillable="true" type="tns:ErrorParameterType"/>
+                    <xs:element form="unqualified" minOccurs="0" name="longMessage" type="xs:string"/>
+                    <xs:element form="unqualified" minOccurs="0" name="severityCode" type="tns:SeverityCodeType"/>
+                    <xs:element form="unqualified" minOccurs="0" name="shortMessage" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorParameterType">
+                <xs:sequence>
+                    <xs:element form="unqualified" minOccurs="0" name="Value" type="xs:string"/>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+                </xs:sequence>
+                <xs:attribute name="ParamID" type="xs:string"/>
+            </xs:complexType>
+            <xs:complexType name="address">
+                <xs:sequence>
+                    <xs:element form="unqualified" minOccurs="0" name="city" type="xs:string"/>
+                    <xs:element form="unqualified" minOccurs="0" name="emailAddress" type="xs:string"/>
+                    <xs:element form="unqualified" name="postCode" type="xs:int"/>
+                    <xs:element form="unqualified" minOccurs="0" name="state" type="xs:string"/>
+                    <xs:element form="unqualified" minOccurs="0" name="streetName" type="xs:string"/>
+                    <xs:element form="unqualified" name="streetNumber" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ErrorSeverity">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error"/>
+                    <xs:enumeration value="Warning"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="System"/>
+                    <xs:enumeration value="Application"/>
+                    <xs:enumeration value="Request"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorClassificationCodeType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="RequestError"/>
+                    <xs:enumeration value="SystemError"/>
+                    <xs:enumeration value="CustomCode"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="SeverityCodeType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Warning"/>
+                    <xs:enumeration value="Error"/>
+                    <xs:enumeration value="CustomCode"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="ErrorMessage" nillable="true" type="tns:ErrorMessage"/>
+            <xs:element name="customError2" nillable="true" type="tns:myMessage"/>
+            <xs:element name="customError2Response" nillable="true" type="tns:myMessage"/>
+            <xs:element name="myNonArgOperationResponse" nillable="true" type="tns:myMessage"/>
+            <xs:element name="myTestOperation" nillable="true" type="tns:myMessage"/>
+            <xs:element name="myTestOperationResponse" nillable="true" type="tns:myMessage"/>
+            <xs:element name="serviceChainingOperation" nillable="true" type="tns:myMessage"/>
+            <xs:element name="serviceChainingOperationResponse" nillable="true" type="tns:myMessage"/>
+            <xs:element name="echoString" nillable="true" type="xs:string"/>
+            <xs:element name="echoStringResponse" nillable="true" type="xs:string"/>
+            <xs:element name="myVoidReturnOperation" nillable="true" type="tns:myMessage"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="myNonArgOperationRequest"/>
+    <wsdl:message name="myNonArgOperationResponse">
+        <wsdl:part name="parameters" element="tns:myNonArgOperationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ErrorMessage">
+        <wsdl:part name="parameters" element="tns:ErrorMessage"/>
+    </wsdl:message>
+    <wsdl:message name="myVoidReturnOperationRequest">
+        <wsdl:part name="parameters" element="tns:myVoidReturnOperation"/>
+    </wsdl:message>
+    <wsdl:message name="serviceChainingOperationRequest">
+        <wsdl:part name="parameters" element="tns:serviceChainingOperation"/>
+    </wsdl:message>
+    <wsdl:message name="serviceChainingOperationResponse">
+        <wsdl:part name="parameters" element="tns:serviceChainingOperationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="myTestOperationRequest">
+        <wsdl:part name="parameters" element="tns:myTestOperation"/>
+    </wsdl:message>
+    <wsdl:message name="myTestOperationResponse">
+        <wsdl:part name="parameters" element="tns:myTestOperationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="customError1Request"/>
+    <wsdl:message name="customError2Request">
+        <wsdl:part name="parameters" element="tns:customError2"/>
+    </wsdl:message>
+    <wsdl:message name="customError2Response">
+        <wsdl:part name="parameters" element="tns:customError2Response"/>
+    </wsdl:message>
+    <wsdl:message name="echoStringRequest">
+        <wsdl:part name="parameters" element="tns:echoString"/>
+    </wsdl:message>
+    <wsdl:message name="echoStringResponse">
+        <wsdl:part name="parameters" element="tns:echoStringResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="Test1ServicePortType">
+        <wsdl:operation name="myNonArgOperation">
+            <wsdl:input message="tns:myNonArgOperationRequest" wsaw:Action="urn:myNonArgOperation"/>
+            <wsdl:output message="tns:myNonArgOperationResponse" wsaw:Action="urn:myNonArgOperationResponse"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:myNonArgOperationErrorMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="myVoidReturnOperation">
+            <wsdl:input message="tns:myVoidReturnOperationRequest" wsaw:Action="urn:myVoidReturnOperation"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:myVoidReturnOperationErrorMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="serviceChainingOperation">
+            <wsdl:input message="tns:serviceChainingOperationRequest" wsaw:Action="urn:serviceChainingOperation"/>
+            <wsdl:output message="tns:serviceChainingOperationResponse" wsaw:Action="urn:serviceChainingOperationResponse"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:serviceChainingOperationErrorMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="myTestOperation">
+            <wsdl:input message="tns:myTestOperationRequest" wsaw:Action="urn:myTestOperation"/>
+            <wsdl:output message="tns:myTestOperationResponse" wsaw:Action="urn:myTestOperationResponse"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:myTestOperationErrorMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="customError1">
+            <wsdl:input message="tns:customError1Request" wsaw:Action="urn:customError1"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:customError1ErrorMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="customError2">
+            <wsdl:input message="tns:customError2Request" wsaw:Action="urn:customError2"/>
+            <wsdl:output message="tns:customError2Response" wsaw:Action="urn:customError2Response"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:customError2ErrorMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="echoString">
+            <wsdl:input message="tns:echoStringRequest" wsaw:Action="urn:echoString"/>
+            <wsdl:output message="tns:echoStringResponse" wsaw:Action="urn:echoStringResponse"/>
+            <wsdl:fault message="tns:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:echoStringErrorMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="Test1ServiceSoap11Binding" type="tns:Test1ServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="myNonArgOperation">
+            <soap:operation soapAction="urn:myNonArgOperation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="myVoidReturnOperation">
+            <soap:operation soapAction="urn:myVoidReturnOperation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="serviceChainingOperation">
+            <soap:operation soapAction="urn:serviceChainingOperation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="myTestOperation">
+            <soap:operation soapAction="urn:myTestOperation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="customError1">
+            <soap:operation soapAction="urn:customError1" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="customError2">
+            <soap:operation soapAction="urn:customError2" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="echoString">
+            <soap:operation soapAction="urn:echoString" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="Test1ServiceSoap12Binding" type="tns:Test1ServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="myNonArgOperation">
+            <soap12:operation soapAction="urn:myNonArgOperation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="myVoidReturnOperation">
+            <soap12:operation soapAction="urn:myVoidReturnOperation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="serviceChainingOperation">
+            <soap12:operation soapAction="urn:serviceChainingOperation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="myTestOperation">
+            <soap12:operation soapAction="urn:myTestOperation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="customError1">
+            <soap12:operation soapAction="urn:customError1" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="customError2">
+            <soap12:operation soapAction="urn:customError2" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="echoString">
+            <soap12:operation soapAction="urn:echoString" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="Test1ServiceHttpBinding" type="tns:Test1ServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="myNonArgOperation">
+            <http:operation location="Test1Service/myNonArgOperation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="myNonArgOperation"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="myNonArgOperation"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="myVoidReturnOperation">
+            <http:operation location="Test1Service/myVoidReturnOperation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="myVoidReturnOperation"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="serviceChainingOperation">
+            <http:operation location="Test1Service/serviceChainingOperation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="serviceChainingOperation"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="serviceChainingOperation"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="myTestOperation">
+            <http:operation location="Test1Service/myTestOperation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="myTestOperation"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="myTestOperation"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="customError1">
+            <http:operation location="Test1Service/customError1"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="customError1"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="customError2">
+            <http:operation location="Test1Service/customError2"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="customError2"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="customError2"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="echoString">
+            <http:operation location="Test1Service/echoString"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="echoString"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="echoString"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="Test1Service">
+        <wsdl:port name="Test1ServiceHttpSoap11Endpoint" binding="tns:Test1ServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/Test1Service"/>
+        </wsdl:port>
+        <wsdl:port name="Test1ServiceHttpSoap12Endpoint" binding="tns:Test1ServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/Test1Service"/>
+        </wsdl:port>
+        <wsdl:port name="Test1ServiceHttpEndpoint" binding="tns:Test1ServiceHttpBinding">
+            <http:address location="http://localhost:8080/Test1Service"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. 
+    You may obtain a copy of the License at 
+   
+       http://www.apache.org/licenses/LICENSE-2.0
+       
+ -->
+
+<wsdl:definitions xmlns:ns1="http://org.apache.axis2/xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:ns0="http://www.google.com/api/adsense/v3"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	targetNamespace="http://www.google.com/api/adsense/v3">
+	<wsdl:types>
+		<xs:schema xmlns:ns="http://www.google.com/api/adsense/v3"
+			attributeFormDefault="qualified" elementFormDefault="unqualified"
+			targetNamespace="http://www.google.com/api/adsense/v3">
+			<xs:element name="AdSenseApiExceptionFault">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AdSenseApiException"
+							nillable="true" type="ns0:AdSenseApiException" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdSenseApiException"
+				type="ns0:AdSenseApiException" />
+			<xs:complexType name="AdSenseApiException">
+				<xs:complexContent>
+					<xs:extension base="xs:Exception">
+						<xs:sequence>
+							<xs:element name="code" type="xs:int" />
+							<xs:element name="internal"
+								type="xs:boolean" />
+							<xs:element name="message" nillable="true"
+								type="xs:string" />
+							<xs:element name="trigger" nillable="true"
+								type="xs:string" />
+							<xs:element name="triggerDetails"
+								nillable="true" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getAdLayouts">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="adUnitType" nillable="true"
+							type="ns0:AdUnitType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdUnitType" type="ns0:AdUnitType" />
+			<xs:complexType name="AdUnitType">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getAdLayoutsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:AdLayout" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdLayout" type="ns0:AdLayout" />
+			<xs:complexType name="AdLayout">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getAllAdLayouts">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dummy" nillable="true"
+							type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAllAdLayoutsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:AdLayout" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAdUnitTypes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="adLayout" nillable="true"
+							type="ns0:AdLayout" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAdUnitTypesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:AdUnitType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAllAdUnitTypes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dummy" nillable="true"
+							type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAllAdUnitTypesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:AdUnitType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAdStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAdStylesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:AdStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdStyle" type="ns0:AdStyle" />
+			<xs:complexType name="AdStyle">
+				<xs:sequence>
+					<xs:element name="backgroundColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="borderColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="name" nillable="true"
+						type="xs:string" />
+					<xs:element name="textColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="titleColor" nillable="true"
+						type="xs:string" />
+					<xs:element name="urlColor" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getBuiltinAdStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dummy" nillable="true"
+							type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getBuiltinAdStylesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:AdStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getActiveChannels">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="type" nillable="true"
+							type="ns0:ChannelService_Type" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ChannelService_Type"
+				type="ns0:ChannelService_Type" />
+			<xs:complexType name="ChannelService_Type">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getActiveChannelsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:ChannelService_Data" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ChannelService_Data"
+				type="ns0:ChannelService_Data" />
+			<xs:complexType name="ChannelService_Data">
+				<xs:sequence>
+					<xs:element name="status" nillable="true"
+						type="ns0:ChannelService_Status" />
+					<xs:element name="type" nillable="true"
+						type="ns0:ChannelService_Type" />
+					<xs:element name="name" nillable="true"
+						type="xs:string" />
+					<xs:element name="synServiceId" nillable="true"
+						type="xs:string" />
+					<xs:element name="id" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="ChannelService_Status"
+				type="ns0:ChannelService_Status" />
+			<xs:complexType name="ChannelService_Status">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getChannels">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="type" nillable="true"
+							type="ns0:ChannelService_Type" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getChannelsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:ChannelService_Data" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getInactiveChannels">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="type" nillable="true"
+							type="ns0:ChannelService_Type" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getInactiveChannelsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="return" nillable="true" type="ns0:ChannelService_Data" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="generateAdCode">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="adStyle" nillable="true"
+							type="ns0:AdStyle" />
+						<xs:element name="adUnitType" nillable="true"
+							type="ns0:AdUnitType" />
+						<xs:element name="adLayout" nillable="true"
+							type="ns0:AdLayout" />
+						<xs:element name="alternate" nillable="true"
+							type="xs:string" />
+						<xs:element name="isFramedPage" nillable="true"
+							type="xs:boolean" />
+						<xs:element name="channelName" nillable="true"
+							type="xs:string" />
+						<xs:element name="cornerStyles" nillable="true"
+							type="ns0:CornerStyles" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="hostChannelNames" nillable="true" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CornerStyles" type="ns0:CornerStyles" />
+			<xs:complexType name="CornerStyles">
+				<xs:sequence>
+					<xs:element name="value" nillable="true"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="generateAdCodeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteAdStyle">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="name" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteAdStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="names" nillable="true" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="saveAdStyle">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element name="adStyle" nillable="true"
+							type="ns0:AdStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="saveAdStyles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="synServiceId" nillable="true"
+							type="xs:string" />
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="adStyles" nillable="true" type="ns0:AdStyle" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getAdStylesMessage">
+		<wsdl:part name="part1" element="ns0:getAdStyles" />
+	</wsdl:message>
+	<wsdl:message name="getAdStylesResponse">
+		<wsdl:part name="part1" element="ns0:getAdStylesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getAdStylesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getBuiltinAdStylesMessage">
+		<wsdl:part name="part1" element="ns0:getBuiltinAdStyles" />
+	</wsdl:message>
+	<wsdl:message name="getBuiltinAdStylesResponse">
+		<wsdl:part name="part1"
+			element="ns0:getBuiltinAdStylesResponse" />
+	</wsdl:message>
+	<wsdl:message name="saveAdStyleMessage">
+		<wsdl:part name="part1" element="ns0:saveAdStyle" />
+	</wsdl:message>
+	<wsdl:message name="saveAdStyleFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getActiveChannelsMessage">
+		<wsdl:part name="part1" element="ns0:getActiveChannels" />
+	</wsdl:message>
+	<wsdl:message name="getActiveChannelsResponse">
+		<wsdl:part name="part1" element="ns0:getActiveChannelsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getActiveChannelsFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="deleteAdStyleMessage">
+		<wsdl:part name="part1" element="ns0:deleteAdStyle" />
+	</wsdl:message>
+	<wsdl:message name="deleteAdStyleFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="saveAdStylesMessage">
+		<wsdl:part name="part1" element="ns0:saveAdStyles" />
+	</wsdl:message>
+	<wsdl:message name="saveAdStylesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getAdLayoutsMessage">
+		<wsdl:part name="part1" element="ns0:getAdLayouts" />
+	</wsdl:message>
+	<wsdl:message name="getAdLayoutsResponse">
+		<wsdl:part name="part1" element="ns0:getAdLayoutsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getAdLayoutsFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="deleteAdStylesMessage">
+		<wsdl:part name="part1" element="ns0:deleteAdStyles" />
+	</wsdl:message>
+	<wsdl:message name="deleteAdStylesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getInactiveChannelsMessage">
+		<wsdl:part name="part1" element="ns0:getInactiveChannels" />
+	</wsdl:message>
+	<wsdl:message name="getInactiveChannelsResponse">
+		<wsdl:part name="part1"
+			element="ns0:getInactiveChannelsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getInactiveChannelsFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getAdUnitTypesMessage">
+		<wsdl:part name="part1" element="ns0:getAdUnitTypes" />
+	</wsdl:message>
+	<wsdl:message name="getAdUnitTypesResponse">
+		<wsdl:part name="part1" element="ns0:getAdUnitTypesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getAdUnitTypesFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getChannelsMessage">
+		<wsdl:part name="part1" element="ns0:getChannels" />
+	</wsdl:message>
+	<wsdl:message name="getChannelsResponse">
+		<wsdl:part name="part1" element="ns0:getChannelsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getChannelsFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:message name="getAllAdLayoutsMessage">
+		<wsdl:part name="part1" element="ns0:getAllAdLayouts" />
+	</wsdl:message>
+	<wsdl:message name="getAllAdLayoutsResponse">
+		<wsdl:part name="part1" element="ns0:getAllAdLayoutsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getAllAdUnitTypesMessage">
+		<wsdl:part name="part1" element="ns0:getAllAdUnitTypes" />
+	</wsdl:message>
+	<wsdl:message name="getAllAdUnitTypesResponse">
+		<wsdl:part name="part1" element="ns0:getAllAdUnitTypesResponse" />
+	</wsdl:message>
+	<wsdl:message name="generateAdCodeMessage">
+		<wsdl:part name="part1" element="ns0:generateAdCode" />
+	</wsdl:message>
+	<wsdl:message name="generateAdCodeResponse">
+		<wsdl:part name="part1" element="ns0:generateAdCodeResponse" />
+	</wsdl:message>
+	<wsdl:message name="generateAdCodeFault">
+		<wsdl:part name="part1" element="ns0:AdSenseApiExceptionFault" />
+	</wsdl:message>
+	<wsdl:portType name="v3/AdSenseForContentServicePortType">
+		<wsdl:operation name="getAdStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getAdStylesMessage" wsaw:Action="urn:getAdStyles" />
+			<wsdl:output message="ns0:getAdStylesResponse" />
+			<wsdl:fault message="ns0:getAdStylesFault"
+				name="getAdStylesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinAdStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getBuiltinAdStylesMessage"
+				wsaw:Action="urn:getBuiltinAdStyles" />
+			<wsdl:output message="ns0:getBuiltinAdStylesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyle">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:saveAdStyleMessage" wsaw:Action="urn:saveAdStyle" />
+			<wsdl:fault message="ns0:saveAdStyleFault"
+				name="saveAdStyleFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getActiveChannels">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getActiveChannelsMessage"
+				wsaw:Action="urn:getActiveChannels" />
+			<wsdl:output message="ns0:getActiveChannelsResponse" />
+			<wsdl:fault message="ns0:getActiveChannelsFault"
+				name="getActiveChannelsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyle">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:deleteAdStyleMessage" wsaw:Action="urn:deleteAdStyle" />
+			<wsdl:fault message="ns0:deleteAdStyleFault"
+				name="deleteAdStyleFault" />
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:saveAdStylesMessage" wsaw:Action="urn:saveAdStyles" />
+			<wsdl:fault message="ns0:saveAdStylesFault"
+				name="saveAdStylesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getAdLayouts">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getAdLayoutsMessage" wsaw:Action="urn:getAdLayouts" />
+			<wsdl:output message="ns0:getAdLayoutsResponse" />
+			<wsdl:fault message="ns0:getAdLayoutsFault"
+				name="getAdLayoutsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyles">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:deleteAdStylesMessage"
+				wsaw:Action="urn:deleteAdStyles" />
+			<wsdl:fault message="ns0:deleteAdStylesFault"
+				name="deleteAdStylesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getInactiveChannels">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getInactiveChannelsMessage"
+				wsaw:Action="urn:getInactiveChannels" />
+			<wsdl:output message="ns0:getInactiveChannelsResponse" />
+			<wsdl:fault message="ns0:getInactiveChannelsFault"
+				name="getInactiveChannelsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getAdUnitTypes">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getAdUnitTypesMessage"
+				wsaw:Action="urn:getAdUnitTypes" />
+			<wsdl:output message="ns0:getAdUnitTypesResponse" />
+			<wsdl:fault message="ns0:getAdUnitTypesFault"
+				name="getAdUnitTypesFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getChannelsMessage" wsaw:Action="urn:getChannels" />
+			<wsdl:output message="ns0:getChannelsResponse" />
+			<wsdl:fault message="ns0:getChannelsFault"
+				name="getChannelsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdLayouts">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getAllAdLayoutsMessage"
+				wsaw:Action="urn:getAllAdLayouts" />
+			<wsdl:output message="ns0:getAllAdLayoutsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdUnitTypes">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:getAllAdUnitTypesMessage"
+				wsaw:Action="urn:getAllAdUnitTypes" />
+			<wsdl:output message="ns0:getAllAdUnitTypesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="generateAdCode">
+			<wsdl:input
+				xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				message="ns0:generateAdCodeMessage"
+				wsaw:Action="urn:generateAdCode" />
+			<wsdl:output message="ns0:generateAdCodeResponse" />
+			<wsdl:fault message="ns0:generateAdCodeFault"
+				name="generateAdCodeFault" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="v3/AdSenseForContentServiceSOAP11Binding"
+		type="ns0:v3/AdSenseForContentServicePortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="getAdStyles">
+			<soap:operation soapAction="urn:getAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAdStylesFault">
+				<soap12:fault use="literal" name="getAdStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinAdStyles">
+			<soap:operation soapAction="urn:getBuiltinAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyle">
+			<soap:operation soapAction="urn:saveAdStyle"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveAdStyleFault">
+				<soap12:fault use="literal" name="saveAdStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getActiveChannels">
+			<soap:operation soapAction="urn:getActiveChannels"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getActiveChannelsFault">
+				<soap12:fault use="literal"
+					name="getActiveChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyle">
+			<soap:operation soapAction="urn:deleteAdStyle"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteAdStyleFault">
+				<soap12:fault use="literal" name="deleteAdStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyles">
+			<soap:operation soapAction="urn:saveAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveAdStylesFault">
+				<soap12:fault use="literal" name="saveAdStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAdLayouts">
+			<soap:operation soapAction="urn:getAdLayouts"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAdLayoutsFault">
+				<soap12:fault use="literal" name="getAdLayoutsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyles">
+			<soap:operation soapAction="urn:deleteAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteAdStylesFault">
+				<soap12:fault use="literal" name="deleteAdStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getInactiveChannels">
+			<soap:operation soapAction="urn:getInactiveChannels"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getInactiveChannelsFault">
+				<soap12:fault use="literal"
+					name="getInactiveChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAdUnitTypes">
+			<soap:operation soapAction="urn:getAdUnitTypes"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAdUnitTypesFault">
+				<soap12:fault use="literal" name="getAdUnitTypesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<soap:operation soapAction="urn:getChannels"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getChannelsFault">
+				<soap12:fault use="literal" name="getChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdLayouts">
+			<soap:operation soapAction="urn:getAllAdLayouts"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdUnitTypes">
+			<soap:operation soapAction="urn:getAllAdUnitTypes"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="generateAdCode">
+			<soap:operation soapAction="urn:generateAdCode"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="generateAdCodeFault">
+				<soap12:fault use="literal" name="generateAdCodeFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="v3/AdSenseForContentServiceSOAP12Binding"
+		type="ns0:v3/AdSenseForContentServicePortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="getAdStyles">
+			<soap12:operation soapAction="urn:getAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAdStylesFault">
+				<soap12:fault use="literal" name="getAdStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinAdStyles">
+			<soap12:operation soapAction="urn:getBuiltinAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyle">
+			<soap12:operation soapAction="urn:saveAdStyle"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveAdStyleFault">
+				<soap12:fault use="literal" name="saveAdStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getActiveChannels">
+			<soap12:operation soapAction="urn:getActiveChannels"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getActiveChannelsFault">
+				<soap12:fault use="literal"
+					name="getActiveChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyle">
+			<soap12:operation soapAction="urn:deleteAdStyle"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteAdStyleFault">
+				<soap12:fault use="literal" name="deleteAdStyleFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyles">
+			<soap12:operation soapAction="urn:saveAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="saveAdStylesFault">
+				<soap12:fault use="literal" name="saveAdStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAdLayouts">
+			<soap12:operation soapAction="urn:getAdLayouts"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAdLayoutsFault">
+				<soap12:fault use="literal" name="getAdLayoutsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyles">
+			<soap12:operation soapAction="urn:deleteAdStyles"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:fault name="deleteAdStylesFault">
+				<soap12:fault use="literal" name="deleteAdStylesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getInactiveChannels">
+			<soap12:operation soapAction="urn:getInactiveChannels"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getInactiveChannelsFault">
+				<soap12:fault use="literal"
+					name="getInactiveChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAdUnitTypes">
+			<soap12:operation soapAction="urn:getAdUnitTypes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAdUnitTypesFault">
+				<soap12:fault use="literal" name="getAdUnitTypesFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<soap12:operation soapAction="urn:getChannels"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getChannelsFault">
+				<soap12:fault use="literal" name="getChannelsFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdLayouts">
+			<soap12:operation soapAction="urn:getAllAdLayouts"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdUnitTypes">
+			<soap12:operation soapAction="urn:getAllAdUnitTypes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="generateAdCode">
+			<soap12:operation soapAction="urn:generateAdCode"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="generateAdCodeFault">
+				<soap12:fault use="literal" name="generateAdCodeFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="v3/AdSenseForContentServiceHttpBinding"
+		type="ns0:v3/AdSenseForContentServicePortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getAdStyles">
+			<http:operation location="getAdStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBuiltinAdStyles">
+			<http:operation location="getBuiltinAdStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyle">
+			<http:operation location="saveAdStyle" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getActiveChannels">
+			<http:operation location="getActiveChannels" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyle">
+			<http:operation location="deleteAdStyle" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="saveAdStyles">
+			<http:operation location="saveAdStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getAdLayouts">
+			<http:operation location="getAdLayouts" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteAdStyles">
+			<http:operation location="deleteAdStyles" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="getInactiveChannels">
+			<http:operation location="getInactiveChannels" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAdUnitTypes">
+			<http:operation location="getAdUnitTypes" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getChannels">
+			<http:operation location="getChannels" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdLayouts">
+			<http:operation location="getAllAdLayouts" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAllAdUnitTypes">
+			<http:operation location="getAllAdUnitTypes" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="generateAdCode">
+			<http:operation location="generateAdCode" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="v3/AdSenseForContentService">
+		<wsdl:port name="v3/AdSenseForContentServiceSOAP11port_https"
+			binding="ns0:v3/AdSenseForContentServiceSOAP11Binding">
+			<soap:address
+				location="https://www.google.com/api/adsense/v3/AdSenseForContentService" />
+		</wsdl:port>
+		<wsdl:port name="v3/AdSenseForContentServiceSOAP12port_https"
+			binding="ns0:v3/AdSenseForContentServiceSOAP12Binding">
+			<soap12:address
+				location="https://www.google.com/api/adsense/v3/AdSenseForContentService" />
+		</wsdl:port>
+		<wsdl:port name="v3/AdSenseForContentServiceHttpport"
+			binding="ns0:v3/AdSenseForContentServiceHttpBinding">
+			<http:address
+				location="https://www.google.com/api/adsense/v3/AdSenseForContentService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

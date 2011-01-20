@@ -1,0 +1,50 @@
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# as is, without appending extra path information to
+# it.
+|PathMustNotExistRule|${mojo.outputDirectory}
+gen-src | Indicates bug with -dest argument 
+client  | Indicates bug with -jdest argument
+
+# This is to test regression of changes in codegen
+# that make it use output directories passed to it
+# and not hardcoded paths within the codegen tooling
+|PathMustNotExistRule|${project.basedir}
+gen-src
+gen-meta-src
+
+|ClassMustExistRule|${mojo.outputDirectory}
+com.ebay.test.soaframework.sample.services.message.AsyncTest1Service
+com.ebay.test.soaframework.sample.services.message.ErrorMessageException
+com.ebay.test.soaframework.sample.services.message.gen.Test1ServiceProxy
+com.ebay.test.soaframework.sample.services.message.gen.Test1ServiceTypeDefsBuilder
+com.ebay.test.soaframework.sample.services.message.Test1Service
+com.ebay.test.soaframework.sample.type1.Address
+com.ebay.test.soaframework.sample.type1.CommonErrorData
+com.ebay.test.soaframework.sample.type1.ErrorCategory
+com.ebay.test.soaframework.sample.type1.ErrorClassificationCodeType
+com.ebay.test.soaframework.sample.type1.ErrorData
+com.ebay.test.soaframework.sample.type1.ErrorMessage
+com.ebay.test.soaframework.sample.type1.ErrorParameter
+com.ebay.test.soaframework.sample.type1.ErrorParameterType
+com.ebay.test.soaframework.sample.type1.ErrorSeverity
+com.ebay.test.soaframework.sample.type1.ErrorType
+com.ebay.test.soaframework.sample.type1.MyMessage
+com.ebay.test.soaframework.sample.type1.ObjectFactory
+com.ebay.test.soaframework.sample.type1.package-info
+com.ebay.test.soaframework.sample.type1.SeverityCodeType
+
+|ClassMustNotExistRule|${mojo.outputDirectory}
+org.ebayopensource.turmeric.common.v1.types.AckValue
+org.ebayopensource.turmeric.common.v1.types.BaseRequest
+org.ebayopensource.turmeric.common.v1.types.BaseResponse
+org.ebayopensource.turmeric.common.v1.types.ErrorCategory
+org.ebayopensource.turmeric.common.v1.types.ErrorData
+org.ebayopensource.turmeric.common.v1.types.ErrorMessage
+org.ebayopensource.turmeric.common.v1.types.ErrorParameter
+org.ebayopensource.turmeric.common.v1.types.ErrorSeverity
+org.ebayopensource.turmeric.common.v1.types.ExtensionType
+
+|PathMustExistRule|${mojo.resourcesOutputDirectory}
+META-INF/soa/common/config/Test1Service/TypeMappings.xml
+META-INF/soa/common/config/Test1Service/service_metadata.properties
