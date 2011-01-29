@@ -8,20 +8,19 @@
  *******************************************************************************/
 package org.ebayopensource.turmeric.runtime.tests.common.jetty;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
 
 import java.net.URI;
 import java.util.logging.Logger;
 
 import org.ebayopensource.turmeric.junit.logging.UKernelLoggingUtils;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
+import org.ebayopensource.turmeric.runtime.spf.servlet.TurmericConsoleFrontController;
 import org.ebayopensource.turmeric.runtime.tests.common.logging.SimpleConsoleHandler;
 import org.junit.Assert;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.AbstractHandler;
-import org.mortbay.jetty.handler.AbstractHandlerContainer;
 import org.mortbay.jetty.handler.ContextHandlerCollection;
 import org.mortbay.jetty.handler.HandlerWrapper;
 import org.mortbay.jetty.servlet.Context;
@@ -41,14 +40,18 @@ public class SimpleJettyServer {
 		/*
 		 * Run the server with a system assigned port number. The system will find the first available port and use it.
 		 */
-		setup(0);
+		this(0);
 	}
 	
 	public SimpleJettyServer(int port) {
-		setup(port);
+		this(port, null, null);
+	}
+	
+	public SimpleJettyServer(int port, String servletName, String serviceAdminName) {
+		setup(port, servletName, serviceAdminName);
 	}
 
-	private void setup(int port) {
+	private void setup(int port, String servletName, String serviceAdminName) {
 		JavaUtilLog.init("SimpleJettyServer");
 		server = new Server(port);
 
@@ -61,13 +64,16 @@ public class SimpleJettyServer {
 		// for http://localhost:{port}/ws/spf, etc.
 		ServletHolder sh = new ServletHolder(org.ebayopensource.turmeric.runtime.spf.pipeline.SPFServlet.class);
 		// sh.setInitParameter(SOAConstants.SERVLET_PARAM_LOGGER_INIT, "false");
+		if (serviceAdminName != null) {
+			sh.setInitParameter(SOAConstants.SERVLET_PARAM_ADMIN_NAME, serviceAdminName);
+		}
 		sh.setInitParameter(SOAConstants.SERVLET_PARAM_LOGGER_RESOURCE_NAME, com.ebay.kernel.logger.Logger.CONSOLE_LOGGING_NAME);
-		root.addServlet(sh, "/ws/spf/*");
+		root.addServlet(sh, servletName == null ? "/ws/spf/*" : "/Turmeric/" + servletName + "/*");
 
-		// for http://localhost:{port}/admin/v3console/
+		// for http://localhost:{port}/Turmeric/Console
 		ServletHolder controller = new ServletHolder(
-				com.ebay.configuration.console.ConsoleFrontController.class);
-		root.addServlet(controller, "/admin/v3console/*");
+				TurmericConsoleFrontController.class);
+		root.addServlet(controller, "/Turmeric/Console/*");
 		
 		server.setHandler(root);
 	}

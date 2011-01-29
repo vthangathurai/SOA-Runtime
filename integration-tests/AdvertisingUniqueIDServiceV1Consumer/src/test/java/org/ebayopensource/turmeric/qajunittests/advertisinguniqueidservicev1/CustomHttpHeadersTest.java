@@ -167,7 +167,7 @@ public class CustomHttpHeadersTest {
 		queryParams.put("SVC1", "V3");
 		queryParams.put("SVC2", "V4");
 		
-		response = httpClient.getResponse("http://localhost:8080/admin/v3console/UpdateConfigCategoryXml", queryParams);
+		response = httpClient.getResponse("http://localhost:8080/Turmeric/Console/UpdateConfigCategoryXml", queryParams);
 //		queryParams.put("SVC3", "V5");
 		AdvertisingUniqueIDServiceV1SharedConsumer client = new AdvertisingUniqueIDServiceV1SharedConsumer("AdvertisingUniqueIDServiceV1Consumer", "ESB7");
 		ChainedTransportHeaders param0 = new ChainedTransportHeaders();
@@ -184,7 +184,7 @@ public class CustomHttpHeadersTest {
 		queryParams.put("id","com.ebay.soa.client.AdvertisingUniqueIDServiceV2.UniqueIDServiceV2Client.ESB1.HTTP11.TransportHeaders");
 		queryParams.put("SVC1", "V2");
 		queryParams.put("SVC2", "V2");
-		response = httpClient.getResponse("http://localhost:8080/admin/v3console/UpdateConfigCategoryXml", queryParams);
+		response = httpClient.getResponse("http://localhost:8080/Turmeric/Console/UpdateConfigCategoryXml", queryParams);
 		System.out.println("-- testPosTransportHeadersConfigBean --");
 	}*/
 	

@@ -53,7 +53,7 @@ public class WebAppDescriptorGenerator implements SourceGenerator {
 	private static final String VI_SERVLET_DESC = "Validate Internals";
 	private static final String VI_SERVLET_NAME = "ConsoleFrontController";
 	private static final String VI_SERVLET_CLASS = "com.ebay.configuration.console.LocalConsoleFrontController";
-	private static final String VI_SERVLET_URL_PATTERN = "/admin/v3console/*";
+	private static final String VI_SERVLET_URL_PATTERN = "/Turmeric/Console/*";
 
 	private static final String SPF_SERVLET_CLASS = "org.ebayopensource.turmeric.runtime.spf.pipeline.SPFServlet";
 
