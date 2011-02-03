@@ -166,6 +166,11 @@ public class GenImplMojo extends AbstractTurmericCodegenMojo {
 
         if (isLegacyMode()) {
             commands.add(InputOptions.OPT_PROJECT_ROOT, getProject().getBasedir().getAbsolutePath());
+            if (serviceConfig.serviceImplClassName == null) {
+                throw new MojoExecutionException("Can not read implementation classname from: "
+                        + serviceConfigLocation);
+            }
+            commands.add(InputOptions.OPT_SVC_IMPL_CLASS_NAME, serviceConfig.serviceImplClassName.trim());
         }
         else {
             // From here down is standard mode
