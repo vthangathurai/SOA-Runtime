@@ -38,7 +38,7 @@ public class JSONStreamWriter extends BaseStreamWriter {
 	public static final String KEY_VALUE_KEY = "valueKey";
 	private static final String KEY_NO_ROOT = "noRoot";
 
-	private boolean m_useSchemaInfo = false;
+	private boolean m_useSchemaInfo = true;
 	private boolean m_formatOutput = false;
 	private String m_valueKey = BindingConstants.JSON_VALUE_KEY;
 	private boolean m_noRoot = false; //true;
