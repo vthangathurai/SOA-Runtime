@@ -118,7 +118,7 @@ public class ResponseDataBindingTest  extends AbstractWithServerTest {
 			String body = response.getBody();
 
 			Assert.assertThat(body, not(containsString("exception-id")));
-			Assert.assertThat(body, containsString("Message\":[\"Emeryville\"]"));
+			Assert.assertThat(body, containsString("Message\":\"Emeryville\""));
 		}
 
 }
