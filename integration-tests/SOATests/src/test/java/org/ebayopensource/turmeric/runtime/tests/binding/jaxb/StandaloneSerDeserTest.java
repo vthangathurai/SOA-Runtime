@@ -246,7 +246,7 @@ public class StandaloneSerDeserTest extends BaseSerDeserTest {
 		IDeserializerFactory deserFactory = new JSONDeserializerFactory();
 		deserFactory.init(new TestDeserInitContext(options));
 		doTest(msg, String.class, createStringElementSchema(), BindingConstants.PAYLOAD_JSON, SOAConstants.MIME_JSON,
-				serFactory, deserFactory, "{\n	\n	\"String\":[\"This is a test string.\"]\n}\n");
+				serFactory, deserFactory, "{\n	\n	\"String\":\"This is a test string.\"\n}\n");
 	}
 	
 	@Test
@@ -307,7 +307,7 @@ public class StandaloneSerDeserTest extends BaseSerDeserTest {
 		IDeserializerFactory deserFactory = new JSONDeserializerFactory();
 		deserFactory.init(new TestDeserInitContext(options));
 		doTest(msg, MyObject.class, createMyObjectElementSchema(), BindingConstants.PAYLOAD_JSON, SOAConstants.MIME_JSON,
-				serFactory, deserFactory, "{\n	\n	\"MyObject\":[null]\n}\n");
+				serFactory, deserFactory, "{\n	\n	\"MyObject\":null\n}\n");
 	}
 	
 	@Test
