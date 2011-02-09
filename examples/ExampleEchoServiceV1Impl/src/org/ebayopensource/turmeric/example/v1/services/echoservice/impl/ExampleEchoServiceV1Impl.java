@@ -6,7 +6,7 @@ import org.ebayopensource.turmeric.example.v1.services.EchoRequest;
 import org.ebayopensource.turmeric.example.v1.services.EchoResponse;
 import org.ebayopensource.turmeric.example.v1.services.GetVersionRequest;
 import org.ebayopensource.turmeric.example.v1.services.GetVersionResponse;
-import org.ebayopensource.turmeric.example.v1.services.echoservice.impl.ExampleEchoServiceV1;
+import org.ebayopensource.turmeric.example.v1.services.echoservice.ExampleEchoServiceV1;
 
 public class ExampleEchoServiceV1Impl
     implements ExampleEchoServiceV1
