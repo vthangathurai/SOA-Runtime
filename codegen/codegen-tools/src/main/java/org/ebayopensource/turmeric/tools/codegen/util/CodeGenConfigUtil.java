@@ -11,7 +11,6 @@ package org.ebayopensource.turmeric.tools.codegen.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotCALLogger;
 import org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.DiffBasedSnapshotFileLogger;
 import org.ebayopensource.turmeric.runtime.common.impl.monitoring.storage.SnapshotFileLogger;
 import org.ebayopensource.turmeric.runtime.sif.impl.handlers.MessageContextHandler;
@@ -31,7 +30,7 @@ public class CodeGenConfigUtil {
 		classPackageMap = new HashMap<String,String>();
 		
 		/* globalclientconfig */
-		classPackageMap.put("DiffBasedSnapshotCALLogger",DiffBasedSnapshotCALLogger.class.getName() );
+		classPackageMap.put("DiffBasedSnapshotCALLogger",DiffBasedSnapshotFileLogger.class.getName() );
 		classPackageMap.put("SnapshotFileLogger",SnapshotFileLogger.class.getName());
 		classPackageMap.put("DiffBasedSnapshotFileLogger", DiffBasedSnapshotFileLogger.class.getName());
 		
@@ -40,7 +39,7 @@ public class CodeGenConfigUtil {
 		classPackageMap.put("ClientLoggingHandler",ClientLoggingHandler.class.getName());
 		
 		/*globalserviceconfig */
-		classPackageMap.put("DiffBasedSnapshotCALLogger",DiffBasedSnapshotCALLogger.class.getName() );
+		classPackageMap.put("DiffBasedSnapshotCALLogger",DiffBasedSnapshotFileLogger.class.getName() );
 		classPackageMap.put("SnapshotFileLogger",SnapshotFileLogger.class.getName());
 		
 		/*servicegroupconfig*/
