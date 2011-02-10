@@ -25,8 +25,8 @@ public class LocalCallFallbackOperationTest extends BaseCallTest {
 	}
 	
 	protected Test1Driver createDriver() throws Exception {
-		// Test1Driver driver = new Test1DriverExt("configInvalid", "configInvalid", null, null, "JSON", "XML");
-		Test1Driver driver = new Test1DriverExt("configInvalid", "configInvalid", null, serverUri.toURL());
+		Test1Driver driver = new Test1DriverExt("configInvalid", "configInvalid", null, null, "JSON", "JSON");
+		//Test1Driver driver = new Test1DriverExt("configInvalid", "configInvalid", null, serverUri.toURL());
 		setupDriver(driver);	
 		return driver;
 	}
