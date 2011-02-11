@@ -31,10 +31,12 @@ import org.ebayopensource.turmeric.runtime.binding.BindingConstants;
 import org.ebayopensource.turmeric.runtime.common.types.ByteBufferWrapper;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.runtime.common.types.SOAHeaders;
+import org.ebayopensource.turmeric.runtime.sif.impl.internal.config.ClientConfigManager;
 import org.ebayopensource.turmeric.runtime.sif.service.InvokerExchange;
 import org.ebayopensource.turmeric.runtime.sif.service.Service;
 import org.ebayopensource.turmeric.runtime.sif.service.ServiceFactory;
 import org.ebayopensource.turmeric.runtime.sif.service.ServiceInvokerOptions;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
 import org.ebayopensource.turmeric.runtime.tests.common.jetty.AbstractWithServerTest;
 import org.ebayopensource.turmeric.runtime.tests.common.junit.NeedsConfig;
 import org.ebayopensource.turmeric.runtime.tests.common.util.NVAssert;
@@ -105,6 +107,7 @@ public class RawModeTest extends AbstractWithServerTest {
 		// tracer.setFailOnMultiResourceEntry(true);
 		m_headers = new HashMap<String, String>();
 		m_headers.put(SOAHeaders.SERVICE_OPERATION_NAME, "echoString");
+
 	}
 
 	@Test
@@ -129,7 +132,8 @@ public class RawModeTest extends AbstractWithServerTest {
 	
 	@Test
 	public void testNormalCallsRemote() throws Exception {
-
+		ClientConfigManager.getInstance().setConfigTestCase("testconfig", true);
+		//ServiceConfigManager.getInstance().setConfigTestCase("config", true);
 		m_test1 = ServiceFactory.create(ADMIN_NAME, "remote", serverUri.toURL(), false);
 
 		String param1 = "Hello";
