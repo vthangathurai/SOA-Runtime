@@ -15,6 +15,8 @@ import java.io.StringWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.ebayopensource.turmeric.junit.rules.TestingDir;
 import org.ebayopensource.turmeric.runtime.binding.impl.parser.objectnode.ObjectNodeStreamReader;
 import org.ebayopensource.turmeric.runtime.binding.objectnode.ObjectNode;
@@ -57,9 +59,9 @@ public class ObjectNodeUtilsTest extends AbstractTurmericTestCase {
 		tmpFW = new FileWriter(testingdir.getFile("booksPretty.exp.xml"));
 		tmpFW.write(sw.toString());
 		tmpFW.close();
-		
-		String expPretty = FileUtils.getResourceAsString(ObjectNodeUtilsTest.class, "booksPretty.exp.xml");
-		Assert.assertEquals("Printed version ain't matching them great expectations", expPretty, sw.toString());
+
+		Diff diff = XMLUnit.compareXML(FileUtils.getResourceAsString(ObjectNodeUtilsTest.class, "booksPretty.exp.xml"), sw.toString());
+		Assert.assertTrue("Printed version ain't matching them great expectations",diff.identical());
 	}
 
 }
