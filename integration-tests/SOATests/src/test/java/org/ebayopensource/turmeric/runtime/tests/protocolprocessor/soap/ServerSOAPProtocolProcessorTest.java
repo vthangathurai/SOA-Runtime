@@ -23,6 +23,8 @@ import org.ebayopensource.turmeric.runtime.common.pipeline.InboundMessage;
 import org.ebayopensource.turmeric.runtime.common.pipeline.MessageContext;
 import org.ebayopensource.turmeric.runtime.common.service.ServiceId;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
+import org.ebayopensource.turmeric.runtime.sif.impl.internal.config.ClientConfigManager;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
 import org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor;
 import org.ebayopensource.turmeric.runtime.spf.service.ServerServiceId;
 import org.ebayopensource.turmeric.runtime.tests.common.AbstractTurmericTestCase;
@@ -40,6 +42,8 @@ public class ServerSOAPProtocolProcessorTest extends AbstractTurmericTestCase {
 	private ServerSOAPProtocolProcessor createServerProtocolProcessor(
 		String protocolName, String version) throws Exception
 	{
+		ClientConfigManager.getInstance().setConfigTestCase("config", true);
+		ServiceConfigManager.getInstance().setConfigTestCase("config", true);
 		ServerSOAPProtocolProcessor protocolProcessor = new ServerSOAPProtocolProcessor();
 		ServiceId svcId = ServerServiceId.createFallbackServiceId("test_admin_name");
 		ProtocolProcessorInitContextImpl initCtx =
