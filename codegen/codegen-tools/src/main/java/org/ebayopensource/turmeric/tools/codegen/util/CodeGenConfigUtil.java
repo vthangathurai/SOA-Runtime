@@ -25,36 +25,36 @@ import org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.Serve
 public class CodeGenConfigUtil {
 
 	private static Map<String,String> classPackageMap;
-	
+
 	static{
 		classPackageMap = new HashMap<String,String>();
-		
+
 		/* globalclientconfig */
-		classPackageMap.put("DiffBasedSnapshotCALLogger",DiffBasedSnapshotFileLogger.class.getName() );
+		classPackageMap.put("DiffBasedSnapshotFileLogger",DiffBasedSnapshotFileLogger.class.getName() );
 		classPackageMap.put("SnapshotFileLogger",SnapshotFileLogger.class.getName());
 		classPackageMap.put("DiffBasedSnapshotFileLogger", DiffBasedSnapshotFileLogger.class.getName());
-		
+
 		/*clientgroupconfig*/
 		classPackageMap.put("MessageContextHandler", MessageContextHandler.class.getName());
 		classPackageMap.put("ClientLoggingHandler",ClientLoggingHandler.class.getName());
-		
+
 		/*globalserviceconfig */
-		classPackageMap.put("DiffBasedSnapshotCALLogger",DiffBasedSnapshotFileLogger.class.getName() );
+		classPackageMap.put("DiffBasedSnapshotFileLogger",DiffBasedSnapshotFileLogger.class.getName() );
 		classPackageMap.put("SnapshotFileLogger",SnapshotFileLogger.class.getName());
-		
+
 		/*servicegroupconfig*/
 		classPackageMap.put("NumericVersionCheckHandler",NumericVersionCheckHandler.class.getName());
 		classPackageMap.put("G11nHandler",G11nHandler.class.getName());
 		classPackageMap.put("ServerLoggingHandler",ServerLoggingHandler.class.getName());
 		classPackageMap.put("ServerSOAPProtocolProcessor",ServerSOAPProtocolProcessor.class.getName());
-		
+
 	}
-	
-	
-	
+
+
+
 	public static String addPackageDetailsToTemplateClasses(String templateContent){
 		String newTemplateContent= new String(templateContent);
-		
+
 		java.util.Iterator mapIterator = classPackageMap.entrySet().iterator();
 		while(mapIterator.hasNext()){
 			Map.Entry<String,String> entry = (Map.Entry<String, String>)mapIterator.next();
@@ -62,10 +62,10 @@ public class CodeGenConfigUtil {
 			if(newTemplateContent.contains(className))
 				newTemplateContent = newTemplateContent.replaceAll(className, entry.getValue());
 		}
-		
-		return newTemplateContent;	
+
+		return newTemplateContent;
 	}
-	
-	
-	
+
+
+
 }
