@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import org.ebayopensource.turmeric.runtime.common.impl.utils.ParseUtils;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
 import org.ebayopensource.turmeric.runtime.tests.common.jetty.AbstractWithServerTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -34,10 +35,12 @@ public class ResponseDataBindingTest  extends AbstractWithServerTest {
 	private String oldSysProp=null;
 
 	@Before
-	public void setUp(){
+	public void setUp() throws Exception{
 		oldSysProp = System.getProperty(ParseUtils.SYS_PROP_CONFIG_SCHEMA_CHECK);
 		System.setProperty(ParseUtils.SYS_PROP_CONFIG_SCHEMA_CHECK, "ERROR");
 		//System.setProperty("test.log.out", "true");
+		
+		ServiceConfigManager.getInstance().setConfigTestCase("testconfig", true);
 	}
 	
 	@After
