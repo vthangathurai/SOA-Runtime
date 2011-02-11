@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import org.ebayopensource.turmeric.runtime.common.impl.utils.ParseUtils;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
 import org.ebayopensource.turmeric.runtime.tests.common.jetty.AbstractWithServerTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -34,9 +35,10 @@ public class RequestDataBindingTest extends AbstractWithServerTest {
 	private String oldSysProp=null;
 
 	@Before
-	public void setUp(){
+	public void setUp() throws Exception{
 		oldSysProp = System.getProperty(ParseUtils.SYS_PROP_CONFIG_SCHEMA_CHECK);
 		System.setProperty(ParseUtils.SYS_PROP_CONFIG_SCHEMA_CHECK, "ERROR");
+		ServiceConfigManager.getInstance().setConfigTestCase("testconfig", true);
 	}
 	
 	@After
@@ -84,6 +86,8 @@ public class RequestDataBindingTest extends AbstractWithServerTest {
 		Assert.assertThat("body doesn't contain exception", body,
 				not(containsString("exception-id")));
 		Assert.assertThat("body contains message", body,
-				containsString("Message=\"Milpitas\""));
+				containsString("Message"));
+		Assert.assertThat("body contains message", body,
+				containsString("Milpitas"));
 	}
 }
