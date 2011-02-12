@@ -29,6 +29,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.ebayopensource.turmeric.runtime.binding.BindingConstants;
+import org.ebayopensource.turmeric.runtime.binding.impl.parser.json.JSONStreamWriter;
 import org.ebayopensource.turmeric.runtime.binding.schema.DataElementSchema;
 import org.ebayopensource.turmeric.runtime.binding.utils.BindingUtils;
 import org.ebayopensource.turmeric.runtime.common.binding.DataBindingDesc;
@@ -1091,7 +1092,7 @@ public abstract class BaseServiceDescFactory<T extends ServiceDesc> {
 			result.put(name, bindingDesc);
 		}
 
-		addDefaultDataBindings(svcId, result, payloadTypes, rootClasses, null);
+		addDefaultDataBindings(svcId, result, payloadTypes, rootClasses, null, false);
 
 		if (supportedBindingsNames != null && !supportedBindingsNames.isEmpty()) {
 			// copy only supported bindings
@@ -1202,9 +1203,19 @@ public abstract class BaseServiceDescFactory<T extends ServiceDesc> {
 		return false;
 	}
 
+	private final static Map<String, String> NV_DATA_BINDING_OPTIONS;
+	private final static Map<String, String> JSON_DATA_BINDING_OPTIONS;
+	
+	static {
+		NV_DATA_BINDING_OPTIONS = new HashMap<String, String>();
+		NV_DATA_BINDING_OPTIONS.put(JSONStreamWriter.KEY_USE_SCHEMA_INFO, "false");
+		JSON_DATA_BINDING_OPTIONS = new HashMap<String, String>();
+		JSON_DATA_BINDING_OPTIONS.put(JSONStreamWriter.KEY_USE_SCHEMA_INFO, "false");
+	}
+
 	protected final void addDefaultDataBindings(ServiceId svcId,
 		Map<String,DataBindingDesc> bindings,
-		Set<String> payloadTypes, Set<Class> rootClasses, Schema upaAwareMasterSchema) throws ServiceException
+		Set<String> payloadTypes, Set<Class> rootClasses, Schema upaAwareMasterSchema, boolean forFallback) throws ServiceException
 	{
 		Class[] rootClassArray = addDataBindingSpecificTypes(rootClasses, null);
 
@@ -1233,7 +1244,7 @@ public abstract class BaseServiceDescFactory<T extends ServiceDesc> {
 				new JAXBNVDeserializerFactory(),
 				null, null, null, null);
 
-			initSerializerFactory(bindingDesc.getSerializerFactory(), svcId, null, rootClassArray);
+			initSerializerFactory(bindingDesc.getSerializerFactory(), svcId, (forFallback ? NV_DATA_BINDING_OPTIONS : null), rootClassArray);
 			initDeserializerFactory(bindingDesc.getDeserializerFactory(), svcId, null, rootClassArray,
 					upaAwareMasterSchema);
 
@@ -1251,7 +1262,7 @@ public abstract class BaseServiceDescFactory<T extends ServiceDesc> {
 				new JAXBJSONDeserializerFactory(),
 				null, null, null, null);
 
-			initSerializerFactory(bindingDesc.getSerializerFactory(), svcId, null, rootClassArray);
+			initSerializerFactory(bindingDesc.getSerializerFactory(), svcId, (forFallback ? JSON_DATA_BINDING_OPTIONS : null), rootClassArray);
 			initDeserializerFactory(bindingDesc.getDeserializerFactory(), svcId, null, rootClassArray,
 					upaAwareMasterSchema);
 

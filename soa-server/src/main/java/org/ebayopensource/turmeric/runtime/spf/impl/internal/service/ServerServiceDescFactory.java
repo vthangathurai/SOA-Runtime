@@ -424,7 +424,7 @@ public final class ServerServiceDescFactory extends BaseServiceDescFactory<Serve
 
 		// create default bindings
 		Map<String,DataBindingDesc> bindings = new HashMap<String,DataBindingDesc>();
-		addDefaultDataBindings(serverSvcId, bindings, null, rootClasses, null);
+		addDefaultDataBindings(serverSvcId, bindings, null, rootClasses, null, true);
 
 		// create matchers for bindings
 		RequestPatternMatcher<DataBindingDesc> bindingMatcherForRequest =
