@@ -127,7 +127,7 @@ public class ServiceGeneratorWSDLIntfTest extends AbstractServiceGeneratorTestCa
 			performDirectCodeGen(args);
 			Assert.fail("Expected exception of type: " + CodeGenFailedException.class.getName());
 		} catch (CodeGenFailedException ex) {
-			Assert.assertThat(ex.getMessage(), containsString("JAVAC Compile Failure"));
+			Assert.assertThat(ex.getMessage(), containsString("Failed to generate Java code"));
 		}
 	}
 }
