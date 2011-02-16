@@ -281,7 +281,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 
 		performDirectCodeGen(testArgs, binDir);
 		
-		 String genPath = destDir.getAbsolutePath() + "/gen-src/com/ebayopensource/turmeric/services/gen/ConfigGroupMarketV1TypeDefsBuilder.java";
+		 String genPath = destDir.getAbsolutePath() + "/gen-src/com/ebayopensource/turmeric/services/gen/ConfigGroupMarketTypeDefsBuilder.java";
 			
 			String goldPath = getCodegenQEDataFileInput("ConfigGroupMarketV1TypeDefsBuilder.java").getAbsolutePath();
 				

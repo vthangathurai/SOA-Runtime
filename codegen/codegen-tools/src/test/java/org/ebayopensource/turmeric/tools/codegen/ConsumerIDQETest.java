@@ -89,7 +89,7 @@ public class ConsumerIDQETest extends AbstractServiceGeneratorTestCase {
 			};	
 	
 		 performDirectCodeGen(testArgs, binDir);
-		 String path = destDir.getAbsolutePath()+"/gen-src/client/org/ebayopensource/turmeric/common/v1/services/newservice/gen/SharedAccountServiceConsumer.java";
+		 String path = destDir.getAbsolutePath()+"/gen-src/client/org/ebayopensource/turmeric/common/v1/services/accountservice/gen/SharedAccountServiceConsumer.java";
 		 File sharedConsumer = new File(path);
 		
 		assertTrue(path + " does not exist" ,sharedConsumer.exists());
@@ -635,14 +635,6 @@ public File getCodegenJavaFileInput() {
 			);
 }
 
-@After
-public void deinitialize() throws IOException{
-	 nsc= null;
-	 
-	 testingdir.ensureEmpty();
-	
-	 
-}
 
 	
 }
