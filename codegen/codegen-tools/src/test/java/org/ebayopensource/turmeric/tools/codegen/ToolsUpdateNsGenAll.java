@@ -39,7 +39,7 @@ public void checkServiceConfigForAll() throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","All",
 			"-wsdl",wsdl.getAbsolutePath(),
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-namespace","http://www.ebayopensource.org/turmeric/services",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -53,7 +53,7 @@ public void checkServiceConfigForAll() throws Exception{
 	
 	boolean check = false;
 	performDirectCodeGen(testArgs1,binDir);
-	String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/NewService/ServiceConfig.xml";
+	String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/AccountService/ServiceConfig.xml";
 	File file = new File(serviceConfigpath);
 	assertTrue(file.exists());
 	List<String> firstFile = FileUtils.readLines(file);
@@ -62,7 +62,7 @@ public void checkServiceConfigForAll() throws Exception{
 			check = true;
 	}
 	assertFalse(check);
-	String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/NewService/ClientConfig.xml";
+	String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/AccountService/ClientConfig.xml";
 	File file1 = new File(clientConfigpath);
 	assertTrue(file.exists());
 	List<String> firstFile1 = FileUtils.readLines(file1);

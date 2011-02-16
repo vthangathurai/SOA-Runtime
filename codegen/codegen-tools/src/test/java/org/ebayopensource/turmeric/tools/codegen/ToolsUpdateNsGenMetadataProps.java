@@ -4,10 +4,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 public class ToolsUpdateNsGenMetadataProps  extends AbstractServiceGeneratorTestCase{
@@ -43,7 +45,7 @@ public void generateMetadataPropsWithNs() throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","ServiceMetadataProps",
 			"-interface","org/ebayopensource/qaservices/calculatorservice/intf/CalculatorServiceSkeletonInterface",
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-namespace","http://www.ebayopensource.org/new/namespace",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -53,7 +55,7 @@ public void generateMetadataPropsWithNs() throws Exception{
 	
 	try{
 	 performDirectCodeGen(testArgs1, binDir);
-	String path = destDir.getAbsolutePath() +"/gen-meta-src/META-INF/soa/common/config/NewService/service_metadata.properties"; 
+	String path = destDir.getAbsolutePath() +"/gen-meta-src/META-INF/soa/common/config/AccountService/service_metadata.properties"; 
 	File metadataFile = new File(path);
 	assertTrue(metadataFile.exists());
 	
@@ -64,7 +66,7 @@ public void generateMetadataPropsWithNs() throws Exception{
 	catch(Exception e){
 		e.printStackTrace();
 	}finally{
-		
+		if(in !=null)
 		in.close();
 	}
 	
@@ -79,7 +81,7 @@ public void generateMetadataPropsWithoutNs() throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","ServiceMetadataProps",
 			"-interface","org/ebayopensource/qaservices/calculatorservice/intf/CalculatorServiceSkeletonInterface",
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
 			"-src",destDir.getAbsolutePath(), 
@@ -87,7 +89,7 @@ public void generateMetadataPropsWithoutNs() throws Exception{
 			};
 	try{
 	 performDirectCodeGen(testArgs1, binDir);
-		String path = destDir.getAbsolutePath() +"/gen-meta-src/META-INF/soa/common/config/NewService/service_metadata.properties"; 
+		String path = destDir.getAbsolutePath() +"/gen-meta-src/META-INF/soa/common/config/AccountService/service_metadata.properties"; 
 		File metadataFile = new File(path);
 		assertTrue(metadataFile.exists());
 		
@@ -98,7 +100,7 @@ public void generateMetadataPropsWithoutNs() throws Exception{
 		catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			
+			if(in != null)
 			in.close();
 		}
 	
@@ -124,8 +126,16 @@ public void generateMetadataPropsWithNullStringForNs() throws Exception{
 	
 }
 
+@After
+public void deinitialize() throws IOException{
 
+	 
+	 testingdir.ensureEmpty();	
+	 
 }
+}
+
+
 
 
 

@@ -23,9 +23,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.ebayopensource.turmeric.tools.TestResourceUtil;
-import org.ebayopensource.turmeric.tools.codegen.AbstractServiceGeneratorTestCase;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -77,7 +76,7 @@ public class ConsumerIDQETest extends AbstractServiceGeneratorTestCase {
 		File wsdl = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		String [] testArgs =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "SharedConsumer",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-dest", destDir.getAbsolutePath(),
@@ -90,7 +89,7 @@ public class ConsumerIDQETest extends AbstractServiceGeneratorTestCase {
 			};	
 	
 		 performDirectCodeGen(testArgs, binDir);
-		 String path = destDir.getAbsolutePath()+"/gen-src/client/org/ebayopensource/turmeric/common/v1/services/newservice/gen/SharedNewServiceConsumer.java";
+		 String path = destDir.getAbsolutePath()+"/gen-src/client/org/ebayopensource/turmeric/common/v1/services/newservice/gen/SharedAccountServiceConsumer.java";
 		 File sharedConsumer = new File(path);
 		
 		assertTrue(path + " does not exist" ,sharedConsumer.exists());
@@ -636,8 +635,11 @@ public File getCodegenJavaFileInput() {
 			);
 }
 
-public void deinitialize(){
+@After
+public void deinitialize() throws IOException{
 	 nsc= null;
+	 
+	 testingdir.ensureEmpty();
 	
 	 
 }

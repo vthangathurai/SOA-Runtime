@@ -3,7 +3,9 @@ package org.ebayopensource.turmeric.tools.codegen;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,10 +34,12 @@ public class Bug644321Test  extends AbstractServiceGeneratorTestCase{
 	@Test
 	public void testBug644321() throws Exception
 	{
-		
+			
+			 
+	
 		File wsdl = getCodegenQEDataFileInput("AccountService.wsdl");
 		String testArgs1[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "ServiceFromWSDLIntf",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-src", destDir.getAbsolutePath(),
@@ -48,9 +52,9 @@ public class Bug644321Test  extends AbstractServiceGeneratorTestCase{
 			};	
 		
 		String testArgs[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "Consumer",
-				"-interface","org/ebayopensource/turmeric/common/v1/services/NewService.java",
+				"-interface","org/ebayopensource/turmeric/common/v1/services/AccountService.java",
 				"-src", destDir.getAbsolutePath() + "/gen-src/client",
 				"-dest", tmpDir.getAbsolutePath(),
 				"-scv", "1.2.3",
@@ -66,13 +70,22 @@ public class Bug644321Test  extends AbstractServiceGeneratorTestCase{
 		performDirectCodeGen(testArgs1, binDir);
 		performDirectCodeGen(testArgs, binDir);
 		
-		String path = tmpDir.getAbsolutePath() +"/src/org/ebayopensource/turmeric/common/v1/services/gen/BaseNewServiceConsumer.java";
+		String path = tmpDir.getAbsolutePath() +"/src/org/ebayopensource/turmeric/common/v1/services/gen/BaseAccountServiceConsumer.java";
 		
 	 	File baseConsumer = new File(path);
 		assertTrue(baseConsumer.exists());
 		
 		
 		
+	}
+	
+	@After
+	public void deinitialize() throws IOException{
+
+		 
+		 testingdir.ensureEmpty();
+		
+		 
 	}
 	
 	

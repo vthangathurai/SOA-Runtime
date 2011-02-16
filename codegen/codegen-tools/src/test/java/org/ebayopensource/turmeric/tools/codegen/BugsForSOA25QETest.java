@@ -138,7 +138,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 		
 		File wsdl = getCodegenQEDataFileInput("AccountService.wsdl");
 		String testArgs[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "ServiceFromWSDLIntf",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-namespace","http://www.ebayopensource.org/turmeric/services",
@@ -156,7 +156,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 
 		performDirectCodeGen(testArgs, binDir);
 
-		String path = destDir.getAbsolutePath()+"//gen-meta-src//META-INF//soa//common//config//NewService//TypeMappings.xml";
+		String path = destDir.getAbsolutePath()+"//gen-meta-src//META-INF//soa//common//config//AccountService//TypeMappings.xml";
 		 File typemap = new File(path);
 		assertTrue(typemap.exists());
 		Node result = getNodeDetails(nsc,"//ns2:package-map",path);
@@ -203,7 +203,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 		
 		File wsdl = getCodegenQEDataFileInput("AdcommerceConfigGroupMarketV1.wsdl");
 		String testArgs[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","ConfigGroupMarket",
 				"-genType", "ServiceFromWSDLIntf",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-namespace","http://www.ebayopensource.com/turmeric/services",
@@ -219,7 +219,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 
 		performDirectCodeGen(testArgs, binDir);
 		
-		String path = destDir.getAbsolutePath()+"//gen-meta-src//META-INF//soa//common//config//NewService//TypeMappings.xml";
+		String path = destDir.getAbsolutePath()+"//gen-meta-src//META-INF//soa//common//config//ConfigGroupMarket//TypeMappings.xml";
 		 File typemap = new File(path);
 		assertTrue(typemap.exists());
 		Node result = getNodeDetails(nsc,"//ns2:package-map",path);
@@ -265,7 +265,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 		File wsdl = getCodegenQEDataFileInput("AdcommerceConfigGroupMarketV1_Anonymous.wsdl");
 		
 		String testArgs[] =  new String[] {
-				"-servicename","ConfigGroupMarketV1",
+				"-servicename","ConfigGroupMarket",
 				"-genType", "ServiceFromWSDLIntf",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-namespace","http://www.ebayopensource.com/turmeric/services",
@@ -323,7 +323,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 		File wsdl = getCodegenQEDataFileInput("RIMApplicationProcessService.wsdl");
 
 		String testArgs[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","RIMApplicationProcessService",
 				"-genType", "WsdlConversionToMns",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-namespace","http://www.ebay.com/marketplace/mobile/v1/services",
@@ -336,7 +336,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 
 			};
 		performDirectCodeGen(testArgs, binDir);
-	   String path = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/wsdl/NewService_mns.wsdl";
+	   String path = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/wsdl/RIMApplicationProcessService_mns.wsdl";
 	   nsc.setNs2("http://www.w3.org/2001/XMLSchema");
 	   Node node =  getNodeDetails(nsc,"//ns2:import",path);
 	   String prefix = node.getPrefix();
@@ -351,7 +351,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 		
 		File wsdl = getCodegenQEDataFileInput("Testing.wsdl");
 		String testArgs[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","TestService",
 				"-genType", "WsdlConversionToMns",
 				"-wsdl",wsdl.getAbsolutePath(),
 				//"-src", destDir.getAbsolutePath(),
@@ -363,7 +363,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 
 			};
 		performDirectCodeGen(testArgs, binDir);
-	   String path = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/wsdl/NewService_mns.wsdl";
+	   String path = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/wsdl/TestService_mns.wsdl";
 	   nsc.setNs2("http://www.w3.org/2001/XMLSchema");
 	   Node node =  getNodeDetails(nsc,"//ns2:import",path);
 	   String prefix = node.getPrefix();
@@ -379,7 +379,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 		
 		File wsdl = getCodegenQEDataFileInput("SOAQEConsumerIdTest1V1.wsdl");
 		String testArgs[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","SOAQEConsumerIdTest1",
 				"-genType", "WsdlConversionToMns",
 				"-wsdl",wsdl.getAbsolutePath(),
 				//"-src", destDir.getAbsolutePath(),
@@ -391,7 +391,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 
 			};
 		performDirectCodeGen(testArgs, binDir);
-	   String path = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/wsdl/NewService_mns.wsdl";
+	   String path = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/wsdl/SOAQEConsumerIdTest1_mns.wsdl";
 	   nsc.setNs2("http://www.w3.org/2001/XMLSchema");
 	   Node node =  getNodeDetails(nsc,"//ns2:import",path);
 	   String prefix = node.getPrefix();

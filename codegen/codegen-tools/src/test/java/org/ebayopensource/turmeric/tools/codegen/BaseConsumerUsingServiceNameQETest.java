@@ -169,7 +169,7 @@ public class BaseConsumerUsingServiceNameQETest extends  AbstractServiceGenerato
 		File wsdl = getCodegenQEDataFileInput("AccountService.wsdl");
 
 		String testArgs1[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "Consumer",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-dest", destDir.getAbsolutePath(),
@@ -185,7 +185,7 @@ public class BaseConsumerUsingServiceNameQETest extends  AbstractServiceGenerato
 		
 		performDirectCodeGen(testArgs1, binDir);
 		//change to package of BC - the consumer name is removed from pckg.
-		baseConsumer = destDir.getAbsolutePath() + "/src/org/ebayopensource/turmeric/common/v1/services/gen/BaseNewServiceConsumer.java";
+		baseConsumer = destDir.getAbsolutePath() + "/src/org/ebayopensource/turmeric/common/v1/services/gen/BaseAccountServiceConsumer.java";
 		baseConsumerClass = new File(baseConsumer);
 		assertTrue(baseConsumerClass.exists());
 	}
@@ -202,7 +202,7 @@ public class BaseConsumerUsingServiceNameQETest extends  AbstractServiceGenerato
 		File wsdl = getCodegenQEDataFileInput("AccountService.wsdl");
 
 		String testArgs1[] =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "Consumer",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-dest", destDir.getAbsolutePath(),
@@ -218,7 +218,7 @@ public class BaseConsumerUsingServiceNameQETest extends  AbstractServiceGenerato
 		
 		performDirectCodeGen(testArgs1, binDir);
 		//change to package of BC - the consumer name is removed from pckg.
-		baseConsumer = destDir.getAbsolutePath() +"/src/org/ebayopensource/turmeric/common/v1/services/gen/BaseNewServiceConsumer.java";
+		baseConsumer = destDir.getAbsolutePath() +"/src/org/ebayopensource/turmeric/common/v1/services/gen/BaseAccountServiceConsumer.java";
 		baseConsumerClass = new File(baseConsumer);
 		assertTrue(baseConsumerClass.exists());
 	}

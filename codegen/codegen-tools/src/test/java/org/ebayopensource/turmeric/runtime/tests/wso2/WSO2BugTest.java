@@ -47,7 +47,7 @@ public class WSO2BugTest extends AbstractServiceGeneratorTestCase {
 						testingdir, "meta-src");
 		// @formatter:off
 		String args[] = { 
-			"-servicename", "NewService", 
+			"-servicename", "IHelloWorld123", 
 			"-gentype", "All",
 			"-wsdl", wsdl.getAbsolutePath(), 
 			"-namespace", "http://www.ebayopensource.org/marketplace/vivek/service", 

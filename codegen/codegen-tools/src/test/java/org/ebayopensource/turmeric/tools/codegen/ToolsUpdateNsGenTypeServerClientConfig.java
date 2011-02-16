@@ -43,7 +43,7 @@ public void generateServiceConfig() throws Exception{
 	String testArgs[] =  new String[] {	
 			"-genType","ServiceMetadataProps",
 			"-interface","org/ebayopensource/qaservices/calculatorservice/intf/CalculatorServiceSkeletonInterface",
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-namespace","http://www.ebayopensource.org/new/namespace",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -58,7 +58,7 @@ public void generateServiceConfig() throws Exception{
 	 String testArgs1[] =  new String[] {	
 				"-genType","ServerConfig",
 				"-wsdl",wsdl.getAbsolutePath(),
-				"-serviceName","NewService", 
+				"-serviceName","AccountService", 
 				"-scv","1.0.0", 
 				"-dest",destDir.getAbsolutePath(),
 				"-src",destDir.getAbsolutePath(), 
@@ -67,7 +67,7 @@ public void generateServiceConfig() throws Exception{
 	 performDirectCodeGen(testArgs1, binDir);
 	 boolean check = false;
 		performDirectCodeGen(testArgs1,binDir);
-		String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/NewService/ServiceConfig.xml";
+		String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/AccountService/ServiceConfig.xml";
 		File file = new File(serviceConfigpath);
 		assertTrue(file.exists());
 		List<String> firstFile = FileUtils.readLines(file);
@@ -91,7 +91,7 @@ public void generateClientConfig() throws Exception{
 	String testArgs[] =  new String[] {	
 			"-genType","ServiceMetadataProps",
 			"-interface","org/ebayopensource/qaservices/calculatorservice/intf/CalculatorServiceSkeletonInterface",
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-namespace","http://www.ebayopensource.org/new/namespace",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -106,7 +106,7 @@ public void generateClientConfig() throws Exception{
 	 String testArgs1[] =  new String[] {	
 				"-genType","ClientConfig",
 				"-wsdl",wsdl.getAbsolutePath(),
-				"-serviceName","NewService", 
+				"-serviceName","AccountService", 
 				"-scv","1.0.0", 
 				"-dest",destDir.getAbsolutePath(),
 				"-src",destDir.getAbsolutePath(), 
@@ -115,7 +115,7 @@ public void generateClientConfig() throws Exception{
 	 performDirectCodeGen(testArgs1, binDir);
 	 boolean check = false;
 		performDirectCodeGen(testArgs1,binDir);
-		String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/NewService/ClientConfig.xml";
+		String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/AccountService/ClientConfig.xml";
 		File file = new File(clientConfigpath);
 		assertTrue(file.exists());
 		List<String> firstFile = FileUtils.readLines(file);
@@ -134,7 +134,7 @@ public void generateServerConfigWithNs()throws Exception{
 	String testArgs[] =  new String[] {	
 			"-genType","ServiceMetadataProps",
 			"-interface","org/ebayopensource/qaservices/calculatorservice/intf/CalculatorServiceSkeletonInterface",
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-namespace","http://www.ebayopensource.org/new/namespace",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -149,7 +149,7 @@ public void generateServerConfigWithNs()throws Exception{
 	 String testArgs1[] =  new String[] {	
 				"-genType","ServerConfig",
 				"-wsdl",wsdl.getAbsolutePath(),
-				"-serviceName","NewService",
+				"-serviceName","AccountService",
 				"-namespace","http://www.ebayopensource.org/new/namespace",
 				"-scv","1.0.0", 
 				"-dest",destDir.getAbsolutePath(),
@@ -160,7 +160,7 @@ public void generateServerConfigWithNs()throws Exception{
 
 	 boolean check = false;
 		performDirectCodeGen(testArgs1,binDir);
-		String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/NewService/ServiceConfig.xml";
+		String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/AccountService/ServiceConfig.xml";
 		File file = new File(serviceConfigpath);
 		assertTrue(file.exists());
 		List<String> firstFile = FileUtils.readLines(file);
@@ -178,7 +178,7 @@ public void generateClientConfigWithNs()throws Exception{
 	String testArgs[] =  new String[] {	
 			"-genType","ServiceMetadataProps",
 			"-interface","org/ebayopensource/qaservices/calculatorservice/intf/CalculatorServiceSkeletonInterface",
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-namespace","http://www.ebayopensource.org/new/namespace",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -193,7 +193,7 @@ public void generateClientConfigWithNs()throws Exception{
 	 String testArgs1[] =  new String[] {	
 				"-genType","ClientConfig",
 				"-wsdl",wsdl.getAbsolutePath(),
-				"-serviceName","NewService",
+				"-serviceName","AccountService",
 				"-namespace","http://www.ebayopensource.org/new/namespace",
 				"-scv","1.0.0", 
 				"-dest",destDir.getAbsolutePath(),
@@ -204,7 +204,7 @@ public void generateClientConfigWithNs()throws Exception{
 	 
 	 boolean check = false;
 		performDirectCodeGen(testArgs1,binDir);
-		String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/NewService/ClientConfig.xml";
+		String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/AccountService/ClientConfig.xml";
 		File file = new File(clientConfigpath);
 		assertTrue(file.exists());
 		List<String> firstFile = FileUtils.readLines(file);
@@ -257,7 +257,7 @@ public void generateServerConfigNoNs()throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","ServerConfig",
 			"-wsdl",wsdl.getAbsolutePath(),
-			"-serviceName","NewService",
+			"-serviceName","AccountService",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
 			"-src",destDir.getAbsolutePath(), 
@@ -267,7 +267,7 @@ public void generateServerConfigNoNs()throws Exception{
 	
  boolean check = false;
 	performDirectCodeGen(testArgs1,binDir);
-	String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/NewService/ServiceConfig.xml";
+	String serviceConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/services/config/AccountService/ServiceConfig.xml";
 	File file = new File(serviceConfigpath);
 	assertTrue(file.exists());
 	List<String> firstFile = FileUtils.readLines(file);
@@ -285,7 +285,7 @@ public void generateClientConfigNoNs()throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","ClientConfig",
 			"-wsdl",wsdl.getAbsolutePath(),
-			"-serviceName","NewService", 
+			"-serviceName","AccountService", 
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
 			"-src",destDir.getAbsolutePath(), 
@@ -295,7 +295,7 @@ public void generateClientConfigNoNs()throws Exception{
 	
  boolean check = false;
 	performDirectCodeGen(testArgs1,binDir);
-	String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/NewService/ClientConfig.xml";
+	String clientConfigpath = destDir.getAbsolutePath()+"/gen-meta-src/META-INF/soa/client/config/AccountService/ClientConfig.xml";
 	File file = new File(clientConfigpath);
 	assertTrue(file.exists());
 	List<String> firstFile = FileUtils.readLines(file);
@@ -315,7 +315,7 @@ public void generateServerConfigNullStringNs()throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","ServerConfig",
 			"-wsdl",wsdl.getAbsolutePath(),
-			"-serviceName","NewService",
+			"-serviceName","AccountService",
 			"-namespace","",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
@@ -335,7 +335,7 @@ public void generateClientConfigNullStringNsNs()throws Exception{
 	String testArgs1[] =  new String[] {	
 			"-genType","ClientConfig",
 			"-wsdl",wsdl.getAbsolutePath(),
-			"-serviceName","NewService",
+			"-serviceName","AccountService",
 			"-namespace","",
 			"-scv","1.0.0", 
 			"-dest",destDir.getAbsolutePath(),
