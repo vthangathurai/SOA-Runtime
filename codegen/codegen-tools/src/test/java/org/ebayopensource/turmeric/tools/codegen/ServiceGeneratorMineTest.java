@@ -89,7 +89,7 @@ public class ServiceGeneratorMineTest extends AbstractServiceGeneratorTestCase {
 
         // @formatter:off
 		String[] args = {
-			"-servicename", "MyServiceV1",
+			"-servicename", "TestService1",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "ServiceMetadataProps",
 			"-publicservicename","MyService",
@@ -116,7 +116,7 @@ public class ServiceGeneratorMineTest extends AbstractServiceGeneratorTestCase {
 
         // @formatter:off
 		String[] args = new String[] {
-			"-servicename", "MyServiceV1",
+			"-servicename", "MyService1",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "ServiceMetadataProps",
 			"-publicservicename","MyService",

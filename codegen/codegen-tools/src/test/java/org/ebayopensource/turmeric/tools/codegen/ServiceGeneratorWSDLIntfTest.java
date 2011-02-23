@@ -76,7 +76,7 @@ public class ServiceGeneratorWSDLIntfTest extends AbstractServiceGeneratorTestCa
 		// Setup arguments
 		// @formatter:off
 		String args[] = {
-			"-servicename", "CalculatorService",
+			"-servicename", "CalculatorService1",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "All",
 			"-src", srcDir.getAbsolutePath(),
@@ -123,7 +123,7 @@ public class ServiceGeneratorWSDLIntfTest extends AbstractServiceGeneratorTestCa
 		// Setup arguments
 		// @formatter:off
 		String args[] = {
-			"-servicename", "CalculatorService",
+			"-servicename", "CalculatorService2",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "All",
 			"-src", srcDir.getAbsolutePath(),

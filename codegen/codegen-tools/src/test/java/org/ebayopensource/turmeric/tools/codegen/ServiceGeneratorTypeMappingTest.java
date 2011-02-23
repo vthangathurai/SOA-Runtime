@@ -39,7 +39,7 @@ public class ServiceGeneratorTypeMappingTest extends AbstractServiceGeneratorTes
 
 		// @formatter:off
 		String args[] = new String[] {
-			"-servicename", "AccountService",
+			"-servicename", "AccountService1",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "TypeMappings", 
 			"-src", srcDir.getAbsolutePath(),
@@ -51,7 +51,7 @@ public class ServiceGeneratorTypeMappingTest extends AbstractServiceGeneratorTes
 
 		performDirectCodeGen(args, binDir);
 		
-		File typemappings = getTestDestPath("gen-meta-src/META-INF/soa/common/config/AccountService/TypeMappings.xml");
+		File typemappings = getTestDestPath("gen-meta-src/META-INF/soa/common/config/AccountService1/TypeMappings.xml");
         PathAssert.assertFileExists(typemappings);
 
         ExpectedMessage request = new ExpectedMessage();
@@ -90,7 +90,7 @@ public class ServiceGeneratorTypeMappingTest extends AbstractServiceGeneratorTes
 
 		// @formatter:off
 		String args[] =  new String[] {
-			"-servicename", "AccountService",
+			"-servicename", "AccountService2",
 			"-cn","AccountService",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "TypeMappings",
@@ -102,7 +102,7 @@ public class ServiceGeneratorTypeMappingTest extends AbstractServiceGeneratorTes
 		
 		performDirectCodeGen(args, binDir);
 		
-		File typemappings = getTestDestPath("gen-meta-src/META-INF/soa/common/config/AccountService/TypeMappings.xml");
+		File typemappings = getTestDestPath("gen-meta-src/META-INF/soa/common/config/AccountService2/TypeMappings.xml");
         PathAssert.assertFileExists(typemappings);
 
         List<PackageMapping> expectedMapping = new ArrayList<PackageMapping>();
@@ -150,7 +150,7 @@ public class ServiceGeneratorTypeMappingTest extends AbstractServiceGeneratorTes
 
         // @formatter:off
 		String args[] = new String[] {
-			"-servicename", "AccountService",
+			"-servicename", "PayPalAPIInterfaceService",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "TypeMappings", 
 			"-src", srcDir.getAbsolutePath(),
@@ -162,7 +162,7 @@ public class ServiceGeneratorTypeMappingTest extends AbstractServiceGeneratorTes
 
         performDirectCodeGen(args);
 
-        File typemappings = getTestDestPath("gen-meta-src/META-INF/soa/common/config/AccountService/TypeMappings.xml");
+        File typemappings = getTestDestPath("gen-meta-src/META-INF/soa/common/config/PayPalAPIInterfaceService/TypeMappings.xml");
         PathAssert.assertFileExists(typemappings);
 
         List<PackageMapping> expectedMapping = new ArrayList<PackageMapping>();

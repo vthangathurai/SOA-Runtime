@@ -24,7 +24,7 @@ import org.ebayopensource.turmeric.tools.TestResourceUtil;
 import org.ebayopensource.turmeric.tools.codegen.AbstractServiceGeneratorTestCase;
 import org.ebayopensource.turmeric.tools.codegen.ServiceGenerator;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -37,7 +37,7 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 	File prCategoryRoot = null;
 	File prProductRoot = null;
 
-	private SOATypeRegistry m_soaTypeRegistry = SOAGlobalRegistryFactory.getSOATypeRegistryInstance();
+	private static SOATypeRegistry m_soaTypeRegistry = SOAGlobalRegistryFactory.getSOATypeRegistryInstance();
 	private String PRODUCT_TYPE_LIBRARY = "ProductTypeLibrary";
 	private String CATEGORY_TYPE_LIBRARY = "CategoryTypeLibrary";
 	private String TYPE_LIBRARY_TYPE = "TypeLibraryType";
@@ -48,9 +48,63 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 	private String PROJECT_ROOT = null;
 	private String NAMESPACE ="http://www.ebayopensource.org/soaframework/examples/config";
 
+	public  static void removeParentTypes(LibraryType lib) throws Exception{
+		
+		List<LibraryType> parenttypes = m_soaTypeRegistry.getDependentChildTypeFiles(lib);
+		if(parenttypes.size() > 0){
+			
+			for(LibraryType library : parenttypes){
+				removeParentTypes(library);
+				m_soaTypeRegistry.removeTypeFromRegistry(library);
+				
+			}
+		} else{
+			m_soaTypeRegistry.removeTypeFromRegistry(lib);
+		}
+		
+		
+		
+	}
+	@BeforeClass
+	public static void initClassLevel() throws Exception{
+		
+		List<LibraryType> type = m_soaTypeRegistry.getAllTypes();
+		
+		for(LibraryType lib : type){
+			
+			removeParentTypes(lib);
+			
+		}
+		
+		
+		List<TypeLibraryType> typelib = m_soaTypeRegistry.getAllTypeLibraries();
+		for(TypeLibraryType tlib : typelib){
+			
+			m_soaTypeRegistry.removeLibraryFromRegistry(tlib.getLibraryName());
+			
+		}
+	}
 	
 	@Before
-	public void init() throws IOException{
+	public void init() throws Exception{
+		
+		
+		List<LibraryType> type = m_soaTypeRegistry.getAllTypes();
+		
+		for(LibraryType lib : type){
+			
+			removeParentTypes(lib);
+			
+		}
+		
+		
+		List<TypeLibraryType> typelib = m_soaTypeRegistry.getAllTypeLibraries();
+		for(TypeLibraryType tlib : typelib){
+			
+			m_soaTypeRegistry.removeLibraryFromRegistry(tlib.getLibraryName());
+			
+		}
+		
 		
 		PROJECT_ROOT = testingdir.getDir().getAbsolutePath();
 		PROJECT_ROOT_TEST = testingdir.getFile("Test").getAbsolutePath();
@@ -75,17 +129,20 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 	public void testPopulateRegistryWithTypeLibraries() {
 		String folderConstant = "populateRegistryWithTypeLibraries/1";
 
+		
+		try {
+		List libraryListBef = m_soaTypeRegistry.getAllTypeLibraries();
 		//Set the environment.
 		setEnvironment(folderConstant);
-
 		List<String> list = new ArrayList<String>();
 		list.add(PRODUCT_TYPE_LIBRARY);
 		list.add(CATEGORY_TYPE_LIBRARY);
-		try {
+		
 			boolean flag = m_soaTypeRegistry.populateRegistryWithTypeLibraries(list);
 			assertTrue("SOAGlobalRegistry is not updated properly.", flag);
-			List libraryList = m_soaTypeRegistry.getAllTypeLibraries();
-			boolean libFlag = (libraryList.size() == list.size());
+			m_soaTypeRegistry.updateGlobalRegistry();
+			List libraryListAfter = m_soaTypeRegistry.getAllTypeLibraries();
+			boolean libFlag = (( libraryListAfter.size() -libraryListBef.size()) == list.size());
 			assertTrue("SOAGlobalRegistry is not updated properly.", libFlag);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -100,14 +157,16 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 	@Test
 	public void testPopulateRegistryWithTypeLibrariesInvalidInputs() {
 		String folderConstant = "populateRegistryWithTypeLibraries/1";
-
 		//Set the environment.
 		setEnvironment(folderConstant);
+		
 
 		List<String> list = new ArrayList<String>();
 		CATEGORY_TYPE_LIBRARY = "InvalidTypeLibrary";
 		list.add(CATEGORY_TYPE_LIBRARY);
 		list.add(PRODUCT_TYPE_LIBRARY);
+		
+		
 		try {
 			boolean flag = m_soaTypeRegistry.populateRegistryWithTypeLibraries(list);
 			assertFalse("Valid Exception should be thrown.", flag);
@@ -132,19 +191,22 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 	public void testPopulateRegistryWithTypeLibrariesDuplicateNames() {
 		String folderConstant = "populateRegistryWithTypeLibraries/1";
 
-		//Set the environment.
-		setEnvironment(folderConstant);
-
+		
+		try {
+		List libraryListBef = m_soaTypeRegistry.getAllTypeLibraries();
 		List<String> list = new ArrayList<String>();
 		list.add(PRODUCT_TYPE_LIBRARY);
 		list.add(PRODUCT_TYPE_LIBRARY);
 		list.add(CATEGORY_TYPE_LIBRARY);
 		list.add(CATEGORY_TYPE_LIBRARY);
-		try {
+		
+		//Set the environment.
+		setEnvironment(folderConstant);
+		
 			boolean flag = m_soaTypeRegistry.populateRegistryWithTypeLibraries(list);
 			assertTrue("SOAGlobalRegistry is not updated properly.", flag);
-			List libraryList = m_soaTypeRegistry.getAllTypeLibraries();
-			boolean sizeFlag = (libraryList.size() == 2);
+			List libraryListAfter = m_soaTypeRegistry.getAllTypeLibraries();
+			boolean sizeFlag = ((libraryListAfter.size() -libraryListBef.size()) == (list.size() -2));
 			assertTrue("The Global Registry should not be updated for duplicate libraries.", sizeFlag);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -156,20 +218,25 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 	/**
 	 * This method will validate the working for the response if 
 	 * input is 'null'.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testPopulateRegistryWithTypeLibrariesNullValue() {
+	public void testPopulateRegistryWithTypeLibrariesNullValue() throws Exception {
 		String folderConstant = "populateRegistryWithTypeLibraries/1";
 
-		//Set the environment.
-		setEnvironment(folderConstant);
+		
 
 		List<String> list = new ArrayList<String>();
 		list.add(PRODUCT_TYPE_LIBRARY);
 		list.add(null);
 		list.add(PRODUCT_TYPE_LIBRARY);
 		list.add(CATEGORY_TYPE_LIBRARY);
+		List librariesBef = null;
+		librariesBef = m_soaTypeRegistry.getAllTypeLibraries();
+		//Set the environment.
+		setEnvironment(folderConstant);
 		try {
+			 
 			boolean flag = m_soaTypeRegistry.populateRegistryWithTypeLibraries(list);
 			assertFalse("Exception should be thrown.", flag);
 		} catch (Exception ex) {
@@ -182,8 +249,8 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 			assertTrue("Exception message is Invalid. \n Actual:" + ex.getMessage() + "\n Expected:" + exceptionMessage,
 					ex.getMessage().contains(exceptionMessage));
 			try {
-				List libraries = m_soaTypeRegistry.getAllTypeLibraries();
-				boolean libraryCheck = (libraries.size() == 2);
+				List librariesAfter = m_soaTypeRegistry.getAllTypeLibraries();
+				boolean libraryCheck = ((librariesAfter.size() -librariesBef.size()) == 2);
 				assertTrue("Global Registry is updated incorrectly.", libraryCheck);
 			} catch (Exception e) {
 				assertFalse("Exception should be thrown.", true);
