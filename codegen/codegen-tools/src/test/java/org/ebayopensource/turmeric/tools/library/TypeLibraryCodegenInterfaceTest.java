@@ -381,7 +381,7 @@ public class TypeLibraryCodegenInterfaceTest extends AbstractServiceGeneratorTes
 
 		
 		// @formatter:off
-        String pluginParametersForDeleteType[] = { 
+        final String pluginParametersForDeleteType[] = { 
 			"-gentype", "genTypeDeleteType", 
 			"-pr", rootDir.getAbsolutePath(), 
 			"-libname", "TypeLibC", 
@@ -391,7 +391,26 @@ public class TypeLibraryCodegenInterfaceTest extends AbstractServiceGeneratorTes
 
 		
 		performDirectCodeGen(pluginParameters);
-		performDirectCodeGen(pluginParametersForDeleteType);
+		
+			Runnable run = new Runnable(){
+
+				@Override
+				public void run() {
+					try {
+						performDirectCodeGen(pluginParametersForDeleteType);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+			};
+			
+			Thread t = new Thread(run);
+			t.start();
+		
+		
 	}
 	
 	@Test
