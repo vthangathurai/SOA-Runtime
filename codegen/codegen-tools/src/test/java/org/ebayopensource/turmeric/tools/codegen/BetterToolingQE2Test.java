@@ -170,7 +170,7 @@ public class BetterToolingQE2Test extends AbstractServiceGeneratorTestCase {
 		createInterfacePropsFile(intfProper,destDir.getAbsolutePath());
 		
 				testArgs =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-wsdl", wsdl.getAbsolutePath(),
 				"-genType", "ServiceMetadataProps",
 				"-src", destDir.getAbsolutePath(),
@@ -184,7 +184,7 @@ public class BetterToolingQE2Test extends AbstractServiceGeneratorTestCase {
 			};
 		
 		testArgs1 =  new String[] {
-				"-servicename","NewService",
+				"-servicename","AccountService",
 				"-genType", "ServiceFromWSDLIntf",
 				"-wsdl",wsdl.getAbsolutePath(),
 				"-dest", destDir.getAbsolutePath(),

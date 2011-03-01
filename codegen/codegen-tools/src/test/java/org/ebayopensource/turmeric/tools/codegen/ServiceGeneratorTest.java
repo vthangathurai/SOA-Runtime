@@ -777,7 +777,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 
 		// @formatter:off
 		String args[] = new String[] {
-			"-servicename", "CalculatorService",
+			"-servicename", "CalculatorService1",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "All",
 			"-noObjectFactoryGeneration","false",
@@ -802,7 +802,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 
 		// @formatter:off
 		String args[] =  new String[] {
-			"-servicename", "CalculatorService",
+			"-servicename", "CalculatorService2",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "All",
 			"-src", srcDir.getAbsolutePath(),
@@ -816,7 +816,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 
 		performDirectCodeGen(args, binDir);
 
-		File typeMappingsFile = getTestDestPath("gen-meta-src/META-INF/soa/common/config/CalculatorService/TypeMappings.xml");
+		File typeMappingsFile = getTestDestPath("gen-meta-src/META-INF/soa/common/config/CalculatorService2/TypeMappings.xml");
 			
 		ServiceTypeMappingConfig serviceTypeMappingConfig = JAXB.unmarshal(typeMappingsFile, ServiceTypeMappingConfig.class);
 		Assert.assertNotNull("ServiceTypeMappingConfig should not be null", serviceTypeMappingConfig);
@@ -895,60 +895,6 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 				null, null, null);
 	}
 
-	@Test
-	public void createServiceMetaDataPropsWithNewStructure() throws Exception {
-		MavenTestingUtils.ensureEmpty(testingdir);
-		File wsdl = getCodegenDataFileInput("Testing.wsdl");
-		File destDir = getTestDestDir();
-
-		// @formatter:off
-		String[] args = new String[] {
-			"-servicename", "MyServiceV1",
-			"-wsdl", wsdl.getAbsolutePath(),
-			"-gentype", "ServiceMetadataProps",
-			"-publicservicename","MyService",
-			"-adminname","xyz",
-			"-pr", destDir.getAbsolutePath() 
-		};
-		// @formatter:on
-		
-		performDirectCodeGen(args);
-		
-		GeneratedAssert.assertDirExists(destDir, "gen-meta-src/META-INF/soa/common/config/xyz");
-	}
-	
-	@Test
-	public void createServiceMetaDataPropsWithNewStructureWithIntfPropertiesFilePresent() throws Exception {
-		MavenTestingUtils.ensureEmpty(testingdir);
-		File wsdl = getCodegenDataFileInput("Testing.wsdl");
-		File destDir = getTestDestDir();
-
-		// @formatter:off
-		String[] args = new String[] {
-			"-servicename", "MyServiceV1",
-			"-wsdl", wsdl.getAbsolutePath(),
-			"-gentype", "ServiceMetadataProps",
-			"-publicservicename","MyService",
-			"-adminname","xyz",
-			"-pr", destDir.getAbsolutePath(),
-			"-scv", "1.1.1"};
-		// @formatter:on
-		
-		performDirectCodeGen(args);
-		
-		File smpFile = GeneratedAssert.assertFileExists(destDir, "gen-meta-src/META-INF/soa/common/config/xyz/service_metadata.properties");
-
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(smpFile);
-			Properties props = new Properties();
-			props.load(in);
-			Assert.assertEquals("1.1.1", props.getProperty("service_version"));
-			Assert.assertEquals("TestService", props.getProperty("service_name"));
-		} finally {
-			IOUtils.closeQuietly(in);
-		}
-	}
 	
 	@After
 	public void deinit(){

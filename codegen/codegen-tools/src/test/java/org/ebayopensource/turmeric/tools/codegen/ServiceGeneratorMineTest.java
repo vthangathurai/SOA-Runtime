@@ -80,68 +80,62 @@ public class ServiceGeneratorMineTest extends AbstractServiceGeneratorTestCase {
         performDirectCodeGen(args);
     }
 
-    @Test
-    public void createServiceMetaDataPropsWithNewStructure() throws Exception {
-        // Initialize testing paths
-        testingdir.ensureEmpty();
-        File wsdl = TestResourceUtil.getResource("org/ebayopensource/turmeric/test/tools/codegen/data/Testing.wsdl");
-        File rootDir = testingdir.getDir();
+   
 
-        // @formatter:off
-		String[] args = {
-			"-servicename", "TestService1",
-			"-wsdl", wsdl.getAbsolutePath(),
-			"-gentype", "ServiceMetadataProps",
-			"-publicservicename","MyService",
-			"-adminname","xyz",
-			"-pr", rootDir.getAbsolutePath() 
-		};
-		// @formatter:on
+    
 
-        performDirectCodeGen(args);
+	@Test
+	public void createServiceMetaDataPropsWithNewStructure() throws Exception {
+		MavenTestingUtils.ensureEmpty(testingdir);
+		File wsdl = getCodegenDataFileInput("Testing.wsdl");
+		File destDir = getTestDestDir();
 
-        GeneratedAssert.assertDirExists(rootDir, "gen-meta-src/META-INF/soa/common/config/xyz");
-        // Generates in "gen-meta-src/META-INF/soa/services/wsdl/xyz" instead?
-    }
-
-    @Test
-    public void createServiceMetaDataPropsWithNewStructureWithIntfPropertiesFilePresent() throws Exception {
-        // Initialize testing paths
-        testingdir.ensureEmpty();
-        File wsdl = TestResourceUtil.getResource("org/ebayopensource/turmeric/test/tools/codegen/data/Testing.wsdl");
-        File rootDir = testingdir.getDir();
-
-        File intfFile = new File(rootDir, "service_intf_project.properties");
-        TestResourceUtil.copyResource("intfs/TestService/service_intf_project.properties", intfFile);
-
-        // @formatter:off
+		// @formatter:off
 		String[] args = new String[] {
-			"-servicename", "MyService1",
+			"-servicename", "TestService",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "ServiceMetadataProps",
-			"-publicservicename","MyService",
+			"-publicservicename","TestService",
 			"-adminname","xyz",
-			"-pr", rootDir.getAbsolutePath() 
+			"-pr", destDir.getAbsolutePath() 
 		};
 		// @formatter:on
+		
+		performDirectCodeGen(args);
+		
+		GeneratedAssert.assertDirExists(destDir, "gen-meta-src/META-INF/soa/common/config/xyz");
+	}
+	
+	@Test
+	public void createServiceMetaDataPropsWithNewStructureWithIntfPropertiesFilePresent() throws Exception {
+		MavenTestingUtils.ensureEmpty(testingdir);
+		File wsdl = getCodegenDataFileInput("Testing.wsdl");
+		File destDir = getTestDestDir();
 
-        performDirectCodeGen(args);
+		// @formatter:off
+		String[] args = new String[] {
+			"-servicename", "TestService",
+			"-wsdl", wsdl.getAbsolutePath(),
+			"-gentype", "ServiceMetadataProps",
+			"-publicservicename","TestService",
+			"-adminname","xyz",
+			"-pr", destDir.getAbsolutePath(),
+			"-scv", "1.1.1"};
+		// @formatter:on
+		
+		performDirectCodeGen(args);
+		
+		File smpFile = GeneratedAssert.assertFileExists(destDir, "gen-meta-src/META-INF/soa/common/config/xyz/service_metadata.properties");
 
-        // adminname is Testing and not xyz
-        File propFile = GeneratedAssert.assertFileExists(rootDir,
-                        "gen-meta-src/META-INF/soa/common/config/Testing/service_metadata.properties");
-
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(propFile);
-            Properties props = new Properties();
-            props.load(in);
-            assertEquals("Testing", props.getProperty("admin_name"));
-            assertEquals("1.1.1", props.getProperty("service_version"));
-            assertEquals("TestService", props.getProperty("service_name"));
-        }
-        finally {
-            IOUtils.closeQuietly(in);
-        }
-    }
+		FileInputStream in = null;
+		try {
+			in = new FileInputStream(smpFile);
+			Properties props = new Properties();
+			props.load(in);
+			Assert.assertEquals("1.1.1", props.getProperty("service_version"));
+			Assert.assertEquals("TestService", props.getProperty("service_name"));
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
 }
