@@ -777,7 +777,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 
 		// @formatter:off
 		String args[] = new String[] {
-			"-servicename", "CalculatorService1",
+			"-servicename", "CalculatorService3",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "All",
 			"-noObjectFactoryGeneration","false",
@@ -802,7 +802,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 
 		// @formatter:off
 		String args[] =  new String[] {
-			"-servicename", "CalculatorService2",
+			"-servicename", "CalculatorService3",
 			"-wsdl", wsdl.getAbsolutePath(),
 			"-gentype", "All",
 			"-src", srcDir.getAbsolutePath(),
