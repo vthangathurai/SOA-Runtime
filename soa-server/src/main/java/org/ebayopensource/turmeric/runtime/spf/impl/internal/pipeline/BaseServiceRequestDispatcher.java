@@ -18,14 +18,15 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
-
+import org.ebayopensource.turmeric.common.v1.types.CommonErrorData;
+import org.ebayopensource.turmeric.common.v1.types.ErrorCategory;
+import org.ebayopensource.turmeric.common.v1.types.ErrorMessage;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ErrorDataFactory;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceCreationException;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceException;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceExceptionInterface;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceRuntimeException;
 import org.ebayopensource.turmeric.runtime.common.impl.internal.monitoring.SystemMetricDefs;
-import org.ebayopensource.turmeric.runtime.common.impl.internal.pipeline.BaseMessageContextImpl;
 import org.ebayopensource.turmeric.runtime.common.impl.internal.pipeline.MessageContextAccessorImpl;
 import org.ebayopensource.turmeric.runtime.common.impl.utils.LogManager;
 import org.ebayopensource.turmeric.runtime.common.impl.utils.ReflectionUtils;
@@ -35,16 +36,13 @@ import org.ebayopensource.turmeric.runtime.common.pipeline.Message;
 import org.ebayopensource.turmeric.runtime.common.pipeline.MessageContext;
 import org.ebayopensource.turmeric.runtime.common.service.ServiceOperationDesc;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
+import org.ebayopensource.turmeric.runtime.common.utils.Preconditions;
 import org.ebayopensource.turmeric.runtime.errorlibrary.ErrorConstants;
 import org.ebayopensource.turmeric.runtime.spf.exceptions.AppErrorWrapperException;
 import org.ebayopensource.turmeric.runtime.spf.pipeline.QueryCachePolicy;
+import org.ebayopensource.turmeric.runtime.spf.pipeline.ServiceImplFactory;
 import org.ebayopensource.turmeric.runtime.spf.pipeline.VersionCheckHandler;
 import org.ebayopensource.turmeric.runtime.spf.service.ServerServiceId;
-
-import org.ebayopensource.turmeric.common.v1.types.ErrorCategory;
-import org.ebayopensource.turmeric.common.v1.types.CommonErrorData;
-import org.ebayopensource.turmeric.common.v1.types.ErrorMessage;
-
 
 import com.ebay.kernel.logger.LogLevel;
 import com.ebay.kernel.logger.Logger;
@@ -61,16 +59,22 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 
 	private static Set<String> s_systemOpNames = new HashSet<String>();
 
-	private final Class<T> m_genServiceInterface;
-	private final LinkedList<T> m_serviceInstances = new LinkedList<T>();
-	private final Map<String,DispatchOperactionDef> m_supportedOps =
+	private final Class<T> mGenServiceInterface;
+	private final LinkedList<T> mServiceInstances = new LinkedList<T>();
+	private final Map<String,DispatchOperactionDef> mSupportedOps =
 		new HashMap<String,DispatchOperactionDef>();
 
-	private ServerServiceId m_svcId;
-	private ClassLoader m_classLoader;
-	private String m_serviceImplClassName;
-	private int m_serviceCreationCount;
-	private VersionCheckHandler m_versionCheckHandler;
+	private ServerServiceId mServiceId;
+	private ClassLoader mClassLoader;
+	private String mServiceImplClassName;
+	private int mServiceImplCount;
+	private VersionCheckHandler mVersionCheckHandler;
+	/*
+	 * The factory class name which implements the ServiceImplFactory interface. 
+	 */
+	private String mServiceImplFactory;
+	private boolean mCacheable;
+
 	private static Logger LOGGER = Logger.getInstance( BaseServiceRequestDispatcher.class );
 
 	/**
@@ -78,11 +82,8 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 	 * @param serviceInterface the Java class designating the service interface.
 	 */
 	protected BaseServiceRequestDispatcher(Class<T> serviceInterface) {
-		if (serviceInterface == null) {
-			throw new NullPointerException();
-		}
-
-		m_genServiceInterface = serviceInterface;
+		Preconditions.checkNotNull(serviceInterface);		
+		mGenServiceInterface = serviceInterface;
 
 		addSupportedOperation(SOAConstants.OP_GET_VERSION, null,  new Class[] {Object.class});
 		addSupportedOperation(OP_GET_SERVICE_VERSION, null,  new Class[] {Object.class});
@@ -100,7 +101,7 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 	 * @param outParams the Java classes of the output parameters to the operation (as dispatched to the service implementation).
 	 */
 	protected final void addSupportedOperation(String name, Class[] inParams, Class[] outParams) {
-		m_supportedOps.put(name, new DispatchOperactionDef(name, inParams, outParams));
+		mSupportedOps.put(name, new DispatchOperactionDef(name, inParams, outParams));
 	}
 
 	/**
@@ -118,29 +119,35 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 	public final void init(ServerServiceId svcId, Class serviceInterface,
 		String serviceImplClassName, ClassLoader cl,
 		Collection<ServiceOperationDesc> ops,
-		VersionCheckHandler versionCheckHandler)
+		VersionCheckHandler versionCheckHandler, String factoryClassName, 
+		   boolean cacheable)
 		throws ServiceException
 	{
-		if (svcId == null || serviceInterface == null ||
-			serviceImplClassName == null || cl == null || ops == null)
-		{
-			throw new NullPointerException();
-		}
+		Preconditions.checkNotNull(svcId);
+		Preconditions.checkNotNull(serviceInterface);
+		Preconditions.checkNotNull(cl);
+		Preconditions.checkNotNull(ops);		
+		Preconditions.checkArgument(serviceImplClassName != null || factoryClassName != null);		
 
-		m_svcId = svcId;
-		m_serviceImplClassName = serviceImplClassName;
-		m_classLoader = cl;
-		m_versionCheckHandler = versionCheckHandler;
-
-		if (m_genServiceInterface != serviceInterface) {
+		if (mGenServiceInterface != serviceInterface) {
 			throw new ServiceCreationException(ErrorDataFactory.createErrorData(ErrorConstants.SVC_FACTORY_GEN_USES_WRONG_INTERFACE,
-					ErrorConstants.ERRORDOMAIN, new Object[] {this.getClass().getName(), m_genServiceInterface.getName(),
+					ErrorConstants.ERRORDOMAIN, new Object[] {this.getClass().getName(), mGenServiceInterface.getName(),
 						serviceInterface.getName()}));
 		}
-
-		// create a single instance to make sure class is there
-		T warmupInst = createServiceInstance();
-		returnServiceInstance(warmupInst);
+		
+		this.mServiceId = svcId;
+		this.mServiceImplClassName = serviceImplClassName;		
+		this.mClassLoader = cl;
+		this.mVersionCheckHandler = versionCheckHandler;		
+		this.mServiceImplFactory = factoryClassName;
+		this.mCacheable = cacheable;
+		
+		if (mServiceImplClassName != null) {
+			this.mCacheable = true;
+			// create a single instance to make sure class is there
+			T warmupInst = createServiceInstance();
+			returnServiceInstance(warmupInst);
+		}
 
 		verifyOperations(ops);
 	}
@@ -170,7 +177,7 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 		if (opName.equals(SOAConstants.OP_GET_VERSION) || opName.equals(OP_GET_SERVICE_VERSION)) {
 			Message response = ctx.getResponseMessage();
 
-			String result = m_versionCheckHandler.getVersion();
+			String result = mVersionCheckHandler.getVersion();
 			if(((ServerMessageContextImpl)ctx).getServiceDesc().getConfig().getTypeMappings().getOperationAdded()
 					&& opName.equals(SOAConstants.OP_GET_VERSION))
 				response.setParam(0, result);
@@ -191,7 +198,7 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 			Message response = ctx.getResponseMessage();
 
 			String version = (String)request.getParam(0);
-			boolean result = m_versionCheckHandler.isVersionSupported(version);
+			boolean result = mVersionCheckHandler.isVersionSupported(version);
 
 			response.setParam(0, Boolean.valueOf(result));
 			return true;
@@ -218,7 +225,7 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 
 		ctx.getRequestMessage().getParamCount();
 
-		T service = getServiceInstance();
+		T service = getServiceInstance(ctx);
 
 
 		ctxImpl.runLoggingHandlerStage(LoggingHandlerStage.REQUEST_DISPATCH_START);
@@ -309,44 +316,93 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 
 	/**
 	 * Private method to get service instance.
+	 * @param ctx 
 	 * @return
 	 * @throws ServiceException
 	 */
-	private T getServiceInstance() throws ServiceException {
-		T result = null;
-		synchronized (this) {
-			if (!m_serviceInstances.isEmpty()) {
-				result = m_serviceInstances.removeFirst();
+	private T getServiceInstance(MessageContext ctx) throws ServiceException {		
+		T result = null;		
+		if(mServiceImplClassName != null) {
+			synchronized (this) {
+				if (!mServiceInstances.isEmpty()) {
+					result = mServiceInstances.removeFirst();
+				}
+			}
+			if (result == null) {
+				result = createServiceInstance();
+			}
+		}
+		else { // Service Implementation Factory
+			if(mCacheable) {
+				synchronized (this) {
+					if (!mServiceInstances.isEmpty()) {
+						result = mServiceInstances.removeFirst();
+					}
+				}
+				if (result == null) {
+					mServiceImplCount++;
+					result = createServiceInstanceFromFactory(ctx);
+				}
+			}
+			else {
+				result = createServiceInstanceFromFactory(ctx);
+			}
+		}
+		return result;
+	}
+
+
+	private synchronized void returnServiceInstance(T service) {
+		if(mServiceImplClassName != null) {
+			mServiceInstances.addFirst(service);			
+		}
+		else {
+			if(mCacheable) {
+				mServiceInstances.addFirst(service);	
 			}
 		}
 
-		if (result == null) {
-			result = createServiceInstance();
-		}
-
-		return result;
-	}
-
-	private synchronized void returnServiceInstance(T service) {
-		m_serviceInstances.addFirst(service);
 	}
 
 	private T createServiceInstance() throws ServiceException {
-		if (m_svcId == null) {
+		if (mServiceId == null) {
 			throw new IllegalStateException(this.getClass().getName() + " has not been initialized");
 		}
 
-		T result = ReflectionUtils.createInstance(m_serviceImplClassName,
-			m_genServiceInterface, m_classLoader);
+		T result = ReflectionUtils.createInstance(mServiceImplClassName,
+			mGenServiceInterface, mClassLoader);
 
-		m_serviceCreationCount++;
-		if ((m_serviceCreationCount % 500) == 0) {
-			LogManager.getInstance(BaseServiceRequestDispatcher.class).log(Level.SEVERE,
-				"Excessive creation of service instances " + m_serviceImplClassName + " has been detected, " +
-				m_serviceCreationCount + " instances have been created since service startup");
+		mServiceImplCount++;
+		if ((mServiceImplCount % 500) == 0) {
+			tooManyInstances();
 		}
 
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	private T createServiceInstanceFromFactory(MessageContext context)
+			throws ServiceException {
+		if (mServiceId == null) {
+			throw new IllegalStateException(this.getClass().getName()
+					+ " has not been initialized");
+		}
+		T result = null;
+		ServiceImplFactory<T> factory = null;
+		factory = ReflectionUtils.createInstance(mServiceImplFactory, ServiceImplFactory.class, mClassLoader);		
+
+		result = factory.createServiceImpl(context);
+		if ((mServiceImplCount % 500) == 0) {
+			tooManyInstances();
+		}
+		return result;
+	}
+
+	private void tooManyInstances() {
+		LogManager.getInstance(BaseServiceRequestDispatcher.class).log(Level.SEVERE,
+			"Excessive creation of service instances " + mServiceImplClassName + " has been detected, " +
+			mServiceImplCount + " instances have been created since service startup");
+
 	}
 
 	private void verifyOperations(Collection<ServiceOperationDesc> ops) throws ServiceException {
@@ -356,10 +412,10 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 /*			if (s_systemOpNames.contains(name)) {
 				return;
 			}
-*/			DispatchOperactionDef def = m_supportedOps.get(name);
+*/			DispatchOperactionDef def = mSupportedOps.get(name);
 			if (def == null) {
 				throw new ServiceException(ErrorDataFactory.createErrorData(ErrorConstants.SVC_FACTORY_UNKNOWN_OPERATION_IN_CONFIG,
-						ErrorConstants.ERRORDOMAIN, new Object[] {m_svcId.getAdminName() + "." + name}));
+						ErrorConstants.ERRORDOMAIN, new Object[] {mServiceId.getAdminName() + "." + name}));
 			}
 
 			verifyParams(op.getRequestType().getRootJavaTypes(), def.m_inParams, name);
@@ -376,7 +432,7 @@ public abstract class BaseServiceRequestDispatcher<T> implements Dispatcher {
 
 		throw new ServiceException(ErrorDataFactory.createErrorData(ErrorConstants.SVC_FACTORY_INVALID_PARAM_COUNT_IN_CONFIG,
 				ErrorConstants.ERRORDOMAIN, new Object[] {Integer.toString(realParams.length),
-					m_svcId.getAdminName() + "." + opName, Integer.toString(configParams.size())}));
+					mServiceId.getAdminName() + "." + opName, Integer.toString(configParams.size())}));
 	}
 
 	static {

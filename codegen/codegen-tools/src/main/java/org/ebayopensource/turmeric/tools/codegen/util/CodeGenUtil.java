@@ -14,6 +14,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -428,6 +429,24 @@ public class CodeGenUtil {
 		return buffWriter; 
 	}
 
+	public static BufferedReader getFileReader(
+			String destDir, String fileName) throws IOException {
+
+		if (isEmptyString(destDir) || isEmptyString(fileName)) {
+			return null;
+		}
+
+		File dir = createDir(destDir);
+		File inFile = new File(dir, fileName);
+
+	    Charset defaultCharset = Charset.defaultCharset(); 
+	    FileInputStream fileInStream = new FileInputStream(inFile);
+	    InputStreamReader bw = new InputStreamReader(fileInStream,defaultCharset);
+	    BufferedReader buffReader = new BufferedReader(bw);
+		
+		return buffReader; 
+	}
+
 	public static OutputStream getFileOutputStream(
 			String destDir, 
 			String fileName) throws IOException {
@@ -504,6 +523,25 @@ public class CodeGenUtil {
 		}
 	}
 
+	public static void flushAndCloseQuietly(Closeable closeable) {
+		if (closeable == null) {
+			return; // nothing to do
+		}
+
+		try {
+			if(closeable instanceof Flushable){
+			((Flushable)closeable).flush();
+			}
+		} catch (IOException e) {
+			/* ignore */
+		}
+
+		try {
+			closeable.close();
+		} catch (IOException ignore) {
+			/* ignore */
+		}
+	}
 	public static void move(
 			String srcFilePath, 
 			String destLoc, 

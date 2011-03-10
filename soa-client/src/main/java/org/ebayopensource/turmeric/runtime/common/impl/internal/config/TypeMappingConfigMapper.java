@@ -32,6 +32,7 @@ public class TypeMappingConfigMapper {
 	private static final String ATTR_PACKAGE_NAME = "name";
 	private static final String ATTR_PACKAGE_XML_NS = "xml-namespace";
 	private static final String BASIC_XML_TYPE_JAVA_PACKAGE = "java.lang";
+	private static final String ATTR_METHOD_NAME = "methodName";
 	public static void map(String filename, Element topLevel, TypeMappingConfigHolder dst) throws ServiceCreationException {
 		String enforceSingleNS = topLevel.getAttribute("enable-namespace-folding");
 		dst.setEnableNamespaceFolding((enforceSingleNS != null && TRUE.equals(enforceSingleNS)) ? true : false);
@@ -71,6 +72,14 @@ public class TypeMappingConfigMapper {
 			String name = inOperation.getAttribute("name");
 			OperationConfig outOperation = new OperationConfig();
 			outOperation.setName(name);
+			if(inOperation.hasAttribute(ATTR_METHOD_NAME))
+			{
+				outOperation.setMethodName(inOperation.getAttribute(ATTR_METHOD_NAME));
+			}
+			else
+			{
+				outOperation.setMethodName(name);
+			}
 			MessageTypeConfig messageTypeConfig = parseMessageTypeConfig(filename, pkgToNs, inOperation, SOAConstants.XML_NODE_REQUEST_MESSAGE);
 			if (messageTypeConfig != null) {
 				outOperation.setRequestMessage(messageTypeConfig);

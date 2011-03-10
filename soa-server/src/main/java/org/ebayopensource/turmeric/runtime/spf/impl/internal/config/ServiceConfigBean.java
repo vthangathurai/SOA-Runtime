@@ -16,6 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.management.Descriptor;
+import javax.management.modelmbean.DescriptorSupport;
+
+import org.ebayopensource.turmeric.runtime.common.impl.internal.config.NameValue;
+import org.ebayopensource.turmeric.runtime.common.impl.internal.config.OptionList;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.runtime.sif.service.Service;
 
@@ -24,7 +29,11 @@ import com.ebay.kernel.bean.configuration.BeanConfigCategoryInfo;
 import com.ebay.kernel.bean.configuration.BeanPropertyInfo;
 import com.ebay.kernel.bean.configuration.ConfigCategoryCreateException;
 import com.ebay.kernel.bean.configuration.DynamicConfigBean;
+import com.ebay.kernel.configuration.ConfigurationAttribute;
+import com.ebay.kernel.configuration.ConfigurationAttributeList;
 import com.ebay.kernel.configuration.ConfigurationConstants;
+import com.ebay.kernel.configuration.ConfigurationException;
+import com.ebay.kernel.configuration.ConfigurationManager;
 import com.ebay.kernel.configuration.ObjectTypeConverter;
 import com.ebay.kernel.context.RuntimeContext;
 import com.ebay.kernel.util.JdkUtil;
@@ -76,8 +85,10 @@ public abstract class ServiceConfigBean extends BaseConfigBean {
 
 		final String persistFile = getPersistDirName() + config.getAdminName() + "." + category + "-persist.xml";
 
+		String categoryId = getCategoryId(config.getAdminName(), category);
+		
 		final BeanConfigCategoryInfo beanInfo = BeanConfigCategoryInfo
-		.createBeanConfigCategoryInfo(getCategoryId(config.getAdminName(), category), null,
+		.createBeanConfigCategoryInfo(categoryId, null,
 				SOAConstants.CONFIG_BEAN_GROUP_SERVER, true, // persistent
 				true, // ops managable
 				persistFile, // persistent file
@@ -90,7 +101,50 @@ public abstract class ServiceConfigBean extends BaseConfigBean {
 
 		return configBean;
 	}
+	
+	static void initDynamicBeanInfo(DynamicConfigBean dBean, OptionList options) 
+		throws ConfigurationException
+	{	
+		if (options != null) {
+			List<NameValue> list = options.getOption();
+			if (list == null) {
+				return;
+			}
 
+			ConfigurationAttributeList attrsForUpdate = new ConfigurationAttributeList();
+
+			for (NameValue nv : list) {
+				if(!dBean.hasProperty(nv.getName()))
+				{
+					// this is the attribute value...
+					ConfigurationAttribute newAttribute = new ConfigurationAttribute(
+							nv.getName(), nv.getValue());
+					newAttribute.setMBeanAttributeInfo(null); // Give us a defualt
+																// one
+					Descriptor attrDescriptor = new DescriptorSupport();
+					attrDescriptor.setField("name", newAttribute.getName());
+					attrDescriptor.setField("descriptorType", "attribute");
+					attrDescriptor.setField("displayName", newAttribute.getName());
+					attrDescriptor.setField(
+							ConfigurationAttribute.CONFIG_PERSIST_TYPE,
+							ConfigurationAttribute.CONFIG_PERSIST_TYPE_NEVER);
+					newAttribute.getMBeanAttributeInfo().setDescriptor(
+							attrDescriptor);
+	
+					attrsForUpdate.add(newAttribute);
+				}
+			}
+
+			if(attrsForUpdate.size() > 0)
+			{
+				ConfigurationManager configMgr = ConfigurationManager.getInstance();
+	
+				String categoryId = dBean.getConfigCategoryId();
+				configMgr.setAttributeValues(categoryId, attrsForUpdate, true);
+			}
+		}
+	}
+	
 	public String getAdminName() {
 		return m_adminName;
 	}

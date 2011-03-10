@@ -286,7 +286,7 @@ public class BugsForSOA25QETest extends AbstractServiceGeneratorTestCase{
 			String goldPath = getCodegenQEDataFileInput("ConfigGroupMarketV1TypeDefsBuilder.java").getAbsolutePath();
 				
 			assertFileExists(genPath);
-			Assert.assertTrue(compareTwoFiles(genPath, goldPath));	
+			compareTwoFiles(genPath, goldPath);	
 	}
 
 

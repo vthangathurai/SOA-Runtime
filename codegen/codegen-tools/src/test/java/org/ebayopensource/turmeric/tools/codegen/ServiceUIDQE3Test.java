@@ -628,11 +628,11 @@ public class ServiceUIDQE3Test extends AbstractServiceGeneratorTestCase{
 		File metaProperties = new File(metaPropsFile);
 		assertTrue(metaProperties.exists());
 
-		String implClass = destDir.getAbsolutePath()+"/gen-src/service/com/ebayopensource/test/soaframework/tools/codegen/gen/NewadminnameImplSkeleton.java";
+		String implClass = destDir.getAbsolutePath()+"/gen-src/service/com/ebayopensource/test/soaframework/tools/codegen/impl/NewadminnameImplSkeleton.java";
 		File implClassFile = new File(implClass);
 		assertTrue(implClassFile.exists());
 
-		String dispatcherClass = destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/test/soaframework/tools/codegen/gen/gen/NewadminnameRequestDispatcher.java";
+		String dispatcherClass = destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/test/soaframework/tools/codegen/impl/gen/NewadminnameRequestDispatcher.java";
 		File dispatcherClassFile = new File(dispatcherClass);
 		assertTrue(dispatcherClassFile.exists());
 

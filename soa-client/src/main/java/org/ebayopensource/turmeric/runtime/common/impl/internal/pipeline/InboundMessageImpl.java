@@ -11,11 +11,13 @@ package org.ebayopensource.turmeric.runtime.common.impl.internal.pipeline;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -302,6 +304,7 @@ public final class InboundMessageImpl extends BaseMessageImpl implements Inbound
 						Class paramType = paramTypes.get(i);
 						Object value = deser.deserialize(this, paramType);
 						m_params[i] = value;
+						processQueryParameters(ctx.getQueryParams(), paramType, value);	
 					}
 				}
 
@@ -677,5 +680,80 @@ public final class InboundMessageImpl extends BaseMessageImpl implements Inbound
 	public Class getInputStreamClass() {
 	    return m_inputStream == null ? null : m_inputStream.getClass();
 	}
+
+	private Object processQueryParameters(Map<String, String> queryParams, Class<?> paramType, Object toReturn) {
+		if(queryParams == null || queryParams.isEmpty()) { 
+			return toReturn;					
+		}
+		Set<Map.Entry<String, String>> entries = queryParams.entrySet();
+		
+		for(Map.Entry<String, String> e: entries) {
+			setValue(e.getKey(), e.getValue(), toReturn, paramType);
+		}		
+
+		return toReturn;
+	}
+	
+	private void setValue(String key, String value, Object obj, Class<?> type) {
+		
+		Field[] fields = type.getDeclaredFields();
+		
+		for(Field field: fields) {
+			field.setAccessible(true);
+		}		
+		int index = key.indexOf(".");		
+		try {
+			if(index > -1) {
+				String fname = key.substring(0, index);
+				Field f = type.getDeclaredField(fname);
+				f.setAccessible(true);
+				setValue(key.substring(index+1), value, f.get(obj), f.getType());
+			}				
+			else {	
+				Field f = type.getDeclaredField(key);
+				f.setAccessible(true);
+				setFieldValue(obj, f, value);
+			}			
+		} catch (Exception ignored) {			
+			// Ignore the exception
+			// Exceptions may occur for arrays and Maps.
+			// Collections are not supported in SOA 2.8
+		}
+	}
+	
+	private void setFieldValue(Object o, Field f, String v) 
+	throws IllegalArgumentException, IllegalAccessException {
+		Object val  = adaptType(v, f.getType(), f.getName(), o);		
+		if(val != null) {
+			f.set(o, val);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+    private static <T> T adaptType(String from, Class<T> to, String field, Object obj) {
+        T returnObject = null;
+        
+        if (to == String.class) {
+            returnObject = (T) from;
+        } else if (to == Integer.class || to == int.class) {
+            returnObject = (T) Integer.valueOf(from);
+        } else if (to == Long.class || to == long.class) {
+            returnObject = (T) Long.valueOf(from);
+        } else if (to == boolean.class || to == Boolean.class) {
+            returnObject = (T) Boolean.valueOf(from);
+        } else if (to == Short.class || to == short.class) {
+            returnObject = (T) Short.valueOf(from);
+        } else if (to == Double.class || to == double.class) {
+            returnObject = (T) Double.valueOf(from);
+        } else if (to == Float.class || to == float.class) {
+            returnObject = (T) Float.valueOf(from);
+        } else if (to == Byte.class || to == byte.class) {
+            returnObject = (T) Byte.valueOf(from);
+        } else if (to == Character.class || to == char.class) {
+            returnObject = (T) Character.valueOf(from.charAt(0));
+        }
+        return returnObject;
+    }
+
 
 }

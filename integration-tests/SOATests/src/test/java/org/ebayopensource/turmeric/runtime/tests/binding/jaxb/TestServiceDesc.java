@@ -115,7 +115,7 @@ public class TestServiceDesc {
 				Collections.unmodifiableMap(new HashMap<String, Map<String, String>>()),
 				createDefaultDataBinding(),
 				createDefaultDataBinding(),
-				Arrays.asList(new String[] {"COMMON", "INTERMEDIATE", "BUSINESS"}), null
+				Arrays.asList(new String[] {"COMMON", "INTERMEDIATE", "BUSINESS"}), null, null, null
 				);
 	}
 

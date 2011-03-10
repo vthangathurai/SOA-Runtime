@@ -68,7 +68,7 @@ public class CodeGenTypeLibraryGenerator {
 	private static final String TYPE_INFORMATION_TEMPLATE_NO_CATEGORY = "org/ebayopensource/turmeric/tools/library/template/typeinformation_without_category_template.tpt";
 	private static final String OBJECTFACTORY_FILE_NAME = "ObjectFactory.java";
 	private static final String PACKAGEINFO_FILE_NAME = "package-info.java"; 
-
+	private static final String DEPENDENT_JARS_DELIMITER = ";";
 
 	public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
@@ -642,7 +642,7 @@ public class CodeGenTypeLibraryGenerator {
 					getLogger().log(Level.INFO, "Time spent on trying to identify and delete additional types : " +  (endTime - startTime ) + " milliSeconds");
 
 				}catch(Exception e){
-					getLogger().log(Level.WARNING, "exception : " +e);
+					getLogger().log(Level.WARNING, "exception : " +e, e);
 				}
 				
 			} catch (Throwable e) {
@@ -771,7 +771,7 @@ public class CodeGenTypeLibraryGenerator {
 		if(TypeLibraryUtilities.isEmptyString(dependentJarPath))
 			return;
 			
-		String[] dependentLibrariesJarPaths = dependentJarPath.split(",");
+		String[] dependentLibrariesJarPaths = dependentJarPath.split(DEPENDENT_JARS_DELIMITER);
 		
 		if(dependentLibrariesJarPaths.length == 0)
 		   return;
@@ -779,7 +779,10 @@ public class CodeGenTypeLibraryGenerator {
 		
 		//identify the possible java types to be deleted
 		List<String> javaTypesToDelete = new ArrayList<String>();
-		
+		//Need to check if ObjectFactory is being deleted.
+		//One ObjectFactory per library.Need to get a set of all namespaces being referred.
+		Set<String> dependentLibsNamespace = new HashSet<String>();
+
 		for(String currDepLibraryJar : dependentLibrariesJarPaths){
 		String currLibraryName = getLibraryNameFromJarFilePath(currDepLibraryJar);
 			//for referred libraries  the TypeInformation.xml from the related jar . this jar won't be available in classpath and hence has to be mnaually processed
@@ -809,18 +812,21 @@ public class CodeGenTypeLibraryGenerator {
 				if(inputStream != null){
 					
 					TypeLibraryType typeLibraryType = JAXB.unmarshal(inputStream,TypeLibraryType.class );
-					if(typeLibraryType != null)
+					if(typeLibraryType != null){
+						dependentLibsNamespace.add( typeLibraryType.getLibraryNamespace() );
 						for(TypeInformationType typeInformationType : typeLibraryType.getType())
 							javaTypesToDelete.add(typeInformationType.getJavaTypeName());
+					}
 					
 				}
 
 			} catch (IOException e) {
-				getLogger().log(Level.WARNING, "");
+				getLogger().log(Level.WARNING, "Exception while parsing the TypeInformation.xml of jar " + currDepLibraryJar, e);
 			}
 		}
 		
 		deleteJavaTypes(javaTypesToDelete,codeGenCtx);
+		findPackageForObjectFactoriesAndDelete(codeGenCtx,dependentLibsNamespace);
 	}
 
 	private static void deleteTheGeneratedDependentTypesForPlugin(Set<String> depLibrariesSetForDeletingFiles, TypeLibraryCodeGenContext codeGenCtx) {

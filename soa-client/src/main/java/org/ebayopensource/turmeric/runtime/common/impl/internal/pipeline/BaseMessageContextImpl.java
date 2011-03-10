@@ -87,6 +87,8 @@ import org.ebayopensource.turmeric.common.v1.types.CommonErrorData;
 import org.ebayopensource.turmeric.common.v1.types.ErrorCategory;
 import org.ebayopensource.turmeric.common.v1.types.ErrorSeverity;
 
+import com.ctc.wstx.exc.WstxParsingException;
+
 
 
 
@@ -158,6 +160,8 @@ public abstract class BaseMessageContextImpl<D extends ServiceDesc, C extends Se
     private List<Object> m_outParams;
 
     private ByteBufferWrapper m_outWrapper;
+    
+    protected Map<String, String> m_queryParams;
 
     /**
      * Internal constructor to be called by the derived classes.
@@ -502,7 +506,11 @@ public abstract class BaseMessageContextImpl<D extends ServiceDesc, C extends Se
         t = validateNewError(t);
         for (LoggingHandler loggingHandler : m_serviceDesc.getLoggingHandlers()) {
             try {
+				if (t instanceof DataValidationErrorException || t instanceof WstxParsingException) {
+					loggingHandler.logWarning(this, t);
+				} else {
                 loggingHandler.logError(this, t);
+				}             		 
             } catch (Throwable loggingError) {
                 logLoggingError(loggingError, t);
             }
@@ -1133,6 +1141,10 @@ public abstract class BaseMessageContextImpl<D extends ServiceDesc, C extends Se
 
     public ErrorDataProvider getErrorDataProvider() {
         return m_serviceDesc.getErrorDataProviderClass();
+    }
+    
+	public Map<String,String> getQueryParams() {
+		return m_queryParams;
     }
 
     private String parseGuid(String id) {

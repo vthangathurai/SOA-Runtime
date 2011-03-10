@@ -69,11 +69,20 @@ public class SimpleJettyServer {
 		}
 		sh.setInitParameter(SOAConstants.SERVLET_PARAM_LOGGER_RESOURCE_NAME, com.ebay.kernel.logger.Logger.CONSOLE_LOGGING_NAME);
 		root.addServlet(sh, servletName == null ? "/ws/spf/*" : "/Turmeric/" + servletName + "/*");
-
+		
+		ServletHolder sh1 = new ServletHolder(org.ebayopensource.turmeric.runtime.spf.pipeline.SPFServlet.class);
+		sh1.setInitParameter(SOAConstants.SERVLET_PARAM_LOGGER_RESOURCE_NAME, com.ebay.kernel.logger.Logger.CONSOLE_LOGGING_NAME);
+		sh1.setInitParameter(SOAConstants.SERVLET_PARAM_ADMIN_NAME, "AdvertisingUniqueIDServiceV1");
+		root.addServlet(sh1, "/services/advertise/UniqueIDService/v1/*");
+		
+		ServletHolder sh2 = new ServletHolder(org.ebayopensource.turmeric.runtime.spf.pipeline.SPFServlet.class);
+		sh2.setInitParameter(SOAConstants.SERVLET_PARAM_LOGGER_RESOURCE_NAME, com.ebay.kernel.logger.Logger.CONSOLE_LOGGING_NAME);
+		sh2.setInitParameter(SOAConstants.SERVLET_PARAM_ADMIN_NAME, "SoaTestServiceV1");
+		root.addServlet(sh2, "/soa/services/v1/*");
 		// for http://localhost:{port}/Turmeric/Console
-		ServletHolder controller = new ServletHolder(
-				TurmericConsoleFrontController.class);
-		root.addServlet(controller, "/Turmeric/Console/*");
+//		ServletHolder controller = new ServletHolder(
+//				TurmericConsoleFrontController.class);
+//		root.addServlet(controller, "/Turmeric/Console/*");
 		
 		server.setHandler(root);
 	}
@@ -95,6 +104,7 @@ public class SimpleJettyServer {
 	public URI getSPFURI() {
 		return serverURI.resolve("/ws/spf/");
 	}
+	
 
 	public void start() throws Exception {
 		wrapHandlers(new DebugHandler());

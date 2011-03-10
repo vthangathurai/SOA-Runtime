@@ -54,22 +54,23 @@ public class ExceptionUtils {
 	 * @param t the exception
 	 * @return true if Throwable t is caused by client timeout exception.
 	 */
-	public static boolean isClientTimeoutException(Throwable t) {
+	public static SocketException getClientTimeoutException(Throwable t) {
 		Throwable cause = ExceptionUtils.getRootCause(t);
 		if (!(cause instanceof SocketException)) {
-			return false;
+			return null;
 		}
+		SocketException socketExcption = (SocketException)cause;
 		String message = cause.getMessage();
 		if (null == message) {
-			return false;
+			return null;
 		}
 		if (message.contains("Software caused connection abort")) {
-			return true;
+			return socketExcption;
 		}
 		if (message.contains("Connection reset by peer")) {
-			return true;
+			return socketExcption;
 		}
-		return false;
+		return null;
 	}
 
 	/**

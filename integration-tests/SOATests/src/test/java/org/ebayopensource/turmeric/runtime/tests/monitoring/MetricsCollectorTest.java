@@ -31,6 +31,7 @@ import org.ebayopensource.turmeric.runtime.sif.impl.internal.pipeline.ClientMess
 import org.ebayopensource.turmeric.runtime.sif.impl.internal.service.ClientServiceDescFactory;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.pipeline.ServerMessageProcessor;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.ServerServiceDescFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,6 +52,7 @@ public class MetricsCollectorTest extends BaseMonitoringTest {
 		// load the client-side service to ensure that its admin name is known
 		ClientServiceDescFactory.getInstance().getServiceDesc(
 			MetricsRegistryTest.SERVICE_NAME_ITEM, "default");
+		ServerServiceDescFactory.getInstance().getServiceDesc(MetricsRegistryTest.SERVICE_NAME_ITEM);
 	}
 
 	@Test

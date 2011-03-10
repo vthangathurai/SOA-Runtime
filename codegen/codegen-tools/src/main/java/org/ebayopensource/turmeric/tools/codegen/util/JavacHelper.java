@@ -286,12 +286,13 @@ public class JavacHelper {
 			// adding it...
 			if (entryFound == false) {
 				codeGenClassLoader.addURL(classpathURL);
+				entryFound=true;
 			}
 		}
 
 		// if entry not found means that entry has been
 		// added to url classloader
-		return !entryFound;
+		return entryFound;
 	}
 
 	public static String normalizeURLPath(URI uri) {

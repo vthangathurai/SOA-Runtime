@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,8 +31,16 @@ import org.apache.axis2.wsdl.WSDL2Java;
 import org.apache.ws.java2wsdl.Java2WSDLCodegenEngine;
 import org.apache.ws.java2wsdl.utils.Java2WSDLCommandLineOption;
 import org.apache.ws.java2wsdl.utils.Java2WSDLCommandLineOptionParser;
+import org.ebayopensource.turmeric.common.config.TypeInformationType;
+import org.ebayopensource.turmeric.common.config.TypeLibraryType;
+import org.ebayopensource.turmeric.runtime.codegen.common.NSPkgMappingType;
+import org.ebayopensource.turmeric.runtime.codegen.common.NSToPkgMappingList;
+import org.ebayopensource.turmeric.runtime.codegen.common.OpNameCemcMappingType;
+import org.ebayopensource.turmeric.runtime.codegen.common.OpNameToCemcMappingList;
+import org.ebayopensource.turmeric.runtime.codegen.common.PkgToNSMappingList;
 import org.ebayopensource.turmeric.runtime.common.impl.utils.CallTrackingLogger;
 import org.ebayopensource.turmeric.runtime.common.impl.utils.LogManager;
+import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.tools.codegen.CodeGenContext;
 import org.ebayopensource.turmeric.tools.codegen.InputOptions;
 import org.ebayopensource.turmeric.tools.codegen.exception.CodeGenFailedException;
@@ -45,14 +54,6 @@ import org.ebayopensource.turmeric.tools.library.SOATypeRegistry;
 import org.ebayopensource.turmeric.tools.library.TypeLibraryInputOptions;
 import org.ebayopensource.turmeric.tools.library.builders.TypeLibraryParser;
 import org.ebayopensource.turmeric.tools.library.codegen.TypeLibraryCodeGenContext;
-
-import org.ebayopensource.turmeric.common.config.TypeInformationType;
-import org.ebayopensource.turmeric.common.config.TypeLibraryType;
-import org.ebayopensource.turmeric.runtime.codegen.common.NSPkgMappingType;
-import org.ebayopensource.turmeric.runtime.codegen.common.NSToPkgMappingList;
-import org.ebayopensource.turmeric.runtime.codegen.common.OpNameCemcMappingType;
-import org.ebayopensource.turmeric.runtime.codegen.common.OpNameToCemcMappingList;
-import org.ebayopensource.turmeric.runtime.codegen.common.PkgToNSMappingList;
 
 
 public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
@@ -176,6 +177,10 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 		} finally {
 			
 			removeFileHandlerForWSDL2JavaLog();
+
+			//remove the unneccessary ObjectFactory.java and package-info.java SOAPLATFORM-609
+			deleteDuplicateFilesFromDefaultPackage(codeGenCtx);
+
 			if(codeGenCtx.getInputOptions().isObjectFactoryTobeDeleted())
 				deleteObjectFactoryfile(codeGenCtx);
 			// reset to old factory name
@@ -194,7 +199,7 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 			CodeGenUtil.deleteFile(wsdl2javaLogFile);
 			deleteAdditionalJavaTypeFiles(codeGenCtx,destLocation);
 		} catch (Exception e) {
-			getLogger().log(Level.WARNING, "Exception while trying to delete extra types. " + e.getMessage());
+			getLogger().log(Level.WARNING, "Exception while trying to delete extra types. " + e.getMessage(), e);
 		}
 		
 		
@@ -224,6 +229,19 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 
 	}
 
+	/**
+	 * Deletes the Java files ObjectFactory.java and package-info.java from name space SOAConstants.SOA_TYPES_NAMESPACE.
+	 * @param ctx
+	 * @throws CodeGenFailedException
+	 */
+	@SuppressWarnings("deprecation")
+	private void deleteDuplicateFilesFromDefaultPackage(CodeGenContext ctx)throws CodeGenFailedException {
+
+		NSToPkgMappingList ns2PkgList = ctx.getInputOptions().getNSToPkgMappingList();
+		String packageName = getpackageForNamespace(SOAConstants.SOA_TYPES_NAMESPACE,ns2PkgList);
+		deleteEachObjectFactoryClass(ctx, packageName);
+		deleteEachPackageInfoClass(ctx, packageName);
+	}
 	
 	private String[] getWSDL2JavaToolArgsForTypeLib(TypeLibraryCodeGenContext typeLibraryCodeGenContext, String outputDirectory)
 	throws CodeGenFailedException{
@@ -275,6 +293,7 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 			s_logger.log(Level.SEVERE,"could not find namespaces present in the wsdl");
 			throw new CodeGenFailedException("TargetNamespace details for schema section of wsdl could not be found ");
 		}
+		@SuppressWarnings("deprecation")
 		NSToPkgMappingList ns2PkgList = ctx.getInputOptions().getNSToPkgMappingList();
 		//One objectFactory per namespace hence needs to be deleted.
 		for(String currentnamespace : allNamespaces)
@@ -287,6 +306,7 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 		}
 	}
 
+	
 	private String getpackageForNamespace(String currentnamespace,NSToPkgMappingList mappingList) {
 
 		if(mappingList==null)
@@ -314,27 +334,46 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 	 */
 	private void deleteEachObjectFactoryClass(CodeGenContext ctx,
 			String packageForObjectFact) {
+		deleteClassFromGivenPackage(ctx, packageForObjectFact, "ObjectFactory.java");
+	}
+	/**This would delete each package-info.java generated for the wsdl
+	 * @param ctx
+	 * @param packageForObjectFact
+	 */
+	private void deleteEachPackageInfoClass(CodeGenContext ctx,
+			String packageForObjectFact) {
+		deleteClassFromGivenPackage(ctx, packageForObjectFact, "package-info.java");
+	}
+	/**
+	 * This deletes the java source file for the class name specified in the given package.
+	 * @param ctx
+	 * @param packageForObjectFact
+	 * @param className
+	 */
+	private void deleteClassFromGivenPackage(CodeGenContext ctx,
+			String packageForObjectFact, String className) {
 		String projectRoot = ctx.getProjectRoot()==null?ctx.getDestLocation():ctx.getProjectRoot();
 		String folderName = CodeGenUtil.getFolderPathFrompackageName(packageForObjectFact);
 		String fileName = CodeGenUtil.toOSFilePath(projectRoot)  + CodeGenConstants.GEN_SRC_FOLDER + File.separatorChar +
-						  "src" + File.separatorChar + folderName  + "ObjectFactory.java";
-		File objectFactoryFile = new File(fileName);
-		s_logger.log(Level.INFO,"ObjectFactory is at " +fileName);
+						  "src" + File.separatorChar + folderName  + className;
+		File fileToBeDeleted  = new File(fileName);
+
+		s_logger.log(Level.INFO,"Class '"+className+"' is at " +fileName);
 		
 			try {
-				CodeGenUtil.deleteFile(objectFactoryFile);
-				s_logger.log(Level.INFO,"Deleted ObjectFactory.java under package "+ packageForObjectFact);
+				CodeGenUtil.deleteFile(fileToBeDeleted );
+				s_logger.log(Level.INFO,"Deleted '"+className+"' under package "+ packageForObjectFact);
 			} catch (Exception exception) {
 				fileName = CodeGenUtil.toOSFilePath(ctx.getJavaSrcDestLocation(true)) +
-						  "src" + File.separatorChar + folderName  + "ObjectFactory.java";
-				objectFactoryFile = new File(fileName);
-				s_logger.log(Level.INFO,"ObjectFactory is at " +fileName);				
+						  "src" + File.separatorChar + folderName  + className;
+				fileToBeDeleted  = new File(fileName);
+				s_logger.log(Level.INFO,"Class '"+className+"' is at " +fileName);		
 				try {
-					CodeGenUtil.deleteFile(objectFactoryFile);
-					s_logger.log(Level.INFO,"Deleted ObjectFactory.java under package "+ packageForObjectFact);
+					CodeGenUtil.deleteFile(fileToBeDeleted );
+					s_logger.log(Level.INFO,"Deleted "+className+" under package "+ packageForObjectFact);
 				} catch (Exception ex) {
 					
-					s_logger.log(Level.INFO,"Could not delete ObjectFactory under the package " 
+					s_logger.log(Level.INFO,"Could not delete "+className+" under the package " 
 							+ packageForObjectFact
 							+ " due to " + ex.getMessage());
 				}
@@ -356,9 +395,9 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 			}
 			
 		} catch (FileNotFoundException e) {
-			getLogger().log(Level.INFO, e.getMessage());
+			getLogger().log(Level.INFO, e.getMessage(), e);
 		} catch (IOException e) {
-			getLogger().log(Level.INFO,e.getMessage());
+			getLogger().log(Level.INFO, e.getMessage(), e);
 		} finally{
 			CodeGenUtil.closeQuietly(br);
 		}
@@ -410,15 +449,28 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 
 		getLogger().log(Level.INFO, "Dependent libraries are : " + detail(dependentLibraries));
 		
-		for(String libraryName : dependentLibraries){
-			try{
-				typeRegistry.addTypeLibraryToRegistry(libraryName);
-			}catch(Exception e){
-				getLogger().log(Level.WARNING, "Exception while trying to populate the registry for library : "+ libraryName +"\n" +
-						"Exception is : " + e.getMessage());
-			}
+//		for(String libraryName : dependentLibraries){
+//			try{
+//				typeRegistry.addTypeLibraryToRegistry(libraryName);
+//			}catch(Exception e){
+//				getLogger().log(Level.WARNING, "Exception while trying to populate the registry for library : "+ libraryName +"\n" +
+//						"Exception is : " + e.getMessage());
+//			}
+//		}
+
+		/*
+		 * Instead of populating registry library by library, populate at one go for entire list of libraries.
+		 * What difference it makes is, TypeInformation.xml is parsed for all libraries first and 
+		 * then TypeDependecies.xml is parsed for all libraries. 
+		 */
+		List<String> dependentLibrariesList = new ArrayList<String>(dependentLibraries);
+		try {
+			typeRegistry.populateRegistryWithTypeLibraries(dependentLibrariesList);
+		} catch (Exception e) {
+			getLogger().log(Level.WARNING, "Exception while trying to populate the registry for dependent libaries : " +
+			"Exception is : " + e.getMessage(), e);
 		}
-		
+
 		// identify the possible java types to be deleted.
 		// Map of <fully qualified java type name> to <type library name>
 		Map<String,String> javaTypesToDelete = new HashMap<String,String>();
@@ -509,18 +561,68 @@ public class AxisJavaWSDLGeneratorImpl implements JavaWSDLGenerator {
 			
 			TypeLibraryCodeGenContext tempTypeLibContext = new TypeLibraryCodeGenContext(typelibInputOptions, null);
 			parser.processTypeDepXMLFileForGen(tempTypeLibContext, libraryName);
-            for (String libName : parser.getReferredTypeLibraries()) {
-                parser.processTypeDepXMLFile(libName);
-            }
+//            for (String libName : parser.getReferredTypeLibraries()) {
+//                parser.processTypeDepXMLFile(libName);
+//            }
+			/*
+			 * Instead of parsing just second level, parse till nth level deep.
+			 */
+			Set<String> orgReferedTypeLibraries = new HashSet<String>( parser.getReferredTypeLibraries() );
+			doRecursiveSearchForReferredLibs(parser, orgReferedTypeLibraries);
 		} catch (Exception e) {
-			getLogger().log(Level.SEVERE, e.getMessage());
-			throw e;
+			getLogger().log(Level.SEVERE, e.getMessage(), e);
 		}
 		return parser.getReferredTypeLibraries();
 	}
 	
 	
+	/**
+	 * This method parses all the TypeDependcies.xml in the tree and finds out all the libraries referred till nth level.
+	 * @param parser
+	 * @param typeLibrariesToBeParsed
+	 * @throws Exception
+	 */
+	private void doRecursiveSearchForReferredLibs(TypeLibraryParser parser, Set<String> typeLibrariesToBeParsed) throws Exception{
+		Set<String> orgReferedTypeLibraries = new HashSet<String>( parser.getReferredTypeLibraries() );
+		Set<String> currentReferedTypeLibraries = processTypeDepXMLForAllLibaries(parser, typeLibrariesToBeParsed);
+		if(currentReferedTypeLibraries.size() != orgReferedTypeLibraries.size() ){
+			Set<String> deeplyReferedTypeLibraries = getDeeplyAddedLibraries( orgReferedTypeLibraries, currentReferedTypeLibraries );
+			doRecursiveSearchForReferredLibs(parser, deeplyReferedTypeLibraries);
+		}
+	}
 
+	/**
+	 * This method compares two sets and finds out the extra ones added in the second set.
+	 * @param orgReferedTypeLibraries
+	 * @param curReferedTypeLibraries
+	 * @return
+	 */
+	private Set<String> getDeeplyAddedLibraries(Set<String> orgReferedTypeLibraries, Set<String> curReferedTypeLibraries){
+		Set<String> deeplyReferedTypeLibraries = new HashSet<String>();
+		for(String library : curReferedTypeLibraries){
+			if( !(orgReferedTypeLibraries.contains(library)) ){
+				deeplyReferedTypeLibraries.add(library);
+			}
+		}
+		return deeplyReferedTypeLibraries;
+		
+	}
+	/**
+	 * This method parses the TypeDependcies.xml for the given set of libraries
+	 * @param parser
+	 * @param referedTypeLibraries
+	 * @return
+	 * @throws Exception
+	 */
+	private Set<String> processTypeDepXMLForAllLibaries(TypeLibraryParser parser, Set<String> referedTypeLibraries) throws Exception{
+		Iterator it = referedTypeLibraries.iterator();
+		while (it.hasNext()) {
+			String libName = (String) it.next();
+			parser.processTypeDepXMLFile(libName);
+		}
+		
+		return new HashSet<String>( parser.getReferredTypeLibraries() );
+	}
 
 
 	public String wsdl2JavaGenSrcLoc(String srcLocPrefix) {

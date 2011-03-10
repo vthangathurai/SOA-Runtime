@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/CalcService/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CalcService" targetNamespace="http://www.example.org/CalcService/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/CalcService/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="operationTwo">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewOperationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="operationTwoResponse1">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="out" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="operationTwoRequest">
+  	<wsdl:part element="tns:operationTwo" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part element="tns:NewOperationResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="operationTwoResponse1">
+  	<wsdl:part name="parameters" element="tns:operationTwoResponse1"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CalcService">
+    <wsdl:operation name="NewOperation">
+      <wsdl:input message="tns:operationTwoRequest"/>
+      <wsdl:output message="tns:NewOperationResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="OperationTwo">
+    	<wsdl:input message="tns:operationTwoRequest"></wsdl:input>
+    	<wsdl:output message="tns:operationTwoResponse1"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CalcServiceSOAP" type="tns:CalcService">
+
+  	<soap:binding style="document"
+  		transport="http://schemas.xmlsoap.org/soap/http" />
+  	<wsdl:operation name="NewOperation">
+
+  		<soap:operation
+  			soapAction="http://www.example.org/CalcService/newOperation" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="OperationTwo">
+  		<soap:operation
+  			soapAction="http://www.example.org/CalcService/operationTwo" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CalcService">
+    <wsdl:port binding="tns:CalcServiceSOAP" name="CalcServiceSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

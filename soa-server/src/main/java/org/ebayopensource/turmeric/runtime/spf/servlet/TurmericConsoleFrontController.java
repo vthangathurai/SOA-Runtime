@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ebay.configuration.console.BaseConsoleFrontController;
-import com.ebay.configuration.console.HostInformationComponentStatus;
 import com.ebay.configuration.console.ResourceRegistry;
 import com.ebay.configuration.console.helper.LogLinkHelper;
 import com.ebay.kernel.component.Registration;
@@ -64,8 +63,6 @@ public class TurmericConsoleFrontController extends BaseConsoleFrontController {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		System.out.println("Initializing TurmericConsoleFrontController"); //KEEPME
-		Registration.registerComponent(new HostInformationComponentStatus());
-		
 		LogLinkHelper.setLogLinkHelper(new LogLinkHelper.NullHelper());
 		
 		ResourceRegistry reg = ResourceRegistry.getInstance();

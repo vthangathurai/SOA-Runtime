@@ -20,6 +20,7 @@ import org.ebayopensource.turmeric.runtime.common.types.Cookie;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.runtime.common.types.ServiceAddress;
 import org.ebayopensource.turmeric.runtime.sif.pipeline.ClientMessageContext;
+import org.ebayopensource.turmeric.runtime.spf.impl.transport.local.LocalTransport;
 
 
 public class SOALocalTransportRequest implements ISOATransportRequest {
@@ -134,5 +135,15 @@ public class SOALocalTransportRequest implements ISOATransportRequest {
 		return ctx;
 	}
 
+	@Override
+	public String getServletPath() {		
+		// remove the ending '/*'
+		String servletPath = options.getProperty(LocalTransport.REQUEST_URI);
+		int index = -1;
+		if(servletPath != null && (index = servletPath.indexOf("/*")) != -1 ) {
+			servletPath = servletPath.substring(0, index);
+		}
+		return servletPath;
+	}
 
 }

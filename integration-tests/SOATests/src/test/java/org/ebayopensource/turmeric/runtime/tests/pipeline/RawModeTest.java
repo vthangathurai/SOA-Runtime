@@ -132,7 +132,7 @@ public class RawModeTest extends AbstractWithServerTest {
 	
 	@Test
 	public void testNormalCallsRemote() throws Exception {
-		ClientConfigManager.getInstance().setConfigTestCase("testconfig", true);
+		ClientConfigManager.getInstance().setConfigTestCase("config", true);
 		//ServiceConfigManager.getInstance().setConfigTestCase("config", true);
 		m_test1 = ServiceFactory.create(ADMIN_NAME, "remote", serverUri.toURL(), false);
 

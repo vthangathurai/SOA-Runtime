@@ -16,11 +16,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-//	ServiceUIDAdminNameSIFTests.class,
-//	ServiceUIDSharedConsumerTests.class,
-	org.ebayopensource.turmeric.qajunittests.advertisinguniqueidservicev1.sif.AllTests.class
-//	com.ebay.qajunittests.advertisinguniqueidservicev1.spf.AllTests.class,
-//	ServiceUIDAdminNameRESTTests.class
+CustomHttpHeadersTest.class,
+LoggingRequestIDTests.class,
+SvcInvocationTests.class
 })
 
 public class AllTests extends TestSuite {

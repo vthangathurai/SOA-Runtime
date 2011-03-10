@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://www.ebayopensource.org/turmeric/common/v1/types" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://www.ebayopensource.org/turmeric/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.ebayopensource.org/turmeric/services">
+    <wsdl:types>
+        <xs:schema xmlns:tns="http://www.ebayopensource.org/turmeric/services" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.ebayopensource.org/turmeric/services">
+	    <xs:import namespace="http://www.ebayopensource.org/turmeric/common/v1/types"/>
+            <xs:complexType name="getAccountDetailsRequest">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="accountId" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="fieldsToReturn" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="getAccountDetailsResponse">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="emailAddresses" nillable="true" type="tns:emailAddress"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="phoneNumbers" nillable="true" type="tns:phoneNumber"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="streetAddresses" nillable="true" type="tns:streetAddress"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="emailAddress">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="email" type="xs:string"/>
+                    <xs:element minOccurs="0" name="id" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="phoneNumber">
+                <xs:sequence>
+                    <xs:element name="activated" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="id" type="xs:string"/>
+                    <xs:element minOccurs="0" name="number" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" type="tns:phoneType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="streetAddress">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="city" type="xs:string"/>
+                    <xs:element minOccurs="0" name="country" type="xs:string"/>
+                    <xs:element minOccurs="0" name="id" type="xs:string"/>
+                    <xs:element minOccurs="0" name="postalCode" type="xs:string"/>
+                    <xs:element minOccurs="0" name="province" type="xs:string"/>
+                    <xs:element minOccurs="0" name="recipientName" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" type="xs:string"/>
+                    <xs:element minOccurs="0" name="street1" type="xs:string"/>
+                    <xs:element minOccurs="0" name="street2" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="type" nillable="true" type="tns:addressType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="phoneType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="HOME"/>
+                    <xs:enumeration value="WORK"/>
+                    <xs:enumeration value="MOBILE"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="addressType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="HOME"/>
+                    <xs:enumeration value="BUSINESS"/>
+                    <xs:enumeration value="BILLING"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="ErrorMessage" nillable="true" type="ns1:ErrorMessage"/>
+            <xs:element name="getAccountDetails" nillable="true" type="tns:getAccountDetailsRequest"/>
+            <xs:element name="getAccountDetailsResponse" nillable="true" type="tns:getAccountDetailsResponse"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://www.ebayopensource.org/turmeric/common/v1/types" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebayopensource.org/turmeric/common/v1/types">
+            <xs:complexType name="ErrorMessage">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="tns:ErrorData"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorData">
+                <xs:sequence>
+                    <xs:element name="error-id" type="xs:long"/>
+                    <xs:element name="domain" type="xs:string"/>
+                    <xs:element name="severity" type="tns:ErrorSeverity"/>
+                    <xs:element name="category" type="tns:ErrorCategory"/>
+                    <xs:element name="message" type="xs:string"/>
+                    <xs:element minOccurs="0" name="exception-id" type="xs:token"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="ErrorSeverity">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error"/>
+                    <xs:enumeration value="Warning"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="System"/>
+                    <xs:enumeration value="Application"/>
+                    <xs:enumeration value="Request"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getAccountDetailsRequest">
+        <wsdl:part name="parameters" element="ns0:getAccountDetails"/>
+    </wsdl:message>
+    <wsdl:message name="getAccountDetailsResponse">
+        <wsdl:part name="parameters" element="ns0:getAccountDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ErrorMessage">
+        <wsdl:part name="parameters" element="ns0:ErrorMessage"/>
+    </wsdl:message>
+    <wsdl:portType name="AccountServicePortType">
+        <wsdl:operation name="getAccountDetails">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:getAccountDetailsRequest" wsaw:Action="urn:getAccountDetails"/>
+            <wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:getAccountDetailsResponse" wsaw:Action="urn:getAccountDetailsResponse"/>
+            <wsdl:fault xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="ns0:ErrorMessage" name="ErrorMessage" wsaw:Action="urn:getAccountDetailsErrorMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="AccountServiceSOAP11Binding" type="ns0:AccountServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getAccountDetails">
+            <soap:operation soapAction="urn:getAccountDetails" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="AccountServiceSOAP12Binding" type="ns0:AccountServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getAccountDetails">
+            <soap12:operation soapAction="urn:getAccountDetails" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorMessage">
+                <soap12:fault use="literal" name="ErrorMessage"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="AccountServiceHttpBinding" type="ns0:AccountServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getAccountDetails">
+            <http:operation location="AccountService/getAccountDetails"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAccountDetails"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAccountDetails"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="AccountService">
+        <wsdl:port name="AccountServiceSOAP11port_http" binding="ns0:AccountServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/AccountService"/>
+        </wsdl:port>
+        <wsdl:port name="AccountServiceSOAP12port_http" binding="ns0:AccountServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/AccountService"/>
+        </wsdl:port>
+        <wsdl:port name="AccountServiceHttpport" binding="ns0:AccountServiceHttpBinding">
+            <http:address location="http://localhost:8080/AccountService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

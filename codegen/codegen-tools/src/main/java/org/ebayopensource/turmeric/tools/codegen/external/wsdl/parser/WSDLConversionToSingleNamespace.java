@@ -46,6 +46,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.ebayopensource.turmeric.tools.codegen.util.CodeGenUtil;
 
 public class WSDLConversionToSingleNamespace {
 	private static final String XML_SCHEMA = "schema";
@@ -379,7 +380,7 @@ public class WSDLConversionToSingleNamespace {
 			throw new CodeGenFailedException(e.getMessage());
 		}
 		DOMSource sourcewsdl = new DOMSource(m_Document);
-
+		FileOutputStream output = null;
 		try {
 			File file = new File(fileLocation);
 			try {
@@ -392,7 +393,7 @@ public class WSDLConversionToSingleNamespace {
 				s_logger.log(Level.SEVERE, e.getMessage());
 				throw new CodeGenFailedException(e.getMessage());
 			}
-			FileOutputStream output = new FileOutputStream(file);
+			output = new FileOutputStream(file);
 			StreamResult newWsdl = new StreamResult(output);
 			sourcewsdl.setNode(m_Document);
 			transformer.transform(sourcewsdl, newWsdl);
@@ -402,6 +403,8 @@ public class WSDLConversionToSingleNamespace {
 		} catch (TransformerException e) {
 			s_logger.log(Level.SEVERE, e.getMessage());
 			throw new CodeGenFailedException(e.getMessage());
+		}finally{
+			CodeGenUtil.flushAndCloseQuietly(output);
 		}
 	}
 

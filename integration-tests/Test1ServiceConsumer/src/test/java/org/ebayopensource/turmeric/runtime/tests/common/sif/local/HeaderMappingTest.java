@@ -40,6 +40,7 @@ public class HeaderMappingTest extends AbstractWithServerTest {
 		headers.put("X-TURMERIC-SERVICE-VERSION", "header-0-value-should-be-suppressed");
         headers.put("header-1-name", "header-1-value");
         headers.put("header-2-name", "header-2-value");
+        headers.put("header-3-name", "header-3-value");
         // headers.put("Z-GUID", "zuid-should-be-suppressed"); // Special case?
 
 		RequestContext reqCtx = test1.getRequestContext();
@@ -62,8 +63,11 @@ public class HeaderMappingTest extends AbstractWithServerTest {
 		// Assert that they were copied to the response
         for(Map.Entry<String, String> header: headers.entrySet()) {
 		    String respHeaderKey = "COPIED_FROM_REQ_" + header.getKey().toUpperCase();
-            Assert.assertEquals("request header [" + header.getKey() + "] copied to response header [" + respHeaderKey + "]",
+		    // The header X-TURMERIC-SERVICE-VERSION has been suppressed in the config
+		    if(!header.getKey().equals("X-TURMERIC-SERVICE-VERSION")) {
+		    	Assert.assertEquals("request header [" + header.getKey() + "] copied to response header [" + respHeaderKey + "]",
                             header.getValue(), respCtx.getTransportHeader(respHeaderKey));
+		    }
 		}
 	}
 }

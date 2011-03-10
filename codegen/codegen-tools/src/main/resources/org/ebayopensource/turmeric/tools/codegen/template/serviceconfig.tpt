@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+        What and where to look for? All node locations mentioned are relative to service-instance-config
+
+        setup REST options                         node provider-options/header-mapping-options
+        service health check                       node provider-options/error-status-options
+        configure header mappings for request      node provider-options/request-header-mapping-options
+        configure header mappings for response     node provider-options/response-header-mapping-options
+        REST style request url for operations      node provider-options/request-params-mapping
+        configure the custom request handlers      node pipeline-config/request-handlers
+        configure the custom response handlers     node pipeline-config/response-handlers
+        configure the factory class for impl       node service-config/service-impl-factory-class-name
+-->
+<service-config group="@@ServiceConfigGroupName@@" xmlns="http://www.ebayopensource.org/turmeric/common/config">
+<!--
+    service-impl-class-name          The service implementation class.
+                                     This class implements the corresponding service interface.
+    service-impl-factory-class-name  If more than one impl class is needed for service or 
+                                     if more control is needed on instantiating the service impl then this 
+                                     option can be used.
+                                     The flag 'useExternalFactory=true' needs to be configured, if factory 
+                                     mode has to be used
+                                     Based on this flag the generation of request dispatcher class package 
+                                     will vary.
+    Only one of these can be configured, service-impl-class-name or service-impl-factory-class-name. If both 
+    are configured runtime will throw an exception.
+
+    service-interface-class-name     The fully qualified service interface class name.
+    current-version                  Indicates the current version of the service implementation.
+    supported-version                One or more the version that this service supports. 
+                                     If Client does not want to use current version, it can specify in
+                                     client config (use-service-version) which of the supported versions to use. 
+-->
+<!--
+    <service-impl-factory-class-name>
+        
+    </service-impl-factory-class-name>
+    <current-version></current-version> 
+    <supported-version></supported-version>
+-->
+    <service-impl-class-name>@@ServiceImplClassName@@</service-impl-class-name>
+    <service-interface-class-name>@@ServiceInterfaceClassName@@</service-interface-class-name>
+    <service-instance-config>
+        <provider-options>
+<!--
+            Following section configures the various service provider options.
+            unsupported-operation             This allows a service to restrict an operation defined in the 
+                                              interface of the service so that it is not invocable. 
+                                              This makes pools more manageable by allowing service deployers to 
+                                              specifically restrict the operations from among a broadly defined set.
+            supported-data-bindings           Allows a service to disallow certain data bindings, e.g. in case 
+                                              not all bindings can be tested or in case other constraints exist on 
+                                              the use of a particular defined binding.
+                                              If not configured anything SOA fwk supports XML, FAST_INFOSET, NV and JSON
+            error-mapping-handler-class-name  The name of the server-side error mapping class that implements 
+                                              org.ebayopensource.turmeric.runtime.spf.pipeline.ErrorMapper
+                                              It does mapping from the list of exceptions in the MessageContext 
+                                              to the error response that will go out over the wire. The default 
+                                              implementation maps the MessageContext exceptions to an ErrorMessage 
+                                              with one or more Errordata
+            error-data-provider-class-name    The name of the server-side error data provider class.
+                                              This class should implement 
+                                              org.ebayopensource.turmeric.runtime.common.errors.ErrorDataProvider
+            monitoring-level                  Each Metric is associated with monitoring level.  The monitoring-level 
+                                              here tells runtime to log only the Metrics with monitoring level equal 
+                                              to or lower than the specified level.  Possible values are normal, fine 
+                                              and finest. It is the log level to monitor the client use statistics of 
+                                              this service.
+            version-check-handler             The VersionCheckHandler provides versioning information for a service. 
+                                              This is used to test whether an incoming request version is supported 
+                                              by the service; the version check handler throws a ServiceException 
+                                              otherwise.
+                                              To support the built-in isServiceVersionSupported and getServiceVersion 
+                                              operations.
+            default-request-data-binding and default-response-data-binding
+                                              Indicates the default request and response data binding.
+                                              These databindings should be one of the supported data bindings
+-->
+<!--
+            <unsupported-operation></unsupported-operation>
+            <supported-data-bindings>XML</supported-data-bindings>
+            <supported-data-bindings>FAST_INFOSET</supported-data-bindings>
+            <supported-data-bindings>NV</supported-data-bindings>
+            <supported-data-bindings>JSON</supported-data-bindings>
+            <error-mapping-handler-class-name>
+                org.ebayopensource.turmeric.runtime.spf.impl.pipeline.DefaultErrorMapperImpl
+            </error-mapping-handler-class-name> 
+            <error-data-provider-class-name>
+                org.ebayopensource.turmeric.runtime.common.exceptions.PropertyFileBasedErrorProvider
+            </error-data-provider-class-name> 
+            <monitoring-level>normal</monitoring-level> 
+            <version-check-handler>
+                org.ebayopensource.turmeric.runtime.spf.impl.pipeline.SimpleVersionCheckHandler
+            </version-check-handler>
+            <default-request-data-binding>XML</default-request-data-binding> 
+            <default-response-data-binding>XML</default-response-data-binding>
+-->
+<!--
+            When using REST (HTTP GET), SOA header values (X-TURMERIC-*) can be inferred based on the URL 
+            mapping configuration. This allows the parts of the URL to query string and URL path parameters 
+            to X-TURMERIC headers. Apart from mapping the URL mapping section can also configured to not allow 
+            certain headers to be a part of the URL. The header mapping options are name value pairs. The name 
+            attribute is the valid SOA Header. The value can be one of the following formats.
+            path[value]      value is an integer matching one of the "/" separated parts of the URL path, 
+                             starting at position 0, for the example "http://localhost:8080/ws/spf/myservice:" 
+                             path[0] equals "ws", path[1] equals "spf", and path[2] equals "myservice".
+
+                             If the value starts with '+' symbol like path[+2], then parts are mapped relatively. 
+                             i.e. [+1] means no of parts mapped in servlet config plus one
+                             Suppose the web.xsl servlet config for service is 
+                             _soa_/services/Infrastructure/myservice/v1 ( 5 parts ) and the GET request uri is 
+                             _soa_/services/Infrastructure/myservice/v1/myop/myparam ( 7 parts ) then path[+1] 
+                             is path[6] maps to "myop" and path[+2] is path[7] maps to myparam
+
+            queryop          Provides the name of the query parameter at the beginning of the query string, 
+                             for example, when using ?wsdl, queryop will produce value "wsdl".
+                             Ofcourse only one option can have value as queryop.
+
+            query[name]      The name of a query parameter.
+                             The corresponding value will be returned; if there are multiple values, 
+                             they will be separated by semicolons. 
+                             For example, in the query string "?param1=a&param2=b", query[\param2] equals "b".
+
+            reject           Signifies that if the corresponding header is present as part of the URL query string, 
+                             the request should be rejected as malformed request.
+
+            Example configs are 
+                   <option name="X-TURMERIC-OPERATION-NAME">path[+1]</option>
+                   <option name="X-TURMERIC-MESSAGE-PROTOCOL">path[0]</option>
+                   <option name="X-TURMERIC-USER-PASSWORD">reject</option>
+                   <option name="X-TURMERIC-SERVICE-NAME">query[SERVICE-NAME]</option>
+                   <option name="X-TURMERIC-SERVICE-VERSION">query[SERVICE-VERSION]</option>
+                   <option name="X-TURMERIC-OPERATION-NAME">queryop</option>
+           
+-->
+            <header-mapping-options>
+                <option name="X-TURMERIC-OPERATION-NAME">path[+1]</option>
+                <option name="X-TURMERIC-RESPONSE-DATA-FORMAT">query[format]</option>
+            </header-mapping-options>
+<!--
+            Following section allows SOA clients and servers to re-map SOA transport headers to alternative header names 
+            or suppress receiving these headers by the server from the client or vice versa. 
+            This is required to enable coexistence with non-SOA implementations.
+            The values are configured key-value pair where key is the standard SOAHeader name and value could be 
+            either suppress (suppress the header from sending to client)
+            or of format header[*] where * is any name which indicates that header is transported in the name 
+            instead of usual header name.
+
+            Example configs are,
+                   <option name="X-TURMERIC-OPERATION-NAME">header[Operation-Name]</option>
+                   <option name="X-TURMERIC-USER-PASSWORD">reject</option>
+-->
+<!--
+            <request-header-mapping-options>
+                <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+            </request-header-mapping-options>
+            <response-header-mapping-options>
+                <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+            </response-header-mapping-options>
+-->
+<!--
+            Following is the service health check section.  A metric can be specified to measuer the health of the 
+            service.  A threshold and a sample-size can be specified.  If the threshold is exceeded consecutively 
+            for "sample-size" times,  the service is marked "IMPIRED" in SOAServerBrowser.  
+            metric              Name of the metric as defined in MetricDef. This element is optional and defaults 
+                                to SoaFwk.Err.Total The threshold metric value as expressed in a string. 
+                                A comparison MetricValue of the appropriate class will be constructed and then 
+                                initialized from this string.
+            sample-size         Optional; if supplied, it must be a positive integer. 
+                                This is the collection window size as a multiple of the snapshot interval 
+                                (which is usually configured to 60 seconds). 
+                                The default value is 3. Metrics must implement a MetricThreshold interface 
+                                in order to be used in threshold evaluations
+-->
+<!--
+            <error-status-options>
+                <metric>SoaFwk.Err.Total</metric> 
+                <threshold>100</threshold> 
+                <sample-size>3</sample-size> 
+            </error-status-options>
+-->
+<!--
+            The operation mapping feature provides and extra level of dereferencing for specifying 
+            the SOA operation name at runtime.
+            In other words, this feature will provide the user with the ability to specify an alias for the 
+            operation name at runtime. The SOA runtime will do a lookup to find the actual operation name to be 
+            invoked for the alias specified with the request.
+
+            For example, if the user has to invoke the operation "getVersion", the GET request would look something like
+            http://myserver:8080/MyService?...&X-TURMERIC-OPERATION-NAME=getVersion
+
+            With the operation mapping feature the user can configure the web service's ServiceConfig.xml as below
+                       <operation name="getVersion">version</operation>
+
+            Now, the user can specify the request as
+            http://myserver:8080/MyService?...&X-TURMERIC-OPERATION-NAME=version
+-->
+<!--
+            <operation-mapping-options>
+                <operation name="PUT_VALID_OPERATION_NAME">PUT_ALIAS_NAME</operation>
+            </operation-mapping-options>
+-->
+<!--
+           request-params-mapping is used to configure REST style request URL, mapping of the request REST url 
+           parts to the operation request params is mapped here. For each operation, one operation node is defined.
+           One or more options can be defined for an operation based on the complexity of the operation request.
+           option attribute name     It indicates the input payload path. The value of option is substituted in this 
+                                     path.
+           option attribute alias    It is the short alias name for attribute name.
+           option value              The value follows format path[value] where value is integer matching one of 
+                                     the "/" separated parts of the URL path, starting at position 0, for the example 
+                                     "http://localhost:8080/_soa_/services/Infrastructure/myservice/v1/" path[0] equals 
+                                     "_soa_" and path[1] equals "services".  If the value starts with '+' symbol like 
+                                     path[+2], then parts are mapped relatively. i.e. [+1] means no of parts mapped in 
+                                     servlet config plus one. Suppose the web.xsl servlet config for service is 
+                                     _soa_/services/Infrastructure/myservice/v1 ( 5 parts ) and the GET request uri is 
+                                     _soa_/services/Infrastructure/myservice/v1/myop/myparam ( 7 parts ) then path[+1] 
+                                     is path[6] maps to "myop" and path[+2] is path[7] maps to myparam
+-->
+<!--
+              <request-params-mapping>
+                  <operation name="PUT_YOUR_OPERATION_NAME" >
+                      <option alias="PUT_YOUR_ALIAS_NAME" name="PUT_YOUR_OPTION_NAME" >PUT_YOUR_OPTION_VALUE</option>
+                  </operation>
+              </request-params-mapping>
+-->
+        </provider-options>
+<!--
+        Following section configures G11N-options
+        supported-global-id   One or more global ids that needs to be supported out of global ids defined in 
+                              GlobalRegistry.xml. By default all global ids defined in  GlobalRegistry.xml are 
+                              supported.
+        supported-locale      One or more locales that are supported by the global ids defined.
+-->
+<!--
+        <G11N-options>
+            <supported-global-id>PUT_YOUR_GLOBAL_ID</supported-global-id>
+            <supported-global-id>PUT_YOUR_GLOBAL_ID</supported-global-id>
+            <supported-locale>PUT_YOUR_LOCALE</supported-locale>
+        </G11N-options>
+-->
+<!--
+        Pipeline framework lies between message processor and the  transport section.
+        Following section configures the pipeline handlers, dispatchers, request and response handlers etc.
+        request-pipeline           The class that implements interface 
+                                   org.ebayopensource.turmeric.runtime.common.pipeline.Pipeline
+                                   is a driver for running a message in sequence through configured handlers for a service.
+                                   It takes care of handler errors, communication between 
+                                   handlers, metric aggregations etc.
+        response-pipeline          Similar to request-pipeline except it comes into picture after server 
+                                   is invoked.
+        request/response-handlers  The handlers are invoked by the pipeline framework. 
+                                   Apart from one toplevel handler a chain of handlers can be configured. The 
+                                   order of invocation is toplevel handler, and subhandler1, subhandler2 etc  
+                                   defined in chain handlers.
+
+        handler-options            The namevalue pairs to support the configuration needs of handlers. The pairs 
+                                   are accumulated as hashmaps.
+        continue/run-on-error      If the continue-on-error flag is set on the handler that threw the error, the 
+                                   exception is stored to a "warning" list in the message context and the current 
+                                   processing state (normal / error) is not altered. Otherwise, The exception is 
+                                   stored to a critical error list and processing state will be error. Only 
+                                   request/response handlers designated as run-on-error in the configuration will 
+                                   be invoked. The request dispatcher will not be called.
+
+        logging-handler            One or more logging-handlers that implements 
+                                   org.ebayopensource.turmeric.runtime.common.pipeline.LoggingHandler
+                                   Logging handlers provide call request/dispatch/response logging capability.
+                                   Logging handlers are called at various points in service processing. 
+                                   These handlers are distinct from normal pipeline handlers.
+-->
+<!--
+        <pipeline-config>
+            <request-pipeline>
+                <class-name>org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl</class-name> 
+            </request-pipeline>
+            <response-pipeline>
+                <class-name>org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl</class-name> 
+            </response-pipeline>
+            <request-handlers>
+                <handler continue-on-error="true" name="PUT_YOUR_HANDLER_NAME" presence="Mandatory" run-on-error="true">
+                    <class-name>PUT_YOUR_CLASS_NAME</class-name> 
+                    <options>
+                        <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+                    </options>
+                </handler>
+            </request-handlers>
+            <response-handlers>
+                <handler continue-on-error="true" name="PUT_YOUR_HANDLER_NAME" presence="Mandatory" run-on-error="true">
+                    <class-name>PUT_YOUR_CLASS_NAME</class-name>
+                    <options>
+                        <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+                    </options>
+                </handler>
+            </response-handlers>
+            <logging-handler>
+               <class-name>PUT_YOUR_CLASS_NAME</class-name>
+               <options>
+                   <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+               </options>
+            </logging-handler>
+        </pipeline-config>
+-->
+<!--
+        Following section configures one or more processor class names for protocol-specific handling. e.g 
+        SOAP operation. The class should implement interface org.ebayopensource.turmeric.runtime.common.pipeline.ProtocolProcessor.
+        Either URL pattern or transport header can be used.
+-->
+
+        <protocol-processor name="SOAP11" version="1.1">
+	        <indicator>
+                <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP11</transport-header>
+            </indicator>
+            <class-name>
+                org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor
+            </class-name>
+        </protocol-processor>
+        <protocol-processor name="SOAP12" version="1.2">
+            <indicator>
+                <transport-header name="X-TURMERIC-MESSAGE-PROTOCOL">SOAP12</transport-header>
+            </indicator>
+            <class-name>
+                org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor
+            </class-name>
+        </protocol-processor>
+
+<!--
+        Following section allows to override the default databindings configured in the framework or
+        to create a new databinding type.
+        The default databinding types supported by framework are XML, NV, JSON, FAST_INFOSET
+
+        mime-type                         The MIME type to be used when representing this data binding's 
+                                          content type
+        serializer-factory-class-name     The class name which implements 
+                                          org.ebayopensource.turmeric.runtime.common.binding.SerializerFactory
+        deserializer-factory-class-name   The class name which implements 
+                                          org.ebayopensource.turmeric.runtime.common.binding.DeserializerFactory.
+        options                           options are the name value pair that can be used the 
+                                          data-binding-framework. Different data binding defines their
+                                          own options that the data binding understand.
+
+        Using options, Schema validation against the request payload at server side can be enabled.
+        Following are the two option names (validatePayLoad and schemaValidationHandler) are used to configure.
+        validatePayLoad                   If false, The payload would not be validated against the schema,
+                                          but the schema gets loaded.
+                                          If true, The payload would be validated.
+
+        schemaValidationHandler           The class that should implement javax.xml.bind.ValidationEventHandler.
+        For more details, please refer https://www.ebayopensource.org/wiki/display/TURMERICDOC/Schema+Validation
+
+        Here are an example data binding section if custom option values are required.
+-->
+<!--
+        <data-binding-config>
+            <data-binding name="FAST_INFOSET">
+                <mime-type>application/fastinfoset</mime-type>
+                <serializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="elementFormDefault">UNQUALIFIED</option>
+                    <option name="validatePayLoad">false</option>
+                    <option name="schemaValidationListenerClass">
+                        org.ebayopensource.turmeric.runtime.binding.impl.jaxb.JAXBValidationEventHandler
+                    </option>
+                </options>
+            </data-binding>
+            <data-binding name="XML">
+                <mime-type>text/xml</mime-type>
+                <serializer-factory-class-name>
+			        org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+			    </serializer-factory-class-name>
+			    <deserializer-factory-class-name>
+			        org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+			    </deserializer-factory-class-name>
+			    <options>
+			        <option name="elementFormDefault">QUALIFIED</option>
+                    <option name="validatePayLoad">false</option>
+                    <option name="schemaValidationListenerClass">
+                        org.ebayopensource.turmeric.runtime.binding.impl.jaxb.JAXBValidationEventHandler
+                    </option>
+			    </options>
+            </data-binding>
+            <data-binding name="NV">
+                <mime-type>text/plain</mime-type>
+                <serializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="elementFormDefault">QUALIFIED</option>
+                    <option name="validatePayLoad">false</option>
+                    <option name="schemaValidationListenerClass">
+                        org.ebayopensource.turmeric.runtime.binding.impl.jaxb.JAXBValidationEventHandler
+                    </option>
+                </options>
+            </data-binding>
+            <data-binding name="JSON">
+                <mime-type>text/plain</mime-type>
+                <serializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="elementFormDefault">QUALIFIED</option>
+                    <option name="useSchemaInfo">FALSE</option>
+                    <option name="validatePayLoad">false</option>
+                    <option name="schemaValidationListenerClass">
+                        org.ebayopensource.turmeric.runtime.binding.impl.jaxb.JAXBValidationEventHandler
+                    </option>
+                </options>
+            </data-binding>
+        </data-binding-config>
+-->
+    </service-instance-config>
+</service-config>

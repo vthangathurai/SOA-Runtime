@@ -82,7 +82,7 @@ public class ServerNoConfigTest extends AbstractServiceGeneratorTestCase{
 		 Assert.assertTrue(compareTwoFiles(genPath, goldPath));	
 		 
 		 
-		 genPath = destDir.getAbsolutePath() + "/gen-meta-src/WEB-INF/web.xml";
+		 genPath = destDir.getAbsolutePath() + "/gen-web-content/WEB-INF/web.xml";
 			
 		  goldPath = getTestResrcDir() + "/HelloWorldIntf/gen-meta-src/WEB-INF/web.xml";
 				

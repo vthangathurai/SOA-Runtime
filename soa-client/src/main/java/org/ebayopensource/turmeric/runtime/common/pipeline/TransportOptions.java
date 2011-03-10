@@ -283,6 +283,15 @@ public class TransportOptions {
 		return Collections.unmodifiableCollection(m_properties.keySet());
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @return the property value
+	 */
+	public String getProperty(String name) {
+		return m_properties.get(name);
+	}
+	
 	@Override
 	public String toString() {
 		String superStr = super.toString();

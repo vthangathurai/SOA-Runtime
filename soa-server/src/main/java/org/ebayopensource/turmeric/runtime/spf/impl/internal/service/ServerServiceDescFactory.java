@@ -178,21 +178,16 @@ public final class ServerServiceDescFactory extends BaseServiceDescFactory<Serve
 		RequestPatternMatcher<DataBindingDesc> bindingMatcherForResponse =
 			new RequestPatternMatcher<DataBindingDesc>(true);
 		createDataBindingsMatchers(bindings.values(),
-			bindingMatcherForRequest, bindingMatcherForResponse);
-
-		String serviceImplClassName = config.getServiceImplClassName();
-		if (serviceImplClassName == null) {
-			throw new ServiceCreationException(ErrorDataFactory.createErrorData(ErrorConstants.SVC_FACTORY_UNDEFINED_IMPL_CLASS_NAME,
-					ErrorConstants.ERRORDOMAIN));
-		}
-
+			bindingMatcherForRequest, bindingMatcherForResponse);			
+	
 		ErrorMapper errorMapper = createErrorMapper(processorConfig, serverSvcId, cl);
 		ErrorDataProvider errorDataProviderClass = getErrorDataProviderClass(processorConfig, cl);
 		List<LoggingHandler> loggingHandlers = createLoggingHandlers(id, processorConfig, cl);
 
-		// Dispatcher class name is based on the admin name.
-		String serviceDispatcherClassName = ServiceNameUtils.getServiceDispatcherClassName(
-				serverSvcId.getAdminName(), serviceImplClassName);
+		String serviceDispatcherClassName = getDispatcherClassName(config);
+
+		String serviceImplClassName = config.getServiceImplClassName();
+		String implFactory = config.getServiceImplFactoryClassName();
 
 		BaseServiceRequestDispatcher<?> serviceDispatcher = null;
 		try {
@@ -208,7 +203,8 @@ public final class ServerServiceDescFactory extends BaseServiceDescFactory<Serve
 		VersionCheckHandler versionCheckHandler = createVersionCheckHandler(serverSvcId, config, cl);
 
 		serviceDispatcher.init(serverSvcId, serviceInterfaceClass,
-			serviceImplClassName, cl, operations.values(), versionCheckHandler);
+			serviceImplClassName, cl, operations.values(), versionCheckHandler,implFactory, 
+			config.isImplCached());
 
 		Dispatcher requestDispatcher = new SimpleInvokerDispatcher(serviceDispatcher);
 		Dispatcher responseDispatcher = new SimpleServerResponseDispatcher(true);
@@ -273,9 +269,35 @@ public final class ServerServiceDescFactory extends BaseServiceDescFactory<Serve
 			authentOperationsMap,
 			defaultRequestBinding,
 			defaultResponseBinding,
-			serviceLayers, cachePolicyDesc);
+			serviceLayers, cachePolicyDesc,config.getRequestParamsDescriptor(), implFactory);
 
 		return result;
+	}
+
+	private String getDispatcherClassName(ServiceConfigHolder config)
+			throws ServiceCreationException {
+		String implClass = config.getServiceImplClassName();
+		String dispatcher = null;
+		if (implClass != null) {
+			dispatcher = ServiceNameUtils.getServiceDispatcherClassName(
+					config.getAdminName(), implClass);
+		}
+		String implFactory = null;
+		if (implClass == null) {
+			implFactory = config.getServiceImplFactoryClassName();
+			if (implFactory == null) {
+				// Same error message for backward compatibility
+				throw new ServiceCreationException(
+						ErrorDataFactory
+								.createErrorData(
+										ErrorConstants.SVC_FACTORY_UNDEFINED_IMPL_CLASS_NAME,
+										ErrorConstants.ERRORDOMAIN));
+			}
+			String interfaceName = config.getServiceInterfaceClassName();
+			dispatcher = ServiceNameUtils.getServiceDispatcherClassName(
+					config.getAdminName(), interfaceName);
+		}
+		return dispatcher;
 	}
 
 	private DataBindingDesc getDefaultRequestDataBinding(ServiceConfigHolder config, Collection<String> supportedDataBindings,
@@ -384,6 +406,9 @@ public final class ServerServiceDescFactory extends BaseServiceDescFactory<Serve
 				String indexval = value.substring(5, value.length()-1);
 				Integer indexnum = null;
 				try {
+					if(indexval.startsWith("+")) {
+						indexval = indexval.replace("+", "-");
+					}
 					indexnum = Integer.valueOf(indexval);
 				} catch (NumberFormatException e) {
 					throw new ServiceCreationException(ErrorDataFactory.createErrorData(ErrorConstants.SVC_FACTORY_INVALID_MAPPING_VALUE,
@@ -489,8 +514,7 @@ public final class ServerServiceDescFactory extends BaseServiceDescFactory<Serve
 			Collections.unmodifiableMap(new HashMap<String, Map<String, String>>()),
 			bindings.get(BindingConstants.PAYLOAD_XML),
 			bindings.get(BindingConstants.PAYLOAD_XML),
-			serviceLayers, null
-		);
+			serviceLayers, null, null, null);
 
 		return result;
 	}

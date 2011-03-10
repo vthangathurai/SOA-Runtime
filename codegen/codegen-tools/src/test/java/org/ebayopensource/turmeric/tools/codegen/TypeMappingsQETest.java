@@ -1,13 +1,13 @@
 package org.ebayopensource.turmeric.tools.codegen;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import junit.framework.Assert;
 
-import org.ebayopensource.turmeric.tools.codegen.AbstractServiceGeneratorTestCase;
-import org.junit.After;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.ElementNameAndAttributeQualifier;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,11 +28,13 @@ public class TypeMappingsQETest extends AbstractServiceGeneratorTestCase {
 	@Before
 	public void init() throws Exception{
 	
+		mavenTestingRules.setFailOnViolation(false);	
 		testingdir.ensureEmpty();
 		destDir = testingdir.getDir();
 		binDir = testingdir.getFile("bin");
 		prDir = testingdir.getDir();
-		
+		XMLUnit.setIgnoreAttributeOrder(true);
+		XMLUnit.setIgnoreWhitespace(true);
 		
 		}
 
@@ -72,8 +74,11 @@ public class TypeMappingsQETest extends AbstractServiceGeneratorTestCase {
 		String path = destDir.getAbsolutePath()+ "/gen-meta-src/META-INF/soa/common/config/HelloWorldService/TypeMappings.xml";
 		String goldPath = getTestResrcDir() +"/typemappings//gen-meta-src/META-INF/soa/common/config/HelloWorldService/TypeMappings.xml";
 		
+		String genstr = readFileAsString(path);
+		String goldstr = readFileAsString(goldPath);
+		
 		assertFileExists(path);
-		Assert.assertTrue(compareTwoFiles(path, goldPath));
+		XMLAssert.assertXMLEqual(genstr, goldstr);
 		
 		
 	}
@@ -106,8 +111,15 @@ public class TypeMappingsQETest extends AbstractServiceGeneratorTestCase {
 				String path = destDir.getAbsolutePath()+ "/gen-meta-src/META-INF/soa/common/config/ShippingCalculatorService/TypeMappings.xml";
 				String goldPath = getTestResrcDir() +"/typemappings//gen-meta-src/META-INF/soa/common/config/ShippingCalculatorService/TypeMappings.xml";
 				
+				String genstr = readFileAsString(path);
+				String goldstr = readFileAsString(goldPath);
+				
 				assertFileExists(path);
-				Assert.assertTrue(compareTwoFiles(path, goldPath));
+				
+				Diff diff = new Diff(goldstr, genstr);
+				
+				diff.overrideElementQualifier(new ElementNameAndAttributeQualifier("xml-namespace"));
+				Assert.assertTrue(diff.similar());
 		
 		
 	}
@@ -139,8 +151,14 @@ File wsdl = getCodegenQEDataFileInput("ShippingCalculatorService.wsdl");
 				String path = destDir.getAbsolutePath()+ "/gen-meta-src/META-INF/soa/common/config/ShippingCalculatorService/TypeMappings.xml";
 				String goldPath = getTestResrcDir() +"/typemappings//gen-meta-src/META-INF/soa/common/config/ShippingCalculatorService/TypeMappings2.xml";
 				
+				String genstr = readFileAsString(path);
+				String goldstr = readFileAsString(goldPath);
+				
 				assertFileExists(path);
-				Assert.assertTrue(compareTwoFiles(path, goldPath));
+				Diff diff = new Diff(goldstr, genstr);
+				
+				diff.overrideElementQualifier(new ElementNameAndAttributeQualifier("xml-namespace"));
+				Assert.assertTrue(diff.similar());
 		
 	}
 }

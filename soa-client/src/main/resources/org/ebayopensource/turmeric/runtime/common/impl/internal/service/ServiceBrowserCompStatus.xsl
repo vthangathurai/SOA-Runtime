@@ -119,8 +119,16 @@
 			<th></th>
 			<td colspan="2">
 				<table border="1" width="100%" bgcolor="#E0FFFF">
-					<xsl:call-template name="RenderBaseServiceDesc"/>
-					<tr><td>Impl</td><td><xsl:value-of select="impl-class"/></td></tr>
+					<xsl:call-template name="RenderBaseServiceDesc"/>					
+					<xsl:choose>
+						<xsl:when test="impl-factory-class != '(null)'">
+							<tr><td>Impl Factory</td><td><xsl:value-of select="impl-factory-class"/></td></tr>							
+						</xsl:when>
+						<xsl:otherwise>
+							<tr><td>Impl</td><td><xsl:value-of select="impl-class"/></td></tr>
+						</xsl:otherwise>						
+					</xsl:choose>
+					
 				</table>
 			</td>
 		</tr>

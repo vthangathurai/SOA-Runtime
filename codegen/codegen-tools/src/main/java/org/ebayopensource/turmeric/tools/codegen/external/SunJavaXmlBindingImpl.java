@@ -15,7 +15,9 @@ import java.util.Set;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 
+import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.tools.codegen.CodeGenContext;
 import org.ebayopensource.turmeric.tools.codegen.exception.CodeGenFailedException;
 
@@ -28,7 +30,11 @@ import org.ebayopensource.turmeric.common.config.ServiceTypeMappingConfig;
 public class SunJavaXmlBindingImpl implements JavaXmlBinder {
 	
 	//private static final String DEFAULT_SCHEMA_FILE_NAME = "schema1.xsd";
-
+	private static final String DEFAULT_NS =  SOAConstants.SOA_CONFIG_NAMESPACE;
+	private final static QName serviceQNAME = new QName(DEFAULT_NS, "service");
+	private final static QName clientConfigListQNAME = new QName(DEFAULT_NS, "client-config-list");
+	private final static QName serviceConfigQNAME = new QName(DEFAULT_NS, "service-config");
+	private final static QName securityPolicyQNAME = new QName(DEFAULT_NS, "security-policy");
 	
 	public SunJavaXmlBindingImpl() {		
 	}
@@ -66,7 +72,7 @@ public class SunJavaXmlBindingImpl implements JavaXmlBinder {
 				Writer fileWriter) throws Exception {		
 	    // create an element for marshalling
 	    JAXBElement<ServiceTypeMappingConfig> typeMappingsElement = 
-			(new ObjectFactory()).createService(typeMappings); 
+	    	new JAXBElement<ServiceTypeMappingConfig>(serviceQNAME, ServiceTypeMappingConfig.class, null, typeMappings); 
 	    marshal(typeMappingsElement, fileWriter);
 	}
 		
@@ -76,7 +82,7 @@ public class SunJavaXmlBindingImpl implements JavaXmlBinder {
 			Writer fileWriter) throws Exception {		
 		// create an element for marshalling
 	    JAXBElement<ClientConfigList> clientCfgListElement = 
-	    		(new ObjectFactory()).createClientConfigList(clientCfgList);
+	    	new JAXBElement<ClientConfigList>(clientConfigListQNAME, ClientConfigList.class, null, clientCfgList);
 		
 	    marshal(clientCfgListElement, fileWriter);
 	}
@@ -87,7 +93,7 @@ public class SunJavaXmlBindingImpl implements JavaXmlBinder {
 			Writer fileWriter) throws Exception {
 		// create an element for marshalling
         JAXBElement<ServiceConfig> serviceConfigElement = 
-        		(new ObjectFactory()).createServiceConfig(serviceConfig);
+        	new JAXBElement<ServiceConfig>(serviceConfigQNAME, ServiceConfig.class, null, serviceConfig);
 		
 	    marshal(serviceConfigElement, fileWriter);
 	}
@@ -99,7 +105,7 @@ public class SunJavaXmlBindingImpl implements JavaXmlBinder {
 		
 		// create an element for marshalling
         JAXBElement<ServiceSecurityConfig> serviceSecurityConfigElement = 
-        		(new ObjectFactory()).createSecurityPolicy(securityPolicyConfig);
+        	new JAXBElement<ServiceSecurityConfig>(securityPolicyQNAME, ServiceSecurityConfig.class, null, securityPolicyConfig);
 		
 	    marshal(serviceSecurityConfigElement, fileWriter);
 	}

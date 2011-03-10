@@ -33,7 +33,7 @@ public class WebXMLTest extends AbstractServiceGeneratorTestCase {
 		destDir = testingdir.getDir();
 		binDir = testingdir.getFile("bin");
 		
-		
+		createPropertyFile(destDir.getAbsolutePath(),"service_impl_project.properties");
 		}
 
 	/**
@@ -61,7 +61,7 @@ public class WebXMLTest extends AbstractServiceGeneratorTestCase {
 		 
 		 
 		 
-		 String genPath = destDir.getAbsolutePath() + "/gen-meta-src/WEB-INF/web.xml";
+		 String genPath = destDir.getAbsolutePath() + "/gen-web-content/WEB-INF/web.xml";
 			
 		 String goldPath = getTestResrcDir() + "/HelloWorldIntf/gen-meta-src/WEB-INF/web.xml";
 				

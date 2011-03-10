@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.ebayopensource.turmeric.runtime.common.binding.SerializerFactory;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ErrorDataFactory;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ExceptionUtils;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceException;
+import org.ebayopensource.turmeric.runtime.common.exceptions.TransportException;
 import org.ebayopensource.turmeric.runtime.common.impl.attachment.BaseMessageAttachments;
 import org.ebayopensource.turmeric.runtime.common.impl.attachment.OutboundMessageAttachments;
 import org.ebayopensource.turmeric.runtime.common.impl.attachment.SOAMimeUtils;
@@ -45,7 +47,6 @@ import org.ebayopensource.turmeric.runtime.common.service.ServiceOperationDesc;
 import org.ebayopensource.turmeric.runtime.common.types.Cookie;
 import org.ebayopensource.turmeric.runtime.common.types.G11nOptions;
 import org.ebayopensource.turmeric.runtime.common.types.SOAHeaders;
-
 import org.ebayopensource.turmeric.runtime.errorlibrary.ErrorConstants;
 import org.ebayopensource.turmeric.runtime.sif.pipeline.ClientMessageContext;
 
@@ -366,16 +367,38 @@ public final class OutboundMessageImpl extends BaseMessageImpl implements Outbou
 		SerializerFactory serFactory = getDataBindingDesc().getSerializerFactory();
 		Map<String, String> options = serFactory.getOptions();
 		boolean ignoreClientTimeout = DataBindingOptions.IgnoreClientTimeout.getBoolOption(options);
-		if (!ignoreClientTimeout || !ExceptionUtils.isClientTimeoutException(e)) {
-			ServiceException se = null;
+
+		ServiceException se = null;
+		SocketException socketException = ExceptionUtils.getClientTimeoutException(e);
+
+		if (socketException == null) {// not caused by socket exception
 			if (e instanceof ServiceException) {
 				se = (ServiceException) e;
 			} else {
-				se = new ServiceException(ErrorDataFactory.createErrorData(ErrorConstants.SVC_DATA_WRITE_ERROR, 
-						ErrorConstants.ERRORDOMAIN, new String[] {e.toString()}), e);
+				se = new ServiceException(ErrorDataFactory.createErrorData(
+						ErrorConstants.SVC_DATA_WRITE_ERROR,
+						ErrorConstants.ERRORDOMAIN, new String[] { e
+								.toString() }), e);
 			}
 			throw se;
 		}
-		LogManager.getInstance(JAXBBasedSerializer.class).log(Level.SEVERE, "Client timeout", e); 
+
+		// caused by socket exception
+		se = new TransportException(ErrorDataFactory
+				.createErrorData(ErrorConstants.SVC_DATA_WRITE_ERROR,
+						ErrorConstants.ERRORDOMAIN,
+						new String[] { socketException.toString() }),
+				socketException);
+		
+		if (!ignoreClientTimeout) {
+			se = new TransportException(ErrorDataFactory
+					.createErrorData(ErrorConstants.SVC_DATA_WRITE_ERROR,
+							ErrorConstants.ERRORDOMAIN,
+							new String[] { socketException.toString() }),
+					socketException);
+			throw se;
+		}
+		
+		LogManager.getInstance(JAXBBasedSerializer.class).log(Level.SEVERE, "Client timeout", se); 
 	}
 }

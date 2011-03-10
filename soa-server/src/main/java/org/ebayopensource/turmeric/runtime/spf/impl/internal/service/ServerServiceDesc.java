@@ -47,6 +47,7 @@ public final class ServerServiceDesc extends ServiceDesc {
 	private final RequestPatternMatcher<DataBindingDesc> m_bindingMatcherRequest;
 	private final RequestPatternMatcher<DataBindingDesc> m_bindingMatcherResponse;
 	private final String m_serviceImplClassName;
+	private final String m_serviceImplfactory;
 	private final ErrorMapper m_errorMapper;
 	private final Map<String, GlobalIdDesc> m_globalIdMap;
 	private final VersionCheckHandler m_versionCheckHandler;
@@ -57,6 +58,7 @@ public final class ServerServiceDesc extends ServiceDesc {
 	private final DataBindingDesc m_defaultResponseBinding;
 	private final CachePolicyDesc m_cachePolicyDesc;
 	private OperationMappings m_operationMappings;
+	private final RequestParamsDescriptor requestParamDesc;
 
 	public ServerServiceDesc(ServerServiceId id,
 		QName serviceQName,
@@ -90,7 +92,9 @@ public final class ServerServiceDesc extends ServiceDesc {
 		DataBindingDesc defaultRequestBinding,
 		DataBindingDesc defaultResponseBinding,
 		List<String> serviceLayers,
-		CachePolicyDesc cachePolicyDesc
+		CachePolicyDesc cachePolicyDesc,
+		RequestParamsDescriptor requestParamDesc,
+		String serviceImplfactory
 		)
 	{
 		super(id, serviceQName, config, requestPipeline, responsePipeline,
@@ -115,8 +119,8 @@ public final class ServerServiceDesc extends ServiceDesc {
 
 		if (config != null) {
 			// check properties that can be null in fallback scenario
-			if (serviceImplClassName == null) {
-				throw new NullPointerException();
+			if (serviceImplClassName == null && serviceImplfactory == null) {
+					throw new NullPointerException();
 			}
 		}
 
@@ -125,6 +129,8 @@ public final class ServerServiceDesc extends ServiceDesc {
 		m_bindingMatcherRequest = bindingMatcherRequest;
 		m_bindingMatcherResponse = bindingMatcherResponse;
 		m_serviceImplClassName = serviceImplClassName;
+		m_serviceImplfactory = serviceImplfactory;
+
 		m_errorMapper = errorMapper;
 		m_globalIdMap = Collections.unmodifiableMap(globalIdMap);
 		m_versionCheckHandler = versionCheckHandler;
@@ -135,7 +141,12 @@ public final class ServerServiceDesc extends ServiceDesc {
 		m_defaultRequestBinding = defaultRequestBinding;
 		m_defaultResponseBinding = defaultResponseBinding;
 		m_cachePolicyDesc = cachePolicyDesc;
+		this.requestParamDesc = requestParamDesc;
 
+	}
+	
+	public RequestParamsDescriptor getOperationRequestParamsDescriptor() {
+		return this.requestParamDesc;
 	}
 
 	@Override
@@ -251,4 +262,9 @@ public final class ServerServiceDesc extends ServiceDesc {
 		}
 		return Collections.unmodifiableMap(authenticationOptions);
 	}
+	
+	public String getServiceImplFactoryClassName() {	
+		return m_serviceImplfactory;
+	}
+
 }

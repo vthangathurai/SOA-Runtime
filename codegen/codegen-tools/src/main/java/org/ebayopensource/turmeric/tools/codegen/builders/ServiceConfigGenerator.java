@@ -8,27 +8,27 @@
  *******************************************************************************/
 package org.ebayopensource.turmeric.tools.codegen.builders;
 
+import java.io.File;
+import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.File;
 
+import org.ebayopensource.turmeric.common.config.FeatureIndicatorConfig;
+import org.ebayopensource.turmeric.common.config.NameValue;
+import org.ebayopensource.turmeric.common.config.ProtocolProcessorConfig;
+import org.ebayopensource.turmeric.common.config.ServiceConfig;
+import org.ebayopensource.turmeric.common.config.ServiceGroupConfig;
+import org.ebayopensource.turmeric.runtime.codegen.common.ConfigType;
+import org.ebayopensource.turmeric.runtime.codegen.common.ServiceCodeGenDefType;
 import org.ebayopensource.turmeric.runtime.common.impl.utils.LogManager;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.runtime.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor;
 import org.ebayopensource.turmeric.tools.codegen.CodeGenContext;
-import org.ebayopensource.turmeric.tools.codegen.ConfigHelper;
 import org.ebayopensource.turmeric.tools.codegen.InputOptions;
 import org.ebayopensource.turmeric.tools.codegen.SourceGenerator;
 import org.ebayopensource.turmeric.tools.codegen.exception.CodeGenFailedException;
+import org.ebayopensource.turmeric.tools.codegen.util.CodeGenConfigUtil;
 import org.ebayopensource.turmeric.tools.codegen.util.CodeGenUtil;
-
-import org.ebayopensource.turmeric.common.config.ServiceConfig;
-import org.ebayopensource.turmeric.runtime.codegen.common.ConfigType;
-import org.ebayopensource.turmeric.runtime.codegen.common.ServiceCodeGenDefType;
-import org.ebayopensource.turmeric.common.config.ProtocolProcessorConfig;
-import org.ebayopensource.turmeric.common.config.ServiceGroupConfig;
-import org.ebayopensource.turmeric.common.config.FeatureIndicatorConfig;
-import org.ebayopensource.turmeric.common.config.NameValue;
 
 /**
  * Service configuration generator.
@@ -45,6 +45,16 @@ public class ServiceConfigGenerator  implements SourceGenerator {
 	private static final String SERVICE_CONFIG_FILE_NAME = "ServiceConfig.xml";
 	private static final String SOAP_11_VERSION = "1.1";
 	private static final String SOAP_12_VERSION = "1.2";
+
+	private static final String SERVICE_CONFIG_TEMPLATE = 
+		"org/ebayopensource/turmeric/tools/codegen/template/serviceconfig.tpt";
+
+	private static final String SERVICE_GROUP_NAME = "@@ServiceConfigGroupName@@";
+	private static final String SERVICE_GROUP_NAME_ATTR = "group=\"@@ServiceConfigGroupName@@\"";
+	private static final String SERVICE_INT_NAME = "@@ServiceInterfaceClassName@@";
+	private static final String SERVICE_INT_NAME_NODE = "<service-interface-class-name>@@ServiceInterfaceClassName@@</service-interface-class-name>";
+	private static final String SERVICE_IMPL_NAME = "@@ServiceImplClassName@@";
+	private static final String SERVICE_IMPL_NAME_NODE = "<service-impl-class-name>@@ServiceImplClassName@@</service-impl-class-name>";
 
 	private static Logger s_logger = LogManager.getInstance(ServiceConfigGenerator.class);
 
@@ -99,6 +109,7 @@ public class ServiceConfigGenerator  implements SourceGenerator {
 			CodeGenContext codeGenCtx,
 			ServiceConfig serviceConfig)  throws CodeGenFailedException {
 
+		Writer fileWriter = null;
 		try {
 			InputOptions inputOptions = codeGenCtx.getInputOptions();
 	        String destFolderPath =
@@ -107,10 +118,10 @@ public class ServiceConfigGenerator  implements SourceGenerator {
 	        		inputOptions.getServiceAdminName(),
 	        		GEN_SERVICE_CONFIG_DIR);
 
-	        ConfigHelper.generateServiceConfigXml(
-	        			serviceConfig,
-	        			destFolderPath,
-	        			SERVICE_CONFIG_FILE_NAME);
+	        String contents = getUpdatedServiceConfigTemplate(codeGenCtx, serviceConfig);
+
+	        fileWriter = CodeGenUtil.getFileWriter(destFolderPath, SERVICE_CONFIG_FILE_NAME);
+			fileWriter.write(contents );
 
 	        getLogger().log(Level.INFO,
 	        		"Successfully generated  " + SERVICE_CONFIG_FILE_NAME);
@@ -119,11 +130,31 @@ public class ServiceConfigGenerator  implements SourceGenerator {
 			String errMsg = "Failed to generate " + SERVICE_CONFIG_FILE_NAME;
 			getLogger().log(Level.SEVERE, errMsg, ex);
 			throw new CodeGenFailedException(errMsg , ex);
+		}finally{
+			CodeGenUtil.flushAndCloseQuietly(fileWriter);
 		}
 
 
 	}
 
+	private String getUpdatedServiceConfigTemplate(CodeGenContext codeGenCtx,
+			ServiceConfig serviceConfig) throws CodeGenFailedException  {
+		try {
+			if(serviceConfig == null ){
+				throw new CodeGenFailedException("The content of 'serviceConfig' is empty.");
+			}
+
+			String contents = CodeGenUtil.getTemplateContent(SERVICE_CONFIG_TEMPLATE);
+
+			contents = CodeGenConfigUtil.replaceTemplate(contents, SERVICE_GROUP_NAME, serviceConfig.getGroup(), SERVICE_GROUP_NAME_ATTR);
+			contents = CodeGenConfigUtil.replaceTemplate(contents, SERVICE_INT_NAME, serviceConfig.getServiceInterfaceClassName(), SERVICE_INT_NAME_NODE);
+			contents = CodeGenConfigUtil.replaceTemplate(contents, SERVICE_IMPL_NAME, serviceConfig.getServiceImplClassName(), SERVICE_IMPL_NAME_NODE);
+
+			return contents;
+		} catch (Throwable e) {
+			throw new CodeGenFailedException("Failed in retriveing the service config template " + SERVICE_CONFIG_TEMPLATE + e.getMessage());
+		}
+	}
 
 	private ServiceConfig createServiceConfig(CodeGenContext codeGenCtx)
 			throws CodeGenFailedException {

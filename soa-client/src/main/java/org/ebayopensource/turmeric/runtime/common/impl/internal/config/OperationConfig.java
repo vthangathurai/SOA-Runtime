@@ -27,6 +27,7 @@ public class OperationConfig {
     protected MessageTypeConfig errorMessage;
     protected List<MessageHeaderConfig> requestHeader;
     protected List<MessageHeaderConfig> responseHeader;
+    protected String methodName;
     protected String name;
 
     /**
@@ -123,6 +124,16 @@ public class OperationConfig {
      */
     public void setName(String value) {
         this.name = value;
+    }
+    
+    public void setMethodName(String methodName)
+    {
+    	this.methodName = methodName;
+    }
+    
+    public String getMethodName()
+    {
+    	return this.methodName;
     }
     
     /**

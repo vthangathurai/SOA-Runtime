@@ -62,9 +62,9 @@ public class SISkeletonTest extends AbstractServiceGeneratorTestCase{
 		 
 		 
 		
-		 String genPath = destDir.getAbsolutePath() + "/org/ebayopensource/turmeric/tools/codegen/gen/HelloWorldServiceImplSkeleton.java";
+		 String genPath = destDir.getAbsolutePath() + "/org/ebayopensource/turmeric/tools/codegen/impl/HelloWorldServiceImplSkeleton.java";
 			
-		 String goldPath = getTestResrcDir() + "/HelloWorldIntf/gen-src/org/ebayopensource/turmeric/tools/codegen/gen/HelloWorldServiceImplSkeleton.java";
+		 String goldPath = getTestResrcDir() + "/HelloWorldIntf/gen-src/org/ebayopensource/turmeric/tools/codegen/impl/HelloWorldServiceImplSkeleton.java";
 				
 		 assertFileExists(genPath);
 		 Assert.assertTrue(compareTwoFiles(genPath, goldPath));		

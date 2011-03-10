@@ -1926,7 +1926,7 @@ public class SOAGlobalRegistryQETest extends AbstractServiceGeneratorTestCase {
 		return path;
 	}
 
-	private boolean createTypeLibrary(String projectRoot, String libraryName, String version) {
+	public boolean createTypeLibrary(String projectRoot, String libraryName, String version) {
 		boolean flag = false;
 		ServiceGenerator sGenerator = new ServiceGenerator();
 		String[] pluginParameter = { "-gentype",

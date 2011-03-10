@@ -471,7 +471,7 @@ public class Soa25QETest extends AbstractServiceGeneratorTestCase{
 
 		performDirectCodeGen(testArgs, binDir);
 		
-		File file = new File(destDir.getAbsolutePath()+"/gen-src/org/ebayopensource/turmeric/common/v1/types/ObjectFactory.java");
+		File file = new File(destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/turmeric/services/ObjectFactory.java");
 		assertTrue(file.exists());
 	}
 	
@@ -498,7 +498,7 @@ public class Soa25QETest extends AbstractServiceGeneratorTestCase{
 
 	
 		performDirectCodeGen(testArgs, binDir);
-		File file = new File(destDir.getAbsolutePath()+"/gen-src/org/ebayopensource/turmeric/common/v1/types/ObjectFactory.java");
+		File file = new File(destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/turmeric/services/ObjectFactory.java");
 		assertTrue(file.exists());
 	}
 	
@@ -527,7 +527,7 @@ public class Soa25QETest extends AbstractServiceGeneratorTestCase{
 	
 		performDirectCodeGen(testArgs, binDir); 
 	
-		File file = new File(destDir.getAbsolutePath()+"/gen-src/org/ebayopensource/turmeric/common/v1/types/ObjectFactory.java");
+		File file = new File(destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/turmeric/services/ObjectFactory.java");
 		assertTrue(file.exists());
 	}
 

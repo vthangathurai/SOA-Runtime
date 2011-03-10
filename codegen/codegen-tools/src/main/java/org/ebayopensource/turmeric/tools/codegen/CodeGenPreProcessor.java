@@ -18,6 +18,13 @@ import java.util.logging.Logger;
 
 import javax.wsdl.Definition;
 
+import org.ebayopensource.turmeric.runtime.codegen.common.ImplClassDefType;
+import org.ebayopensource.turmeric.runtime.codegen.common.InterfaceClassDefType;
+import org.ebayopensource.turmeric.runtime.codegen.common.InterfaceDefType;
+import org.ebayopensource.turmeric.runtime.codegen.common.InterfaceType;
+import org.ebayopensource.turmeric.runtime.codegen.common.OpNameCemcMappingType;
+import org.ebayopensource.turmeric.runtime.codegen.common.OpNameToCemcMappingList;
+import org.ebayopensource.turmeric.runtime.codegen.common.ServiceCodeGenDefType;
 import org.ebayopensource.turmeric.runtime.common.impl.utils.LogManager;
 import org.ebayopensource.turmeric.tools.codegen.InputOptions.CodeGenType;
 import org.ebayopensource.turmeric.tools.codegen.InputOptions.InputType;
@@ -38,14 +45,6 @@ import org.ebayopensource.turmeric.tools.codegen.util.CodeGenUtil;
 import org.ebayopensource.turmeric.tools.codegen.util.IntrospectUtil;
 import org.ebayopensource.turmeric.tools.codegen.validator.MessageObject;
 import org.ebayopensource.turmeric.tools.codegen.validator.SourceValidator;
-
-import org.ebayopensource.turmeric.runtime.codegen.common.ImplClassDefType;
-import org.ebayopensource.turmeric.runtime.codegen.common.InterfaceClassDefType;
-import org.ebayopensource.turmeric.runtime.codegen.common.InterfaceDefType;
-import org.ebayopensource.turmeric.runtime.codegen.common.InterfaceType;
-import org.ebayopensource.turmeric.runtime.codegen.common.OpNameCemcMappingType;
-import org.ebayopensource.turmeric.runtime.codegen.common.OpNameToCemcMappingList;
-import org.ebayopensource.turmeric.runtime.codegen.common.ServiceCodeGenDefType;
 
 public class CodeGenPreProcessor {
 	
@@ -221,7 +220,12 @@ public class CodeGenPreProcessor {
 		
 		InputOptions inputOptions = codeGenCtx.getInputOptions();
 		
-		if(inputOptions.getCodeGenType().equals(CodeGenType.ServiceFromWSDLImpl)){
+		//ServiceFromWSDLImpl is used by plugin for impl project build
+		//DispatcherForBuild is used by v3 build for impl project build
+		//DispatcherForMaven is used by maven build for impl project build
+		if(inputOptions.getCodeGenType().equals(CodeGenType.ServiceFromWSDLImpl) 
+				|| inputOptions.getCodeGenType().equals(CodeGenType.DispatcherForBuild)
+				|| inputOptions.getCodeGenType().equals(CodeGenType.DispatcherForMaven) ){
 			populateCodegenContextWithWSDLFromClassPath(codeGenCtx);
 		}
 		

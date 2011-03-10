@@ -169,7 +169,7 @@ public class TestServletRequest implements HttpServletRequest {
 	 * @see javax.servlet.http.HttpServletRequest#getServletPath()
 	 */
 	public String getServletPath() {
-		throw new UnsupportedOperationException(TestServletRequest.class + ".getServletPath()");
+		return "ws/spf";
 	}
 
 	/* (non-Javadoc)

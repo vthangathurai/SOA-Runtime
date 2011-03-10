@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -172,6 +175,12 @@ public abstract class AbstractServiceGeneratorTestCase extends AbstractCodegenTe
 		 return intfProps;
 	 }
 	
+	 protected void compileJavaFile(String file) {
+			JavaCompiler compiler = (JavaCompiler) ToolProvider
+			.getSystemJavaCompiler();
+	compiler.run(null, null, null, file);
+	 }
+	
 	protected void createInterfacePropsFile(Properties pro,String path) throws Exception{
 		
 		File file = new File(path +File.separator +"service_intf_project.properties");
@@ -252,9 +261,22 @@ public abstract class AbstractServiceGeneratorTestCase extends AbstractCodegenTe
 
 			
 
-				if (trimmedList2.containsAll(trimmedList1))
+				if (trimmedList2.containsAll(trimmedList1)){
+					for(String ln:trimmedList1){
+						System.out.println(ln);
+					}
+					for(String ln1:trimmedList2){
+						System.out.println(ln1);
+					}
 					return true;
+				}
 				else {
+				for(String ln:trimmedList1){
+					System.out.println(ln);
+				}
+				for(String ln1:trimmedList2){
+					System.out.println(ln1);
+				}
 					Iterator<String> i = trimmedList2.iterator();
 					
 					while(i.hasNext()){
@@ -340,6 +362,54 @@ public abstract class AbstractServiceGeneratorTestCase extends AbstractCodegenTe
 			
 			return false;
 		}
+	 
+	 protected boolean createTypeLibrary(String projectRoot,String libraryName,String namespace) {
+			boolean flag = false;
+			
+			String[] pluginParameter = { "-gentype",
+					"genTypeCreateTypeLibrary",
+					"-pr",
+					projectRoot,
+					"-libname",
+					libraryName,
+					"-libVersion",
+					"1.0.0",
+					"-libNamespace",
+					namespace };
+			try {
+				NonInteractiveCodeGen gen = new NonInteractiveCodeGen();
+				gen.execute(pluginParameter);
+				flag = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				flag = false;
+			}
+			return flag;
+		}
+
+		protected void createType(String projectRoot,String libraryName,String xsdName) {
+			
+			String[] pluginParameter = { "-gentype",
+					"genTypeAddType",
+					"-pr",
+					projectRoot,
+					"-libname",
+					libraryName,
+					"-type",
+					xsdName };
+			try {
+				NonInteractiveCodeGen gen = new NonInteractiveCodeGen();
+				gen.execute(pluginParameter);
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		 protected void codegenAssertFileNotExists(String destDir,String path){
+			 
+			 File file = new File(destDir+File.separator+path);
+			 Assert.assertTrue("file " + path+ "does not exist in directory" + destDir, !file.exists());
+		 }
 	 
 	 protected void assertXML(String expectedPath,String actualPath,String [] attNames) {
 		 XMLUnit.setIgnoreComments(true);

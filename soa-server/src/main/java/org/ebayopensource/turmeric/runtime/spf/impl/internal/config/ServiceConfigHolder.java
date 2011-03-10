@@ -18,14 +18,18 @@ import org.ebayopensource.turmeric.runtime.common.cachepolicy.CachePolicyHolder;
 import org.ebayopensource.turmeric.runtime.common.impl.internal.config.CommonConfigHolder;
 import org.ebayopensource.turmeric.runtime.common.impl.internal.config.ConfigUtils;
 import org.ebayopensource.turmeric.runtime.common.impl.internal.config.OptionList;
-
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.RequestParamsDescriptor;
 
 public class ServiceConfigHolder extends CommonConfigHolder {
-	// When adding properties, please ensure that copy(), dump(), and getters/setters
-	// are all covered for the new properties.  Make sure setters call checkReadOnly().
+	// When adding properties, please ensure that copy(), dump(), and
+	// getters/setters
+	// are all covered for the new properties. Make sure setters call
+	// checkReadOnly().
 
 	// Provider options
 	private String m_serviceImplClassName;
+	private String serviceImplFactoryClassName;
+	private boolean isImplCached;
 	private String m_defaultEncoding;
 	private Set<String> m_supportedGlobalId = new HashSet<String>();
 	private Set<String> m_supportedLocales = new HashSet<String>();
@@ -44,9 +48,9 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	private String m_ResponsePayloadLog;
 	private String m_ResponsePayloadCalLog;
 	private OperationMappings m_operationMappings;
+	private RequestParamsDescriptor reqParamsDesc;
 	private static final char NL = '\n';
 
-	
 	public ServiceConfigHolder(String adminName) {
 		super(adminName);
 	}
@@ -58,6 +62,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 		newCH.m_readOnly = false;
 		newCH.copyMemberData(this);
 		newCH.m_serviceImplClassName = m_serviceImplClassName;
+		newCH.serviceImplFactoryClassName = serviceImplFactoryClassName;
+		newCH.isImplCached = isImplCached;
 		newCH.m_versionCheckHandlerClassName = m_versionCheckHandlerClassName;
 		newCH.m_defaultEncoding = m_defaultEncoding;
 		if (m_supportedGlobalId != null) {
@@ -67,32 +73,40 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 			newCH.m_supportedLocales = new HashSet<String>(m_supportedLocales);
 		}
 		if (m_supportedDataBindings != null) {
-			newCH.m_supportedDataBindings = new ArrayList<String>(m_supportedDataBindings);
+			newCH.m_supportedDataBindings = new ArrayList<String>(
+					m_supportedDataBindings);
 		}
 		if (m_unsupportedOperation != null) {
-			newCH.m_unsupportedOperation = new ArrayList<String>(m_unsupportedOperation);
+			newCH.m_unsupportedOperation = new ArrayList<String>(
+					m_unsupportedOperation);
 		}
 		if (m_supportedVersions != null) {
-			newCH.m_supportedVersions = new ArrayList<String>(m_supportedVersions);
+			newCH.m_supportedVersions = new ArrayList<String>(
+					m_supportedVersions);
 		}
 		if (m_headerMappingOptions != null) {
-			newCH.m_headerMappingOptions = ConfigUtils.copyOptionList(m_headerMappingOptions);
+			newCH.m_headerMappingOptions = ConfigUtils
+					.copyOptionList(m_headerMappingOptions);
 		}
 		newCH.m_defaultRequestDataBinding = m_defaultRequestDataBinding;
 		newCH.m_defaultResponseDataBinding = m_defaultResponseDataBinding;
-		
+
 		newCH.m_RequestPayloadLog = m_RequestPayloadLog;
 		newCH.m_RequestPayloadCalLog = m_RequestPayloadCalLog;
-		
+
 		newCH.m_ResponsePayloadLog = m_ResponsePayloadLog;
 		newCH.m_ResponsePayloadCalLog = m_ResponsePayloadCalLog;
-	
+
 		if (m_securityPolicy != null) {
 			newCH.m_securityPolicy = m_securityPolicy.copy();
 		}
-		
+
 		if (m_cachePolicy != null) {
 			newCH.m_cachePolicy = m_cachePolicy.copy();
+		}
+
+		if (reqParamsDesc != null) {
+			newCH.reqParamsDesc = reqParamsDesc;
 		}
 		newCH.m_serviceLayer = m_serviceLayer;
 		return newCH;
@@ -120,7 +134,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param defaultEncoding the m_defaultEncoding to set
+	 * @param defaultEncoding
+	 *            the m_defaultEncoding to set
 	 */
 	public void setDefaultEncoding(String encoding) {
 		checkReadOnly();
@@ -135,11 +150,46 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param serviceImplClassName the m_serviceImplClassName to set
+	 * @param serviceImplClassName
+	 *            the m_serviceImplClassName to set
 	 */
 	public void setServiceImplClassName(String className) {
 		checkReadOnly();
 		m_serviceImplClassName = className;
+	}
+
+	/**
+	 * @return the serviceImplFactoryClassName
+	 */
+	public String getServiceImplFactoryClassName() {
+		return serviceImplFactoryClassName;
+	}
+
+	/**
+	 * @param serviceImplFactoryClassName
+	 *            the serviceImplFactoryClassName to set
+	 */
+	public void setServiceImplFactoryClassName(String className) {
+		checkReadOnly();
+		serviceImplFactoryClassName = className;
+	}
+
+	/**
+	 * 
+	 * @param reqParamsDesc
+	 */
+	public void setRequestParamsDescriptor(RequestParamsDescriptor reqParamsDesc) {
+		checkReadOnly();
+		this.reqParamsDesc = reqParamsDesc;
+	}
+
+	/**
+	 * 
+	 * @return RequestParamsDescriptor
+	 */
+	public RequestParamsDescriptor getRequestParamsDescriptor() {
+		return this.reqParamsDesc;
+		// TODO: Make a copy and return
 	}
 
 	/**
@@ -154,7 +204,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param supportedGlobalId the m_supportedGlobalId to set
+	 * @param supportedGlobalId
+	 *            the m_supportedGlobalId to set
 	 */
 	public void setSupportedGlobalId(Set<String> supportedGlobalId) {
 		checkReadOnly();
@@ -173,7 +224,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param supportedLocale the m_supportedLocales to set
+	 * @param supportedLocale
+	 *            the m_supportedLocales to set
 	 */
 	public void setSupportedLocale(Set<String> supportedLocales) {
 		checkReadOnly();
@@ -192,7 +244,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param supportedDataBindings the m_supportedDataBindings to set
+	 * @param supportedDataBindings
+	 *            the m_supportedDataBindings to set
 	 */
 	public void setSupportedDataBindings(List<String> supportedDataBindings) {
 		checkReadOnly();
@@ -211,7 +264,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param unsupportedOperation the m_unsupportedOperation to set
+	 * @param unsupportedOperation
+	 *            the m_unsupportedOperation to set
 	 */
 	public void setUnsupportedOperation(List<String> unsupportedOperation) {
 		checkReadOnly();
@@ -230,7 +284,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param supportedVersions the m_supportedVersions to set
+	 * @param supportedVersions
+	 *            the m_supportedVersions to set
 	 */
 	public void setSupportedVersions(List<String> supportedVersions) {
 		checkReadOnly();
@@ -245,7 +300,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param checkHandlerClassName the m_versionCheckHandlerClassName to set
+	 * @param checkHandlerClassName
+	 *            the m_versionCheckHandlerClassName to set
 	 */
 	public void setVersionCheckHandlerClassName(String className) {
 		checkReadOnly();
@@ -263,7 +319,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param options the m_headerMappingOptions to set
+	 * @param options
+	 *            the m_headerMappingOptions to set
 	 */
 	public void setHeaderMappingOptions(OptionList options) {
 		checkReadOnly();
@@ -271,56 +328,60 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 		m_headerMappingOptions = options;
 	}
 
-
 	public void setOperationMappings(OperationMappings omo) {
-		
+
 		checkReadOnly();
-		
-		m_operationMappings = omo;	
+
+		m_operationMappings = omo;
 	}
-	
+
 	public OperationMappings getOperationMappings() {
-		if( m_operationMappings == null ) {
+		if (m_operationMappings == null) {
 			return null;
 		}
-		
-		if( m_readOnly) {
+
+		if (m_readOnly) {
 			return m_operationMappings.clone();
 		}
-		
-		return m_operationMappings;
-		
-	}
 
+		return m_operationMappings;
+
+	}
 
 	/**
 	 * @return the m_securityPolicy
 	 */
 	public SecurityPolicyConfigHolder getSecurityPolicy() {
-		// This object has a read-only state that shadows the ConfigHolder itself, so no need
-		// to manage cloning at this level - object will take care of cloning its internal values.
+		// This object has a read-only state that shadows the ConfigHolder
+		// itself, so no need
+		// to manage cloning at this level - object will take care of cloning
+		// its internal values.
 		return m_securityPolicy;
 	}
 
 	/**
-	 * @param securityPolicy the m_securityPolicy to set
+	 * @param securityPolicy
+	 *            the m_securityPolicy to set
 	 */
 	public void setSecurityPolicy(SecurityPolicyConfigHolder securityPolicy) {
 		checkReadOnly();
 		m_securityPolicy = securityPolicy;
 	}
-	
+
 	/**
 	 * @return the m_cachePolicy
 	 */
 	public CachePolicyHolder getCachePolicy() {
-		// This object has a read-only state that shadows the ConfigHolder itself, so no need
-		// to manage cloning at this level - object will take care of cloning its internal values.
+		// This object has a read-only state that shadows the ConfigHolder
+		// itself, so no need
+		// to manage cloning at this level - object will take care of cloning
+		// its internal values.
 		return m_cachePolicy;
 	}
 
 	/**
-	 * @param cachePolicy the m_cachePolicy to set
+	 * @param cachePolicy
+	 *            the m_cachePolicy to set
 	 */
 	public void setCachePolicy(CachePolicyHolder cachePolicy) {
 		checkReadOnly();
@@ -335,7 +396,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param layer the m_serviceLayer to set
+	 * @param layer
+	 *            the m_serviceLayer to set
 	 */
 	public void setServiceLayer(String layer) {
 		checkReadOnly();
@@ -350,7 +412,8 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param dataBinding the m_defaultRequestDataBinding to set
+	 * @param dataBinding
+	 *            the m_defaultRequestDataBinding to set
 	 */
 	public void setDefaultRequestDataBinding(String dataBinding) {
 		m_defaultRequestDataBinding = dataBinding;
@@ -364,14 +427,23 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 	}
 
 	/**
-	 * @param dataBinding the m_defaultResponseDataBinding to set
+	 * @param dataBinding
+	 *            the m_defaultResponseDataBinding to set
 	 */
 	public void setDefaultResponseDataBinding(String dataBinding) {
 		m_defaultResponseDataBinding = dataBinding;
-	}	
+	}
 
-///////////////////////
-// Dump methods
+	public boolean isImplCached() {
+		return isImplCached;
+	}
+
+	public void setImplCached(boolean isImplCached) {
+		this.isImplCached = isImplCached;
+	}
+
+	// /////////////////////
+	// Dump methods
 
 	@Override
 	public void dump(StringBuffer sb) {
@@ -379,71 +451,80 @@ public class ServiceConfigHolder extends CommonConfigHolder {
 		if (m_serviceLayer != null) {
 			sb.append("========== Service Layer: " + m_serviceLayer + NL);
 		}
-		sb.append("========== Provider Options =========="+NL);
+		sb.append("========== Provider Options ==========" + NL);
 		if (m_defaultEncoding != null) {
-			sb.append("defaultEncoding="+m_defaultEncoding+NL);
+			sb.append("defaultEncoding=" + m_defaultEncoding + NL);
 		}
 		if (m_serviceImplClassName != null) {
-			sb.append("serviceImplClassName="+m_serviceImplClassName+NL);
+			sb.append("serviceImplClassName=" + m_serviceImplClassName + NL);
 		}
 		if (m_versionCheckHandlerClassName != null) {
-			sb.append("versionCheckHandlerClassName="+m_versionCheckHandlerClassName+NL);
+			sb.append("versionCheckHandlerClassName="
+					+ m_versionCheckHandlerClassName + NL);
 		}
 		if (m_supportedGlobalId != null && !m_supportedGlobalId.isEmpty()) {
 			sb.append("supportedGlobalId=");
-			TreeSet<String> supportedGlobalId = new TreeSet<String>(m_supportedGlobalId);
+			TreeSet<String> supportedGlobalId = new TreeSet<String>(
+					m_supportedGlobalId);
 			ConfigUtils.dumpList(sb, supportedGlobalId);
 			sb.append(NL);
 		}
 		if (m_supportedLocales != null && !m_supportedLocales.isEmpty()) {
 			sb.append("supportedLocale=");
-			TreeSet<String> supportedLocales = new TreeSet<String>(m_supportedLocales);
+			TreeSet<String> supportedLocales = new TreeSet<String>(
+					m_supportedLocales);
 			ConfigUtils.dumpList(sb, supportedLocales);
 			sb.append(NL);
 		}
-		if (m_supportedDataBindings != null && !m_supportedDataBindings.isEmpty()) {
+		if (m_supportedDataBindings != null
+				&& !m_supportedDataBindings.isEmpty()) {
 			sb.append("supportedDataBindings=");
-			TreeSet<String> supportedDataBindings = new TreeSet<String>(m_supportedDataBindings);
+			TreeSet<String> supportedDataBindings = new TreeSet<String>(
+					m_supportedDataBindings);
 			ConfigUtils.dumpList(sb, supportedDataBindings);
 			sb.append(NL);
 		}
 		if (m_unsupportedOperation != null && !m_unsupportedOperation.isEmpty()) {
 			sb.append("unsupportedOperation=");
-			TreeSet<String> unsupportedOperation = new TreeSet<String>(m_unsupportedOperation);
+			TreeSet<String> unsupportedOperation = new TreeSet<String>(
+					m_unsupportedOperation);
 			ConfigUtils.dumpList(sb, unsupportedOperation);
 			sb.append(NL);
 		}
 		if (m_supportedVersions != null && !m_supportedVersions.isEmpty()) {
 			sb.append("supportedVersions=");
-			TreeSet<String> supportedVersions = new TreeSet<String>(m_supportedVersions);
+			TreeSet<String> supportedVersions = new TreeSet<String>(
+					m_supportedVersions);
 			ConfigUtils.dumpList(sb, supportedVersions);
 			sb.append(NL);
 		}
 		if (m_headerMappingOptions != null) {
-			sb.append("headerMappingOptions:"+NL);
+			sb.append("headerMappingOptions:" + NL);
 			ConfigUtils.dumpOptionList(sb, m_headerMappingOptions, "  ");
 		}
 		if (m_defaultRequestDataBinding != null) {
-			sb.append("defaultRequestDataBinding="+m_defaultRequestDataBinding+NL);
+			sb.append("defaultRequestDataBinding="
+					+ m_defaultRequestDataBinding + NL);
 		}
 		if (m_defaultResponseDataBinding != null) {
-			sb.append("defaultResponseDataBinding="+m_defaultResponseDataBinding+NL);
+			sb.append("defaultResponseDataBinding="
+					+ m_defaultResponseDataBinding + NL);
 		}
-		
+
 		if (m_RequestPayloadLog != null) {
-			sb.append("defaultRequestPayloadLog="+m_RequestPayloadLog+NL);
+			sb.append("defaultRequestPayloadLog=" + m_RequestPayloadLog + NL);
 		}
-		
+
 		if (m_RequestPayloadCalLog != null) {
-			sb.append("defaultRequestPayloadCalLog="+m_RequestPayloadLog+NL);
+			sb.append("defaultRequestPayloadCalLog=" + m_RequestPayloadLog + NL);
 		}
-		
+
 		if (m_ResponsePayloadLog != null) {
-			sb.append("defaultResponsePayloadLog="+m_ResponsePayloadLog+NL);
+			sb.append("defaultResponsePayloadLog=" + m_ResponsePayloadLog + NL);
 		}
-		
+
 		if (m_RequestPayloadCalLog != null) {
-			sb.append("defaultResponsePayloadLog="+m_ResponsePayloadLog+NL);
+			sb.append("defaultResponsePayloadLog=" + m_ResponsePayloadLog + NL);
 		}
 		if (m_securityPolicy != null) {
 			m_securityPolicy.dump(sb);

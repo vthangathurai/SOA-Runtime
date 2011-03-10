@@ -170,7 +170,11 @@ public class ServiceSkeletonGenerator extends BaseCodeGenerator implements Sourc
 		
 		String serviceImplClassName = codeGenCtx.getServiceImplClassName();
 		
-		if (CodeGenUtil.isEmptyString(serviceImplClassName)) {
+		//If externaleServiceFactoryMode then dont generate impl class SOAPLATFORM-497
+		if ( codeGenCtx.getInputOptions().isUseExternalServiceFactory() ) {
+			s_logger.log(Level.INFO, "It is factory mode. So dont generate the impl skeleton class");
+			shouldGenSkeleton = false;
+		} else if (CodeGenUtil.isEmptyString(serviceImplClassName)) {
 			shouldGenSkeleton = true;	
 		} else {
 			Class<?> svcImplClass = ContextClassLoaderUtil.loadOptionalClass(serviceImplClassName);;

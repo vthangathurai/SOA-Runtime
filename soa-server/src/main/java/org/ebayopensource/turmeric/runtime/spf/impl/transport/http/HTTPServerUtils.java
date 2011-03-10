@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,8 @@ import org.ebayopensource.turmeric.runtime.common.types.ServiceAddress;
 import org.ebayopensource.turmeric.runtime.errorlibrary.ErrorConstants;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.OperationMapping;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.OperationMappings;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.RequestParamsDescriptor;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.RequestParamsDescriptor.RequestParams;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.ServerServiceDesc;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.UrlMappingsDesc;
 import org.ebayopensource.turmeric.runtime.spf.impl.pipeline.ServerMessageContextBuilder;
@@ -80,6 +83,9 @@ public final class HTTPServerUtils {
 	private int m_systemParamCount;
 	private List<Throwable> m_errors;
 
+	private final int relativeOffset; // '0' based
+
+	
 	private final static Logger s_logger = Logger.getInstance(JdkUtil
 			.forceInit(HTTPServerUtils.class));
 
@@ -109,7 +115,8 @@ public final class HTTPServerUtils {
 		m_reqMetaCtx.setQueryParams(getQueryParams());
 
 		m_serviceResolver = new ServiceResolver(m_reqMetaCtx);
-
+		this.relativeOffset = getRelativeOffset(request.getServletPath());
+		
 		checkRejectList();
 
 		getUrlMappedHeaders();
@@ -134,6 +141,15 @@ public final class HTTPServerUtils {
 
 		m_errors.add(th);
 	}
+
+	private int getRelativeOffset(String servletPath) {		
+		if(servletPath == null) {
+			return 0;
+		}
+		return servletPath.split("/").length - 2;
+	} 
+	
+
 
 	public ServerMessageContextBuilder createMessageContext(
 			Transport responseTransport) throws ServiceException {
@@ -255,18 +271,16 @@ public final class HTTPServerUtils {
 
 	private void getUrlMappedHeaders() throws ServiceException {
 		ServerServiceDesc serviceDesc = m_serviceResolver.lookupServiceDesc();
-		UrlMappingsDesc urlMappings = serviceDesc.getUrlMappings();
-		HeaderMappingsDesc requestHeaderMappings = serviceDesc
-				.getRequestHeaderMappings();
-
-		applyQueryMap(urlMappings.getQueryMap(),
-				urlMappings.getUpperCaseQueryMap(), urlMappings.getRejectList());
-		applyQueryOp(urlMappings.getQueryOpMapping(),
-				urlMappings.getRejectList());
-		applyPathMap(urlMappings.getPathMap(), urlMappings.getRejectList());
+		UrlMappingsDesc mappingDesc = serviceDesc.getUrlMappings();
+		if(mappingDesc != null) {
+			applyQueryMap(mappingDesc);
+			applyQueryOp(mappingDesc);
+			applyPathMap(mappingDesc);
+		}
 
 		List<Throwable> errors = new ArrayList<Throwable>();
-		HTTPCommonUtils.applyHeaderMap(requestHeaderMappings.getHeaderMap(),
+		HeaderMappingsDesc requestHeaderMappings = serviceDesc.getRequestHeaderMappings();
+		HTTPCommonUtils.applyHeaderMap(requestHeaderMappings.getHeaderMap(), 
 				m_reqMetaCtx.getTransportHeaders(), errors);
 		if (errors.size() > 0) {
 			if (m_errors == null)
@@ -277,26 +291,87 @@ public final class HTTPServerUtils {
 		HTTPCommonUtils.applySuppressHeaderSet(
 				requestHeaderMappings.getSuppressHeaderSet(),
 				m_reqMetaCtx.getTransportHeaders());
-
+		
+		String operationName = m_reqMetaCtx.getTransportHeaders().get(SOAHeaders.SERVICE_OPERATION_NAME);
 		// do custom mapping of operation name
-		String aliasKey = m_reqMetaCtx.getTransportHeaders().get(
-				"X-TURMERIC-OPERATION-NAME");
-		if (aliasKey != null) {
-			OperationMappings operationMappings = serviceDesc
-					.getOperationMappings();
+		if (operationName != null) {
+			OperationMappings operationMappings = serviceDesc.getOperationMappings();
+
+
+
 			if (operationMappings != null) {
-				OperationMapping operationMapping = operationMappings
-						.getOperationMapping(aliasKey);
+				OperationMapping operationMapping = operationMappings.getOperationMapping(operationName);
+
 				if (operationMapping != null) {
+					operationName = operationMapping.getOperationName();
 					HTTPCommonUtils.addTransportHeader(
-							"X-TURMERIC-OPERATION-NAME",
-							operationMapping.getOperationName(),
-							m_reqMetaCtx.getTransportHeaders(), false, false,
-							errors);
+							SOAHeaders.SERVICE_OPERATION_NAME, operationName, 
+							m_reqMetaCtx.getTransportHeaders(), false, false, errors);
 				}
 			}
 		}
+		// Do the request parameter mapping first as it has the lease priority.
+		// If the same parameter specified in the query parameter,
+		// that has to be taken into account.		
+		applyOperationRequestParamMap(operationName, serviceDesc.getOperationRequestParamsDescriptor());
+		applyAliases(operationName, serviceDesc.getOperationRequestParamsDescriptor());	
 
+	}
+
+	private void applyAliases(String operationName,
+			RequestParamsDescriptor operationRequestParamsDescriptor) {
+		// If the request param mapping is not defined, exit immediately.
+		if (operationRequestParamsDescriptor == null || operationName == null) {
+			return;
+		}				
+		RequestParams reqParams = operationRequestParamsDescriptor.getRequestParams(operationName);
+		if(reqParams == null) {
+			return; 
+		}
+		List<ParamData> newParams = new ArrayList<ParamData>();
+		for(Iterator<ParamData> i = m_params.iterator() ; i.hasNext(); ) {
+			ParamData param = i.next();
+			String alias = param.getRawName();
+			String paramName = reqParams.getParamName(alias);			
+			if(paramName != null) {
+				newParams.add(new ParamData(paramName, param.getRawValue(), param.getIndex()));
+				i.remove();				
+			}
+		}			
+		m_params.addAll(newParams);
+	}
+
+	private void applyOperationRequestParamMap(String operationName,
+			RequestParamsDescriptor operationRequestParamsDescriptor) {
+
+		// If the request param mapping is not defined, exit immediately.
+		if (operationRequestParamsDescriptor == null) {
+			return;
+		}
+		// If there is no request uri, exit.
+		if (m_rawRequestUri == null || m_rawRequestUri.trim().length() < 2) {
+			return;
+		}
+		List<String> pathParts = StringUtils.splitStr(m_rawRequestUri.substring(1), '/');		
+		RequestParams reqParams = operationRequestParamsDescriptor.getRequestParams(operationName);
+		// Build the NV pair with name as seen in the ServiceConfig and value as
+		// passed in the URI. Append the NP pairs to the payload.
+		if (reqParams == null || reqParams.count() <= 0) {
+			return;
+		}
+
+		for (Map.Entry<String, String> entry : reqParams.entries()) {
+			int pathIndex = Integer.parseInt(entry.getKey());
+			if(pathIndex < 0) {
+				// negative index implies relative indexing
+				pathIndex = relativeOffset  + -pathIndex;
+			}			
+			String pname = entry.getValue();
+			if (pname != null && pathIndex < pathParts.size()) {
+				String pvalue = pathParts.get(pathIndex);
+				m_params.add(new ParamData(pname, pvalue, m_params.size()));
+			}
+		}
 	}
 
 	public String getRequestUriForLogging(String requestUri) {
@@ -307,30 +382,22 @@ public final class HTTPServerUtils {
 		return requestUri;
 	}
 
-	private void applyPathMap(Map<Integer, String> pathMap,
-			Set<String> rejectList) throws ServiceException {
+	private void applyPathMap(UrlMappingsDesc mappingDesc)
+			throws ServiceException {
+		Map<Integer, String> pathMap = mappingDesc.getPathMap();
 
-		if (m_rawRequestUri == null || m_rawRequestUri.trim().length() < 1)
+		if (m_rawRequestUri == null || m_rawRequestUri.trim().length() < 2)
 			return;
 
-		List<String> pathParts = StringUtils.splitStr(m_rawRequestUri, '/');
+		List<String> pathParts = StringUtils.splitStr(m_rawRequestUri.substring(1), '/');
 		for (Map.Entry<Integer, String> entry : pathMap.entrySet()) {
 			String headerName = entry.getValue();
-
-			if (!nonAnonGetAllowed) {
-				// check to see if the mapped header name is a security
-				// credential
-				checkIfSecurityCredential(headerName);
+			checkIfSecurityCredential(headerName);
+			int i = entry.getKey().intValue();
+			if (i < 0) {
+				// Negative index indicates relative index
+				i = relativeOffset + -i;
 			}
-
-			// Indexing in the file begins with "0" for the first component
-			// after the initial slash.
-			// Path comes as "/ws/spf".
-			// The splitter returns an initial entry which is empty string for
-			// the text before the first slash,
-			// and we really want to start *after* the first slash, at position
-			// 1.
-			int i = entry.getKey().intValue() + 1;
 			if (i < pathParts.size()) {
 				String headerValue = pathParts.get(i);
 				addTransportHeader(headerName, headerValue);
@@ -338,17 +405,13 @@ public final class HTTPServerUtils {
 		}
 	}
 
-	private void applyQueryOp(String queryOpMapping, Set<String> rejectList)
+	private void applyQueryOp(UrlMappingsDesc mappingDesc)
 			throws ServiceException {
+		String queryOpMapping = mappingDesc.getQueryOpMapping();
 		if (queryOpMapping == null || m_systemParamCount == 0) {
 			return;
 		}
-
-		if (!nonAnonGetAllowed) {
-			// check to see if the mapped header name is a security credential
-			checkIfSecurityCredential(queryOpMapping);
-		}
-
+		checkIfSecurityCredential(queryOpMapping);
 		ParamData param = m_params.get(0);
 		addTransportHeader(queryOpMapping, param.getDecodedName());
 		param.setConsumed();
@@ -367,9 +430,11 @@ public final class HTTPServerUtils {
 		return queryParams;
 	}
 
-	private void applyQueryMap(Map<String, String> queryMap,
-			Map<String, String> upperCaseQueryMap, Set<String> rejectList)
+	private void applyQueryMap(UrlMappingsDesc mappingDesc)
 			throws ServiceException {
+		Map<String, String> queryMap = mappingDesc.getQueryMap();
+		Map<String, String> upperCaseQueryMap = mappingDesc
+				.getUpperCaseQueryMap();
 		for (int i = 0; i < m_params.size(); i++) {
 
 			ParamData param = m_params.get(i);
@@ -380,13 +445,7 @@ public final class HTTPServerUtils {
 			}
 
 			if (headerName != null) {
-
-				if (!nonAnonGetAllowed) {
-					// check to see if the mapped header name is a security
-					// credential
-					checkIfSecurityCredential(headerName);
-				}
-
+				checkIfSecurityCredential(headerName);
 				String paramValue = param.getDecodedValue();
 				addTransportHeader(headerName, paramValue);
 				param.setConsumed();
@@ -475,12 +534,8 @@ public final class HTTPServerUtils {
 			value = "";
 		}
 
-		if (!nonAnonGetAllowed) {
-			checkIfSecurityCredential(name);
-		}
-
-		m_params.add(new ParamData(name, null, value, null, true, m_params
-				.size()));
+		checkIfSecurityCredential(name);		
+		m_params.add(new ParamData(name, value, m_params.size()));
 	}
 
 	/**
@@ -492,23 +547,24 @@ public final class HTTPServerUtils {
 	 *            the parameter name
 	 * @return true, if it is a security credential, false otherwise
 	 */
-	private boolean checkIfSecurityCredential(String paramName) {
+	private void checkIfSecurityCredential(String paramName) {
+		if (!nonAnonGetAllowed) {
+			// Check if this query parameter name is a security header
+			if (m_isGetMethod
+					&& (paramName != null)
+					&& paramName.toUpperCase().startsWith(
+							SECURITY_HEADER_PREFIX)) {
 
-		// Check if this query parameter name is a security header
-		if (m_isGetMethod && (paramName != null)
-				&& paramName.toUpperCase().startsWith(SECURITY_HEADER_PREFIX)) {
+				// do error
+				addError(new ServiceException(
+						ErrorDataFactory
+								.createErrorData(
+										org.ebayopensource.turmeric.security.errorlibrary.ErrorConstants.SVC_SECURITY_INVALID_URL_CREDENTIALS,
+										org.ebayopensource.turmeric.security.errorlibrary.ErrorConstants.ERRORDOMAIN,
+										new String[] { paramName })));
 
-			// do error
-			addError(new ServiceException(
-					ErrorDataFactory
-							.createErrorData(
-									org.ebayopensource.turmeric.security.errorlibrary.ErrorConstants.SVC_SECURITY_INVALID_URL_CREDENTIALS,
-									org.ebayopensource.turmeric.security.errorlibrary.ErrorConstants.ERRORDOMAIN,
-									new String[] { paramName })));
-			return true;
+			}
 		}
-		return false;
-
 	}
 
 	static String decode(String str) {
@@ -795,6 +851,10 @@ public final class HTTPServerUtils {
 
 		private String m_decodedValue;
 
+		public ParamData(String rawName, String rawValue, int index) {
+			this(rawName, null, rawValue, null, true, index);			
+		}
+		
 		public ParamData(String rawName, String decodedName, String rawValue,
 				String decodedValue, boolean hasRawData, int index) {
 			m_rawName = rawName;

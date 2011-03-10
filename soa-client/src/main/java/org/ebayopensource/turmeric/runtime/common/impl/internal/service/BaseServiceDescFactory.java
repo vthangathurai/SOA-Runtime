@@ -886,6 +886,7 @@ public abstract class BaseServiceDescFactory<T extends ServiceDesc> {
 		Map<String,ServiceOperationDesc> result = new HashMap<String,ServiceOperationDesc>();
 		for (OperationConfig opConfig: opConfigs) {
 			String name = opConfig.getName();
+			String methodName = opConfig.getMethodName();
 			validateOperationName(name);
 
 			String svcNamespace = svcQName.getNamespaceURI();
@@ -920,7 +921,7 @@ public abstract class BaseServiceDescFactory<T extends ServiceDesc> {
 			} else {
 				propMap = null;
 			}
-			ServiceOperationDesc operation = new ServiceOperationDescImpl(svcId, name,
+			ServiceOperationDesc operation = new ServiceOperationDescImpl(svcId, name, methodName,
 				requestParamDesc, responseParamDesc, errorParamDesc, requestHeaderParamDesc,
 				responseHeaderParamDesc, propMap, true, isSupported);
 

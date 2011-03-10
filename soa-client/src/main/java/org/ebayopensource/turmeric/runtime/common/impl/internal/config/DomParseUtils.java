@@ -273,7 +273,13 @@ public class DomParseUtils {
 		return value;
 	}
 
-
+	public static String getAttribute(String filename, Element element, String name, String attribute) throws ServiceCreationException {
+		Element node = getSingleElement(filename, element, name);
+		if(node == null) {
+			return null;
+		}		
+		return node.getAttribute(attribute);
+	}
 	public static void throwError(String filename, String cause) throws ServiceCreationException {
 		throw new ServiceCreationException(ErrorDataFactory.createErrorData(ErrorConstants.CFG_VALIDATION_ERROR,
 				ErrorConstants.ERRORDOMAIN, new Object[] {filename, cause}));

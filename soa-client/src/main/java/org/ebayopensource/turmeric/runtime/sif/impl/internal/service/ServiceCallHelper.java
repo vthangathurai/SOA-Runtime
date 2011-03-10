@@ -369,7 +369,7 @@ public final class ServiceCallHelper {
 		// try to create helper data if it was not found
 		if (errorHelperData == null) {
 			try {
-				errorHelperData = buildErrorHelperData(ctx.getServiceDesc(), operation.getName());
+				errorHelperData = buildErrorHelperData(ctx.getServiceDesc(), operation);
 			} catch (Throwable e) {
 				getLogger().log(Level.SEVERE, "Unexpected exception building error helper data for " +
 					ctx.getAdminName() + "." + operation.getName() + ": " + e.toString(), e);
@@ -479,16 +479,16 @@ public final class ServiceCallHelper {
 		return result;
 	}
 
-	private static ServiceErrorHelperData buildErrorHelperData(ClientServiceDesc serviceDesc, String opName)
+	private static ServiceErrorHelperData buildErrorHelperData(ClientServiceDesc serviceDesc, ServiceOperationDescImpl operation)
 	{
 		Class intfClass = serviceDesc.getServiceInterfaceClass();
 		if (intfClass == null) {
 			return new ServiceErrorHelperData(null);
 		}
 
-		Method method = getMethod(intfClass, opName);
+		Method method = getMethod(intfClass, operation.getMethodName());
 		if (method == null) {
-			getLogger().log(Level.SEVERE, "Unable to find operation " + opName +
+			getLogger().log(Level.SEVERE, "Unable to find operation " + operation.getMethodName() +
 				" on service interface " + intfClass.getName());
 
 			return new ServiceErrorHelperData(null);

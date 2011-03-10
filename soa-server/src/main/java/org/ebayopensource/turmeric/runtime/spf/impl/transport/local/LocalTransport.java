@@ -67,6 +67,10 @@ public class LocalTransport implements Transport {
 	private boolean m_configUseDetachedLocalBinding;
 
 	private int m_configInvocationTimeoutMs = DFLT_REQUEST_TIMEOUT_MS;
+	
+	// Changes for supporting relative mapping in Local transport.
+	private String requestUri;
+	public static final String REQUEST_URI = "request-uri";
 
 	// private String tName = "LocalTransport";
 
@@ -107,6 +111,7 @@ public class LocalTransport implements Transport {
 		if (configInvTimeoutMs != null) {
 			m_configInvocationTimeoutMs = configInvTimeoutMs.intValue();
 		}
+		requestUri = ctx.getOptions().getProperty(REQUEST_URI);
 	}
 
 	public Object preInvoke(MessageContext ctx) throws ServiceException {
@@ -312,6 +317,7 @@ public class LocalTransport implements Transport {
 		String adminName =    metadatsHolder.getAdminName();		
 		if (adminName==null || adminName.trim().length() <1)
 			 adminName =   clientCtx.getAdminName();
+		options.getProperties().put(REQUEST_URI,  requestUri);
 		ISOATransportRequest soaRequest = SOALocalTransportRequest.createRequest(clientCtx,options);  
 		HTTPServerUtils serverUtils = new HTTPServerUtils(soaRequest, adminName, null);
 		

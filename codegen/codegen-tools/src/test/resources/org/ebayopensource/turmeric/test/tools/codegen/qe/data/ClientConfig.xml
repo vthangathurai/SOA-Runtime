@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+        What and where to look for? All node locations mentioned are relative to client-instance-config
+
+        configure service invocation options           node invocation-options/preferred-transport/override-options
+           (timeout, num of retries, etc)              override options is recommended rather than config at
+                                                       transport/default-options.
+        change the consumer id                         node invocation-options/consumer-id
+        configure header mappings for request          node invocation-options/request-header-mapping-options
+        configure header mappings for response         node invocation-options/response-header-mapping-options
+        app level retry options                        node retry-options
+        change request data binding                    node invocation-options/request-data-binding
+        change response data binding                   node invocation-options/response-data-binding
+        configure service markdown options             node invocation-options/markdown-options
+        configure the custom request handlers          node pipeline-config/request-handlers
+        configure the custom response handlers         node pipeline-config/response-handlers
+
+-->
+<client-config-list xmlns="http://www.ebayopensource.org/turmeric/common/config">
+    <client-config group="marketplace" >
+        <service-interface-class-name>com.ebay.AccountService</service-interface-class-name>
+        <wsdl-location>http://www.ebayopensource.com/services?wsdl</wsdl-location>
+        <service-location>http://www.ebayopensource.com/services</service-location>
+        <client-instance-config>
+            <invocation-options>
+        	<preferred-transport name="HTTP11">
+<!--
+                Following section describes the various override options for transport config.
+                socket-connect-timeout-msec       The number of milliseconds to wait while opening the socket 
+                                                  communication with the service URL. Default to 2000 ms
+                socket-read-timeout-msec          The number of milliseconds to wait while reading from Input 
+                                                  stream when a connection is established. Default to 3000 ms
+                invocation-timeout-msec           The maximum number of milliseconds that an entire transport 
+                                                  invocation is allowed to take up. The maximum time allowed 
+                                                  for this invocation, including connect, send, and receive.
+                                                  Default to 5000 ms
+                num-connect-retries               The number of retries to attempt on a connect failure. 
+                                                  This is a different parameter from the app-level-num-retries 
+                                                  parameter.  Default is 2 retries
+                use-detached-local-binding        Indicates whether the local binding operation should be performed 
+                                                  in a separate thread or not. Default to false.
+                client-streaming                  This flag enables consumer to work in streaming mode in which 
+                                                  response data will be downloaded progressively.
+                                                  So response will not be downloaded at one strech and this will 
+                                                  be useful in case of large attachements. Default to false.
+                other-options                     This options is a name value pair map which helps to override 
+                                                  the transport options that are meaningful to a specific transport, 
+                                                  which are not represented explicitly in transport options like 
+                                                  CONSECUTIVE_FAILURE_THRESHOLD 
+-->
+                <override-options>
+                    <socket-connect-timeout-msec>2000</socket-connect-timeout-msec>
+                    <socket-read-timeout-msec>3000</socket-read-timeout-msec>
+                    <invocation-timeout-msec>5000</invocation-timeout-msec>
+                    <num-connect-retries>2</num-connect-retries>
+                    <use-detached-local-binding>false</use-detached-local-binding>
+                    <client-streaming>false</client-streaming>
+<!--
+                    <other-options>
+                        <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option> 
+                    </other-options>
+-->
+                </override-options>
+<!--
+                Override Header options allows to override the transport headers defined in transport config.
+                It is a name value pair config.
+-->
+<!--
+                <override-header-options>
+                    <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option> 
+                </override-header-options>
+-->
+        	</preferred-transport>
+<!--
+            Following section configures localization options.
+            preferred-encoding     The preferred character set encoding to be used by this client.
+                                   This affects the wire encoding and also causes the header 
+                                   X-TURMERIC-MESSAGE-ENCODING to be transmitted.
+                                   In addition, the "charset" field of the content-type HTTP header 
+                                   is set to the selected encoding.
+            preferred-locale       List of preferred locales to be used by this client. The ordered 
+                                   list is transmitted by the client runtime in an 
+                                   X-TURMERIC-LOCALE-LIST header, as a set of comma-separated locale 
+                                   ID values.
+            preferred-global-id    The preferred global id out of global-ids defined in GlobalRegistry.xml 
+                                   to be used by this client. This global-id should be one of the supported 
+                                   global-ids of corresponding service. The supported global-ids are defined 
+                                   in ServiceConfig.xml
+-->
+<!--
+            <G11N-options>
+                <preferred-encoding>UTF_8</preferred-encoding> 
+                <preferred-locale>PUT_YOUR_LOCALE</preferred-locale> 
+                <preferred-global-id>PUT_YOUR_GLOBAL_ID</preferred-global-id> 
+            </G11N-options>
+-->
+<!--
+            Following section configures other invocation options.
+            request-data-binding            The client request data binding format. Out of the box supported values 
+                                            are XML,JSON,NV, FAST_INFOSET. Default to XML.
+            response-data-binding           The service response data binding format. Out of the box supported values 
+                                            are XML,JSON,NV, FAST_INFOSET. Default to XML.
+            error-data-provider-class-name  The name of the server-side error data provider class. This class should 
+                                            implement org.ebayopensource.turmeric.runtime.common.errors.ErrorDataProvider
+            use-service-version             If service has more than one supported versions defined in serviceconfig, 
+                                            this option can be used to specify which version is the client request 
+                                            version for this service. The value is sent via header 
+                                            X-TURMERIC-SERVICE-VERSION.  Usually the use-service-version should be the 
+                                            version that are lower than the current service version that is compatible
+                                            with the current service version.
+            monitoring-level                Each Metric is associated with monitoring level.  The monitoring-level here
+                                            tells runtime to log only the Metrics with monitoring level equal to or 
+                                            lower than the specified level.  Possible values are normal, fine and finest.
+                                            It is the log level to monitor the client use statistics of this service.
+            consumer-id                     It is used to identify the user of service, or to control the access level 
+                                            and usage level. A Consumer ID can be obtained for all of Marketplaces, or 
+                                            for all the Consumers in a Domain, for each specific Consumer (command, 
+                                            batch).
+            message-protocol                The message protocol for the selected service. Possible values are SOAP11, 
+                                            SOAP12 or NONE
+            response-transport              Used to request an alternate transport on the server side, for asymmetric 
+                                            transport usage between request and response (This option is to be supported)
+            custom-error-response-adapter   SOAfwk defined {http://www.ebayopensource.org/turmeric/common/v1/types}ErrorMessage
+                                            type to transmit error from server to client.  Users can use their own error 
+                                            message type for the same purpose.  In order for SOA client framework to 
+                                            understand the cusomize error message type.  A custom-error-response-adapter 
+                                            must be provided. A custom error response adapter must implement 
+                                            org.ebayopensource.turmeric.runtime.sif.pipeline.ErrorResponseAdapter interface.
+            url-path-info                   This allows users to append URL string information for the service URL.
+                                            If the base URL ends with "/" or a "?" and the string to append should 
+                                            not start with a "/" or "?" or if the base URL does not ends with "/" or 
+                                            a "?" and the string to append should start with a "/" or "?"
+                                            
+-->
+<!--
+            <error-data-provider-class-name>
+                org.ebayopensource.turmeric.runtime.common.exceptions.PropertyFileBasedErrorProvider
+            </error-data-provider-class-name>
+            <use-service-version>PUT_YOUR_SERVICE_VERSION_TO_USE</use-service-version>
+            <monitoring-level>normal</monitoring-level>
+            <consumer-id>PUT_YOUR_CONSUMER_ID</consumer-id>
+            <message-protocol>org.ebayopensource.turmeric.runtime.common.impl.pipeline.NullProtocolProcessor</message-protocol>
+            <response-transport>PUT_YOUR_RESPONSE_TRANSPORT</response-transport>
+            <custom-error-response-adapter>PUT_YOUR_RESPONSE_ADAPTER</custom-error-response-adapter>
+            <url-path-info>PUT_YOUR_URL_PATH_INFO</url-path-info>
+-->
+            <request-data-binding>XML</request-data-binding>
+            <response-data-binding>XML</response-data-binding>
+            <consumer-id>123</consumer-id>
+            
+<!--
+            Following section configures various request retry options.
+            app-level-num-retries        Number of times to retry incase of SOA service invocation failure
+            app-level-retry-handler      User provided fully qualified class which determines if retry should be done.
+                                         The handler must implement 
+                                         org.ebayopensource.turmeric.runtime.sif.pipeline.ApplicationRetryHandler.
+            retry-transport-status-code  One or more transport level error code for which retry should be done 
+                                         e.g. Http error code 502, 500, etc
+            retry-exception-class        One or more exception(s) for which application should retry while 
+                                         invoking SOA service 
+            retry-error-id               One or more application level error id(s) associated with the failure 
+                                         which when received retry can be done
+-->
+<!--
+            <retry-options>
+                <app-level-num-retries>1</app-level-num-retries> 
+                <app-level-retry-handler>
+                    org.ebayopensource.turmeric.runtime.sif.impl.pipeline.DefaultApplicationRetryHandler
+                </app-level-retry-handler> 
+                <retry-transport-status-code>PUT_YOUR_STATUS_CODE</retry-transport-status-code> 
+                <retry-exception-class>PUT_YOUR_EXCEPTION_CLASS</retry-exception-class> 
+                <retry-error-id>PUT_YOUR_RETRY_ID</retry-error-id> 
+            </retry-options>
+-->
+<!--
+           Following section configures the markdown options. To markdown the service on client side, 
+           Marked down can be configured based on numerous options such as HTTP status code, error code, 
+           retry count, etc
+           enable-auto-markdown       Enables automatic markdown of service on reach of error count threshold 
+                                      configured 
+           state-factory              The class name of the auto markdown state factory.
+                                      The class must implement interface 
+                                      org.ebayopensource.turmeric.runtime.sif.pipeline.AutoMarkdownStateFactory.
+           error-count-threshold      The error count threshold for auto markdown.
+           transport-status-code      One or more transport status codes. SOA client runtime increments 
+                                      the markdown count when matched with the transport exception status code. 
+           exception-class            One or more fully qualified exception class names. SOA client runtime 
+                                      increments the markdown count when matched with the exception caught 
+                                      while invoking the service.
+           error-id                   One or more error-ids. SOA client runtime increments the markdown count
+                                      when the exception caught while invoking the service is instanceof 
+                                      ServiceExceptionInterface and the error matches.
+-->
+<!--
+           <markdown-options>
+               <enable-auto-markdown>false</enable-auto-markdown> 
+               <state-factory>
+                   org.ebayopensource.turmeric.runtime.sif.impl.pipeline.DefaultAutoMarkdownStateFactory
+               </state-factory> 
+               <error-count-threshold>PUT_YOUR_THRESOLD_COUNT</error-count-threshold> 
+               <transport-status-code>PUT_YOUR_STATUS_CODE</transport-status-code> 
+               <exception-class>PUT_YOUR_EXCEPTION_CLASS</exception-class> 
+               <error-id>PUT_YOUR_ERROR_ID</error-id> 
+           </markdown-options>
+-->
+<!--
+           Following section allows SOA clients and servers to re-map transport headers to alternative header names 
+           or suppress receiving these headers by the server from the client or vice versa. 
+           This is required to enable coexistence with non-SOA implementations.
+           The values are configured key-value pair where key is the standard SOAHeader name and value could be 
+           either suppress (suppress the header from sending to server)
+           or of format header[*] where * is any name which indicates that header is transported in the name 
+           instead of usual header name.
+
+
+            Example configs are,
+                   <option name="X-TURMERIC-OPERATION-NAME">header[Operation-Name]</option>
+                   <option name="X-TURMERIC-USER-PASSWORD">reject</option>
+-->
+<!--
+           <request-header-mapping-options>
+               <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option> 
+           </request-header-mapping-options>
+           <response-header-mapping-options>
+               <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option> 
+           </response-header-mapping-options>
+-->
+        </invocation-options>
+
+<!--
+        SOA client runtime supports the client side caching. To configure client-side caching, a 
+        CachePolicy.xml of the service has to be created and placed at the location of ServiceConfig.xml.
+        The cache-policy section configures the cache provider class.
+        cache-provider-class-name      Cache provider class which implements 
+                                       org.ebayopensource.turmeric.runtime.common.cachepolicy.CacheProvider
+        disable-cache-on-local         Flag to disable the cache on local binding. 
+        skip-cache-on-error            This flag will skip the caching when error occurred.
+-->
+<!--
+        <cache-policy>
+            <cache-provider-class-name>
+                org.ebayopensource.turmeric.runtime.common.impl.cachepolicy.DefaultCacheProvider
+            </cache-provider-class-name> 
+            <disable-cache-on-local>false</disable-cache-on-local> 
+            <skip-cache-on-error>false</skip-cache-on-error> 
+        </cache-policy>
+-->
+<!--
+        Pipeline framework lies between message processor and the  transport section.
+        Following section configures the pipeline handlers, dispatchers, request and response handlers etc.
+        request-pipeline           The class that implements interface 
+                                   org.ebayopensource.turmeric.runtime.common.pipeline.Pipeline is a driver
+                                   for running a message in sequence through configured handlers for a service.
+                                   It takes care of handler errors, communication between 
+                                   handlers, metric aggregations etc.
+        response-pipeline          Similar to request-pipeline except it comes into picture after server 
+                                   response is received.
+        request-dispatcher         The class that implements 
+                                   org.ebayopensource.turmeric.runtime.common.pipeline.Dispatcher is the glue 
+                                   that actually invokes a service method passing the java argument objects
+        response-dispatcher        Similar to request dispatcher except it gets invoked after the response pipeline 
+                                   is invoked.
+        request/response-handlers  The handlers are invoked by the pipeline framework. 
+                                   Apart from one toplevel handler a chain of handlers can be configured. The 
+                                   order of invocation is toplevel handler, and subhandler1, subhandler2 etc  
+                                   defined in chain handlers.
+
+       handler-options             The namevalue pairs to support the configuration needs of handlers. The pairs 
+                                   are accumulated as hashmaps.
+       continue/run-on-error       If the continue-on-error flag is set on the handler that threw the error, the 
+                                   exception is stored to a "warning" list in the message context and the current 
+                                   processing state (normal / error) is not altered. Otherwise, The exception is 
+                                   stored to a critical error list and processing state will be error. Only 
+                                   request/response handlers designated as run-on-error in the configuration will 
+                                   be invoked. The request dispatcher will not be called.
+
+       logging-handler             One or more logging-handlers that implements 
+                                   org.ebayopensource.turmeric.runtime.common.pipeline.LoggingHandler
+                                   Logging handlers provide call request/dispatch/response logging capability.
+                                   Logging handlers are called at various points in service processing. 
+                                   These handlers are distinct from normal pipeline handlers.
+-->
+<!--
+        <pipeline-config>
+            <request-pipeline>
+                <class-name>org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl</class-name> 
+            </request-pipeline>
+            <response-pipeline>
+                <class-name>org.ebayopensource.turmeric.runtime.common.impl.pipeline.PipelineImpl</class-name> 
+            </response-pipeline>
+            <request-dispatcher>
+                <class-name>
+                    org.ebayopensource.turmeric.runtime.sif.impl.pipeline.SimpleClientRequestDispatcher
+                </class-name> 
+            </request-dispatcher>
+            <response-dispatcher>
+                <class-name>org.ebayopensource.turmeric.runtime.common.impl.pipeline.NullDispatcher</class-name> 
+            </response-dispatcher>
+            <request-handlers>
+                <handler continue-on-error="true" name="PUT_YOUR_HANDLER_NAME" presence="Mandatory" run-on-error="true">
+                    <class-name>PUT_YOUR_CLASS_NAME</class-name> 
+                    <options>
+                        <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+                    </options>
+                </handler>
+            </request-handlers>
+            <response-handlers>
+                <handler continue-on-error="true" name="PUT_YOUR_HANDLER_NAME" presence="Mandatory" run-on-error="true">
+                    <class-name>PUT_YOUR_CLASS_NAME</class-name> 
+                    <options>
+                        <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+                    </options>
+                </handler>
+            </response-handlers>
+            <logging-handler>
+               <class-name>PUT_YOUR_CLASS_NAME</class-name> 
+               <options>
+                   <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option> 
+               </options>
+            </logging-handler>
+        </pipeline-config>
+-->
+<!--
+        Following section processor class name for protocol-specific handling. e.g SOAP operation.
+        The class should implement interface org.ebayopensource.turmeric.runtime.common.pipeline.ProtocolProcessor.
+        Only URL pattern or transport header can be used.
+-->
+<!--
+        <protocol-processor name="PUT_YOUR_PROCESSOR_NAME" version="">
+            <indicator>
+                <URL-pattern>PUT_YOUR_URL_PATTERN</URL-pattern>
+                <transport-header>PUT_YOUR_HEADER_NAME</transport-header>
+            </indicator>
+            <class-name>PUT_YOUR_CLASS_NAME</class-name> 
+        </protocol-processor>
+-->
+<!--
+        Following section describes the various transport config. 
+        Transport config can be for a particular transport type or for all types of transport.
+
+        class-name                        The class should implement interface 
+                                          org.ebayopensource.turmeric.runtime.common.pipeline.Transport
+        socket-connect-timeout-msec       The number of milliseconds to wait while opening the socket 
+                                          communication with the service URL.
+        socket-read-timeout-msec          The number of milliseconds to wait while reading from Input 
+                                          stream when a connection is established.
+        invocation-timeout-msec           The maximum number of milliseconds that an entire transport 
+                                          invocation is allowed to take up. The maximum time allowed 
+                                          for this invocation, including connect, send, and receive.
+        num-connect-retries               The number of retries to attempt on a connect failure.
+                                          This is a different parameter from the app-level-num-retries parameter.
+        use-detached-local-binding        Indicates whether the local binding operation should be performed 
+                                          in a separate thread or not.
+        client-streaming                  This flag enables consumer to work in streaming mode in which 
+                                          response data will be downloaded progressively.
+                                          So response will not be downloaded at one strech and this will 
+                                          be useful in case of large attachements.
+        other-options                     This options is a name value pair map which helps to override 
+                                          the transport options that are meaningful to a specific transport, 
+                                          which are not represented explicitly in transport options like 
+                                          CONSECUTIVE_FAILURE_THRESHOLD
+        header-options                    Header options are name value pair. These header names should be a SOA Header.
+                                          These headers are transported as HHTPHeader.
+-->
+<!--
+        <transport name="PUT_YOUR_TRANSPORT_NAME">
+            <class-name>PUT_YOUR_CLASS_NAME</class-name>
+            <default-options>
+                 <socket-connect-timeout-msec>36000</socket-connect-timeout-msec>
+                 <socket-read-timeout-msec>50000</socket-read-timeout-msec>
+                 <invocation-timeout-msec>86000</invocation-timeout-msec>
+                 <num-connect-retries>1</num-connect-retries>
+                 <use-detached-local-binding>false</use-detached-local-binding>
+                 <client-streaming>false</client-streaming>
+                 <skip-serialization>false</skip-serialization>
+                <other-options>
+                    <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option> 
+                </other-options>
+            </default-options>
+            <header-options>
+                <option name="PUT_YOUR_OPTION_NAME">PUT_YOUR_OPTION_VALUE</option>
+            </header-options>
+        </transport>
+-->
+<!--
+        Following section allows to override the default databindings configured in the framework or
+        to create a new databinding type.
+        The default databinding types supported by framework are XML, NV, JSON, FAST_INFOSET
+
+        mime-type                         The MIME type to be used when representing this data binding's 
+                                          content type
+        serializer-factory-class-name     The class name which implements 
+                                          org.ebayopensource.turmeric.runtime.common.binding.SerializerFactory
+        deserializer-factory-class-name   The class name which implements 
+                                          org.ebayopensource.turmeric.runtime.common.binding.DeserializerFactory.
+        options                           options are the name value pair that can be used the 
+                                          data-binding-framework. Different data binding defines their
+                                          own options that the data binding understand.  
+        Here are an example data binding section if custom option values are required.
+-->
+<!--
+        <data-binding-config>
+            <data-binding name="FAST_INFOSET">
+                <mime-type>application/fastinfoset</mime-type>
+                <serializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.fastinfoset.JAXBFastInfosetDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="elementFormDefault">UNQUALIFIED</option>
+                </options>
+            </data-binding>
+            <data-binding name="XML">
+			    <mime-type>text/xml</mime-type>
+			    <serializer-factory-class-name>
+			        org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+			    </serializer-factory-class-name>
+			    <deserializer-factory-class-name>
+			        org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+			    </deserializer-factory-class-name>
+			    <options>
+			        <option name="elementFormDefault">QUALIFIED</option>
+			    </options>
+            </data-binding>
+            <data-binding name="NV">
+                <mime-type>text/plain</mime-type>
+                <serializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="elementFormDefault">QUALIFIED</option>
+                </options>
+            </data-binding>
+            <data-binding name="JSON">
+                <mime-type>text/plain</mime-type>
+                <serializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    org.ebayopensource.turmeric.runtime.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="elementFormDefault">QUALIFIED</option>
+                </options>
+            </data-binding>
+        </data-binding-config>
+-->
+        </client-instance-config>
+    </client-config>
+</client-config-list>

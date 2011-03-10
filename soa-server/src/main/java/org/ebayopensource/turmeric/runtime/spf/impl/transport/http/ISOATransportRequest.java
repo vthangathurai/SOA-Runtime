@@ -48,5 +48,7 @@ public interface ISOATransportRequest {
 	Map <String,String> getHeaderNames( ) throws ServiceException;
 	
 	Object getUnderlyingObject() ;
+	
+	String getServletPath();
 
 }

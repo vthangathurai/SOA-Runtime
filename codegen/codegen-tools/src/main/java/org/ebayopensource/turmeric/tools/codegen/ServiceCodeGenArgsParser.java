@@ -130,6 +130,11 @@ public class ServiceCodeGenArgsParser {
 	    	
 	    	populateDefaultValuesFromMetaDataFile(inputOptions);
 	    }
+
+	    //find info about useExternalServiceFactory SOAPLATFORM-497
+	    if(!CodeGenUtil.isEmptyString(inputOptions.getProjectRoot()))
+	    	populateExternalServiceFactoryInfo(inputOptions.getProjectRoot(),inputOptions);
+
 		//Need to set the inputType as interface for "DispatcherForBuild".
 	    if (inputOptions.getCodeGenType().equals(CodeGenType.DispatcherForBuild)) {
 	    		String svcIntfClassName = CodeGenInfoFinder.getPropertyFromMetaData(CodeGenConstants.SERVICE_INTF_CLASS_NAME,inputOptions.getServiceAdminName());
@@ -227,6 +232,52 @@ public class ServiceCodeGenArgsParser {
 			s_logger.log(Level.WARNING, e.getCause() + e.getMessage());
 		} finally {
 			CodeGenUtil.closeQuietly(inputStream);
+		}
+	}
+
+	/**
+	 * Scans the file service_impl_project.properties and finds out the value for property useExternalServiceFactory.
+	 * 
+	 * @param projectRoot
+	 * @param inputoption
+	 */
+	private void populateExternalServiceFactoryInfo(String projectRoot,
+			InputOptions inputoption) {
+		String implPropFilePath = CodeGenUtil.toOSFilePath(projectRoot);
+		implPropFilePath = implPropFilePath
+				+ CodeGenConstants.SERVICE_IMPL_PROPERTIES_FILE;
+		File svcImplPropFile = new File(CodeGenUtil
+				.toOSFilePath(implPropFilePath));
+		if (!svcImplPropFile.exists()) {
+			s_logger.log(Level.INFO, implPropFilePath + " does not exist");
+			return;
+		}
+		InputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(svcImplPropFile);
+			Properties svcImplProps = new Properties();
+			svcImplProps.load(inputStream);
+			String isFactoryModeString = svcImplProps.getProperty("useExternalServiceFactory");
+			if( !(CodeGenUtil.isEmptyString(isFactoryModeString) ) ){
+				isFactoryModeString = isFactoryModeString.trim();
+			}
+			s_logger.log(Level.INFO,
+			"Is factory mode string is identified ="+ isFactoryModeString);
+			if("true".equalsIgnoreCase(isFactoryModeString)){
+				inputoption.setUseExternalServiceFactory(true);
+			}
+		} catch (FileNotFoundException e) {
+			s_logger.log(Level.WARNING, "populateExternalServiceFactoryInfo " + e.getMessage());
+		} catch (IOException e) {
+			s_logger.log(Level.WARNING, "populateExternalServiceFactoryInfo " + e.getMessage());
+		} finally {
+			if (inputStream != null)
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					s_logger.log(Level.WARNING, "populateExternalServiceFactoryInfo. Could not close inputstream "
+							+ e.getCause());
+				}
 		}
 	}
 
@@ -822,9 +873,16 @@ public class ServiceCodeGenArgsParser {
 				options.setCodeGenType(codeGenType);
 			} 
 			else if (InputOptions.OPT_SVC_IMPL_CLASS_NAME.equals(optName)) {
-				i = getNextOptionIndex(i, args);
-				options.setServiceImplClassName(args[i]);
-			} 
+				int nextIndex = getNextOptionIndex(i, args); 
+				String implClassName = args[nextIndex];
+
+				if(implClassName.startsWith("-")){
+					getLogger().log(Level.INFO, "Option -sicn is not passed with corresponding value. Hence ignoring the option.");
+				}else{
+					options.setServiceImplClassName( implClassName );
+					i =	nextIndex;
+				}
+			}
 			else if (InputOptions.OPT_GEN_INTERFACE_NAME.equals(optName)) {
 				i = getNextOptionIndex(i, args);
 				options.setGenInterfaceName(args[i]);

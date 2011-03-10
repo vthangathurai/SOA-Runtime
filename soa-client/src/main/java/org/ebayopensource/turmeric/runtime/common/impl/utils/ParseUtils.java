@@ -49,7 +49,7 @@ public class ParseUtils {
 	
 	public static final String SYS_PROP_CONFIG_SCHEMA_CHECK 
 	= "org.ebayopensource.turmeric.runtime.common.impl.config.schemacheck";
-	protected static final SchemaValidationLevel s_schemaCheckLevel;
+	protected static SchemaValidationLevel s_schemaCheckLevel;
 	static {
 	   	String schemaCheckStr = System.getProperty(SYS_PROP_CONFIG_SCHEMA_CHECK);
 	   	if (schemaCheckStr == null) {
@@ -59,6 +59,17 @@ public class ParseUtils {
 	   		s_schemaCheckLevel = SchemaValidationLevel.valueOf(schemaCheckStr);
 
     	}
+	}
+	
+	/**
+	 * Used for testing
+	 */
+	public static void reloadSchemaCheckLevel() {
+		String schemaCheckStr = System.getProperty(SYS_PROP_CONFIG_SCHEMA_CHECK);
+	   	if (schemaCheckStr != null) {
+	   		schemaCheckStr = schemaCheckStr.toUpperCase();
+	   		s_schemaCheckLevel = SchemaValidationLevel.valueOf(schemaCheckStr); 
+	   	} 
 	}
 	
 	public static SchemaValidationLevel getSchemaValidationLevel() {

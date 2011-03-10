@@ -237,7 +237,9 @@ public class InputOptions {
 	private String[] m_allSrcLocations;	
 	
 	private ServiceCodeGenDefType m_svcCodeGenDefType;
-	
+
+	//added as part of SOAPLATFORM-497
+	private boolean useExternalServiceFactory = false;
 	
 	//This variable does not have any corresponding inputOption. This is a transient/derived variable
 	private String m_caller;
@@ -925,7 +927,11 @@ public class InputOptions {
 	}
 	
 	public String getProjectRoot(){
-		return m_projectRoot;
+
+		if (CodeGenUtil.isEmptyString(m_projectRoot) && !CodeGenUtil.isEmptyString(m_destLocation))
+			return m_destLocation;
+		
+		return m_projectRoot;	
 	}
 	
 	public void setUseInterfaceJar(boolean useInterfaceJar){
@@ -1193,6 +1199,14 @@ public class InputOptions {
 	}
 
 
+	public boolean isUseExternalServiceFactory() {
+		return useExternalServiceFactory;
+	}
+
+
+	public void setUseExternalServiceFactory(boolean useExternalServiceFactory) {
+		this.useExternalServiceFactory = useExternalServiceFactory;
+	}
 
 	public String toString() {
 		

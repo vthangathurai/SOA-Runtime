@@ -83,8 +83,41 @@
 			<element name="default-request-data-binding" type="string" minOccurs="0"/>
 			<element name="default-response-data-binding" type="string" minOccurs="0"/>
 			<element name="error-status-options" type="tns:ErrorStatusOptions" minOccurs="0"/>
+			<element name="request-params-mapping" type="tns:RequestParamMapping" minOccurs="0"/>
 		</sequence>
 	</complexType>
+	<complexType name="RequestParam">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required" />
+				<attribute name="style" type="token" use="optional" />
+				<attribute name="type" type="token" use="optional" />
+				<attribute name="required" type="token" use="optional" />
+				<attribute name="alias" type="token" use="optional" />
+			</extension>
+		</simpleContent>
+    </complexType>
+	<complexType name="RequestParamOptionList">
+		<sequence>
+			<element name="option" type="tns:RequestParam" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="OperationRequestParamMapping">
+		<sequence>
+			<element name="operation" type="tns:RequestParamOptionList" minOccurs="0" />
+		</sequence>
+		<attribute name="name" type="token" use="required"/>
+		<attribute name="request" type="token" use="optional"/>
+		<attribute name="namespace" type="token" use="optional"/>		
+	</complexType>	
+	<complexType name="RequestParamMapping">
+		<sequence>
+			<element name="request-params-mapping" type="tns:OperationRequestParamMapping" minOccurs="0" />
+		</sequence>
+		<attribute name="service" type="token" use="optional" />
+		<attribute name="type" type="token" use="optional" />
+	</complexType>
+	
 	<complexType name="ServerG11NOptions">
 		<sequence>
 			<element name="supported-global-id" type="string"

@@ -24,6 +24,12 @@ public interface ServiceOperationDesc {
 	public String getName();
 
 	/**
+	 * Returns the name of the method corresponding to the operation to which this description applies.
+	 * @return the name of the operation
+	 */
+	public String getMethodName();
+
+	/**
 	 * If false, this is a "fallback" operation description, used only to format errors based on the default ErrorMessage
 	 * type.  If true, this is a "real" operation description associated with a service interface as described by the 
 	 * generated TypeMappings configuration file.

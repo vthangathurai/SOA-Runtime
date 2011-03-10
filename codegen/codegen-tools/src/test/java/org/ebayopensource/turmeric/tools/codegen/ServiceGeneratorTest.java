@@ -106,7 +106,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 		
 		performDirectCodeGen(args, binDir);
 		
-		GeneratedAssert.assertFileExists(destDir, "gen-src/service/org/ebayopensource/services/remoteportlet/intf/gen/RemotePortletImplSkeleton.java");
+		GeneratedAssert.assertFileExists(destDir, "gen-src/service/org/ebayopensource/services/remoteportlet/intf/impl/RemotePortletImplSkeleton.java");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -816,7 +816,7 @@ public class ServiceGeneratorTest extends AbstractServiceGeneratorTestCase {
 
 		performDirectCodeGen(args, binDir);
 
-		File typeMappingsFile = getTestDestPath("gen-meta-src/META-INF/soa/common/config/CalculatorService2/TypeMappings.xml");
+		File typeMappingsFile = getTestDestPath("gen-meta-src/META-INF/soa/common/config/CalculatorService3/TypeMappings.xml");
 			
 		ServiceTypeMappingConfig serviceTypeMappingConfig = JAXB.unmarshal(typeMappingsFile, ServiceTypeMappingConfig.class);
 		Assert.assertNotNull("ServiceTypeMappingConfig should not be null", serviceTypeMappingConfig);

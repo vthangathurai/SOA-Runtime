@@ -70,14 +70,15 @@ public class ServiceCodeGenArgsValidator {
 			throw new MissingInputOptionException(
 					"Name for the generated interface is missing.");
 		} 
-		else if (((inputOptions.getCodeGenType() == CodeGenType.ServerNoConfig)
-				|| (inputOptions.getCodeGenType() == CodeGenType.ConfigAll) || 
-				   (inputOptions.getCodeGenType() == CodeGenType.Dispatcher))
-				&& CodeGenUtil.isEmptyString(inputOptions
-						.getServiceImplClassName())) {
-			throw new MissingInputOptionException(
-					"Service Impl class name is missing.");
-		} 
+		//Commented as part of SOAPLATFORM-497
+//		else if (((inputOptions.getCodeGenType() == CodeGenType.ServerNoConfig)
+//				|| (inputOptions.getCodeGenType() == CodeGenType.ConfigAll) || 
+//				   (inputOptions.getCodeGenType() == CodeGenType.Dispatcher))
+//				&& CodeGenUtil.isEmptyString(inputOptions
+//						.getServiceImplClassName())) {
+//			throw new MissingInputOptionException(
+//					"Service Impl class name is missing.");
+//		} 
 		else if ((inputOptions.getCodeGenType() == CodeGenType.Interface)
 				&& (inputOptions.getInputType() != InputType.WSDL)) {
 			throw new BadInputValueException(

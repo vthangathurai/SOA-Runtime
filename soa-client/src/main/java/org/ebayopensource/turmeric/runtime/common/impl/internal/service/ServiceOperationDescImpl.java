@@ -32,6 +32,7 @@ public final class ServiceOperationDescImpl implements ServiceOperationDesc {
 
 	//private final ServiceId m_svcId;
 	private final String m_name;
+	private final String m_methodName;
 	private final ServiceOperationParamDesc m_requestType;
 	private final ServiceOperationParamDesc m_responseType;
 	private final ServiceOperationParamDesc m_errorType;
@@ -51,6 +52,7 @@ public final class ServiceOperationDescImpl implements ServiceOperationDesc {
 				throw new NullPointerException();
 			}
 			m_name = name;
+			m_methodName = name;
 			m_requestType = null;
 			m_responseType = null;
 			m_errorType = null;
@@ -64,6 +66,14 @@ public final class ServiceOperationDescImpl implements ServiceOperationDesc {
 		}
 	
 	public ServiceOperationDescImpl(ServiceId svcId, String name,
+		ServiceOperationParamDesc requestType, ServiceOperationParamDesc responseType,
+		ServiceOperationParamDesc errorType, ServiceOperationParamDesc requestHeaders, ServiceOperationParamDesc responseHeaders, Map<String,Object> props,
+		boolean isExisting, boolean isSupported)
+	{
+		this(svcId, name, name, requestType, responseType, errorType, requestHeaders, responseHeaders, props,
+				isExisting, isSupported);
+	}
+	public ServiceOperationDescImpl(ServiceId svcId, String name, String methodName,
 		ServiceOperationParamDesc requestType, ServiceOperationParamDesc responseType,
 		ServiceOperationParamDesc errorType, ServiceOperationParamDesc requestHeaders, ServiceOperationParamDesc responseHeaders, Map<String,Object> props,
 		boolean isExisting, boolean isSupported)
@@ -97,6 +107,7 @@ public final class ServiceOperationDescImpl implements ServiceOperationDesc {
 
 		//m_svcId = svcId;
 		m_name = name;
+		m_methodName = methodName;
 		m_requestType = requestType;
 		m_responseType = responseType;
 		m_errorType = errorType;
@@ -116,6 +127,10 @@ public final class ServiceOperationDescImpl implements ServiceOperationDesc {
 
 	public String getName() {
 		return m_name;
+	}
+	
+	public String getMethodName() {
+		return m_methodName;
 	}
 
 	public boolean isExisting() {

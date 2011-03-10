@@ -115,7 +115,7 @@ public class ServiceGeneratorBotTest extends AbstractServiceGeneratorTestCase {
 			throws Exception {
         GenDirs dirs = generateBotService();
         
-        File java = GeneratedAssert.assertJavaExists(dirs.genSrcDir, "fr.virtuoz.gen.gen.BotServiceRequestDispatcher");
+        File java = GeneratedAssert.assertJavaExists(dirs.genSrcDir, "fr.virtuoz.impl.gen.BotServiceRequestDispatcher");
         
         String expectedline = "addSupportedOperation(\"TalkXml\", new Class[] {TalkXml.class }, new Class[] {TalkXmlResponse.class });";
         String expectedconstructor = "public BotServiceRequestDispatcher()";
@@ -129,7 +129,7 @@ public class ServiceGeneratorBotTest extends AbstractServiceGeneratorTestCase {
 			throws Exception {
         GenDirs dirs = generateBotService();
         
-        File java = GeneratedAssert.assertJavaExists(dirs.genSrcDir, "fr.virtuoz.gen.gen.BotServiceRequestDispatcher");
+        File java = GeneratedAssert.assertJavaExists(dirs.genSrcDir, "fr.virtuoz.impl.gen.BotServiceRequestDispatcher");
 
         String expectedline = "if (\"TalkXml\".equals(operationName)) {";
         String expectedmethod = "public boolean dispatch(MessageContext param0, BotService param1) throws ServiceException";

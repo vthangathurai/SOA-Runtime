@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.ebayopensource.turmeric.runtime.binding.utils.CollectionUtils;
+import org.ebayopensource.turmeric.runtime.common.types.SOAHeaders;
 
 
 public class UrlMappingsDesc {
@@ -42,11 +43,16 @@ public class UrlMappingsDesc {
 		
 		Map<String, String> tmp = new HashMap<String, String>();
 		for(Map.Entry<String, String> entry : m_queryMap.entrySet()) {
-			tmp.put(entry.getKey().toUpperCase(), entry.getValue());
+			// Upper case only the SOA Headers in URL Mappings
+			String key = entry.getKey(); 
+			if(key != null && key.startsWith(SOAHeaders.SYS_PREFIX)) {
+				key = key.toUpperCase();
+			}			
+			tmp.put(key, entry.getValue());			
 		}
 		
 		m_upperCaseQueryMap = Collections.unmodifiableMap(tmp);
-		m_rejectList = Collections.EMPTY_SET;
+		m_rejectList = Collections.emptySet();
 	}
 	
 	public UrlMappingsDesc(Map<Integer, String> pathMap, Map<String, String> queryMap, String queryOpMapping, Set<String> rejectList) {

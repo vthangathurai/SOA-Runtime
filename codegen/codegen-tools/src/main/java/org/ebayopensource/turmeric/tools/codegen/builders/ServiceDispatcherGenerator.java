@@ -75,7 +75,9 @@ public class ServiceDispatcherGenerator extends BaseCodeGenerator implements Sou
 		return s_dipatcherGenerator;
 	}
 	
-	
+	private boolean useImplClassNamePackage(CodeGenContext codeGenCtx){
+		return !codeGenCtx.getInputOptions().isUseExternalServiceFactory() ;
+	}
 	
 	public void generate(CodeGenContext codeGenCtx) throws CodeGenFailedException {
 		
@@ -84,9 +86,11 @@ public class ServiceDispatcherGenerator extends BaseCodeGenerator implements Sou
 
 		Class<?> serviceInterfaceClass = jTypeTable.getClazz();
 		String className = codeGenCtx.getServiceImplClassName();
-		if (CodeGenUtil.isEmptyString(className)) {
+		//If external service factory mode, then use class name of service interface SOAPLATFORM-497
+		if( (!useImplClassNamePackage( codeGenCtx )) ||  CodeGenUtil.isEmptyString(className)){
 			className = CodeGenUtil.toQualifiedClassName(
-							codeGenCtx.getServiceInterfaceClassName());
+					codeGenCtx.getServiceInterfaceClassName());
+			s_logger.log(Level.INFO, "Not using the impl class name. The class name used is "+ className);
 		}
 		
 		String dispatcherClassName = getDispatcherClassName(codeGenCtx, className);	

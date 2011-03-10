@@ -49,7 +49,7 @@ final class ServerServiceBrowserCompStatus extends BaseServiceBrowserCompStatus 
 
 		String serviceImplClassName = desc2.getServiceImplClassName();
 		XmlStreamUtil.safeWriteChildCData(xmlWriter, "impl-class", serviceImplClassName);
-
+		XmlStreamUtil.safeWriteChildCData(xmlWriter, "impl-factory-class", desc2.getServiceImplFactoryClassName());		
 		Charset serviceCharset = desc2.getServiceCharset();
 		if (serviceCharset != null) {
 			XmlStreamUtil.safeWriteChildCData(xmlWriter, "service-charset", serviceCharset.toString());

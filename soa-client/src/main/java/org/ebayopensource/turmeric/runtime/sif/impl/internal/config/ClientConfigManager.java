@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,7 +47,6 @@ import org.ebayopensource.turmeric.runtime.sif.impl.internal.service.ClientServi
 import org.ebayopensource.turmeric.runtime.sif.impl.transport.http.HTTPSyncAsyncClientTransport;
 import org.ebayopensource.turmeric.runtime.sif.service.ClientServiceId;
 
-import com.ebay.kernel.context.RuntimeContext;
 import com.ebay.kernel.logger.LogLevel;
 import com.ebay.kernel.logger.Logger;
 
@@ -65,40 +65,47 @@ public class ClientConfigManager extends ConfigManager {
 	private static ConfigManager s_instance = null;
 	private static final char FILE_SEPERATOR = '/';
 	private static  final String DEFAULT_BASE_PATH = BASE_PATH + "config/";
-	private static final String s_clientConfigRoot;
+	private String m_globalClientConfigRoot;
 	private Element m_globalData = null;
 	private Element m_groupData = null;
 	private Map<String, Map<String, ClientConfigHolder>> m_clientData = new HashMap<String, Map<String, ClientConfigHolder>>();
 	private GlobalConfigHolder m_globalConfig;
 	private boolean m_configLoaded = false;
-	private String m_configPath =  s_clientConfigRoot;
+	private String m_configPath;
 	private String m_commonPath = BASE_PATH2 + "config/";
 	private boolean isInTestMode = false;
+	private Map<String, String> m_clientConfigPaths = new Hashtable<String,String>();
 
-	static {
-		String configRoot = System.getProperty(SYS_PROP_SOA_CLIENT_CONFIG_ROOT);
-		StringBuffer buf = new StringBuffer();
+	
+	private static String getGlobalConfigPath()
+	{
+		return getConfigPath(null);
+	}
+	
+	private static String getConfigPath(String clientName)
+	{
+		String configPath = DEFAULT_BASE_PATH;
+		StringBuffer configRootProperty = new StringBuffer(SYS_PROP_SOA_CLIENT_CONFIG_ROOT);
+		
+		if(clientName != null)
+		{
+			configRootProperty.append(".").append(clientName);
+		}
+			
+		String configRoot = System.getProperty(configRootProperty.toString());
 
 		if (configRoot != null) {
-			configRoot = configRoot.trim();
-			if (configRoot.startsWith("$", 0)) {
-				int var = configRoot.indexOf("/",0);
-				URL url = RuntimeContext.getConfigRoot();
-				if (url!=null)
-					buf.append(url.getPath());
-				configRoot = configRoot.substring(var+1);
-			}
-
-			buf.append(BASE_PATH);
+			StringBuffer buf = new StringBuffer();
 			buf.append(configRoot);
 			if (!buf.toString().endsWith("/")) {
 				buf.append('/');
 			}
-			s_clientConfigRoot = buf.toString();
-		} else {
-			s_clientConfigRoot = DEFAULT_BASE_PATH;
+			configPath =  buf.toString();
 		}
+		
+		return configPath;
 	}
+	
 
 
 	public static ClientConfigManager getInstance() throws ServiceCreationException {
@@ -107,6 +114,11 @@ public class ClientConfigManager extends ConfigManager {
     	return (ClientConfigManager)s_instance;
     }
 
+	private ClientConfigManager()
+	{
+		m_globalClientConfigRoot = getGlobalConfigPath();
+		m_configPath = m_globalClientConfigRoot;
+	}
 	public ClientConfigHolder getConfig(String serviceAdminName, String clientName) throws ServiceCreationException, ServiceNotFoundException {
 		return getConfig(serviceAdminName, clientName, false);
 	}
@@ -244,7 +256,7 @@ public class ClientConfigManager extends ConfigManager {
 	private synchronized void init() throws ServiceCreationException {
 		if (m_configLoaded)
 			return;
-		String globalFileName = getBasePath()+ GLOBAL_FILENAME;
+		String globalFileName = getGlobalBasePath()+ GLOBAL_FILENAME;
    	 	loadGlobalData(globalFileName);
    	 	m_globalConfig = new GlobalConfigHolder();
    	 	GlobalConfigMapper.map(globalFileName, m_globalData, m_globalConfig);
@@ -283,9 +295,9 @@ public class ClientConfigManager extends ConfigManager {
 			return clientConfigMap;
 		}
 		clientConfigMap = new HashMap<String, ClientConfigHolder>();
-		clientConfigFileName = this.getConfigFilePath(getBasePath(), clientName, envName, serviceName);
+		clientConfigFileName = this.getConfigFilePath(getBasePath(clientName), clientName, envName, serviceName);
 		String clientConfigSchemaName = s_schemaPath + CLIENT_SCHEMA;
-		String globalFileName = getBasePath() + GLOBAL_FILENAME;
+		String globalFileName = getGlobalBasePath() + GLOBAL_FILENAME;
 		Document configDoc = null;
 		try{
 			configDoc = ParseUtils.parseConfig(clientConfigFileName, clientConfigSchemaName, isOptional, "client-config-list", ParseUtils.getSchemaCheckLevel());
@@ -293,9 +305,9 @@ public class ClientConfigManager extends ConfigManager {
 	        // try to load from default now
 			// need to log this
 			if ( LOGGER.isLogEnabled( LogLevel.WARN ) ) {
-				LOGGER.log( LogLevel.WARN, "Unable to load ClientConfig.xml from config root (will use default): " + m_configPath );
+				LOGGER.log( LogLevel.WARN, "Unable to load ClientConfig.xml from config root " + clientConfigFileName + "(will use default : " + m_configPath + ")");
 			}
-			clientConfigFileName = this.getConfigFilePath(DEFAULT_BASE_PATH, clientName, envName, serviceName);
+			clientConfigFileName = this.getConfigFilePath(m_configPath, clientName, envName, serviceName);
         	configDoc = ParseUtils.parseConfig(clientConfigFileName, clientConfigSchemaName, isOptional, "client-config-list", ParseUtils.getSchemaCheckLevel());
 		}
         if (configDoc == null) {
@@ -496,12 +508,35 @@ public class ClientConfigManager extends ConfigManager {
 		}
 	}
 
-	private String getBasePath(){
-		return isInTestMode?m_configPath:DEFAULT_BASE_PATH;
+	private String getGlobalBasePath()
+	{
+		if(isInTestMode)
+		{
+			return m_configPath;
+		}
+		return m_globalClientConfigRoot;
+	}
+	
+	private String getBasePath(String clientName){
+		if(isInTestMode)
+		{
+			return m_configPath;
+		}
+		String basePath = DEFAULT_BASE_PATH;
+		if(clientName != null)
+		{
+			basePath = m_clientConfigPaths.get(clientName); 
+			if(basePath == null)
+			{
+				basePath = getConfigPath(clientName);
+				m_clientConfigPaths.put(clientName, basePath);
+			}
+		}
+		return basePath;
 	}
 
 	private String getGlobalFilePath() {
-		URL glabalFileURL = getClassLoader().getResource(getBasePath() + GLOBAL_FILENAME);
+		URL glabalFileURL = getClassLoader().getResource(getGlobalBasePath() + GLOBAL_FILENAME);
 		return (glabalFileURL != null ? glabalFileURL.getPath() : " ");
 	}
 
@@ -521,6 +556,11 @@ public class ClientConfigManager extends ConfigManager {
 
 	private synchronized void setCommonPath(String path) {
 		m_commonPath = path;
+	}
+	public static ClientConfigManager newInstanceForTestCase() throws ServiceException
+	{
+		s_instance = new ClientConfigManager();
+		return (ClientConfigManager)s_instance;
 	}
 
 	public synchronized void setConfigTestCase(String relativePath, String commonPath, boolean force) throws ServiceException {

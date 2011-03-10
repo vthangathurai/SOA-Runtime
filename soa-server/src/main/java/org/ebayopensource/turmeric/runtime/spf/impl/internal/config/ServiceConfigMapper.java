@@ -15,9 +15,6 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import org.ebayopensource.turmeric.runtime.common.exceptions.ErrorDataFactory;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceCreationException;
 import org.ebayopensource.turmeric.runtime.common.impl.internal.config.DomParseUtils;
@@ -28,6 +25,12 @@ import org.ebayopensource.turmeric.runtime.common.impl.internal.utils.ServiceNam
 import org.ebayopensource.turmeric.runtime.common.monitoring.ErrorStatusOptions;
 import org.ebayopensource.turmeric.runtime.common.monitoring.MonitoringLevel;
 import org.ebayopensource.turmeric.runtime.errorlibrary.ErrorConstants;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+
+import org.ebayopensource.turmeric.runtime.common.impl.internal.config.NameValue;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.RequestParamsDescriptor;
 
 
 // Copy non-null source data into the destination holder.
@@ -113,8 +116,94 @@ public class ServiceConfigMapper {
 			OperationMappings omo = mapOperationMappingOptions(filename, operationMappingOptions);
 			dst.setOperationMappings(omo);
 		}
-		
+		Element reqParamsMapping = DomParseUtils.getSingleElement(filename, providerOptions, "request-params-mapping");
+		if( reqParamsMapping != null ) {			 
+			dst.setRequestParamsDescriptor(mapOperationReqParamsMappings(filename, reqParamsMapping));
+			verifyPathIndicesUniqueness(dst, filename);
+		}
 	}
+	
+	private static void verifyPathIndicesUniqueness(ServiceConfigHolder dst, String filename) 
+	  throws ServiceCreationException {
+		RequestParamsDescriptor requestParamDesc = dst.getRequestParamsDescriptor();
+		if(requestParamDesc == null) {
+			return;
+		}
+		Set<String> paramIndices = requestParamDesc.getPathIndices();
+		OptionList headerMappings = dst.getHeaderMappingOptions();
+		if(headerMappings == null) {
+			return;
+		}
+		List<NameValue> nvList = headerMappings.getOption();
+		if(nvList == null || nvList.isEmpty()) {
+			return;
+		}
+		for(NameValue nv : nvList) {
+			String index = nv.getValue();			
+			index = index.substring(index.indexOf("path[") + 5, index.indexOf(']'));
+			if(index.startsWith("+")) {
+				index = index.replace('+', '-');
+			}
+			if(paramIndices.contains(index)) {
+				throwError(filename, "Duplicates indices for url path elements");
+			}
+		}		
+	}
+
+	private static RequestParamsDescriptor mapOperationReqParamsMappings(String filename, Element operationReqParamsMapping) 
+		throws ServiceCreationException {		
+		RequestParamsDescriptor requestParams = new RequestParamsDescriptor();		
+		NodeList operations = DomParseUtils.getImmediateChildrenByTagName(operationReqParamsMapping, "operation");
+		final Set<String> knownOperations = new HashSet<String>();
+		int numOperations = operations.getLength();
+		for(int i=0; i < numOperations; ++i) {			
+			Element operation = (Element) operations.item(i);
+			String operationName = operation.getAttribute("name");			
+			if( operationName == null ) {
+				DomParseUtils.throwError(filename, "Missing operation name in operation element: '" + operation + "'");
+			}
+			if(knownOperations.contains(operationName)) {
+				throwError(filename, "Duplicate definition for request params for operation '" + operationName + "'");
+			}					
+			NodeList params = DomParseUtils.getImmediateChildrenByTagName(operation, "option");			
+			int paramsLen = params.getLength();
+			for(int j=0; j < paramsLen; ++j) {
+				Element option = (Element) params.item(j);
+				String name = option.getAttribute("name");
+				String alias = option.getAttribute("alias");
+				if (name == null || name.isEmpty()) {
+					throwError(filename, "Missing option name in option list \"operation\" ");
+				}
+				String value = DomParseUtils.getText(option);
+				if (value == null) {
+					throwError(filename, "Missing option value for option list \"operation\" ");
+				}				
+				try {
+					String index = value.substring(value.indexOf("path[") + 5, value.indexOf(']'));					
+					if(index.startsWith("+")) {
+						index = index.replace('+', '-');
+					}
+					try {
+						Integer.parseInt(index);
+					}
+					catch(NumberFormatException e) {					
+						throwError(filename, "Invalid value for request uri path index. An integer is expected. Given :" + value);					
+					}	
+					if(!requestParams.map(operationName, index, name, alias)) {
+						throwError(filename, "Invalid configuration for request param mapping. " +
+								"Check for duplicate path indices or duplicate aliases or duplicate request param names");	
+					}
+				}
+				catch(StringIndexOutOfBoundsException exception) {					
+					throwError(filename, "Invalid value for request uri index. It must of form 'path[i]'");					
+				}				
+			}
+			knownOperations.add(operationName);
+		}		
+		return requestParams;
+	}
+
+
 	
 	private static OperationMappings mapOperationMappingOptions(String filename, Element operationMappingOptions) 
 		throws ServiceCreationException {
@@ -254,11 +343,37 @@ public class ServiceConfigMapper {
 			throwError(configFilename, "Missing service name");
 		}		
 		QName qname = ServiceNameUtils.normalizeQName(QName.valueOf(serviceName));		
-		dst.setServiceQName(qname);		
-		// Required: service-impl-class-name
-		String serviceImplClassName = DomParseUtils.getElementText(configFilename, serviceConfig, "service-impl-class-name", true);
-		dst.setServiceImplClassName(serviceImplClassName);
+		dst.setServiceQName(qname);	
 		
+		/*
+		 * Service Implementation class must be provided in one of the two ways. 
+		 * 	 1. Service Implementation class name.
+		 * 	 2. Service Implementation factory class name.  
+		 */
+		String serviceImplClassName = DomParseUtils.getElementText(configFilename, serviceConfig, "service-impl-class-name", false);
+		String serviceFactory = DomParseUtils.getElementText(configFilename, serviceConfig, "service-impl-factory-class-name", false);		
+		if(serviceImplClassName != null) { 
+
+
+			dst.setServiceImplClassName(serviceImplClassName);			
+		}
+		else { // this means post 2.8 service			
+			if(serviceFactory != null) {
+				dst.setServiceImplFactoryClassName(serviceFactory);				
+				String cacheable = DomParseUtils.getAttribute(configFilename, serviceConfig, "service-impl-factory-class-name", "cacheable");
+				boolean implCached = "true".equalsIgnoreCase(cacheable);
+				dst.setImplCached(implCached);
+			}
+			else { 
+				// Required: service-impl-class-name
+				// Same error message for backward compatibility
+				throwError(configFilename, "Missing required element: 'service-impl-class-name'");
+			}
+		}		
+		if(serviceImplClassName != null && serviceFactory != null) {
+			throwError(configFilename, "Specify one of 'service-impl-class-name' or 'service-impl-factory-class-name', not both.");
+		}	
+
 		// Required: service-interface-class-name
 		String serviceInterfaceClassName = DomParseUtils.getElementText(configFilename, serviceConfig, "service-interface-class-name", true);
 		dst.setServiceInterfaceClassName(serviceInterfaceClassName);

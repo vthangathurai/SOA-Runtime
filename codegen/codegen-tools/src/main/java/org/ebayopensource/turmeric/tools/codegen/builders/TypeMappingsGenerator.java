@@ -329,6 +329,9 @@ public class TypeMappingsGenerator extends BaseCodeGenerator implements
 		OperationConfig operationConfig = new OperationConfig();
 		operationConfig.setName(operationName);
 
+		//SOAPLATFORM-400 Added new attribute to find out corresponding interface method name at runtime
+		operationConfig.setMethodName(methodName);
+
 		Class<?>[] paramTypes = method.getParameterTypes();
 		// method accepts parameters
 		if (paramTypes.length > 0) {
@@ -349,7 +352,7 @@ public class TypeMappingsGenerator extends BaseCodeGenerator implements
 
 		// adding error-message
 		MessageTypeConfig errorMsg = getErrorMsgTypeConfig(operationName,
-				opNameToCemcMap, wsdlOperations, ns2PkgMap, headerPkgNsMap);
+				opNameToCemcMap, wsdlOperations, ns2PkgMap, headerPkgNsMap, codeGenCtx);
 		operationConfig.setErrorMessage(errorMsg);
 
 		// adding SOAPHeaderRequest
@@ -612,7 +615,8 @@ public class TypeMappingsGenerator extends BaseCodeGenerator implements
 	private MessageTypeConfig getErrorMsgTypeConfig(String operationName,
 			Map<String, String> opNameToCemcMap,
 			Map<String, WSDLOperationType> wsdlOperations,
-			Map<String, String> ns2PkgMap, Map<String, String> headerPkgNsMap)
+			Map<String, String> ns2PkgMap, Map<String, String> headerPkgNsMap,
+			CodeGenContext codeGenCtx)
 			throws CodeGenFailedException {
 
 		MessageTypeConfig errorMsgTypeConfig = new MessageTypeConfig();
@@ -663,7 +667,15 @@ public class TypeMappingsGenerator extends BaseCodeGenerator implements
 									.getSchemaTypeName()));
 					errorMsgTypeConfig.setXmlTypeName(messageType
 							.getSchemaTypeName());
-					errorMsgTypeConfig.setXmlElementName(messageType.getElementQname().toString());
+					//SOAPLATFORM-689 if EnabledNamespaceFoldingSet then use service namespace
+					if(codeGenCtx.getInputOptions().isEnabledNamespaceFoldingSet()){
+						String localPartErrMsg = CodeGenUtil.makeFirstLetterLower(messageType.getSchemaTypeName());
+						QName xmlElementQname = getQnameForErrorMessage(localPartErrMsg, codeGenCtx.getNamespace());
+						errorMsgTypeConfig.setXmlElementName( xmlElementQname.toString() );
+					}else{
+						errorMsgTypeConfig.setXmlElementName(messageType.getElementQname().toString());						
+					}
+
 
 					isErrorMessageConfigSet = true;
 				}
@@ -679,11 +691,23 @@ public class TypeMappingsGenerator extends BaseCodeGenerator implements
 			errorMsgTypeConfig.setXmlTypeName(errorMsgClass.getSimpleName());
 			String localPartErrMsg = CodeGenUtil
 			.makeFirstLetterLower(errorMsgClass.getSimpleName());
-			QName xmlElementQname = getQnameForErrorMessage(localPartErrMsg,errorMsgClass,ns2PkgMap);
+
+			QName xmlElementQname = null; 
+			//SOAPLATFORM-689 if EnabledNamespaceFoldingSet then use service namespace
+			if(codeGenCtx.getInputOptions().isEnabledNamespaceFoldingSet()){
+				xmlElementQname = getQnameForErrorMessage(localPartErrMsg, codeGenCtx.getNamespace());
+			}else{
+				xmlElementQname = getQnameForErrorMessage(localPartErrMsg,errorMsgClass,ns2PkgMap);
+			}
+
 			errorMsgTypeConfig.setXmlElementName(xmlElementQname.toString());
 		}
 
 		return errorMsgTypeConfig;
+	}
+
+	private QName getQnameForErrorMessage(String errorMsgLocalPart,String namespace) {
+		return new QName(namespace,errorMsgLocalPart);
 	}
 
 	private QName getQnameForErrorMessage(String errorMsgLocalPart,Class<?> errorMsgClass,Map<String, String> ns2pkgMap) {

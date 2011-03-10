@@ -26,6 +26,8 @@ import org.ebayopensource.turmeric.advertising.v1.services.GetGenericClientInfoR
 import org.ebayopensource.turmeric.advertising.v1.services.GetGenericClientInfoResponse;
 import org.ebayopensource.turmeric.advertising.v1.services.GetItemRequest;
 import org.ebayopensource.turmeric.advertising.v1.services.GetItemResponse;
+import org.ebayopensource.turmeric.advertising.v1.services.GetMessagesForTheDayRequest;
+import org.ebayopensource.turmeric.advertising.v1.services.GetMessagesForTheDayResponse;
 import org.ebayopensource.turmeric.advertising.v1.services.GetRequestIDResponse;
 import org.ebayopensource.turmeric.advertising.v1.services.GetTransportHeaders;
 import org.ebayopensource.turmeric.advertising.v1.services.GetTransportHeadersResponse;
@@ -35,6 +37,8 @@ import org.ebayopensource.turmeric.advertising.v1.services.TestAttachment;
 import org.ebayopensource.turmeric.advertising.v1.services.TestAttachmentResponse;
 import org.ebayopensource.turmeric.advertising.v1.services.TestEnhancedRest;
 import org.ebayopensource.turmeric.advertising.v1.services.TestEnhancedRestResponse;
+import org.ebayopensource.turmeric.advertising.v1.services.TestPrimitiveTypesRequest;
+import org.ebayopensource.turmeric.advertising.v1.services.TestPrimitiveTypesResponse;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceException;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceRuntimeException;
 import org.ebayopensource.turmeric.runtime.common.types.Cookie;
@@ -460,6 +464,109 @@ public class SharedAdvertisingUniqueIDServiceV1Consumer
 
 	@Override
 	public Response<GetVersionResponse> getVersionAsync(GetVersion param0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+/*
+	@Override
+	public TestJAXWSCompliance1Response testJAXWSCompliance1(
+			TestJAXWSCompliance1 param0) {
+		TestJAXWSCompliance1Response result = null;
+		 try {
+	            m_proxy = getProxy();
+	        } catch (ServiceException serviceException) {
+	            throw ServiceRuntimeException.wrap(serviceException);
+	        }
+	        result = m_proxy.testJAXWSCompliance1(param0);
+	        return result;
+	}
+
+	@Override
+	public TestJAXWSCompliance2Response testJAXWSCompliance2(
+			TestJAXWSCompliance2 param0) {
+		  TestJAXWSCompliance2Response result = null;
+	        try {
+	            m_proxy = getProxy();
+	        } catch (ServiceException serviceException) {
+	            throw ServiceRuntimeException.wrap(serviceException);
+	        }
+	        result = m_proxy.testJAXWSCompliance2(param0);
+	        return result;
+	}
+
+	@Override
+	public Future<?> testJAXWSCompliance1Async(TestJAXWSCompliance1 param0,
+			AsyncHandler<TestJAXWSCompliance1Response> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response<TestJAXWSCompliance1Response> testJAXWSCompliance1Async(
+			TestJAXWSCompliance1 param0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<?> testJAXWSCompliance2Async(TestJAXWSCompliance2 param0,
+			AsyncHandler<TestJAXWSCompliance2Response> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response<TestJAXWSCompliance2Response> testJAXWSCompliance2Async(
+			TestJAXWSCompliance2 param0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+*/
+	@Override
+	public TestPrimitiveTypesResponse testPrimitiveTypes(
+			TestPrimitiveTypesRequest param0) {
+		   TestPrimitiveTypesResponse result = null;
+	        try {
+	            m_proxy = getProxy();
+	        } catch (ServiceException serviceException) {
+	            throw ServiceRuntimeException.wrap(serviceException);
+	        }
+	        result = m_proxy.testPrimitiveTypes(param0);
+	        return result;
+	}
+
+	@Override
+	public Future<?> testPrimitiveTypesAsync(TestPrimitiveTypesRequest param0,
+			AsyncHandler<TestPrimitiveTypesResponse> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response<TestPrimitiveTypesResponse> testPrimitiveTypesAsync(
+			TestPrimitiveTypesRequest param0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GetMessagesForTheDayResponse testSchemaValidationWithUPA(
+			GetMessagesForTheDayRequest testSchemaValidationWithUPA) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<?> testSchemaValidationWithUPAAsync(
+			GetMessagesForTheDayRequest param0,
+			AsyncHandler<GetMessagesForTheDayResponse> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response<GetMessagesForTheDayResponse> testSchemaValidationWithUPAAsync(
+			GetMessagesForTheDayRequest param0) {
 		// TODO Auto-generated method stub
 		return null;
 	}

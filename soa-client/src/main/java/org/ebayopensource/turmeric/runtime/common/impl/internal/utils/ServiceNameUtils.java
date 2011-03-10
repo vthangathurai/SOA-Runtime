@@ -75,7 +75,7 @@ public final class ServiceNameUtils {
 	public static String getServiceImplSkeletonClassName(String svcName,
 			String serviceIntfClassName)
 	{
-		return getServiceGenClassName(svcName, serviceIntfClassName, "gen", "ImplSkeleton");
+		return getServiceGenClassName(svcName, serviceIntfClassName, "impl", "ImplSkeleton");
 	}
 
 	public static String getServiceTypeDefsBuilderClassName(String svcName,

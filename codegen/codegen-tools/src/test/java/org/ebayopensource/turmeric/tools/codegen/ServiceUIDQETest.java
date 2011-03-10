@@ -158,11 +158,11 @@ public class ServiceUIDQETest extends AbstractServiceGeneratorTestCase{
 		performDirectCodeGen(testArgs1, binDir);
 		performDirectCodeGen(testArgs2, binDir);
 	
-		String implClass = destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/test/soaframework/tools/codegen/gen/NewadminnameImplSkeleton.java";
+		String implClass = destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/test/soaframework/tools/codegen/impl/NewadminnameImplSkeleton.java";
 		File implementationClass = new File(implClass);
 		assertTrue(implementationClass.exists());
 
-		String dispatcherClass = destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/test/soaframework/tools/codegen/gen/gen/NewadminnameRequestDispatcher.java";
+		String dispatcherClass = destDir.getAbsolutePath()+"/gen-src/com/ebayopensource/test/soaframework/tools/codegen/impl/gen/NewadminnameRequestDispatcher.java";
 		File dispatcClass = new File(dispatcherClass);
 		assertTrue(dispatcClass.exists());
 

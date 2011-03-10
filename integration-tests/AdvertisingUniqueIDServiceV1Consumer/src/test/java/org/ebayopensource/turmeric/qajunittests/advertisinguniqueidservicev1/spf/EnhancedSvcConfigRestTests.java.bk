@@ -1,0 +1,353 @@
+/*******************************************************************************
+ * Copyright (c) 2006-2010 eBay Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *******************************************************************************/
+package org.ebayopensource.turmeric.qajunittests.advertisinguniqueidservicev1.spf;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import junit.framework.Assert;
+
+import org.ebayopensource.turmeric.advertising.v1.services.EchoMessageRequest;
+import org.ebayopensource.turmeric.advertising.v1.services.GetMessagesForTheDayRequest;
+import org.ebayopensource.turmeric.advertising.v1.services.GetMessagesForTheDayResponse;
+import org.ebayopensource.turmeric.advertisinguniqueidservicev1.gen.SharedAdvertisingUniqueIDServiceV1Consumer;
+import org.ebayopensource.turmeric.advertisinguniqueservicev1.AdvertisingUniqueIDServiceV1SharedConsumer;
+import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceCreationException;
+import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceException;
+import org.ebayopensource.turmeric.runtime.common.types.SOAHeaders;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
+import org.ebayopensource.turmeric.runtime.tests.common.jetty.AbstractWithServerQETest;
+import org.ebayopensource.turmeric.runtime.tests.common.util.HttpTestClient;
+import org.junit.Test;
+
+/*
+ * vyaramala
+ * TestCases for http://jirap.corp.ebay.com:8080/browse/SOAPLATFORM-618
+ */
+public class EnhancedSvcConfigRestTests extends AbstractWithServerQETest {
+	public static HttpTestClient http = HttpTestClient.getInstance();
+	public Map<String, String> queryParams = new HashMap<String, String>();
+	String response = null;
+
+	
+//	 * ServiceConfig.xml
+//	  <provider-options>
+//	   <request-params-mapping>
+//	 		<operation name="testSchemaValidationWithUPA">
+//				<option name="language" alias="lang" type="string">path[5]</option>
+//				<option name="sitedId" type="string">path[6]</option>
+//				<option name="clientId">path[7]</option>
+//			</operation>
+//		</request-params-mapping>
+//	  </provider-options>
+//	 *
+	 
+	@Test
+	public void testDefaultConfigurationRegularREST() {
+		queryParams.put("X-TURMERIC-OPERATION-NAME","testSchemaValidationWithUPA");
+		queryParams.put("X-TURMERIC-SERVICE-NAME","AdvertisingUniqueIDServiceV1");
+		queryParams.put("language","1");
+		queryParams.put("siteId", "0");
+		queryParams.put("clientId","abc");
+		String url = serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1/";
+		String response = http.getResponse(url, queryParams);
+		System.out.println(response);
+		Assert.assertTrue(response.contains("Call reached IMPL as schemaValidation went thru fine.siteid - 0clientid - abclang - 1"));
+	}
+
+	@Test
+	public void testWithSIFInSPF() {
+		boolean success = false;
+
+		try {
+//			ServiceConfigManager.getInstance().setConfigTestCase("config");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV1Consumer","local");
+			consumer.getService().setServiceLocation(new URL(serverUri.toASCIIString() + "/ws/spf/"));
+			GetMessagesForTheDayResponse resp =
+				consumer.testSchemaValidationWithUPA(param0);
+			System.out.println(resp.getMessageList().get(0).getMessage());
+			if(resp.getMessageList().get(0).getMessage().contains("schemaValidation"))
+				success = true;
+		}catch (Exception exception) {
+			success = false;
+			exception.printStackTrace();
+		}
+		Assert.assertTrue(success);
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("config");
+		} catch (ServiceCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testDefaultConfigurationRequestParamMapping() throws MalformedURLException, ServiceException {
+		AdvertisingUniqueIDServiceV1SharedConsumer client = new AdvertisingUniqueIDServiceV1SharedConsumer("AdvertisingUniqueIDServiceV1Consumer", "MixedMode2");
+		EchoMessageRequest param0 = new EchoMessageRequest();
+		param0.setIn("Foo");
+		
+		client.getService().setServiceLocation(new URL(serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1"));
+		System.out.println(serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1");
+		http.port = serverUri.toASCIIString().substring(17);
+		queryParams.clear();
+		queryParams.put("X-TURMERIC-OPERATION-NAME","testSchemaValidationWithUPA");
+		String url = serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1/1/0/abc/";
+//		System.out.println(url);
+		String response = http.getResponse(url, queryParams);
+//		System.out.println("testDefaultConfiguration" + response);
+		Assert.assertTrue(response.contains("Call reached IMPL as schemaValidation went thru fine.siteid - 0clientid - abclang - 1"));
+	}
+	@Test
+	public void testDefaultConfigurationRequestParamMappingWithAlias() {
+		queryParams.clear();
+		queryParams.put("X-TURMERIC-OPERATION-NAME","testSchemaValidationWithUPA");
+		queryParams.put("lang","3");
+//		String url = serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1/testSchemaValidationWithUPA/1/0/abc/";
+		String url = serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1/1/0/abc/";
+		String response = http.getResponse(url, queryParams);
+//		response = http.getResponse(
+//				"http://localhost:8080/services/advertise/UniqueIDService/v2/testSchemaValidationWithUPA/1/0/abc", queryParams);
+		System.out.println("testDefaultConfiguration" + response);
+		Assert.assertTrue(response.contains("Call reached IMPL as schemaValidation went thru fine.siteid - 0clientid - abclang - 3"));
+
+	}
+
+	@Test
+	public void testWithHeaderMappingOptionsDefaultREST() {
+//		Default UseCase
+		queryParams.put("X-TURMERIC-OPERATION-NAME","testEnhancedRest");
+		queryParams.put("in(0)","hello");
+		String url = serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1/";
+		String response = http.getResponse(url, queryParams);
+//		String response = http.getResponse("http://localhost:8080/services/advertise/UniqueIDService/v1", queryParams);
+		System.out.println("testWithHeaderMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>hello</out>"));
+	}
+	@Test
+	public void testWithHeaderMappingOptionsDefaultUseCase() {
+//		Usecase with headermapping
+		queryParams.clear();
+		response = http.getResponse(
+				"http://localhost:8080/services/advertise/UniqueIDService/v1/testEnhancedRest/hello", queryParams);
+		System.out.println("testWithHeaderMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>hello</out>"));
+		System.out.println(" ** testWithHeaderMappingOptions ** ");
+	}
+
+	@Test
+	public void testOperationMappingOptionsRegularREST() {
+		System.out.println(" ** testOperationMappingOptions ** ");
+//		Default UseCase
+		queryParams.put("X-EBAY-SOA-OPERATION-NAME","testEnhancedRest");
+		queryParams.put("in(0)","hello");
+		String response = http.getResponse("http://localhost:8080/services/advertise/UniqueIDService/v1", queryParams);
+		System.out.println("testOperationMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>hello</out>"));
+		queryParams.clear();
+	}
+	@Test
+	public void testOperationMappingOptionsDefaultUseCase() {
+		response = http.getResponse(
+				"http://localhost:8080/services/advertise/UniqueIDService/v1/enhanced/hello", queryParams);
+		System.out.println("testOperationMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>hello</out>"));
+		System.out.println(" ** testOperationMappingOptions ** ");
+
+	}
+	@Test
+//	Relative Mapping Testing for Enhanced Rest Configuration
+	public void testDefaultRESTConfigurationWithRelativeMapping() {
+		System.out.println(" ** testDefaultConfigurationWithRelativeMapping ** ");
+		queryParams.put("X-EBAY-SOA-OPERATION-NAME","testSchemaValidationWithoutUPA");
+		queryParams.put("X-EBAY-SOA-REQ-PAYLOAD-VALIDATION-LEVEL","false");
+		queryParams.put("in","hello");
+		String response = http.getResponse("http://localhost:8080/services/advertise/UniqueIDService/v2", queryParams);
+		System.out.println("testOperationMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>helloTesting enhanced REST Feature relative mapping</out>"));
+	}
+	@Test
+	public void testWithRelativeMapping1() {
+		queryParams.clear();
+//		queryParams.put("X-EBAY-SOA-REQ-PAYLOAD-VALIDATION-LEVEL","false");
+		response = http.getResponse(
+				"http://localhost:8080/services/advertise/UniqueIDService/v2/testSchemaValidationWithoutUPA/Audi", queryParams);
+		System.out.println("testOperationMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>AudiTesting enhanced REST Feature relative mapping</out>"));
+	}
+	@Test
+	public void testWithRelativeMapping2() {
+		queryParams.clear();
+		queryParams.put("X-EBAY-SOA-REQ-PAYLOAD-VALIDATION-LEVEL","false");
+		response = http.getResponse(
+				"http://localhost:8080/services/advertise/UniqueIDService/v2/testSchemaValidationWithoutUPA/Golf", queryParams);
+		System.out.println("testOperationMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>GolfTesting enhanced REST Feature relative mapping</out>"));
+	}
+	@Test
+	public void testWithRelativeMapping3() {
+		queryParams.clear();
+		queryParams.put("X-EBAY-SOA-REQ-PAYLOAD-VALIDATION-LEVEL","false");
+		response = http.getResponse(
+				"http://localhost:8080/services/advertise/UniqueIDService/v2/testSchemaValidationWithoutUPA/Bmw", queryParams);
+		System.out.println("testOperationMappingOptions" + response);
+		Assert.assertTrue(response.contains("<out>BmwTesting enhanced REST Feature relative mapping</out>"));
+		System.out.println(" ** testDefaultConfigurationWithRelativeMapping ** ");
+	}
+	@Test
+	public void testRestInLocalModePost24() throws ServiceException {
+		SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV1Consumer","local");
+		GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//		clientId is mandatory. But this test will not throw an error
+//		param0.setClientId("schemavalidation");
+		param0.setLanguage("us-ENG");
+		param0.setMessageType(null);
+		param0.setSiteId("0");
+		System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+	}
+	
+//	Error Conditions
+	@Test
+	public void testAbsoluteMappingWithSameIndex() {
+		try {
+		ServiceConfigManager.getInstance().setConfigTestCase("configAbsoluteMappingWithSameIndex");
+		SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+		GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//		clientId is mandatory. But this test will not throw an error
+//		param0.setClientId("schemavalidation");
+		param0.setLanguage("us-ENG");
+		param0.setMessageType(null);
+		param0.setSiteId("0");
+		System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+		} catch (Exception e) {
+			Assert.assertEquals(
+					"Error validating configuration file META-INF/soa/services/configAbsoluteMappingWithSameIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+					e.getMessage());
+		}
+	}
+	@Test
+	public void testRelativeMappingWithSameIndex() {
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("configRelativeMappingWithSameIndex");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//			clientId is mandatory. But this test will not throw an error
+//			param0.setClientId("schemavalidation");
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+			} catch (Exception e) {
+				Assert.assertEquals(
+						"Error validating configuration file META-INF/soa/services/configRelativeMappingWithSameIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+						e.getMessage());
+			}
+	}
+	@Test
+	public void testRequestParamMappingWithNegativeIndex() {
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("configRequestParamMappingWithNegativeIndex");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//			clientId is mandatory. But this test will not throw an error
+//			param0.setClientId("schemavalidation");
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+			} catch (Exception e) {
+				Assert.assertEquals(
+						"Error validating configuration file META-INF/soa/services/configRequestParamMappingWithNegativeIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+						e.getMessage());
+			}
+	}
+	@Test
+	public void testHeaderMappingWithNegativeIndex() {
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("configHeaderMappingWithNegativeIndex");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//			clientId is mandatory. But this test will not throw an error
+//			param0.setClientId("schemavalidation");
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+			} catch (Exception e) {
+				Assert.assertEquals(
+						"Error validating configuration file META-INF/soa/services/configRequestParamMappingWithNegativeIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+						e.getMessage());
+			}
+
+	}
+	@Test
+	public void testRequestParamMappingWithCharacters() {
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("configRequestParamMappingWithCharacters");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//			clientId is mandatory. But this test will not throw an error
+//			param0.setClientId("schemavalidation");
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+			} catch (Exception e) {
+				Assert.assertEquals(
+						"Error validating configuration file META-INF/soa/services/configRequestParamMappingWithNegativeIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+						e.getMessage());
+			}
+	}
+	@Test
+	public void testHeaderMappingWithCharacters() {
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("configHeaderMappingWithCharacters");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//			clientId is mandatory. But this test will not throw an error
+//			param0.setClientId("schemavalidation");
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+			} catch (Exception e) {
+				Assert.assertEquals(
+						"Error validating configuration file META-INF/soa/services/configRequestParamMappingWithNegativeIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+						e.getMessage());
+			}
+	}
+
+	@Test
+	public void testInvalidRequestParamMapping() {
+		try {
+			ServiceConfigManager.getInstance().setConfigTestCase("configInvalidRequestParamMapping");
+			SharedAdvertisingUniqueIDServiceV1Consumer consumer = new SharedAdvertisingUniqueIDServiceV1Consumer("AdvertisingUniqueIDServiceV2Consumer","local");
+			GetMessagesForTheDayRequest param0 = new GetMessagesForTheDayRequest();
+//			clientId is mandatory. But this test will not throw an error
+//			param0.setClientId("schemavalidation");
+			param0.setLanguage("us-ENG");
+			param0.setMessageType(null);
+			param0.setSiteId("0");
+			System.out.println(consumer.testSchemaValidationWithUPA(param0).getAck());
+			} catch (Exception e) {
+				Assert.assertEquals(
+						"Error validating configuration file META-INF/soa/services/configRequestParamMappingWithNegativeIndex/AdvertisingUniqueIDServiceV2/ServiceConfig.xml: Duplicates indices for url path elements",
+						e.getMessage());
+			}
+	}
+}

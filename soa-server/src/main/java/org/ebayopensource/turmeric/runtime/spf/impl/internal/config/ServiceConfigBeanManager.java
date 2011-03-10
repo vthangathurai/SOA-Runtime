@@ -150,9 +150,10 @@ public class ServiceConfigBeanManager {
 
 					URLHeaderMappingsConfigBeanListener listener = new URLHeaderMappingsConfigBeanListener(dBean, lookupName);
 					
-					listener.setMappings(config.getHeaderMappingOptions());
+					ServiceConfigBean.initDynamicBeanInfo(dBean, config.getHeaderMappingOptions());
 					
 					config.setHeaderMappingOptions(listener.getMappings());
+					
 					
 					dBean.addVetoableChangeListener(listener);
 					dBean.addPropertyChangeListener(listener);
@@ -178,7 +179,7 @@ public class ServiceConfigBeanManager {
 					
 					RequestHeaderMappingsConfigBeanListener listener = new RequestHeaderMappingsConfigBeanListener(dBean, lookupName);
 					
-					listener.setMappings(config.getRequestHeaderMappingOptions());
+					ServiceConfigBean.initDynamicBeanInfo(dBean, config.getRequestHeaderMappingOptions());
 
 					config.setRequestHeaderMappingOptions(listener.getMappings());
 					
@@ -206,7 +207,7 @@ public class ServiceConfigBeanManager {
 					
 					ResponseHeaderMappingsConfigBeanListener listener = new ResponseHeaderMappingsConfigBeanListener(dBean, lookupName);
 
-					listener.setMappings(config.getResponseHeaderMappingOptions());
+					ServiceConfigBean.initDynamicBeanInfo(dBean, config.getResponseHeaderMappingOptions());
 
 					config.setResponseHeaderMappingOptions(listener.getMappings());
 					
@@ -236,7 +237,9 @@ public class ServiceConfigBeanManager {
 							dBean = ServiceConfigBean.createDynamicConfigBean(config, REQUEST_HANDLER_PREFIX + handlerName + ".Options");
 
 							RequestHandlerOptionsConfigBeanListener listener = new RequestHandlerOptionsConfigBeanListener(dBean, adminName, handlerName);
-							listener.setMappings(hc.getOptions());
+							
+							ServiceConfigBean.initDynamicBeanInfo(dBean, hc.getOptions());
+							
 							hc.setOptions(listener.getMappings());
 							
 							dBean.addVetoableChangeListener(listener);
@@ -267,7 +270,9 @@ public class ServiceConfigBeanManager {
 							dBean = ServiceConfigBean.createDynamicConfigBean(config, RESPONSE_HANDLER_PREFIX + handlerName + ".Options");
 
 							ResponseHandlerOptionsConfigBeanListener listener = new ResponseHandlerOptionsConfigBeanListener(dBean, adminName, handlerName);
-							listener.setMappings(hc.getOptions());
+							
+							ServiceConfigBean.initDynamicBeanInfo(dBean, hc.getOptions());
+							
 							hc.setOptions(listener.getMappings());
 							
 							dBean.addVetoableChangeListener(listener);

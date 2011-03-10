@@ -89,9 +89,14 @@ public class SOAServerTransportRequest implements ISOATransportRequest {
 		return m_request.getRequestURI();
 	}
 
+	@Override
+	public String getServletPath() {
+		return m_request.getServletPath();
+	}
+	
 	public Map<String, String> getHeaderNames() throws ServiceException {
 		Map<String, String> headers = new HashMap<String, String> ();
-		Enumeration reqHeaders = m_request.getHeaderNames();
+		Enumeration<?> reqHeaders = m_request.getHeaderNames();
 		while (reqHeaders.hasMoreElements()) {
 			String name = (String)reqHeaders.nextElement();
 			name = SOAHeaders.normalizeName(name, true);

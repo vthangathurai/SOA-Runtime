@@ -58,7 +58,7 @@ public class UnitTestTest extends AbstractServiceGeneratorTestCase{
 		 
 		 
 		 
-		 String genPath = destDir.getAbsolutePath() + "/gen-src/org/ebayopensource/turmeric/tools/codegen/test/HelloWorldServiceTest.java";
+		 String genPath = destDir.getAbsolutePath() + "/gen-test/org/ebayopensource/turmeric/tools/codegen/test/HelloWorldServiceTest.java";
 			
 		 String goldPath = getTestResrcDir() + "/HelloWorldIntf/gen-src/org/ebayopensource/turmeric/tools/codegen/test/HelloWorldServiceTest.java";
 				

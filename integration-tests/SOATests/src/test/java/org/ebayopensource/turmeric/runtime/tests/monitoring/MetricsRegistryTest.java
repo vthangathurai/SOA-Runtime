@@ -28,6 +28,7 @@ import org.ebayopensource.turmeric.runtime.common.monitoring.value.IntSumMetricV
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
 import org.ebayopensource.turmeric.runtime.sif.impl.internal.pipeline.ClientMessageProcessor;
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.pipeline.ServerMessageProcessor;
+import org.ebayopensource.turmeric.runtime.spf.impl.internal.service.ServerServiceDescFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,6 +58,10 @@ public class MetricsRegistryTest extends BaseMonitoringTest {
 	public void setupMessageProcessors() throws Exception {
 		ClientMessageProcessor.getInstance();
 		ServerMessageProcessor.getInstance();
+		
+		ServerServiceDescFactory serviceDescFactory = ServerServiceDescFactory.getInstance();
+		serviceDescFactory.loadAllServices(); // Load the Test1 Service.
+
 	}
 
 	@Test
