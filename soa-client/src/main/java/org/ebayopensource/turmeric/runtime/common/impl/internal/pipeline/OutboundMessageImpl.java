@@ -335,8 +335,7 @@ public final class OutboundMessageImpl extends BaseMessageImpl implements Outbou
 		Object obj = node.getNodeValue();
 		SerializerFactory serFactory = getDataBindingDesc().getSerializerFactory();
 		Serializer ser = serFactory.getSerializer();
-		QName xmlName = getMessageXMLName(getHeaderParamDesc(), obj.getClass());
-		ser.serialize(this, obj, xmlName, obj.getClass(), out);
+        ser.serialize(this, obj, node.getNodeName(), obj.getClass(), out);
 	}
 	
 	public int getTransportErrorResponseIndicationCode() throws ServiceException {
