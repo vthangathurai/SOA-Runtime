@@ -8,7 +8,7 @@ To build and run the demo, In Eclipse,
 
 - install Turmeric Plugin;
 - import item-search as maven project;
-- build all the imported projects;
+- clean build all the imported projects;
 - start DemoAppServer under DemoApp project as Java application.  This starts up a jetty server;
 - In a browser, open page http://localhost:8080/DemoApp/ItemSearch.html, type a keyword in the search field and press the search button. A table with search result will return.
 
