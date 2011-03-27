@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+<title>eBay Open Source Demo</title>
+<meta http-equiv="Pragma" content="no-cache">
+<link rel="stylesheet" type="text/css"
+	href="https://www.ebayopensource.org/pub/skins/turmeric/images/style.css" />
+<link rel='alternate'
+	title='\eBay Open Source$FeedLinkTitleGroup RSS Feed'
+	href='https://www.ebayopensource.org/index.php/Site.AllRecentChanges?action=rss&amp;name=-SideBar'
+	type='application/rss+xml' />
+<link rel='alternate'
+	title='\eBay Open Source$FeedLinkTitleGroup Atom Feed'
+	href='https://www.ebayopensource.org/index.php/Site.AllRecentChanges?action=atom&amp;name=-SideBar'
+	type='application/atom+xml' />
+<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+</head>
+
+<body>
+<div id="main">
+<div id="header">
+<div id="logo">
+<div class="logo_lft"><a
+	href="https://www.ebayopensource.org/index.php/Main/HomePage"><img
+	src="https://www.ebayopensource.org/pub/skins/turmeric/images/logoEbay_x45.gif"
+	width="285" height="90" alt="eBay Open Source logo"
+	title="eBay Open Source logo"></a></div>
+<div class="logo_rgt">
+<div class="searchheading">Search by keywords</div>
+<form method="get" action="http://www.google.com/search"
+	id="search_form" onsubmit="return false;">
+<p><input type='hidden' name='itemsearch'
+	value='www.ebayopensource.org' />
+	<input id='keywordField' type='text' name='q' value=''
+	class='inputbox searchbox' />
+	<input id="search_btn" name="search"
+	type="image" style="border: 0; margin: 0 0 -9px 5px;"
+	src="https://www.ebayopensource.org/pub/skins/turmeric/images/search.png"
+	alt="Search" title="Search" /></p>
+</form>
+</div>
+</div>
+<div class="cl">&nbsp;</div>
+</div>
+
+<table id="site_content" width="100%" border="0">
+	<tr>
+		<td id="content"><!-- insert the page content here --> <!--PageActionFmt-->
+
+		<!--PageText-->
+		<div id='wikitext'>
+		<h1><div id="keywordDisplayArea">Search Results for Keyword: </div></h1>
+		<div class='vspace'></div>
+		<div id="search_result">
+		</div>
+		</div>
+		</td>
+	</tr>
+
+
+</table>
+<div id="search"></div>
+<script type="text/javascript"><!--
+YUI({ filter: 'raw' }).use("node", "io", "dump", "json-parse",function (Y) {
+
+    var target = Y.one('#search');
+    var keyword = Y.one('#keywordField');
+    var keywordDisplay = Y.one("#keywordDisplayArea");
+
+    var callback = {
+
+        timeout : 30000,
+
+        on : {
+            success : function (x,o) {
+                Y.log("RAW JSON DATA: " + o.responseText);
+
+                var messages = [], html,
+                i, items, item;
+
+            try {
+                messages = Y.JSON.parse(o.responseText);
+            }
+            catch (e) {
+                alert("JSON Parse failed! -- " + o.responseText);
+                return;
+            }
+
+            Y.log("PARSED DATA: " + Y.Lang.dump(messages));
+
+            items = messages.findByKeywordsResponse.item;
+            if (items != null && items != undefined) {
+                html = "<table border='1' width='100%'><tr><td bgcolor='silver' align='center' valign='top'><strong>Description</strong></td><td bgcolor='silver' align='center' valign='top'><strong>Id</strong></td><td bgcolor='silver' align='center' valign='top'><strong>Source</strong></td><td bgcolor='silver' align='center' valign='top'><strong>Type</strong></td><td bgcolor='silver' align='center' valign='top'><strong>Condition</strong></td><td bgcolor='silver' align='center' valign='top'><strong>Price</strong></td></tr>";
+	            for (i=0; i < items.length; ++i) {
+	                var name = items[i].name;
+	                var id = items[i].id;
+	                var source = items[i].source;
+	                var price = items[i].price;
+	                var type = items[i].type;
+	                var condition = items[i].condition
+	                html += '<tr><td valign="top"><strong>' + (name == undefined ? "" : name)
+	                        + '</strong></td><td valign="top">' + (id == undefined ? "" : id)
+	                        + '</td><td valign="top">' + (source == undefined ? "" : source)
+	                        + '</td><td valign="top">' + (type == undefined ? "" : type)
+	                        + '</td><td valign="top">' + (condition == undefined ? "" : condition)
+	                        + '</td><td valign="top">' + (price == undefined ? "" : price) + '</td></tr>';
+	            }
+	            // Use the Node API to apply the new innerHTML to the target
+	            target.set('innerHTML', html + '</table>');
+            } else {
+                keywordDisplay.set('innerHTML', "Zero result returned for keyword: " + keyword.get('value'));
+                target.set('innerHTML', "");
+            }
+            
+            },
+
+            failure : function (x,o) {
+                alert("Async call failed!");
+            }
+
+        }
+    };
+
+    // Attach a click event listener to the button #demo_btn to send the request
+    Y.on('click',function (e) {
+        // Make the call to the server for JSON data
+        keywordDisplay.set('innerHTML', "Search Results for Keyword: " + keyword.get('value'));
+        target.set('innerHTML', "");
+        Y.io("/DemoApp/ItemSearch?X-TURMERIC-OPERATION-NAME=findByKeywords&X-TURMERIC-RESPONSE-DATA-FORMAT=JSON&keyword=" + keyword.get('value'), callback);
+    },'#search_btn');
+
+});
+--></script>
+
+<div id="content_footer"></div>
+<div id="footer">
+<div class="footer_lft">Copyright &copy; 2011 eBay Inc. All Rights
+Reserved.</div>
+<div class="footer_rgt"><a
+	href="https://www.ebayopensource.org/index.php/Main/About">About</a> |
+<a href="https://www.ebayopensource.org/index.php/Main/TermsOfUse">Terms
+and Conditions</a> | <a
+	href="https://www.ebayopensource.org/index.php/Main/PrivacyPolicy">Privacy
+Policy</a> | <a href="mailto:dl-ebay-OpenSourceContact@ebay.com">Contact</a>
+</div>
+
+</div>
+</div>
+</body>
+</html>
