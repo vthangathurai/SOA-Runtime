@@ -2,19 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>org.ebayopensource.turmeric.runtime.examples</groupId>
-    <artifactId>turmeric-runtime-examples-parent</artifactId>
+    <artifactId>turmeric-examples-echoservice-parent</artifactId>
     <version>1.0.0.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ebayopensource.turmeric.intf</groupId>
-  <artifactId>ExampleEchoServiceV1</artifactId>
-  <name>ExampleEchoServiceV1</name>
+  <groupId>org.ebayopensource.turmeric.client</groupId>
+  <artifactId>ExampleEchoServiceConsumer</artifactId>
+  <name>ExampleEchoServiceConsumer</name>
   <properties>
-    <implProjectName>ExampleEchoServiceV1Impl</implProjectName>
+    <requiredServices>ExampleEchoServiceV1</requiredServices>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.typelib</groupId>
+      <artifactId>common-type-library</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ebayopensource.turmeric.intf</groupId>
+      <artifactId>ExampleEchoServiceV1</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+      <version>2.1.2</version>
+    </dependency>
     <dependency>
       <groupId>org.ebayopensource.turmeric.runtime</groupId>
       <artifactId>soa-client</artifactId>
@@ -24,17 +38,6 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ebayopensource.turmeric.typelib</groupId>
-      <artifactId>common-type-library</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-xjc</artifactId>
-      <version>2.1.2</version>
     </dependency>
   </dependencies>
   <build>
@@ -43,9 +46,6 @@
     <outputDirectory>build/classes</outputDirectory>
     <testOutputDirectory>build/classes</testOutputDirectory>
     <resources>
-      <resource>
-        <directory>gen-meta-src</directory>
-      </resource>
       <resource>
         <directory>meta-src</directory>
       </resource>
@@ -76,29 +76,11 @@
             </goals>
             <configuration>
               <sources>
-                <source>gen-src/client</source>
+                <source>src</source>
               </sources>
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.ebayopensource.turmeric.maven</groupId>
-        <artifactId>turmeric-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>gen-interface-wsdl</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <verbose>true</verbose>
-          <legacy>true</legacy>
-          <resourcesOutputDirectory>${project.basedir}/gen-meta-src</resourcesOutputDirectory>
-          <outputDirectory>${project.basedir}/gen-src/client</outputDirectory>
-        </configuration>
       </plugin>
     </plugins>
   </build>
