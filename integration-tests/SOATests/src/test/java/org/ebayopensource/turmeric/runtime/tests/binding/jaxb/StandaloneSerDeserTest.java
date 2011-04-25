@@ -86,7 +86,9 @@ public class StandaloneSerDeserTest extends BaseSerDeserTest {
 		deserFactory.init(new TestDeserInitContext(options));
 
 		doTest(msg, BindingConstants.PAYLOAD_XML, SOAConstants.MIME_XML,
-				serFactory, deserFactory, "<?xml version='1.0' encoding='windows-1252'?><id xmlns=\"urn:default\">12345</id>");
+				serFactory, deserFactory, "<?xml version='1.0' encoding='" +
+		Charset.defaultCharset().displayName() +
+		"'?><id xmlns=\"urn:default\">12345</id>");
 	}
 
 	@Test	
@@ -103,7 +105,9 @@ public class StandaloneSerDeserTest extends BaseSerDeserTest {
 		deserFactory.init(new TestDeserInitContext(options));
 
 		doTest(msg, BindingConstants.PAYLOAD_XML, SOAConstants.MIME_XML,
-				serFactory, deserFactory, "<?xml version='1.0' encoding='windows-1252'?><MyObject xmlns=\"urn:default\"><id>12345</id></MyObject>");
+				serFactory, deserFactory, "<?xml version='1.0' encoding='" +
+		Charset.defaultCharset().displayName() +
+		"'?><MyObject xmlns=\"urn:default\"><id>12345</id></MyObject>");
 	}
 
 /*	private static final String GOLD_JaxbXmlCharacterEscaping = "<?xml version='1.0' encoding='" +
