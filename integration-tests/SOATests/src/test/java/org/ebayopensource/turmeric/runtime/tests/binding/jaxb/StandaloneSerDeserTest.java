@@ -72,6 +72,40 @@ public class StandaloneSerDeserTest extends BaseSerDeserTest {
 				serFactory, deserFactory, GOLD_JaxbXmlOutOfProcess);
 	}
 
+	@Test	
+	public void testJaxbXmlNoRoot() throws Exception {
+		MyObject msg = new MyObject();
+		msg.setId(12345);
+
+		HashMap<String, String> options = new HashMap<String, String>();
+		options.put("noRoot", "true");
+
+		ISerializerFactory serFactory = new XMLSerializerFactory();
+		serFactory.init(new TestSerInitContext(options));
+		IDeserializerFactory deserFactory = new XMLDeserializerFactory();
+		deserFactory.init(new TestDeserInitContext(options));
+
+		doTest(msg, BindingConstants.PAYLOAD_XML, SOAConstants.MIME_XML,
+				serFactory, deserFactory, "<?xml version='1.0' encoding='windows-1252'?><id xmlns=\"urn:default\">12345</id>");
+	}
+
+	@Test	
+	public void testJaxbXmlNoRootFalse() throws Exception {
+		MyObject msg = new MyObject();
+		msg.setId(12345);
+
+		HashMap<String, String> options = new HashMap<String, String>();
+		options.put("noRoot", "false");
+
+		ISerializerFactory serFactory = new XMLSerializerFactory();
+		serFactory.init(new TestSerInitContext(options));
+		IDeserializerFactory deserFactory = new XMLDeserializerFactory();
+		deserFactory.init(new TestDeserInitContext(options));
+
+		doTest(msg, BindingConstants.PAYLOAD_XML, SOAConstants.MIME_XML,
+				serFactory, deserFactory, "<?xml version='1.0' encoding='windows-1252'?><MyObject xmlns=\"urn:default\"><id>12345</id></MyObject>");
+	}
+
 /*	private static final String GOLD_JaxbXmlCharacterEscaping = "<?xml version='1.0' encoding='" +
 		Charset.defaultCharset().displayName() +
 		"'?>";

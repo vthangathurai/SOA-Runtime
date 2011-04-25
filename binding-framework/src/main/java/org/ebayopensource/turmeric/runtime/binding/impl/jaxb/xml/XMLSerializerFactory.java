@@ -20,9 +20,11 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.ebayopensource.turmeric.runtime.binding.BindingConstants;
+import org.ebayopensource.turmeric.runtime.binding.DataBindingOptions;
 import org.ebayopensource.turmeric.runtime.binding.ISerializationContext;
 import org.ebayopensource.turmeric.runtime.binding.ISerializerFactory;
 import org.ebayopensource.turmeric.runtime.binding.impl.AbstractSerializerFactory;
+import org.ebayopensource.turmeric.runtime.binding.impl.parser.xml.IgnoreRootElementStreamWriter;
 import org.ebayopensource.turmeric.runtime.binding.impl.parser.xml.XMLTextEscapingWriterFactory;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
@@ -65,6 +67,9 @@ public class XMLSerializerFactory extends AbstractSerializerFactory
 		OutputStreamWriter osWriter = new OutputStreamWriter(out, charset);
 		XMLStreamWriter xmlStreamWriter = 
 			m_streamWriterFactory.createXMLStreamWriter(osWriter);
+		if (DataBindingOptions.NoRoot.getBoolOption(m_options)) {
+			xmlStreamWriter = new IgnoreRootElementStreamWriter(xmlStreamWriter);
+		}
 		return xmlStreamWriter;
 	}
 	

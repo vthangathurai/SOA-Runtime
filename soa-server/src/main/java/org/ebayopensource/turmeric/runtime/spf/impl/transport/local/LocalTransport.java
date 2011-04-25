@@ -20,6 +20,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.ebayopensource.turmeric.runtime.common.binding.DataBindingDesc;
 import org.ebayopensource.turmeric.runtime.common.exceptions.ErrorDataFactory;
@@ -60,6 +61,7 @@ import org.ebayopensource.turmeric.runtime.spf.pipeline.ServerMessageContext;
  */
 public class LocalTransport implements Transport {
 	private final static int DFLT_REQUEST_TIMEOUT_MS = 1000;
+	private final static Logger s_logger = LogManager.getInstance(LocalTransport.class);
 
 	// SOA2.4, changing default skip serialization to true 
 	private boolean m_configSkipSerialization;
@@ -381,8 +383,9 @@ public class LocalTransport implements Transport {
 			throws ServiceException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
 		outboundMsg.serialize(bos);
-        // LogManager.getInstance(LocalTransport.class).log(Level.INFO, 
-        // "Response msg: " + bos.toString()); 	 
+		if (s_logger.isLoggable(Level.FINEST)) {
+			s_logger.log(Level.FINEST, "Response msg: " + bos.toString()); 	 
+		}
 		return bos.toByteArray();
 	}
 

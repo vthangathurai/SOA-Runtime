@@ -379,7 +379,7 @@ public class JSONFilterInputStream extends FilterInputStream {
 	 */
 	
 	private static final Pattern JSON_NS_PATTERN = Pattern.compile(
-		"\\{\\s*(\\s*\"jsonns\\.[a-zA-Z0-9]+\"\\s*:\\s*\"[^\"]+\"\\s*,)*\\s*(\"[a-zA-Z0-9@.]+\":)?(\\[?\\{?.*)", Pattern.MULTILINE | Pattern.DOTALL);
+		"\\{\\s*(\\s*\"jsonns\\.[a-zA-Z0-9]+\"\\s*:\\s*\"[^\"]+\"\\s*,)*\\s*(\"[a-zA-Z0-9@.]+\"\\s*:\\s*)?(\\[?\\{?.*)", Pattern.MULTILINE | Pattern.DOTALL);
 		
 	
 	private static final int INITIAL_BUFFER_SIZE = 1024;

@@ -19,7 +19,8 @@ public enum DataBindingOptions {
 	/**
 	 * When specified as true, ignore socket output stream time out. By default it is true.
 	 */
-	IgnoreClientTimeout("ignoreClientTimeout", Boolean.TRUE);
+	IgnoreClientTimeout("ignoreClientTimeout", Boolean.TRUE),
+	NoRoot("noRoot", Boolean.FALSE);
 	
 	private String m_optionName;
 	private Object m_defaultValue;

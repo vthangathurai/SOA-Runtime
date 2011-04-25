@@ -19,9 +19,11 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.ebayopensource.turmeric.runtime.binding.BindingConstants;
+import org.ebayopensource.turmeric.runtime.binding.DataBindingOptions;
 import org.ebayopensource.turmeric.runtime.binding.IDeserializationContext;
 import org.ebayopensource.turmeric.runtime.binding.IDeserializerFactory;
 import org.ebayopensource.turmeric.runtime.binding.impl.AbstractDeserializerFactory;
+import org.ebayopensource.turmeric.runtime.binding.impl.parser.xml.PatchRootElementStreamReader;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
@@ -53,6 +55,9 @@ public class XMLDeserializerFactory extends AbstractDeserializerFactory
 		InputStreamReader isReader = new InputStreamReader(in, charset);
 		XMLStreamReader xmlStreamReader = 
 			factory.createXMLStreamReader(isReader);
+		if (DataBindingOptions.NoRoot.getBoolOption(m_options)) {
+			xmlStreamReader = new PatchRootElementStreamReader(xmlStreamReader, ctxt.getRootXMLName());
+		}
 		return xmlStreamReader;
 	}
 

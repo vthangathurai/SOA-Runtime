@@ -55,7 +55,6 @@ public class JSONDeserializerFactory extends AbstractDeserializerFactory
 		
 		JSONFilterInputStream jfin = new JSONFilterInputStream(in, ctxt.getRootXMLName(), charset);
 		
-		//JSONStreamReadContext jsonCtx = new JSONStreamReadContext(in, convention, charset, m_options);
 		JSONStreamReadContext jsonCtx = new JSONStreamReadContext(jfin, convention, charset, m_options);
 		
 		ObjectNodeImpl root = new JSONStreamObjectNodeImpl(jsonCtx);

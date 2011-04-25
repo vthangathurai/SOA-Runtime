@@ -171,6 +171,78 @@ public class JSONParserTest {
 			"	}\n" +
 			"}\n";
 	
+
+	
+	private static final String GOLD_JSON_INPUT_PAYPAL_ISSUE = 
+		"root:{\n" +
+		"	actionType:PAY\n" +
+		"	currencyCode:USD\n" +
+		"	receiverList:{\n" +
+		"		receiver:{\n" +
+		"			amount:1.00\n" +
+		"			email:seller_1288085303_biz@gmail.com\n" +
+		"		}\n" +
+		"	}\n" +
+		"	returnUrl:http://apigee.com/console/-1/handlePaypalReturn\n" +
+		"	cancelUrl:http://apigee.com/console/-1/handlePaypalCancel?\n" +
+		"	requestEnvelope:{\n" +
+		"		errorLanguage:en_US\n" +
+		"		detailLevel:ReturnAll\n" +
+		"	}\n" +
+		"}\n";
+	@Test
+	public void jSONParserPayPalSpaceIssue() throws Exception {
+		String JSON_INPUT_PAYPAL_ISSUE = 
+			"{" + 
+			"		  \"actionType\"   :  \"PAY\"," + 
+			"		  \"currencyCode\"   :  \"USD\"," + 
+			"		  \"receiverList\" : {" + 
+			"		                     \"receiver\":[{\"amount\":\"1.00\",\"email\":\"seller_1288085303_biz@gmail.com\"}]" + 
+			"		                   }," + 
+			"		  \"returnUrl\"  :  \"http://apigee.com/console/-1/handlePaypalReturn\"," + 
+			"		  \"cancelUrl\"  :  \"http://apigee.com/console/-1/handlePaypalCancel?\"," + 
+			"		  \"requestEnvelope\"  :  {\"errorLanguage\":\"en_US\", \"detailLevel\":\"ReturnAll\"}" + 
+			"		}";
+		System.out.println("**** Starting jSONParserPayPalSpaceIssue");
+		System.out.println(JSON_INPUT_PAYPAL_ISSUE);
+		ByteArrayInputStream is = new ByteArrayInputStream(JSON_INPUT_PAYPAL_ISSUE.getBytes());
+		NamespaceConvention convention = DataBindingFacade.createDeserializationNSConvention(null);
+		JSONStreamReadContext ctx = new JSONStreamReadContext(is, convention, Charset.forName("ASCII"));
+		JSONStreamObjectNodeImpl root = new JSONStreamObjectNodeImpl(ctx);
+		ObjectNode clone = root.cloneNode();
+		root.getChildNodes();
+		System.out.println(root.getTree());
+		assertEquals(GOLD_JSON_INPUT_PAYPAL_ISSUE, root.getTree());
+		System.out.println("**** Ending jSONParserPayPalSpaceIssue");
+	}
+
+	
+	@Test
+	public void jSONParserPayPalNoSpaceIssue() throws Exception {
+		String JSON_INPUT_PAYPAL_ISSUE = 
+			"{" + 
+			"		  \"actionType\":  \"PAY\"," + 
+			"		  \"currencyCode\":  \"USD\"," + 
+			"		  \"receiverList\" : {" + 
+			"		                     \"receiver\":[{\"amount\":\"1.00\",\"email\":\"seller_1288085303_biz@gmail.com\"}]" + 
+			"		                   }," + 
+			"		  \"returnUrl\":  \"http://apigee.com/console/-1/handlePaypalReturn\"," + 
+			"		  \"cancelUrl\":  \"http://apigee.com/console/-1/handlePaypalCancel?\"," + 
+			"		  \"requestEnvelope\"  :  {\"errorLanguage\":\"en_US\", \"detailLevel\":\"ReturnAll\"}" + 
+			"		}";
+		System.out.println("**** Starting jSONParserPayPalSpaceIssue");
+		System.out.println(JSON_INPUT_PAYPAL_ISSUE);
+		ByteArrayInputStream is = new ByteArrayInputStream(JSON_INPUT_PAYPAL_ISSUE.getBytes());
+		NamespaceConvention convention = DataBindingFacade.createDeserializationNSConvention(null);
+		JSONStreamReadContext ctx = new JSONStreamReadContext(is, convention, Charset.forName("ASCII"));
+		JSONStreamObjectNodeImpl root = new JSONStreamObjectNodeImpl(ctx);
+		ObjectNode clone = root.cloneNode();
+		root.getChildNodes();
+		System.out.println(root.getTree());
+		assertEquals(GOLD_JSON_INPUT_PAYPAL_ISSUE, root.getTree());
+		System.out.println("**** Ending jSONParserPayPalSpaceIssue");
+	}
+
 	
 	@Test
 	public void jSONParserWithNumberAndBoolean() throws Exception {

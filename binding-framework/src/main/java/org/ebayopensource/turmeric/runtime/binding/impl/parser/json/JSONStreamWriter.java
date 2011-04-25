@@ -19,6 +19,7 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.ebayopensource.turmeric.runtime.binding.BindingConstants;
+import org.ebayopensource.turmeric.runtime.binding.DataBindingOptions;
 import org.ebayopensource.turmeric.runtime.binding.impl.parser.BaseStreamWriter;
 import org.ebayopensource.turmeric.runtime.binding.impl.parser.IndexedQName;
 import org.ebayopensource.turmeric.runtime.binding.impl.parser.NamespaceConvention;
@@ -36,7 +37,7 @@ public class JSONStreamWriter extends BaseStreamWriter {
 	public static final String KEY_USE_SCHEMA_INFO = "useSchemaInfo";
 	public static final String KEY_FORMAT_OUTPUT = "formatOutput";
 	public static final String KEY_VALUE_KEY = "valueKey";
-	private static final String KEY_NO_ROOT = "noRoot";
+	private static final String KEY_NO_ROOT = DataBindingOptions.NoRoot.getOptionName();
 
 	private boolean m_useSchemaInfo = true;
 	private boolean m_formatOutput = false;
