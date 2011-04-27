@@ -172,7 +172,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		File path  = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		
-		String [] testArgs1 = {"-serviceName","NewService",
+		String [] testArgs1 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLIntf",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-gip","org.ebayopensource.test.soaframework.tools.codegen",
@@ -185,7 +185,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 	
 		
-		String [] testArgs2 = {"-serviceName","NewService",
+		String [] testArgs2 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLImpl",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -199,7 +199,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs4 = {"-serviceName","NewService",
+		String [] testArgs4 = {"-serviceName","AccountService",
 				  "-genType","ServerConfig",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -223,7 +223,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 		//XmlUtility.addElementToXml(getServiceConfigFile(destDir,"AccountService"),"service-impl-factory","org.ebayopensource.factory.Factory");
 		
-		String [] testArgs3 = {"-serviceName","NewService",
+		String [] testArgs3 = {"-serviceName","AccountService",
 				  "-genType","dispatcher",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -257,7 +257,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		File path  = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		
-		String [] testArgs1 = {"-serviceName","NewService",
+		String [] testArgs1 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLIntf",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-gip","org.ebayopensource.test.soaframework.tools.codegen",
@@ -269,7 +269,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs2 = {"-serviceName","NewService",
+		String [] testArgs2 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLImpl",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -283,7 +283,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs4 = {"-serviceName","NewService",
+		String [] testArgs4 = {"-serviceName","AccountService",
 				  "-genType","ServerConfig",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -307,7 +307,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 
 		
-		String [] testArgs3 = {"-serviceName","NewService",
+		String [] testArgs3 = {"-serviceName","AccountService",
 				  "-genType","dispatcher",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -339,7 +339,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		File path  = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		
-		String [] testArgs1 = {"-serviceName","NewService",
+		String [] testArgs1 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLIntf",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-gip","org.ebayopensource.test.soaframework.tools.codegen",
@@ -351,7 +351,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 	
-		String [] testArgs2 = {"-serviceName","NewService",
+		String [] testArgs2 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLImpl",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -365,7 +365,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs4 = {"-serviceName","NewService",
+		String [] testArgs4 = {"-serviceName","AccountService",
 				  "-genType","ServerConfig",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -389,7 +389,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 		//XmlUtility.addElementToXml(getServiceConfigFile(destDir.getAbsolutePath(),"AccountService"),"service-impl-factory","org.ebayopensource.factory.Factory");
 		
-		String [] testArgs3 = {"-serviceName","NewService",
+		String [] testArgs3 = {"-serviceName","AccountService",
 				  "-genType","dispatcher",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -423,7 +423,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		File path  = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		
-		String [] testArgs1 = {"-serviceName","NewService",
+		String [] testArgs1 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLIntf",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-gip","org.ebayopensource.test.soaframework.tools.codegen",
@@ -436,7 +436,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 	
 		
-		String [] testArgs2 = {"-serviceName","NewService",
+		String [] testArgs2 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLImpl",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -450,7 +450,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs4 = {"-serviceName","NewService",
+		String [] testArgs4 = {"-serviceName","AccountService",
 				  "-genType","ServerConfig",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -471,7 +471,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		ensureClean(new File(destDir.getAbsolutePath(),"gen-src/service").getAbsolutePath());
 		
 		
-		String [] testArgs3 = {"-serviceName","NewService",
+		String [] testArgs3 = {"-serviceName","AccountService",
 				  "-genType","dispatcher",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -501,7 +501,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		File path  = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		
-		String [] testArgs1 = {"-serviceName","NewService",
+		String [] testArgs1 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLIntf",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-gip","org.ebayopensource.test.soaframework.tools.codegen",
@@ -514,7 +514,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 	
 		
-		String [] testArgs2 = {"-serviceName","NewService",
+		String [] testArgs2 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLImpl",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -528,7 +528,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs4 = {"-serviceName","NewService",
+		String [] testArgs4 = {"-serviceName","AccountService",
 				  "-genType","ServerConfig",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -552,7 +552,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 
 		
-		String [] testArgs3 = {"-serviceName","NewService",
+		String [] testArgs3 = {"-serviceName","AccountService",
 				  "-genType","dispatcher",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -586,7 +586,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		File path  = getCodegenQEDataFileInput("AccountService.wsdl");
 		
 		
-		String [] testArgs1 = {"-serviceName","NewService",
+		String [] testArgs1 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLIntf",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-gip","org.ebayopensource.test.soaframework.tools.codegen",
@@ -599,7 +599,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 		
 		
-		String [] testArgs2 = {"-serviceName","NewService",
+		String [] testArgs2 = {"-serviceName","AccountService",
 				  "-genType","ServiceFromWSDLImpl",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
@@ -613,7 +613,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 				  "-pr",destDir.getAbsolutePath()};
 		
 		
-		String [] testArgs4 = {"-serviceName","NewService",
+		String [] testArgs4 = {"-serviceName","AccountService",
 				  "-genType","ServerConfig",	
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
 				  "-sicn","org.ebayopensource.test.soaframework.tools.codegen.impl.AccountServiceImpl",
@@ -637,7 +637,7 @@ public class ServiceFactoryImplTest extends AbstractServiceGeneratorTestCase {
 		
 		//XmlUtility.addElementToXml(getServiceConfigFile(destDir.getAbsolutePath(),"AccountService"),"service-impl-factory","org.ebayopensource.factory.Factory");
 		
-		String [] testArgs3 = {"-serviceName","NewService",
+		String [] testArgs3 = {"-serviceName","AccountService",
 				  "-genType","dispatcher",	
 				  "-wsdl",path.getAbsolutePath(),
 				  "-interface","org.ebayopensource.test.soaframework.tools.codegen.AccountService",
