@@ -146,14 +146,6 @@ public class GenImplMojo extends AbstractTurmericCodegenMojo {
 
     private ServiceConfigDetails serviceConfig;
     
-    /**
-     * Use an external Service Factory specified in the Service Config file.
-     * 
-     * @parameter default-value="false"
-     * @optional
-     */
-    private boolean useExternalServiceFactory = false; 
-
     static class ServiceConfigDetails {
         String serviceImplClassName;
         String serviceInterfaceClassName;
@@ -172,10 +164,6 @@ public class GenImplMojo extends AbstractTurmericCodegenMojo {
         commands.add(InputOptions.OPT_ADMIN_NAME, serviceName);
         commands.add(InputOptions.OPT_INTERFACE, serviceConfig.serviceInterfaceClassName);
         
-        if (!useExternalServiceFactory) {
-        	commands.addSingle(InputOptions.OPT_OBJECTFACT_GEN);
-        }
-
         if (isLegacyMode()) {
             commands.add(InputOptions.OPT_PROJECT_ROOT, getProject().getBasedir().getAbsolutePath());
             if (serviceConfig.serviceImplClassName == null) {
