@@ -28,7 +28,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
 
 /**
  * PatchRootElementStreamReader is used to enable reading of payloads that
- * ignored root elements. Tipical usage is as follows
+ * ignored root elements. Typical usage is as follows
  * 
  * <code>
  * 			xmlStreamReader = new PatchRootElementStreamReader(sourceStreamReader, ctxt.getRootXMLName());
@@ -39,15 +39,20 @@ import com.ctc.wstx.stax.WstxInputFactory;
  * 		<b xmlns:s="http://www.ebayopensource.org/sample">
  * 		</b>
  * </code>
- * and the root element of the payload is known to be <a>, xmlStreamReader
+ * and the root element of the payload is known to be <MyRequest>, xmlStreamReader
  * will resemble the reading of 
  * <code>
- * 		<s:a xmlns:s="http://www.ebayopensource.org/sample">
+ * 		<s:MyRequest xmlns:s="http://www.ebayopensource.org/sample">
  * 			<s:b>
  * 				...
  * 			</s:b>
- * 		</s: a>
+ * 		</s:MyRequest>
  * </code>
+ * 
+ * Limitations:  Only services whose request and response contains single element all the time
+ * can enable NoRoot support.  The reason is that if there are multiple XML elements inside a 
+ * request/response,  removed the root element invalidated the xml's single root requirement.
+ *  
  * 
  * @author wdeng
  *
@@ -55,20 +60,18 @@ import com.ctc.wstx.stax.WstxInputFactory;
 public class PatchRootElementStreamReader  
 	implements XMLStreamReader {
 
-	private static final Logger s_logger = Logger.getLogger("IgnoreRootElementStreamWriter");
+	private static final Logger s_logger = Logger.getLogger("PatchRootElementStreamReader");
 
 	XMLStreamReader m_reader;
-	boolean m_isFirstElementPassedThrough = false;
-	boolean m_rootElementFound = false;
+	boolean m_rootElementFound = true;
 	QName m_rootElementName;
 	int m_currentEvent = -1;
-	private int m_currentElementLevel = -1;
-	private int m_rootElementLevel = 1;
+	private int m_currentElementLevel = 0;
 
 	
 	public PatchRootElementStreamReader(XMLStreamReader reader, QName rootElementName) {
 		if (null == rootElementName) {
-			throw new IllegalArgumentException("IgnoreRootElemenetStreamWriter: rootElementName cannot be null.");
+			throw new IllegalArgumentException("PatchRootElementStreamReader: rootElementName cannot be null.");
 		}
 		m_reader = reader;
 		m_rootElementName = rootElementName;
@@ -82,7 +85,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public int getAttributeCount() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeCount(): " + m_reader.getAttributeCount());
+			s_logger.log(Level.FINEST, "getAttributeCount(): '" + m_reader.getAttributeCount() + "'");
 		}
 		return 	m_reader.getAttributeCount();		
 	}
@@ -90,7 +93,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getAttributeLocalName(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeLocalName(int arg0)");
+			s_logger.log(Level.FINEST, "getAttributeLocalName('" + arg0 + "'): '" + m_reader.getAttributeLocalName(arg0) + "'" );
 		}
 		return m_reader.getAttributeLocalName(arg0);
 	}
@@ -98,7 +101,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public QName getAttributeName(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeName(int arg0)");
+			s_logger.log(Level.FINEST, "getAttributeName(int arg0): '" + m_reader.getAttributeName(arg0) + "'");
 		}
 		return m_reader.getAttributeName(arg0);
 	}
@@ -106,7 +109,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getAttributeNamespace(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeNamespace(int arg0)");
+			s_logger.log(Level.FINEST, "getAttributeNamespace(int arg0): '" +  m_reader.getAttributeNamespace(arg0) + "'");
 		}
 		return m_reader.getAttributeNamespace(arg0);
 	}
@@ -114,7 +117,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getAttributePrefix(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributePrefix(int arg0)");
+			s_logger.log(Level.FINEST, "getAttributePrefix(int arg0): '" +  m_reader.getAttributePrefix(arg0) + "'");
 		}
 		return m_reader.getAttributePrefix(arg0);
 	}
@@ -122,7 +125,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getAttributeType(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeType(int arg0)");
+			s_logger.log(Level.FINEST, "getAttributeType(int arg0): '" + m_reader.getAttributeType(arg0) + "'");
 		}
 		return m_reader.getAttributeType(arg0);
 	}
@@ -130,7 +133,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getAttributeValue(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeValue(int arg0)");
+			s_logger.log(Level.FINEST, "getAttributeValue(int arg0): '" + m_reader.getAttributeValue(arg0) + "'");
 		}
 		return m_reader.getAttributeValue(arg0);
 	}
@@ -138,7 +141,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getAttributeValue(String arg0, String arg1) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getAttributeValue(String arg0, String arg1)");
+			s_logger.log(Level.FINEST, "getAttributeValue(String arg0, String arg1): '" + m_reader.getAttributeValue(arg0, arg1) + "'");
 		}
 		return m_reader.getAttributeValue(arg0, arg1);
 	}
@@ -146,7 +149,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getCharacterEncodingScheme() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getCharacterEncodingScheme()");
+			s_logger.log(Level.FINEST, "getCharacterEncodingScheme(): ' " + m_reader.getCharacterEncodingScheme()  + "'");
 		}
 		return m_reader.getCharacterEncodingScheme();
 	}
@@ -154,7 +157,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getElementText() throws XMLStreamException {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getElementText()");
+			s_logger.log(Level.FINEST, "getElementText(): '" +  m_reader.getElementText() + "'");
 		}
 		return m_reader.getElementText();
 	}
@@ -162,7 +165,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getEncoding() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getEncoding()");
+			s_logger.log(Level.FINEST, "getEncoding(): '" + m_reader.getEncoding() + "'");
 		}
 		return m_reader.getEncoding();
 	}
@@ -170,7 +173,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public int getEventType() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getEventType()");
+			s_logger.log(Level.FINEST, "getEventType(): '" + m_reader.getEventType()  + "'");
 		}
 		return m_reader.getEventType();
 	}
@@ -178,9 +181,9 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getLocalName() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getLocalName()");
+			s_logger.log(Level.FINEST, "getLocalName(): '" +  m_rootElementName.getLocalPart() + "'");
 		}
-		if (m_currentElementLevel < m_rootElementLevel) {
+		if (!m_rootElementFound && m_currentElementLevel == 1) {
 			return m_rootElementName.getLocalPart();
 		}
 		return m_reader.getLocalName();
@@ -189,21 +192,21 @@ public class PatchRootElementStreamReader
 	@Override
 	public Location getLocation() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getLocation()");
+			s_logger.log(Level.FINEST, "getLocation(): '" +  m_reader.getLocation() + "'");
 		}
 		return m_reader.getLocation();
 	}
 
 	@Override
 	public QName getName() {
-		if (m_currentElementLevel < m_rootElementLevel) {
+		if (!m_rootElementFound && m_currentElementLevel == 1) {
 			if (s_logger.isLoggable(Level.FINEST)) {
-				s_logger.log(Level.FINEST, "getName()1: " + m_rootElementName);
+				s_logger.log(Level.FINEST, "getName()1: '" + m_rootElementName  + "'");
 			}
 			return m_rootElementName;
 		}
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getName()2: " + m_reader.getName());
+			s_logger.log(Level.FINEST, "getName()2: '" + m_reader.getName() + "'");
 		}
 		return m_reader.getName();
 	}
@@ -211,18 +214,18 @@ public class PatchRootElementStreamReader
 	@Override
 	public NamespaceContext getNamespaceContext() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getNamespaceContext():" + m_reader.getNamespaceContext());
+			s_logger.log(Level.FINEST, "getNamespaceContext(): '" + m_reader.getNamespaceContext()  + "'");
 		}
 		return m_reader.getNamespaceContext();
 	}
 
 	@Override
 	public int getNamespaceCount() {
-		if (m_currentElementLevel <= m_rootElementLevel) {
+		if (!m_rootElementFound && m_currentElementLevel == 1) {
 			return 0;
 		}
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getNamespaceCount()");
+			s_logger.log(Level.FINEST, "getNamespaceCount(): '" + m_reader.getNamespaceCount() + "'");
 		}
 		return m_reader.getNamespaceCount();
 	}
@@ -230,32 +233,35 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getNamespacePrefix(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getNamespacePrefix(int arg0): " + m_reader.getNamespacePrefix(arg0));
+			s_logger.log(Level.FINEST, "getNamespacePrefix(int arg0): '" + m_reader.getNamespacePrefix(arg0)  + "'");
 		}
 		return m_reader.getNamespacePrefix(arg0);
 	}
 
 	@Override
 	public String getNamespaceURI() {
-		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getNamespaceURI()");
-		}
-		if (m_currentEvent == END_DOCUMENT) {
+		if (!m_rootElementFound && m_currentEvent == END_DOCUMENT) {
+			if (s_logger.isLoggable(Level.FINEST)) {
+				s_logger.log(Level.FINEST, "getNamespaceURI(): 'null'");
+			}
 			return null;
+		}
+		if (s_logger.isLoggable(Level.FINEST)) {
+			s_logger.log(Level.FINEST, "getNamespaceURI(): '" + m_reader.getNamespaceURI() + "'");
 		}
 		return m_reader.getNamespaceURI();
 	}
 
 	@Override
 	public String getNamespaceURI(String arg0) {
-		if (m_currentElementLevel <= m_rootElementLevel) {
+		if (!m_rootElementFound && m_currentElementLevel == 1) {
 			if (s_logger.isLoggable(Level.FINEST)) {
 				s_logger.log(Level.FINEST, "getNamespaceURI(String arg0)1: " + "null");
 			}
 			return null;
 		}
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getNamespaceURI(String arg0)2: " + m_reader.getNamespaceURI(arg0));
+			s_logger.log(Level.FINEST, "getNamespaceURI(String arg0)2: '" + m_reader.getNamespaceURI(arg0) + "'");
 		}
 		return m_reader.getNamespaceURI(arg0);
 	}
@@ -263,9 +269,9 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getNamespaceURI(int arg0) {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getNamespaceURI(int arg0)");
+			s_logger.log(Level.FINEST, "getNamespaceURI(int arg0): '" + m_reader.getNamespaceURI(arg0) + "'");
 		}
-		if (m_currentElementLevel <= m_rootElementLevel) {
+		if (!m_rootElementFound && m_currentElementLevel == 1) {
 			return null;
 		}
 		return m_reader.getNamespaceURI(arg0);
@@ -274,7 +280,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public String getPIData() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "getPIData()");
+			s_logger.log(Level.FINEST, "getPIData(): '" + m_reader.getPIData() + "'");
 		}
 		return m_reader.getPIData();
 	}
@@ -411,7 +417,7 @@ public class PatchRootElementStreamReader
 	@Override
 	public boolean isStartElement() {
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "isStartElement()");
+			s_logger.log(Level.FINEST, "isStartElement(): '" + m_reader.isStartElement() + "'");
 		}
 		return m_reader.isStartElement();
 	}
@@ -426,43 +432,40 @@ public class PatchRootElementStreamReader
 
 	@Override
 	public int next() throws XMLStreamException {
-		if (m_currentEvent == START_ELEMENT) {
-			int eventToReturn = m_currentEvent;
-			m_currentEvent = -1;
-			m_isFirstElementPassedThrough = true;
-			m_currentElementLevel++;
-			if (s_logger.isLoggable(Level.FINEST)) {
-				s_logger.log(Level.FINEST, "Current Event: " + eventToReturn + " Level: " + m_currentElementLevel);
+		if (!m_rootElementFound) {
+			if (m_currentEvent == START_ELEMENT) {
+				m_currentElementLevel++;
+				m_currentEvent = -1;
+				if (s_logger.isLoggable(Level.FINEST)) {
+					s_logger.log(Level.FINEST, "Current Event: " + m_currentEvent + " Level: " + m_currentElementLevel);
+				}
+				return START_ELEMENT;
+			} else if (m_currentEvent == END_DOCUMENT) {
+				m_currentElementLevel--;
+				if (s_logger.isLoggable(Level.FINEST)) {
+					s_logger.log(Level.FINEST, "Current Event: " + m_currentEvent + " Level: " + m_currentElementLevel);
+				}
+				return m_currentEvent;
 			}
-			return eventToReturn;
-		} else if (m_currentEvent == END_DOCUMENT) {
-			m_currentElementLevel--;
-			if (s_logger.isLoggable(Level.FINEST)) {
-				s_logger.log(Level.FINEST, "Current Event: " + m_currentEvent + "Level: " + m_currentElementLevel);
-			}
-			return m_currentEvent;
 		}
 		int eventToReturn = m_reader.next();
 		if (XMLStreamReader.END_DOCUMENT == eventToReturn) {
 			//Adds the root element end tag if root element was missing
-			if (!m_rootElementFound) {
-				eventToReturn = END_ELEMENT;
-				m_currentEvent = END_DOCUMENT;
-				m_currentElementLevel--;
-			}
-		} else if (XMLStreamReader.START_ELEMENT == eventToReturn) {
+			eventToReturn = END_ELEMENT;
+			m_currentEvent = END_DOCUMENT;
+			m_currentElementLevel--;
+		} else if (m_currentElementLevel == 0 && XMLStreamReader.START_ELEMENT == eventToReturn) {
 			// Records the tag if it is root element tag 
-			m_currentEvent = START_ELEMENT;
 			QName elementNameToRead = m_reader.getName();
-			if (m_rootElementName.getLocalPart().equals(elementNameToRead.getLocalPart()) &&
-				m_rootElementName.getNamespaceURI().equals(elementNameToRead.getNamespaceURI())) {
-				m_rootElementFound = true;
-				m_isFirstElementPassedThrough = false;
+			if (!m_rootElementName.getLocalPart().equals(elementNameToRead.getLocalPart()) ||
+				!m_rootElementName.getNamespaceURI().equals(elementNameToRead.getNamespaceURI())) {
+				m_currentEvent = START_ELEMENT;
+				m_rootElementFound = false;
 			}
 			m_currentElementLevel++;
 		}
 		if (s_logger.isLoggable(Level.FINEST)) {
-			s_logger.log(Level.FINEST, "Current Event: " + eventToReturn + "Level: " + m_currentElementLevel);
+			s_logger.log(Level.FINEST, "Current Event: " + eventToReturn + " Level: " + m_currentElementLevel);
 		}
 		return eventToReturn;
 	}

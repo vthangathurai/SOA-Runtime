@@ -36,6 +36,11 @@ import javax.xml.stream.XMLStreamWriter;
  * Using IgnoreRootElementStreamWriter would results in XMLStreamException of 
  * "Trying to output second root". 
  * 
+ * 
+ * Limitations:  Only services whose request and response contains single element all the time
+ * can enable NoRoot support.  The reason is that if there are multiple XML elements inside a 
+ * request/response,  removed the root element invalidated the xml's single root requirement.
+ *
  * @author wdeng
  */
 public class IgnoreRootElementStreamWriter implements XMLStreamWriter {

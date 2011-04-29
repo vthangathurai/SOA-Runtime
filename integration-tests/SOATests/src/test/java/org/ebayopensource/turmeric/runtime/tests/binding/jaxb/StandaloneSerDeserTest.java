@@ -92,6 +92,27 @@ public class StandaloneSerDeserTest extends BaseSerDeserTest {
 	}
 
 	@Test	
+	public void testJaxbXmlNoRootReceivingPayloadWithRoot() throws Exception {
+		MyObject msg = new MyObject();
+		msg.setId(12345);
+
+		HashMap<String, String> optionsNoRootTrue = new HashMap<String, String>();
+		optionsNoRootTrue.put("noRoot", "true");
+		IDeserializerFactory deserFactory = new XMLDeserializerFactory();
+		deserFactory.init(new TestDeserInitContext(optionsNoRootTrue));
+		
+		String goodPayload = "<?xml version='1.0' encoding='" +
+		Charset.defaultCharset().displayName() +
+		"'?><MyObject xmlns=\"urn:default\"><id>12345</id></MyObject>";
+
+		IDeserializationContext deserCtx = BindingFacade
+				.createDeserializationContext(msg, deserFactory, TEST_NS,
+						createMyObjectElementSchema(), msg.getClass());
+		Object msg1 = BindingFacade.deserialize(deserCtx, deserFactory, goodPayload);
+		Assert.assertEquals(msg, msg1);
+	}
+
+	@Test	
 	public void testJaxbXmlNoRootFalse() throws Exception {
 		MyObject msg = new MyObject();
 		msg.setId(12345);
