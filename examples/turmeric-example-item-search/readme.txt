@@ -12,3 +12,4 @@ To build and run the demo, In Eclipse,
 - start DemoAppServer under DemoApp project as Java application.  This starts up a jetty server;
 - In a browser, open page http://localhost:8080/DemoApp/ItemSearch.html, type a keyword in the search field and press the search button. A table with search result will return.
 
+# Adding this test line to test the process of git push.
