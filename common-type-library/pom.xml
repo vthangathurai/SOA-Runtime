@@ -17,15 +17,14 @@
   </parent>
   <groupId>org.ebayopensource.turmeric.typelib</groupId>
   <artifactId>common-type-library</artifactId>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>Turmeric Runtime :: Common Type Library</name>
   <build>
     <plugins>
       <plugin>
         <groupId>org.ebayopensource.turmeric.maven</groupId>
         <artifactId>turmeric-maven-plugin</artifactId>
-        <!-- An early SNAPSHOT, replace with released version later -->
-        <version>1.0.0-RC1</version>
+        <version>1.0.0</version>
         <executions>
           <execution>
             <id>codegen-typelib</id>
@@ -42,9 +41,26 @@
           </execution>
         </executions>
       </plugin>
-    </plugins>
+      <plugin>   
+         <groupId>org.apache.felix</groupId>
+         <artifactId>maven-bundle-plugin</artifactId>
+         <extensions>true</extensions>
+         <version>2.2.0</version>
+         <configuration>
+            <instructions>
+               <Export-Package>org.ebayopensource.turmeric.common.*</Export-Package>
+               <Bundle-SymbolicName>${pom-artifactId}</Bundle-SymbolicName>
+            </instructions>
+         </configuration>   
+      </plugin>
+    </plugins>	
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>1.0.0</version>
+    </dependency>  
     <dependency>
       <groupId>org.ebayopensource.turmeric.runtime</groupId>
       <artifactId>config-validation-tests</artifactId>

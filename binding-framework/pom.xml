@@ -17,7 +17,7 @@
   </parent>
   <groupId>org.ebayopensource.turmeric.runtime</groupId>
   <artifactId>binding-framework</artifactId>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>Turmeric Runtime :: Binding Framework</name>
   <dependencies>
     <dependency>
@@ -68,5 +68,28 @@
       <version>1.0.3</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
+
+
+ <build>
+   <plugins>
+      <plugin>   
+         <groupId>org.apache.felix</groupId>
+         <artifactId>maven-bundle-plugin</artifactId>
+         <extensions>true</extensions>
+         <version>2.2.0</version>
+         <configuration>
+            <instructions>
+               <Export-Package>org.ebayopensource.turmeric.runtime.binding.*</Export-Package>
+               <Bundle-SymbolicName>${pom-artifactId}</Bundle-SymbolicName>
+            </instructions>
+         </configuration>   
+      </plugin>	
+    </plugins>
+  </build>
 </project>
