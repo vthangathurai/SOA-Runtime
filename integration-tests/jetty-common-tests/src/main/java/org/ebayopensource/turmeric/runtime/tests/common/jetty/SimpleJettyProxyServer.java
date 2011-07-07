@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.*;
 import java.net.URI;
 
 import org.ebayopensource.turmeric.junit.logging.UKernelLoggingUtils;
-import org.ebayopensource.turmeric.runtime.tests.common.logging.SimpleConsoleHandler;
 import org.junit.Assert;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
