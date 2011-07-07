@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 
 import org.ebayopensource.turmeric.junit.logging.UKernelLoggingUtils;
 import org.ebayopensource.turmeric.runtime.common.types.SOAConstants;
-import org.ebayopensource.turmeric.runtime.spf.servlet.TurmericConsoleFrontController;
-import org.ebayopensource.turmeric.runtime.tests.common.logging.SimpleConsoleHandler;
 import org.junit.Assert;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
