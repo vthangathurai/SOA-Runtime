@@ -1,0 +1,142 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+               
+                    
+                    
+              <xs:complexType name="MyComplexType">
+					  <xs:sequence>
+					   <xs:element maxOccurs="1" minOccurs="0" name="elemB"
+					    type="tns:MySimpleTypeIntRest" />
+					   <xs:element maxOccurs="1" minOccurs="0" name="elemA" type="xs:float">
+					   <xs:key name="charName">
+					  	<xs:selector xpath="elemA"/>
+					  	<xs:field xpath="elemA"/>
+						</xs:key>
+					    <xs:keyref name="charNameRef" refer="tns:charName">
+						  <xs:selector xpath="elemA"/>
+						  <xs:field xpath="elemA"/>
+						</xs:keyref>
+					    
+					
+					   </xs:element>
+					  </xs:sequence>
+					 </xs:complexType>
+
+					<xs:simpleType name="MySimpleTypeIntRest">
+					  <xs:restriction base="xs:int">
+					   <xs:totalDigits value="3" />
+					  </xs:restriction>
+					 </xs:simpleType>
+					 
+					 <xs:simpleType name="SmallDressSizeType">
+					  <xs:restriction base="xs:int">
+					    <xs:minInclusive value="2"/>
+					    <xs:maxInclusive value="6"/>
+					    <xs:pattern value="\d{1}"/>
+					  </xs:restriction>
+					  </xs:simpleType>
+					<xs:notation name="gif" public="image/gif" system="view.exe"/>
+					<xs:notation name="jpeg" public="image/jpeg" system="view.exe"/>
+
+					        <xs:simpleType name="Sample">
+					          <xs:restriction base="xs:NOTATION">
+					            <xs:enumeration value="gif"/>
+					            <xs:enumeration value="jpeg"/>
+					          </xs:restriction>
+					        </xs:simpleType>
+					        
+					        <xs:simpleType name="AAA" final="restriction"> 
+						    <xs:restriction base="xs:integer"> 
+						      <xs:minInclusive value="0"/> 
+						    </xs:restriction> 
+						  </xs:simpleType>
+						  
+						  <xs:element name="root"> 
+									    <xs:complexType> 
+									      <xs:sequence minOccurs="1"> 
+									        <xs:element ref="myAbstract"/> 
+									      </xs:sequence> 
+									    </xs:complexType> 
+									  </xs:element> 
+									
+									  <xs:element name="myAbstract" type="BBB" abstract="true" block="substitution"/> 
+									
+									  <xs:simpleType name="BBB"> 
+									    <xs:restriction base="xs:integer"> 
+									      <xs:minInclusive value="1"/> 
+									      <xs:maxInclusive value="9"/> 
+									    </xs:restriction> 
+									  </xs:simpleType> 
+
+  										<xs:element name="unchanged" substitutionGroup="myAbstract" type="BBB"/>
+
+						  
+					        
+						<xs:element name="mortgage">
+						    <xs:complexType>
+						        <xs:sequence>
+						            <xs:element name="property" type="xs:string"/>
+						            <xs:element name="date" type="xs:date" minOccurs="0"/>
+						            <xs:element name="loanAmount" type="xs:decimal"/>
+						            <xs:element name="term">
+						                <xs:simpleType>
+						                    <xs:restriction base="xs:integer">
+						                        <xs:maxInclusive value="30"/>
+						                    </xs:restriction>
+						                </xs:simpleType>
+						            </xs:element>
+						        </xs:sequence>
+						        <xs:attribute name="loanNumber" type="xs:integer"/>
+						    </xs:complexType>
+						</xs:element>
+
+
+      <xs:element name="test" type="tns:SmallDressSizeType" />
+		<xs:element name="test1" type="tns:Sample" />
+       
+           
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test1"/>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

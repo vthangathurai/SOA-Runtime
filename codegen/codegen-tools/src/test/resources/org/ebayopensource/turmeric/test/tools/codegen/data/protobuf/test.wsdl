@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="WSDLTesting8" targetNamespace="http://www.ebay.com/marketplace/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebay.com/marketplace/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services" xmlns:Q2="http://www.ebay.com/soa/test/payment">
+
+                                                <!-- import namespace for another namespace xmlns:Q2 -->
+                                                <xs:import namespace="http://www.ebay.com/soa/test/payment">
+                                                </xs:import>
+
+                                                <!-- global definitions -->
+                                                <xsd:element name="globalName" type="xsd:string"/>
+
+                                                <xsd:complexType name="GlobalType">
+                                                                <xsd:sequence>
+                                                                                <!-- reference to global element -->
+                                                                                <xsd:element ref="tns:globalName"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <!-- Defined for fault - getUserInfo -->
+                                                <xsd:complexType name="MyTestErrorMessage">
+                                                                <xsd:sequence>
+                                                                                <xsd:element minOccurs="0" name="ErrorCode" type="xsd:int"/>
+                                                                                <xsd:element minOccurs="0" name="ErrorId" type="xsd:string"/>
+                                                                                <xsd:element minOccurs="0" name="ErrorDescription" type="xsd:string"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <!-- Abstract classes -->
+
+                                                <xsd:complexType abstract="true" name="Vehicle"/>
+                                                <xsd:complexType name="Plane">
+                                                                <xsd:complexContent>
+                                                                                <xsd:extension base="tns:Vehicle">
+                                                                                                <xsd:sequence>
+                                                                                                                <xsd:element minOccurs="0" name="Info" type="xsd:string"/>
+                                                                                                </xsd:sequence>
+                                                                                </xsd:extension>
+                                                                </xsd:complexContent>
+                                                </xsd:complexType>
+
+                                                <!-- Polymorphism -->
+
+                                                <xsd:complexType name="Pamphlet">
+                                                                <xsd:complexContent>
+                                                                                <xsd:restriction base="tns:Book">
+                                                                                                <xsd:sequence>
+                                                                                                                <xsd:element name="Title" type="xsd:string"/>
+                                                                                                                <xsd:element name="ISBN" type="tns:PamphletISBN"/>
+                                                                                                </xsd:sequence>
+                                                                                </xsd:restriction>
+                                                                </xsd:complexContent>
+                                                </xsd:complexType>
+
+                                                <xsd:simpleType name="ISBN">
+                                                                <xsd:restriction base="xsd:string"/>
+                                                </xsd:simpleType>
+
+                                                <xsd:simpleType name="PamphletISBN">
+                                                                <xsd:restriction base="tns:ISBN"/>
+                                                </xsd:simpleType>
+
+                                                <xsd:complexType name="Book">
+                                                                <xsd:sequence>
+                                                                                <xsd:element name="Title" type="xsd:string"/>
+                                                                                <xsd:element name="ISBN" type="xsd:string"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <!--   UserInfoType  -->
+
+                                                <xsd:complexType name="UserInfoType">
+                                                                <xsd:sequence>
+                                                                                <xsd:element maxOccurs="1" minOccurs="0" name="UserName" type="xsd:string"/>
+                                                                                <xsd:element maxOccurs="unbounded" minOccurs="0" name="Country" type="xsd:string"/>
+                                                                                <xsd:element maxOccurs="unbounded" minOccurs="0" name="RegInfo" type="tns:RegistrationInfoType"/>
+                                                                                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <!--   RegistrationInfoType  -->
+
+                                                <xsd:complexType name="RegistrationInfoType">
+                                                                <xsd:sequence>
+                                                                             <xsd:element maxOccurs="1" minOccurs="0" name="Feedback" type="xsd:float"/>
+
+                                                                                <xsd:element maxOccurs="1" minOccurs="1" name="Site"  type="xsd:int"/> <!-- nillable="true"-->
+
+                                                                                <xsd:element maxOccurs="1" minOccurs="0" name="Email" type="xsd:string"/>
+                                                                                <xsd:element maxOccurs="1" minOccurs="1" name="UserID" type="xsd:string"/>
+                                                                                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+                                                                </xsd:sequence>
+                                                                <xsd:attribute name="SellerType" type="xsd:string" use="optional"/>
+                                                </xsd:complexType>
+
+                                                <!--   ComplexType for soap headers -->
+
+                                                <xsd:complexType name="SecurityCredentials">
+                                                                <xsd:sequence>
+                                                                                <xsd:element name="userName" type="xsd:string"/>
+                                                                                <xsd:element name="pwd" type="xsd:string"/>
+                                                                                <xsd:element name="appName" type="xsd:string"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <!--   ChoiceType: Primitive  -->
+
+                                                <xsd:complexType name="PrimitiveTypes">
+                                                                <xsd:sequence>
+                                                                                <xsd:element name="bool" type="xsd:boolean"/>
+                                                                                <xsd:element name="dec" type="xsd:decimal"/>
+                                                                                <xsd:element name="dur" type="xsd:duration"/>
+                                                                                <xsd:element name="dtime" type="xsd:dateTime"/>
+                                                                                <xsd:element name="ti" type="xsd:time"/>
+                                                                                <xsd:element name="da" type="xsd:date"/>
+                                                                                <xsd:element name="gymth" type="xsd:gYearMonth"/>
+                                                                                <xsd:element name="gyear" type="xsd:gYear"/>
+                                                                                <xsd:element name="gmday" type="xsd:gMonthDay"/>
+                                                                                <xsd:element name="day" type="xsd:gDay"/>
+                                                                                <xsd:element name="gmth" type="xsd:gMonth"/>
+                                                                                <xsd:element name="hexbi" type="xsd:hexBinary"/>
+                                                                                <xsd:element name="b64bi" type="xsd:base64Binary"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+
+
+                                                <xsd:complexType abstract="true" name="BaseServiceRequest">
+                                                </xsd:complexType>
+
+
+                                                <xsd:complexType abstract="true" name="BaseServiceResponse">
+                                                                <xsd:sequence>
+                                                                                <xsd:element minOccurs="0" name="version" type="xsd:string">
+                                                                                </xsd:element>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <!--   Special characters (like hyphen); Escape e.g. ASCI   -->
+
+                                                <xsd:simpleType name="SSN">
+                                                                <xsd:restriction base="xsd:token">
+                                                                                <xsd:pattern value="[0-9]{3}-[0-9]{2}-[0-9]{4}"/>
+                                                                </xsd:restriction>
+                                                </xsd:simpleType>
+
+                                                <xsd:simpleType name="ReserveCharacter">
+                                                                <xsd:restriction base="xsd:token">
+                                                                                <xsd:pattern value="\{a\+b\}"/>
+                                                                </xsd:restriction>
+                                                </xsd:simpleType>
+
+                                                <xsd:simpleType name="hyphen">
+                                                                <xsd:restriction base="xsd:token">
+                                                                                <xsd:pattern value=""/>
+                                                                </xsd:restriction>
+                                                </xsd:simpleType>
+
+
+                                                <!--   EmptyComplexType  -->
+
+                                                <xsd:complexType name="EmptyType">
+                                                                <xsd:attribute name="value" type="xsd:string"/>
+                                                                <xsd:attribute name="bool" type="xsd:boolean"/>
+                                                                <xsd:attribute name="dec" type="xsd:decimal"/>
+                                                                <xsd:attribute name="dur" type="xsd:duration"/>
+                                                                <xsd:attribute name="dtime" type="xsd:dateTime"/>
+                                                                <xsd:attribute name="ti" type="xsd:time"/>
+                                                                <xsd:attribute name="da" type="xsd:date"/>
+                                                                <xsd:attribute name="gymth" type="xsd:gYearMonth"/>
+                                                                <xsd:attribute name="gyear" type="xsd:gYear"/>
+                                                                <xsd:attribute name="gmday" type="xsd:gMonthDay"/>
+                                                                <xsd:attribute name="day" type="xsd:gDay"/>
+                                                                <xsd:attribute name="gmth" type="xsd:gMonth"/>
+                                                                <xsd:attribute name="hexbi" type="xsd:hexBinary"/>
+                                                                <xsd:attribute name="b64bi" type="xsd:base64Binary"/>
+                                                </xsd:complexType>
+
+
+                                                <xsd:simpleType name="test">
+                                                                                                                                                                <xsd:restriction base="xsd:int">
+                                                                                                                                                                </xsd:restriction>
+                                                                                                                                                </xsd:simpleType>
+
+                                                <xsd:complexType name="test1">
+                                                                                                                <xsd:sequence>
+                                                                                                                                <xsd:element name="productName" type="xsd:string"/>
+                                                                                                                                <xsd:element name="quantity" type="tns:test">
+                                                                                                                                                
+                                                                                                                                </xsd:element>
+                                                                                                                                <xsd:element name="USPrice" type="xsd:double"/>
+                                                                                                                                <xsd:element minOccurs="0" name="shipDate" type="xsd:date"/>
+                                                                                                                </xsd:sequence>
+                                                                                                </xsd:complexType>
+                                                
+                                                <!--   AnonymousType  -->
+
+                                                <xsd:complexType name="Items">
+                                                                <xsd:sequence>
+                                                                                <xsd:element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:test1">
+                                                                                                
+                                                                                </xsd:element>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <xsd:element name="getUserInfo">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="in1" type="tns:UserInfoType"/>
+                                                                                                <xsd:element name="in2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getUserInfoResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="out1" type="tns:UserInfoType"/>
+                                                                                                <xsd:element name="out2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getRegistrationInfo">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="in1" type="tns:RegistrationInfoType">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getRegistrationInfoResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="out1" type="tns:RegistrationInfoType">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getEmptyAbsPolyType">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="in1" type="tns:EmptyType"/>
+                                                                                                <xsd:element name="in2" type="tns:Pamphlet">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in3" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in4" type="tns:Plane">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getEmptyAbsPolyTypeResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="out1" type="tns:EmptyType"/>
+                                                                                                <xsd:element name="out2" type="tns:Pamphlet">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out3" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out4" type="tns:Plane">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getChoiceType">
+                                                                <xsd:complexType>
+                                                                                <xsd:choice>
+                                                                                                <xsd:element name="in1" type="tns:PrimitiveTypes">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in3" type="tns:MultipleNS">
+                                                                                                </xsd:element>
+                                                                                </xsd:choice>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getChoiceTypeResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:choice>
+                                                                                                <xsd:element name="out1" type="tns:PrimitiveTypes">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out3" type="tns:MultipleNS">
+                                                                                                </xsd:element>
+                                                                                </xsd:choice>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getReservedType">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="in1" type="tns:SSN"/>
+                                                                                                <xsd:element name="in2" type="tns:ReserveCharacter">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in3" type="tns:hyphen">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in4" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getReservedTypeResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="out1" type="tns:SSN"/>
+                                                                                                <xsd:element name="out2" type="tns:ReserveCharacter">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out3" type="tns:hyphen">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out4" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getAnonType">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="in1" type="tns:Items"/>
+                                                                                                <xsd:element name="in2" type="tns:GlobalType">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in3" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getAnonTypeResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="out1" type="tns:Items"/>
+                                                                                                <xsd:element name="out2" type="tns:GlobalType">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out3" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getRecursionType" type="tns:RecursionType">
+                                                </xsd:element>
+
+                                                <xsd:complexType name="RecursionType">
+                                                                <xsd:sequence>
+                                                                                <xsd:element name="in" type="xsd:string"/>
+                                                                                <xsd:element name="getRecursionType" type="tns:RecursionType"/>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+
+                                                <xs:element name="getRecursionTypeResponse">
+                                                                <xs:complexType>
+                                                                                <xs:sequence>
+                                                                                                <xs:element name="out" type="xs:string"/>
+                                                                                </xs:sequence>
+                                                                </xs:complexType>
+                                                </xs:element>
+
+
+                                                <xsd:element name="getSecurityCredentials">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+
+                                                                                                <xsd:element name="in1" type="tns:SecurityCredentials">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="in2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getSecurityCredentialsResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:sequence>
+                                                                                                <xsd:element name="out1" type="tns:SecurityCredentials">
+                                                                                                </xsd:element>
+                                                                                                <xsd:element name="out2" type="xsd:string">
+                                                                                                </xsd:element>
+                                                                                </xsd:sequence>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+                                                <xsd:element name="getUserInfo_fault" type="tns:FaultType">
+
+                                                </xsd:element>
+
+                                                <xsd:complexType name="FaultType">
+                                                                <xsd:sequence>
+                                                                                <xsd:element name="getUserInfo_fault" type="tns:MyTestErrorMessage">
+                                                                                </xsd:element>
+                                                                </xsd:sequence>
+                                                </xsd:complexType>
+                                                <xsd:element name="getVersion">
+                                                                <xsd:complexType>
+                                                                                <xsd:complexContent>
+                                                                                                <xsd:extension base="tns:BaseServiceRequest">
+                                                                                                                <xsd:sequence>
+                                                                                                                                <xsd:element name="acknowledge" type="xsd:string">
+                                                                                                                                </xsd:element>
+                                                                                                                                <xsd:element name="versionN" type="xsd:string">
+                                                                                                                                </xsd:element>
+                                                                                                                </xsd:sequence>
+                                                                                                </xsd:extension>
+                                                                                </xsd:complexContent>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="getVersionResponse">
+                                                                <xsd:complexType>
+                                                                                <xsd:complexContent>
+                                                                                                <xsd:extension base="tns:BaseServiceResponse">
+                                                                                                                <xsd:sequence>
+                                                                                                                                <xsd:element name="acknowledge" type="xsd:string">
+                                                                                                                                </xsd:element>
+                                                                                                                                <xsd:element name="versionN" type="xsd:string">
+                                                                                                                                </xsd:element>
+                                                                                                                </xsd:sequence>
+                                                                                                </xsd:extension>
+                                                                                </xsd:complexContent>
+                                                                </xsd:complexType>
+                                                </xsd:element>
+
+<xs:complexType name="MultipleNS">
+                                                                <xs:sequence>
+                                                                                <xs:element name="name" type="xs:string"/>
+                                                                                <xs:element name="count" type="xs:int"/>
+                                                                </xs:sequence>
+                                                </xs:complexType>
+
+                                </xsd:schema>
+
+    <!--<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.ebay.com/soa/test/payment" xmlns:Q2="http://www.ebay.com/soa/test/payment" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xs:import namespace="http://www.ebay.com/marketplace/services"/>
+                                                
+                                </xsd:schema> -->
+  </wsdl:types>
+  <wsdl:message name="getUserInfoRequest">
+    <wsdl:part name="parameters" element="tns:getUserInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEmptyAbsPolyTypeResponse">
+    <wsdl:part name="parameters" element="tns:getEmptyAbsPolyTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="parameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSecurityCredentialsResponse">
+    <wsdl:part name="parameters" element="tns:getSecurityCredentialsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRecursionTypeResponse">
+    <wsdl:part name="parameters" element="tns:getRecursionTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSecurityCredentialsRequest">
+    <wsdl:part name="parameters" element="tns:getSecurityCredentials">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRecursionTypeRequest">
+    <wsdl:part name="parameters" element="tns:getRecursionType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionRequest">
+    <wsdl:part name="parameters" element="tns:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEmptyAbsPolyTypeRequest">
+    <wsdl:part name="parameters" element="tns:getEmptyAbsPolyType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserInfo_faultMsg">
+    <wsdl:part name="parameters" element="tns:getUserInfo_fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserInfoResponse">
+    <wsdl:part name="parameters" element="tns:getUserInfoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getChoiceTypeResponse">
+    <wsdl:part name="parameters" element="tns:getChoiceTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRegistrationInfoRequest">
+    <wsdl:part name="parameters" element="tns:getRegistrationInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAnonTypeRequest">
+    <wsdl:part name="parameters" element="tns:getAnonType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getReservedTypeRequest">
+    <wsdl:part name="parameters" element="tns:getReservedType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getReservedTypeResponse">
+    <wsdl:part name="parameters" element="tns:getReservedTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAnonTypeResponse">
+    <wsdl:part name="parameters" element="tns:getAnonTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRegistrationInfoResponse">
+    <wsdl:part name="parameters" element="tns:getRegistrationInfoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getChoiceTypeRequest">
+    <wsdl:part name="parameters" element="tns:getChoiceType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="WSDLTesting8">
+    <wsdl:operation name="getUserInfo">
+     <wsdl:input message="tns:getUserInfoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getUserInfoResponse">
+    </wsdl:output>
+      <wsdl:fault name="fault" message="tns:getUserInfo_faultMsg">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRegistrationInfo">
+      <wsdl:input message="tns:getRegistrationInfoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getRegistrationInfoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmptyAbsPolyType">
+      <wsdl:input message="tns:getEmptyAbsPolyTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getEmptyAbsPolyTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChoiceType">
+      <wsdl:input message="tns:getChoiceTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getChoiceTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReservedType">
+      <wsdl:input message="tns:getReservedTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getReservedTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAnonType">
+      <wsdl:input message="tns:getAnonTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getAnonTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRecursionType">
+      <wsdl:input message="tns:getRecursionTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getRecursionTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSecurityCredentials">
+      <wsdl:input message="tns:getSecurityCredentialsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getSecurityCredentialsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <wsdl:input message="tns:getVersionRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getVersionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSDLTesting8HTTP" type="tns:WSDLTesting8">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="getUserInfo">
+      <http:operation location="/getUserInfo"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+      <wsdl:fault name="fault">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRegistrationInfo">
+      <http:operation location="/getRegistrationInfo"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmptyAbsPolyType">
+      <http:operation location="/getEmptyAbsPolyType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChoiceType">
+      <http:operation location="/getChoiceType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReservedType">
+      <http:operation location="/getReservedType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAnonType">
+      <http:operation location="/getAnonType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRecursionType">
+      <http:operation location="/getRecursionType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSecurityCredentials">
+      <http:operation location="/getSecurityCredentials"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSDLTesting8SOAP" type="tns:WSDLTesting8">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getUserInfo">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getUserInfo"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="fault">
+        <soap:fault name="fault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRegistrationInfo">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getRegistrationInfo"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmptyAbsPolyType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getEmptyAbsPolyType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChoiceType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getChoiceType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReservedType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getReservedType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAnonType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getAnonType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRecursionType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getRecursionType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSecurityCredentials">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getSecurityCredentials"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getVersion"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InterOp">
+    <wsdl:port name="WSDLTesting8HTTP" binding="tns:WSDLTesting8HTTP">
+      <http:address location="http://www.example.org/"/>
+    </wsdl:port>
+    <wsdl:port name="WSDLTesting8SOAP" binding="tns:WSDLTesting8SOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
+

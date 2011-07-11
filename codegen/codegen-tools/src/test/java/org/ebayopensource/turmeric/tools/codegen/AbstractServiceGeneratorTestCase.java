@@ -175,6 +175,12 @@ public abstract class AbstractServiceGeneratorTestCase extends AbstractCodegenTe
 		 return intfProps;
 	 }
 	
+	 protected Class<?> loadClass(String fullyQualifiedName) throws ClassNotFoundException{
+		 
+		 Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(fullyQualifiedName);
+		 return cls;
+	 }
+	
 	 protected void compileJavaFile(String file) {
 			JavaCompiler compiler = (JavaCompiler) ToolProvider
 			.getSystemJavaCompiler();

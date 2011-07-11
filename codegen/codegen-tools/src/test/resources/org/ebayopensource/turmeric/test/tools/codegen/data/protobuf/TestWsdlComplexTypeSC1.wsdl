@@ -1,0 +1,117 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+                    <xs:element name="test3">
+                    <xs:complexType>
+                    <xs:sequence>
+                    <xs:element name="txt" type="xs:string"></xs:element>
+                    </xs:sequence>
+                    </xs:complexType>
+                    
+                    </xs:element>
+                    
+                    
+                   
+                    <xs:complexType name="tested">
+                    <xs:sequence>
+                    <xs:element ref="test3"></xs:element>
+                    </xs:sequence>
+                    </xs:complexType>
+                    
+					<xs:complexType name="MyComplexSimpleContentType1">
+					  <xs:simpleContent>
+					   <xs:extension base="xs:float">
+					   
+					    <xs:attribute name="argA" type="xs:date"/>
+					<xs:attribute name="argB" type="xs:boolean" use="required"/>
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>	
+					 
+					 <xs:simpleType name="restrictedType">
+					<xs:restriction base="xs:string">
+					<xs:enumeration value="one"/>
+					
+					<xs:enumeration value="two"/>
+					</xs:restriction>
+					</xs:simpleType>
+					<xs:complexType name="MyComplexSimpleContentType2">
+					  <xs:simpleContent>
+					    <xs:extension base="tns:restrictedType">
+						
+						<xs:attribute name="argB" type="xs:boolean" use="required"/>
+					          </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>
+										 
+
+               
+           
+  <xs:element name="test" type="tns:MyComplexSimpleContentType1"></xs:element>         
+  <xs:element name="test1" type="tns:MyComplexSimpleContentType2"></xs:element>
+  <xs:element name="test2" type="tns:tested"></xs:element>              
+           
+          
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test1"/>
+    </wsdl:message>
+    <wsdl:message name="subRequest">
+    	<wsdl:part name="subRequest" element="tns:test3"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="subResponse">
+    	<wsdl:part name="subResponse" element="tns:test2"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="sub">
+        	<wsdl:input message="tns:subRequest"></wsdl:input>
+        	<wsdl:output message="tns:subResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+         <wsdl:operation name="sub">
+            <soap:operation soapAction="sub" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

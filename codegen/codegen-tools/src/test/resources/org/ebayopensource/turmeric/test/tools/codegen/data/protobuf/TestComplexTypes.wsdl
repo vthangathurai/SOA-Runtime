@@ -1,0 +1,85 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+                    <xs:simpleType name="MySimpleTypeIntRest">
+					  <xs:restriction base="xs:int">
+					   <xs:totalDigits value="3" />
+					  </xs:restriction>
+					 </xs:simpleType>
+					<xs:complexType  name="MyComplexType">
+					  <xs:sequence>	
+					   <xs:element maxOccurs="1" minOccurs="0" name="elemB"
+					    type="tns:SampleComplexType" />
+					   <xs:element maxOccurs="1" minOccurs="0" name="elemA" type="xs:float" />
+					  </xs:sequence>
+					 </xs:complexType>
+					
+					<xs:complexType name="ExtendMyComplexType">
+					<xs:complexContent>
+					<xs:extension base="tns:MyComplexType">
+					  <xs:sequence>
+					   <xs:element maxOccurs="1" minOccurs="0" name="elemC" type="xs:string" />
+					   <xs:element minOccurs="0" name="test4" type="xs:string"></xs:element>
+					</xs:sequence>
+					</xs:extension>
+					</xs:complexContent>
+					 </xs:complexType>
+
+					
+					
+					<xs:complexType name="SampleComplexType">
+					<xs:sequence>
+					<xs:element  maxOccurs="unbounded" name="Ent" type="tns:MySimpleTypeIntRest" /><!-- nillable="true"-->
+					<xs:element minOccurs="0" name="Value1" type="xs:string" /> <!-- nillable="true"-->
+					<xs:element minOccurs="0" name="Value2" type="xs:string"  /><!-- nillable="true"-->
+					
+						</xs:sequence>
+						</xs:complexType>
+               
+           
+  <xs:element name="test" type="tns:ExtendMyComplexType"></xs:element>         
+           
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

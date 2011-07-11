@@ -1,0 +1,66 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+     
+
+
+ <xs:complexType name="Keywords">
+<xs:simpleContent>
+<xs:extension base="xs:string">
+ <xs:attribute name="int" type="xs:int"/>
+  <xs:attribute name="boolean" type="xs:boolean"/>
+   <xs:attribute name="String" type="xs:string"/>
+    <xs:attribute name="final" type="xs:string"/>
+     <xs:attribute name="new" type="xs:string"/>
+ </xs:extension>
+ </xs:simpleContent>
+ </xs:complexType> 
+
+     
+           
+  <xs:element name="test" type="tns:Keywords"></xs:element>         
+           
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,129 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+                	<xs:simpleType name="AAA" final="restriction"> 
+				                                                    <xs:restriction
+				base="xs:integer"> 
+				                                                      <xs:minInclusive
+				value="0"/> 
+				                                                    </xs:restriction> 
+				                                                  </xs:simpleType> 
+				
+				
+				                                                                         
+				<xs:complexType name="ShoeType" final="#all" block="#all">
+				                                                                           
+				<xs:simpleContent>
+				                                                                             
+				<xs:extension base="tns:AAA">
+				                                                                               
+				<xs:attribute name="country" type="xs:string" />
+				                                                                             
+				</xs:extension>
+				                                                                           
+				</xs:simpleContent>
+				                                                                         
+				</xs:complexType>
+		
+                <!--   <xs:element name="root"> 
+                                                                           
+							<xs:complexType> 
+							                                                                             
+							<xs:sequence> 
+							                                                                               
+							<xs:element ref="myAbstract"/> 
+							                                                                             
+							</xs:sequence> 
+							                                                                           
+							</xs:complexType> 
+							                                                                         
+							</xs:element> 
+							
+							                                                                         
+							<xs:element name="myAbstract" type="BBB"/> 
+							
+							                                                                         
+							<xs:simpleType name="BBB"> 
+							                                                                           
+							<xs:restriction base="xs:integer"> 
+							                                                                             
+							<xs:minInclusive value="1"/> 
+							                                                                             
+							<xs:maxInclusive value="9"/> 
+							                                                                           
+							</xs:restriction> 
+							                                                                         
+							</xs:simpleType>  -->
+							
+						
+							
+                    
+                    
+         <xs:element name="comment" type="xs:string"/>
+
+				 <xs:complexType name="PurchaseOrderType3">
+				<xs:sequence>
+				 <xs:choice>
+				  
+                    
+				<xs:element name="shipTo" type="xs:string"/>
+				<xs:element name="billTo" type="xs:short"/>
+				<xs:element name="items"  type="xs:string"/>
+				</xs:choice>
+				<xs:sequence>
+
+				<xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+				 </xs:sequence>
+				 </xs:sequence>
+				<xs:attribute name="orderDate" type="xs:date"/>
+				</xs:complexType>
+         
+						   
+         
+  <xs:element name="test" type="tns:PurchaseOrderType3"></xs:element>   
+   <xs:element name="test1" type="tns:ShoeType"></xs:element>  
+
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test1"/>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

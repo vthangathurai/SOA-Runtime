@@ -1,0 +1,85 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+          <xs:complexType name="Pamphlet">
+				<xs:complexContent>
+					<xs:restriction base="tns:Book">
+						<xs:sequence>
+							<xs:element name="Title" type="xs:string"/>
+							<xs:element name="ISBN" type="tns:PamphletISBN"/>
+							<xs:element name="sAND" type="tns:PamphletISBN"/>
+							<xs:element name="small" type="tns:PamphletISBN"/>
+							<xs:element name="lasT" type="xs:string"/>
+							<xs:element name="miDDle" type="xs:string"/>
+							<xs:element name="FIrst" type="xs:string"/>
+						</xs:sequence>
+					</xs:restriction>
+				</xs:complexContent>
+			</xs:complexType>  
+
+			<xs:simpleType name="ISBN">
+				<xs:restriction base="xs:string"/>
+			</xs:simpleType>
+
+			<xs:simpleType name="PamphletISBN">
+				<xs:restriction base="tns:ISBN"/>
+			</xs:simpleType>
+
+			<xs:complexType name="Book">
+				<xs:sequence>
+					<xs:element name="Title" type="xs:string"/>
+					<xs:element name="ISBN" type="xs:string"/>
+					<xs:element name="sAND" type="xs:string"/>
+					<xs:element name="small" type="xs:string"/>
+					<xs:element name="lasT" type="xs:string"/>
+					<xs:element name="miDDle" type="xs:string"/>
+					<xs:element name="FIrst" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType> 
+           
+  <xs:element name="test" type="tns:Pamphlet"></xs:element>         
+           
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

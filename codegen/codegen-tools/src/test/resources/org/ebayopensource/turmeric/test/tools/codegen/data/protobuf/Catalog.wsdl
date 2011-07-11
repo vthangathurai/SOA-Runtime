@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:webservice.catalog.service.ebay.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="urn:webservice.catalog.service.ebay.com" xmlns:tns="urn:webservice.catalog.service.ebay.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+<wsdl:types>
+
+  <schema targetNamespace="urn:webservice.catalog.service.ebay.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:webservice.catalog.service.ebay.com" xmlns="http://www.w3.org/2001/XMLSchema"  xmlns:apachesoap="http://xml.apache.org/xml-soap">
+
+   <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" schemaLocation="http://schemas.xmlsoap.org/soap/encoding/"></xsd:import>
+   <complexType name="mapItem">
+    <sequence>
+     <element name="key"  type="xsd:string"/>
+     <element name="value"  type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Map">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:mapItem"/>
+    </sequence>
+   </complexType>
+   <complexType name="ServiceRequestId">
+    <sequence>
+     <element name="requestId" type="xsd:long"/>
+     <element name="serviceId" type="xsd:long"/>
+    </sequence>
+   </complexType>
+   <complexType name="ServiceRequest">
+    <sequence>
+     <element name="approver"  type="xsd:string"/>
+     <element name="approverNotes"  type="xsd:string"/>
+     <element name="description"  type="xsd:string"/>
+     <element name="featureId" type="xsd:int"/>
+     <element name="ltsDate"  type="xsd:dateTime"/>
+     <element name="others"  type="tns:Map"/>
+     <element name="owner"  type="xsd:string"/>
+     <element name="projectId" type="xsd:int"/>
+     <element name="projectName"  type="xsd:string"/>
+     <element name="requestId" type="xsd:long"/>
+     <element name="requestStatusId" type="xsd:int"/>
+     <element name="serviceId" type="xsd:long"/>
+     <element name="serviceName"  type="xsd:string"/>
+     <element name="serviceTypeId" type="xsd:int"/>
+     <element name="submitter"  type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfServiceRequest">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:ServiceRequest[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ProdService">
+    <sequence>
+     <element name="description"  type="xsd:string"/>
+     <element name="featureId" type="xsd:int"/>
+     <element name="others"  type="tns:Map"/>
+     <element name="owner"  type="xsd:string"/>
+     <element name="serviceId" type="xsd:long"/>
+     <element name="serviceName"  type="xsd:string"/>
+     <element name="serviceTypeId" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfProdService">
+    <complexContent>
+     <attribute name="ProdService" type="xsd:string"></attribute>
+    </complexContent>
+   </complexType>
+   <complexType name="DropDownOption">
+    <sequence>
+     <element name="optionId" type="xsd:int"/>
+     <element name="optionValue"  type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfDropDownOption">
+    <complexContent>
+     <attribute name="DropDown" type="xsd:string"></attribute>
+    </complexContent>
+   </complexType>
+  </schema>
+</wsdl:types>
+
+   <wsdl:message name="getUserGroupRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProdServiceRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="xsd:long"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProdServiceListRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getRequestListResponse">
+
+      <wsdl:part name="getRequestListReturn" type="impl:ArrayOfServiceRequest"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProdServiceListResponse">
+
+      <wsdl:part name="getProdServiceListReturn" type="impl:ArrayOfProdService"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProdServiceResponse">
+
+      <wsdl:part name="getProdServiceReturn" type="impl:ProdService"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="editRequestResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getUserGroupResponse">
+
+      <wsdl:part name="getUserGroupReturn" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDropDownOptionsResponse">
+
+      <wsdl:part name="getDropDownOptionsReturn" type="impl:ArrayOfDropDownOption"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteRequestResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getRequestListRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="approveRequestRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="xsd:long"/>
+
+      <wsdl:part name="in2" type="xsd:long"/>
+
+      <wsdl:part name="in3" type="xsd:int"/>
+
+      <wsdl:part name="in4" type="soapenc:string"/>
+
+      <wsdl:part name="in5" type="soapenc:string"/>
+
+      <wsdl:part name="in6" type="soapenc:string"/>
+
+      <wsdl:part name="in7" type="xsd:int"/>
+
+      <wsdl:part name="in8" type="soapenc:string"/>
+
+      <wsdl:part name="in9" type="soapenc:string"/>
+
+      <wsdl:part name="in10" type="soapenc:string"/>
+
+      <wsdl:part name="in11" type="tns:Map"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getRequestRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="xsd:long"/>
+
+      <wsdl:part name="in2" type="xsd:long"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDropDownOptionsRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="editRequestRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="xsd:long"/>
+
+      <wsdl:part name="in2" type="xsd:long"/>
+
+      <wsdl:part name="in3" type="xsd:int"/>
+
+      <wsdl:part name="in4" type="soapenc:string"/>
+
+      <wsdl:part name="in5" type="soapenc:string"/>
+
+      <wsdl:part name="in6" type="soapenc:string"/>
+
+      <wsdl:part name="in7" type="xsd:int"/>
+
+      <wsdl:part name="in8" type="soapenc:string"/>
+
+      <wsdl:part name="in9" type="tns:Map"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteRequestRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="xsd:long"/>
+
+      <wsdl:part name="in2" type="xsd:long"/>
+
+      <wsdl:part name="in3" type="soapenc:string"/>
+
+      <wsdl:part name="in4" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getRequestResponse">
+
+      <wsdl:part name="getRequestReturn" type="impl:ServiceRequest"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="newRequestRequest">
+
+      <wsdl:part name="in0" type="xsd:int"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="xsd:int"/>
+
+      <wsdl:part name="in3" type="soapenc:string"/>
+
+      <wsdl:part name="in4" type="soapenc:string"/>
+
+      <wsdl:part name="in5" type="soapenc:string"/>
+
+      <wsdl:part name="in6" type="xsd:int"/>
+
+      <wsdl:part name="in7" type="soapenc:string"/>
+
+      <wsdl:part name="in8" type="tns:Map"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="newRequestResponse">
+
+      <wsdl:part name="newRequestReturn" type="impl:ServiceRequestId"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="approveRequestResponse">
+
+   </wsdl:message>
+
+   <wsdl:portType name="ServiceCatalogWebService">
+
+      <wsdl:operation name="getUserGroup" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getUserGroupRequest" name="getUserGroupRequest"/>
+
+         <wsdl:output message="impl:getUserGroupResponse" name="getUserGroupResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="newRequest" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7 in8">
+
+         <wsdl:input message="impl:newRequestRequest" name="newRequestRequest"/>
+
+         <wsdl:output message="impl:newRequestResponse" name="newRequestResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="editRequest" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7 in8 in9">
+
+         <wsdl:input message="impl:editRequestRequest" name="editRequestRequest"/>
+
+         <wsdl:output message="impl:editRequestResponse" name="editRequestResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteRequest" parameterOrder="in0 in1 in2 in3 in4">
+
+         <wsdl:input message="impl:deleteRequestRequest" name="deleteRequestRequest"/>
+
+         <wsdl:output message="impl:deleteRequestResponse" name="deleteRequestResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="approveRequest" parameterOrder="in0 in1 in2 in3 in4 in5 in6 in7 in8 in9 in10 in11">
+
+         <wsdl:input message="impl:approveRequestRequest" name="approveRequestRequest"/>
+
+         <wsdl:output message="impl:approveRequestResponse" name="approveRequestResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getRequestList" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getRequestListRequest" name="getRequestListRequest"/>
+
+         <wsdl:output message="impl:getRequestListResponse" name="getRequestListResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getRequest" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:getRequestRequest" name="getRequestRequest"/>
+
+         <wsdl:output message="impl:getRequestResponse" name="getRequestResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProdServiceList" parameterOrder="in0">
+
+         <wsdl:input message="impl:getProdServiceListRequest" name="getProdServiceListRequest"/>
+
+         <wsdl:output message="impl:getProdServiceListResponse" name="getProdServiceListResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProdService" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getProdServiceRequest" name="getProdServiceRequest"/>
+
+         <wsdl:output message="impl:getProdServiceResponse" name="getProdServiceResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDropDownOptions" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getDropDownOptionsRequest" name="getDropDownOptionsRequest"/>
+
+         <wsdl:output message="impl:getDropDownOptionsResponse" name="getDropDownOptionsResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServiceCatalogWebServiceSoapBinding" type="impl:ServiceCatalogWebService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getUserGroup">
+
+         <wsdlsoap:operation soapAction="dsfd"/>
+
+         <wsdl:input name="getUserGroupRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getUserGroupResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="newRequest">
+
+         <wsdlsoap:operation soapAction="sfdf"/>
+
+         <wsdl:input name="newRequestRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="newRequestResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="editRequest">
+
+         <wsdlsoap:operation soapAction="sds"/>
+
+         <wsdl:input name="editRequestRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="editRequestResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteRequest">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteRequestRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteRequestResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="approveRequest">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="approveRequestRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="approveRequestResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getRequestList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getRequestListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getRequestListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getRequest">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getRequestRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getRequestResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProdServiceList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getProdServiceListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+        <wsdl:output name="getProdServiceListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProdService">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getProdServiceRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getProdServiceResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDropDownOptions">
+
+         <wsdlsoap:operation soapAction="adsd"/>
+
+         <wsdl:input name="getDropDownOptionsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getDropDownOptionsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:webservice.catalog.service.ebay.com" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServiceCatalogWebServiceService">
+
+      <wsdl:port binding="impl:ServiceCatalogWebServiceSoapBinding" name="ServiceCatalogWebService">
+
+         <wsdlsoap:address location="http://localhost:8080/ServiceCatalog/services/ServiceCatalogWebService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
+

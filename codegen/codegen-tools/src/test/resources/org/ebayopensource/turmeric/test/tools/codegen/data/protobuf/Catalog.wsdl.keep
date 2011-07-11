@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="WSDLTesting8" targetNamespace="http://www.ebay.com/marketplace/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services">
+
+			<!-- import namespace for another namespace xmlns:Q2 -->
+			<xs:import namespace="http://www.ebay.com/soa/test/payment">
+			</xs:import>
+
+			<!-- global definitions -->
+			<xs:element name="globalName" type="xs:string"/>
+
+			<xs:complexType name="GlobalType">
+				<xs:sequence>
+					<!-- reference to global element -->
+					<xs:element ref="tns:globalName"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<!-- Defined for fault - getUserInfo -->
+			<xs:complexType name="MyTestErrorMessage">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="ErrorCode" type="xs:int"/>
+					<xs:element minOccurs="0" name="ErrorId" type="xs:string"/>
+					<xs:element minOccurs="0" name="ErrorDescription" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<!-- Abstract classes -->
+
+			<xs:complexType abstract="true" name="Vehicle"/>
+			<xs:complexType name="Plane">
+				<xs:complexContent>
+					<xs:extension base="tns:Vehicle">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="Info" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<!-- Polymorphism -->
+			
+			 <xs:complexType name="Pamphlet">
+				<xs:complexContent>
+					<xs:restriction base="tns:Book">
+						<xs:sequence>
+							<xs:element name="Title" type="xs:string"/>
+							<xs:element name="ISBN" type="tns:PamphletISBN"/>
+						</xs:sequence>
+					</xs:restriction>
+				</xs:complexContent>
+			</xs:complexType> 
+
+			<xs:simpleType name="ISBN">
+				<xs:restriction base="xs:string"/>
+			</xs:simpleType>
+
+			<xs:simpleType name="PamphletISBN">
+				<xs:restriction base="tns:ISBN"/>
+			</xs:simpleType>
+
+			<xs:complexType name="Book">
+				<xs:sequence>
+					<xs:element name="Title" type="xs:string"/>
+					<xs:element name="ISBN" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType> 
+
+			<!--   UserInfoType  -->
+
+			<xs:complexType name="UserInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="UserName" type="xs:string"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="Country" type="xs:string"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="RegInfo" type="tns:RegistrationInfoType"/>
+					<!-- <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/> -->
+				</xs:sequence>
+			</xs:complexType>
+
+			<!--   RegistrationInfoType  -->
+
+			<xs:complexType name="RegistrationInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="Feedback" type="xs:float"/>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="Site" nillable="false" type="xs:int"/><!-- nillable made false -->
+
+					<xs:element maxOccurs="1" minOccurs="0" name="Email" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="UserID" type="xs:string"/>
+					<!-- <xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/> -->
+				</xs:sequence>
+				<xs:attribute name="SellerType" type="xs:string" use="optional"/>
+			</xs:complexType>
+
+			<!--   ComplexType for soap headers -->
+
+			<xs:complexType name="SecurityCredentials">
+				<xs:sequence>
+					<xs:element name="userName" type="xs:string"/>
+					<xs:element name="pwd" type="xs:string"/>
+					<xs:element name="appName" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<!--   ChoiceType: Primitive  -->
+
+			<xs:complexType name="PrimitiveTypes">
+				<xs:sequence>
+					<xs:element name="bool" type="xs:boolean"/>
+					<xs:element name="dec" type="xs:decimal"/>
+					<xs:element name="dur" type="xs:duration"/>
+					<xs:element name="dtime" type="xs:dateTime"/>
+					<xs:element name="ti" type="xs:time"/>
+					<xs:element name="da" type="xs:date"/>
+					<xs:element name="gymth" type="xs:gYearMonth"/>
+					<xs:element name="gyear" type="xs:gYear"/>
+					<xs:element name="gmday" type="xs:gMonthDay"/>
+					<xs:element name="day" type="xs:gDay"/>
+					<xs:element name="gmth" type="xs:gMonth"/>
+					<xs:element name="hexbi" type="xs:hexBinary"/>
+					<xs:element name="b64bi" type="xs:base64Binary"/>
+					<!-- Adding few more simple types from xs -->
+					<xs:element minOccurs="0" name="qname" type="xs:QName"/>
+					<xs:element minOccurs="0" name="unbyte" type="xs:unsignedByte"/>
+
+					<xs:element minOccurs="0" name="unint" type="xs:unsignedInt"/>
+
+					<xs:element minOccurs="0" name="unlong" type="xs:unsignedLong"/>
+
+					<xs:element minOccurs="0" name="unshort" type="xs:unsignedShort"/>
+					<xs:element minOccurs="0" name="posInt" type="xs:positiveInteger"/>
+					<xs:element minOccurs="0" name="id" type="xs:ID"/>
+					<xs:element minOccurs="0" name="token" type="xs:NMTOKEN"/>
+
+					<xs:element minOccurs="0" name="tokens" type="xs:NMTOKENS"/>
+					<xs:element minOccurs="0" name="ent" type="xs:ENTITY"/>
+					<xs:element minOccurs="0" name="lan" type="xs:language"/>
+					 <xs:element minOccurs="0" name="name" type="xs:Name"/>
+					 <xs:element minOccurs="0" name="ncname" type="xs:NCName"/>
+					 <xs:element minOccurs="0" name="negInt" type="xs:negativeInteger"/>
+					 <xs:element minOccurs="0" name="nonNegInt" type="xs:nonNegativeInteger"/>
+					 <xs:element minOccurs="0" name="nonPosInt" type="xs:nonPositiveInteger"/>
+					 <xs:element minOccurs="0" name="norstr" type="xs:normalizedString"/>
+					
+					
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+			</xs:complexType>
+
+
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<!--   Special characters (like hyphen); Escape e.g. ASCI   -->
+
+			<xs:simpleType name="SSN">
+				<xs:restriction base="xs:token">
+					<xs:pattern value="[0-9]{3}-[0-9]{2}-[0-9]{4}"/>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ReserveCharacter">
+				<xs:restriction base="xs:token">
+					<xs:pattern value="\{a\+b\}"/>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="hyphen">
+				<xs:restriction base="xs:token">
+					<xs:pattern value="ï»¿"/>
+				</xs:restriction>
+			</xs:simpleType>
+
+
+			<!--   EmptyComplexType  -->
+
+			<xs:complexType name="EmptyType">
+				<xs:attribute name="value" type="xs:string"/>
+				<xs:attribute name="bool" type="xs:boolean"/>
+				<xs:attribute name="dec" type="xs:decimal"/>
+				<xs:attribute name="dur" type="xs:duration"/>
+				<xs:attribute name="dtime" type="xs:dateTime"/>
+				<xs:attribute name="ti" type="xs:time"/>
+				<xs:attribute name="da" type="xs:date"/>
+				<xs:attribute name="gymth" type="xs:gYearMonth"/>
+				<xs:attribute name="gyear" type="xs:gYear"/>
+				<xs:attribute name="gmday" type="xs:gMonthDay"/>
+				<xs:attribute name="day" type="xs:gDay"/>
+				<xs:attribute name="gmth" type="xs:gMonth"/>
+				<xs:attribute name="hexbi" type="xs:hexBinary"/>
+				<xs:attribute name="b64bi" type="xs:base64Binary"/>
+			</xs:complexType>
+
+			<!--   AnonymousType  -->
+			<!-- Anonymous types inside the sequence is not supported .Anonymous types for global element is supported -->
+			<!-- added a "test" simple type for the type of "quantity" -->
+			<xs:simpleType name="test">
+										<xs:restriction base="xs:int">
+										</xs:restriction>
+									</xs:simpleType>
+									
+			<xs:complexType name="test1">
+							<xs:sequence>
+								<xs:element name="productName" type="xs:string"/>
+								<xs:element name="quantity" type="tns:test">
+									
+								</xs:element>
+								<xs:element name="USPrice" type="xs:double"/>
+								<xs:element minOccurs="0" name="shipDate" type="xs:date"/>
+							</xs:sequence>
+						</xs:complexType>						
+			<xs:complexType name="Items">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:test1">
+						
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="getUserInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in1" type="tns:UserInfoType"/>
+						<xs:element name="in2" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserInfoResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out1" type="tns:UserInfoType"/>
+						<xs:element name="out2" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getRegistrationInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in1" type="tns:RegistrationInfoType">
+						</xs:element>
+						<xs:element name="in2" type="xs:string">	
+						</xs:element>
+						<xs:element name="int3" type="tns:ComplexTypeSimpleContentWithAttrGp"/>
+						<xs:element name="int4" type="tns:AttrTypeEnum"/> 
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getRegistrationInfoResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out1" type="tns:RegistrationInfoType">
+						</xs:element>
+						<xs:element name="out2" type="xs:string">
+						</xs:element>
+						<xs:element name="out3" type="tns:MultiAttrSimpleType"/>
+						<xs:element name="out4" type="tns:MultilevelExtension"/>
+						<xs:element name="out5" type="tns:SCMultiLevel"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getEmptyAbsPolyType">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in1" type="tns:EmptyType"/>
+						<xs:element name="in2" type="tns:Pamphlet"> 
+						</xs:element>
+						<xs:element name="in3" type="xs:string">
+						</xs:element>
+						<xs:element name="in4" type="tns:Plane">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getEmptyAbsPolyTypeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out1" type="tns:EmptyType"/>
+					<xs:element name="out2" type="tns:Pamphlet">
+						</xs:element>
+						<xs:element name="out3" type="xs:string">
+						</xs:element>
+						<xs:element name="out4" type="tns:Plane">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getChoiceType">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="in1" type="tns:PrimitiveTypes">
+						</xs:element>
+						<xs:element name="in2" type="xs:string">
+						</xs:element>
+						<xs:element name="in3" type="tns:MultipleNS">
+						</xs:element>
+						<xs:element name="int4" type="tns:PolymorphismTest"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getChoiceTypeResponse">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="out1" type="tns:PrimitiveTypes">
+						</xs:element>
+						<xs:element name="out2" type="xs:string">
+						</xs:element>
+						<xs:element name="out3" type="tns:MultipleNS">
+						</xs:element>
+						<xs:element name="out4" type="tns:MyComplexType"/>
+						<xs:element name="out5" type="tns:ExtendMyComplexType1"/>
+						<xs:element name="out6" type="tns:ExtendMyComplexType2"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getReservedType">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in1" type="tns:SSN"/>
+						<xs:element name="in2" type="tns:ReserveCharacter">
+						</xs:element>
+						<xs:element name="in3" type="tns:hyphen">
+						</xs:element>
+						<xs:element name="in4" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getReservedTypeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out1" type="tns:SSN"/>
+						<xs:element name="out2" type="tns:ReserveCharacter">
+						</xs:element>
+						<xs:element name="out3" type="tns:hyphen">
+						</xs:element>
+						<xs:element name="out4" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getAnonType">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in1" type="tns:Items"/>
+						<xs:element name="in2" type="tns:GlobalType">
+						</xs:element>
+						<xs:element name="in3" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getAnonTypeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out1" type="tns:Items"/>
+						<xs:element name="out2" type="tns:GlobalType">
+						</xs:element>
+						<xs:element name="out3" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getRecursionType" type="tns:RecursionType">
+			</xs:element>
+
+			<xs:complexType name="RecursionType">
+				<xs:sequence>
+					<xs:element name="in" type="xs:string"/>
+					<xs:element name="getRecursionType" type="tns:RecursionType"/>
+					<xs:element name="int2" type="tns:SampleComplexType"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="getRecursionTypeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out" type="xs:string"/>
+						<xs:element name="out1" type="tns:MyComplexSimpleContentType1"/>
+						<xs:element name="out2" type="tns:MyComplexSimpleContentType2"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+
+			<xs:element name="getSecurityCredentials">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="in1" type="tns:SecurityCredentials">
+						</xs:element>
+						<xs:element name="in2" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getSecurityCredentialsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="out1" type="tns:SecurityCredentials">
+						</xs:element>
+						<xs:element name="out2" type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getUserInfo_fault" type="tns:FaultType">
+
+			</xs:element>
+
+			<xs:complexType name="FaultType">
+				<xs:sequence>
+					<xs:element name="getUserInfo_fault" type="tns:MyTestErrorMessage">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<!-- getVersionResponse + AnonymousTypes with extension does not have proper tag generated so modified the wsdl  -->
+			<!-- ref bug 19067 -->
+			 <xs:element name="getVersion">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseServiceRequest">
+							<xs:sequence>
+								<xs:element name="acknowledge" type="xs:string">
+								</xs:element>
+								<xs:element name="versionN" type="xs:string">
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			
+			
+			
+			<xs:element name="getVersionResponse1">
+			<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseServiceResponse">
+							<xs:sequence>
+								<xs:element name="acknowledge" type="xs:string">
+								</xs:element>
+								<xs:element name="versionN" type="xs:string">
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>	
+			</xs:element>
+			
+	<!-- removed multiple schema as protobuf does not support multiple schema -->			
+			
+			<xs:complexType name="MultipleNS">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string"/>
+					<xs:element name="count" type="xs:int"/>
+				</xs:sequence>
+			</xs:complexType>
+		
+		
+	<!-- Adding few more types -->
+	
+	<!-- complex type with polymorphism which can only be detected at runtime-->	
+	<xs:complexType name="MyComplexType">
+			  <xs:sequence>	
+			   <xs:element maxOccurs="1" minOccurs="0" name="elemB" type="xs:string"/>
+			   <xs:element maxOccurs="1" minOccurs="0" name="elemA" type="xs:float"/>
+			  </xs:sequence>
+			 </xs:complexType>
+			
+			<xs:complexType name="ExtendMyComplexType1">
+			<xs:complexContent>
+			<xs:extension base="tns:MyComplexType">
+			  <xs:sequence>
+			   <xs:element maxOccurs="1" minOccurs="0" name="elemC" type="xs:string"/>
+			</xs:sequence>
+			</xs:extension>
+			</xs:complexContent>
+			 </xs:complexType>
+			
+			<xs:complexType name="ExtendMyComplexType2">
+			<xs:complexContent>
+			<xs:extension base="tns:MyComplexType">
+			  <xs:sequence>
+			   <xs:element maxOccurs="1" minOccurs="0" name="elemC" type="xs:string"/>
+			</xs:sequence>
+			</xs:extension>
+			</xs:complexContent>
+			 </xs:complexType>
+			
+			<xs:complexType name="PolymorphismTest">
+			<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="0" name="elemD" type="tns:MyComplexType"/>
+			</xs:sequence>
+			</xs:complexType>
+			
+	<!-- complex type with minOccurs and maxOccurs combination -->		
+	<xs:complexType name="SampleComplexType">
+					<xs:sequence>
+					<xs:element maxOccurs="unbounded" name="Int" type="tns:MySimpleTypeIntRest"/> <!-- nillable="true" -->
+					<xs:element minOccurs="1" name="Value1" type="xs:string"/><!-- nillable="true" -->
+					<xs:element minOccurs="0" name="Value2" type="xs:string"/><!-- nillable="true" -->
+					<xs:element maxOccurs="2" minOccurs="0" name="Value3" type="xs:string"/><!-- nillable="true" -->
+					<xs:element maxOccurs="1" minOccurs="1" name="Value4" type="xs:string"/><!-- nillable="true" -->
+					<xs:element maxOccurs="2" minOccurs="1" name="Value5" type="xs:string"/><!-- nillable="true" -->
+					<xs:element maxOccurs="2" minOccurs="2" name="Value6" type="xs:string"/><!-- nillable="true" -->
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="Value7" type="xs:string"/><!-- nillable="true" -->
+					<xs:element maxOccurs="1" minOccurs="0" name="Value8" type="xs:string"/><!-- nillable="true" -->
+					<xs:element name="Value9" type="xs:string"/><!-- nillable="true" -->
+					<xs:choice>
+					<xs:element name="Value10" type="xs:string"/><!-- nillable="true" -->
+					</xs:choice>
+					</xs:sequence>					
+    </xs:complexType>
+    
+     <xs:simpleType name="MySimpleTypeIntRest">
+					  <xs:restriction base="xs:int">
+					   <xs:totalDigits value="3"/>
+					  </xs:restriction>
+					 </xs:simpleType>
+    
+    <!-- complex type with simple content extension base as primitive type -->
+    
+    <xs:complexType name="MyComplexSimpleContentType1">
+					  <xs:simpleContent>
+					   <xs:extension base="xs:float">
+					   
+					    <xs:attribute name="argA" type="xs:date"/>
+					<xs:attribute name="argB" type="xs:boolean" use="required"/>
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>	
+	<!-- complex type with simple content extension base as enum simple type -->			
+					 
+    <xs:simpleType name="restrictedType">
+					<xs:restriction base="xs:string">
+					<xs:enumeration value="one"/>
+					
+					<xs:enumeration value="two"/>
+					</xs:restriction>
+					</xs:simpleType>
+					<xs:complexType name="MyComplexSimpleContentType2">
+					  <xs:simpleContent>
+					    <xs:extension base="tns:restrictedType">
+						
+						<xs:attribute name="argB" type="xs:boolean" use="required"/>
+					          </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>
+	<!-- complex type with simple content using attribute groups -->				 
+    <xs:attributeGroup name="MyAttrGpA">
+					  <xs:attribute name="attrA" type="xs:date"/>
+					  <xs:attribute name="attrB" type="xs:int"/>
+					 </xs:attributeGroup>
+					 <xs:complexType name="ComplexTypeSimpleContentWithAttrGp">
+					  <xs:simpleContent>
+					   <xs:extension base="xs:string">
+					    <xs:attributeGroup ref="tns:MyAttrGpA"/>
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>
+	<!-- complex type attribute pointing to enum -->
+	<xs:complexType name="AttrTypeEnum">
+					  <xs:choice>
+					   <xs:element maxOccurs="1" minOccurs="0" name="argE" type="xs:string"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="argF" type="xs:string"/>
+					</xs:choice>
+					   <xs:attribute name="attrA" type="xs:date" use="required"/>
+					   <xs:attribute name="attrB" type="tns:TestEnum"/>
+					
+					  
+	</xs:complexType>
+	<xs:simpleType name="TestEnum">
+	<xs:restriction base="xs:string">
+	<xs:enumeration value="one"/>
+	<xs:enumeration value="two"/>
+	<xs:enumeration value="three"/>
+	</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- complex type attribute pointing to multi-levels of simple type -->				 
+					
+	<xs:complexType name="MultiAttrSimpleType">
+					  <xs:choice>
+					   <xs:element maxOccurs="1" minOccurs="0" name="argE" type="xs:string"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="argF" type="xs:string"/>
+					  </xs:choice>
+					   <xs:attribute name="attrA" type="xs:date" use="required"/>
+					   <xs:attribute name="attrB" type="tns:TestEnum"/>
+					
+					  
+	</xs:complexType>
+	<xs:simpleType name="Level1">
+	<xs:restriction base="tns:Level2">
+	</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Level2">
+	<xs:restriction base="tns:Level3">
+	</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Level3">
+	<xs:restriction base="xs:string">
+	</xs:restriction>
+	</xs:simpleType>
+	
+	
+	<!-- complex type extension with multi-level-->	
+	 <xs:complexType name="MultilevelExtension">
+					  <xs:simpleContent>
+					   <xs:extension base="tns:ComplexExtLevel1">
+					   
+					    <xs:attribute name="argA" type="xs:date"/>
+					<xs:attribute name="argB" type="xs:boolean" use="required"/>
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>
+					 
+	<xs:complexType name="ComplexExtLevel1">
+					  <xs:simpleContent>
+					   <xs:extension base="tns:ComplexExtLevel2">
+					<xs:attribute name="param" type="xs:string"/>
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>
+					 
+	<xs:complexType name="ComplexExtLevel2">
+					  <xs:simpleContent>
+					   <xs:extension base="xs:float">
+					<xs:attribute name="param1" type="xs:string"/>
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>	
+					 
+	<!-- Complex type simple content using base type with multi level simple types -->
+	
+	
+					 <xs:complexType name="SCMultiLevel">
+					  <xs:simpleContent>
+					   <xs:extension base="xs:string">
+					   </xs:extension>
+					  </xs:simpleContent>
+					 </xs:complexType>
+					 <xs:simpleType name="Lev1">
+					 <xs:restriction base="xs:string">
+					 </xs:restriction>
+					 </xs:simpleType>
+					 <xs:simpleType name="Lev2">
+					 <xs:restriction base="tns:Lev1">
+					 </xs:restriction>
+					 </xs:simpleType>
+					  <xs:simpleType name="Lev3">
+					 <xs:restriction base="tns:Lev2">
+					 </xs:restriction>
+					 </xs:simpleType>					 				 				 
+					 	
+	</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getUserInfoRequest">
+    <wsdl:part name="parameters" element="tns:getUserInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEmptyAbsPolyTypeResponse">
+    <wsdl:part name="parameters" element="tns:getEmptyAbsPolyTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="parameters" element="tns:getVersionResponse1">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSecurityCredentialsResponse">
+    <wsdl:part name="parameters" element="tns:getSecurityCredentialsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRecursionTypeResponse">
+    <wsdl:part name="parameters" element="tns:getRecursionTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSecurityCredentialsRequest">
+    <wsdl:part name="parameters" element="tns:getSecurityCredentials">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRecursionTypeRequest">
+    <wsdl:part name="parameters" element="tns:getRecursionType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionRequest">
+    <wsdl:part name="parameters" element="tns:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEmptyAbsPolyTypeRequest">
+    <wsdl:part name="parameters" element="tns:getEmptyAbsPolyType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserInfo_faultMsg">
+    <wsdl:part name="parameters" element="tns:getUserInfo_fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserInfoResponse">
+    <wsdl:part name="parameters" element="tns:getUserInfoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRegistrationInfoRequest">
+    <wsdl:part name="parameters" element="tns:getRegistrationInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getChoiceTypeResponse">
+    <wsdl:part name="parameters" element="tns:getChoiceTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAnonTypeRequest">
+    <wsdl:part name="parameters" element="tns:getAnonType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getReservedTypeRequest">
+    <wsdl:part name="parameters" element="tns:getReservedType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getReservedTypeResponse">
+    <wsdl:part name="parameters" element="tns:getReservedTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAnonTypeResponse">
+    <wsdl:part name="parameters" element="tns:getAnonTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getChoiceTypeRequest">
+    <wsdl:part name="parameters" element="tns:getChoiceType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRegistrationInfoResponse">
+    <wsdl:part name="parameters" element="tns:getRegistrationInfoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="WSDLTesting8">
+    <wsdl:operation name="getUserInfo">
+      <wsdl:input message="tns:getUserInfoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getUserInfoResponse">
+    </wsdl:output>
+      <wsdl:fault name="fault" message="tns:getUserInfo_faultMsg">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRegistrationInfo">
+      <wsdl:input message="tns:getRegistrationInfoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getRegistrationInfoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmptyAbsPolyType">
+      <wsdl:input message="tns:getEmptyAbsPolyTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getEmptyAbsPolyTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChoiceType">
+      <wsdl:input message="tns:getChoiceTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getChoiceTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReservedType">
+      <wsdl:input message="tns:getReservedTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getReservedTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAnonType">
+      <wsdl:input message="tns:getAnonTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getAnonTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRecursionType">
+      <wsdl:input message="tns:getRecursionTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getRecursionTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSecurityCredentials">
+      <wsdl:input message="tns:getSecurityCredentialsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getSecurityCredentialsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <wsdl:input message="tns:getVersionRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getVersionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSDLTesting8HTTP" type="tns:WSDLTesting8">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="getUserInfo">
+      <http:operation location="/getUserInfo"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+      <wsdl:fault name="fault">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRegistrationInfo">
+      <http:operation location="/getRegistrationInfo"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmptyAbsPolyType">
+      <http:operation location="/getEmptyAbsPolyType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChoiceType">
+      <http:operation location="/getChoiceType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReservedType">
+      <http:operation location="/getReservedType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAnonType">
+      <http:operation location="/getAnonType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRecursionType">
+      <http:operation location="/getRecursionType"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSecurityCredentials">
+      <http:operation location="/getSecurityCredentials"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSDLTesting8SOAP" type="tns:WSDLTesting8">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getUserInfo">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getUserInfo"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="fault">
+        <soap:fault name="fault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRegistrationInfo">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getRegistrationInfo"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmptyAbsPolyType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getEmptyAbsPolyType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChoiceType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getChoiceType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReservedType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getReservedType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAnonType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getAnonType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRecursionType">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getRecursionType"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSecurityCredentials">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getSecurityCredentials"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getVersion"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InterOp">
+    <wsdl:port name="WSDLTesting8HTTP" binding="tns:WSDLTesting8HTTP">
+      <http:address location="http://www.example.org/"/>
+    </wsdl:port>
+    <wsdl:port name="WSDLTesting8SOAP" binding="tns:WSDLTesting8SOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,179 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+	targetNamespace="http://codegen.tools.soaframework.test.ebay.com" name="Calculator">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns="http://codegen.tools.soaframework.test.ebay.com"
+			targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+			attributeFormDefault="unqualified" elementFormDefault="qualified">
+			<xs:simpleType name="testtoken">
+				<xs:restriction base="xs:token">
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="teststring">
+				<xs:restriction base="xs:string">
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="testdecimal">
+				<xs:restriction base="xs:decimal">
+					<xs:fractionDigits value="2" />
+					<xs:minExclusive value="0.00" />
+					<xs:maxExclusive value="100.00" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="testinteger">
+				<xs:restriction base="xs:integer">
+					<xs:minExclusive value="0" />
+					<xs:maxExclusive value="100" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="MySimpleTypeList">
+				<xs:list itemType="xs:double" />
+			</xs:simpleType>
+			<xs:complexType name="TestComplexType">
+				<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" name="par" type="xs:string"/>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param1"
+						type="tns:testtoken" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param2"
+						type="tns:teststring" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param3"
+						type="tns:testdecimal" />
+					
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param4"
+						type="tns:testinteger" />
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param41"
+						type="xs:double" />
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param42"
+						type="xs:float" />
+						
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param43"
+						type="xs:ENTITY" />
+						
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param44"
+						type="xs:language" />
+						
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param45"
+						type="xs:Name" />
+
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param46"
+						type="xs:NCName" />
+						
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param6"
+						type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param7"
+						type="xs:long" />
+						
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param71"
+						type="xs:normalizedString" />
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param72"
+						type="xs:negativeInteger" /> 
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param73"
+						type="xs:nonNegativeInteger" />
+						
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param74"
+						type="xs:nonPositiveInteger" />
+					
+						<!--  <xs:element minOccurs="0" maxOccurs="unbounded" name="param9"
+						type="xs:ID" /> -->
+						<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="param11" type="xs:NMTOKEN" />
+						
+						<!-- not handled in eproto <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param12" type="xs:NMTOKENS" />-->
+					
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param14"
+						type="xs:anyURI" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param15"
+						type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param17"
+						type="xs:byte" />
+					<xs:element minOccurs="0" maxOccurs="1" name="param111"
+						type="xs:string" />
+						<xs:element minOccurs="1" maxOccurs="1" name="param112"
+						type="xs:string" />
+						<xs:element minOccurs="1" maxOccurs="unbounded" name="param113"
+						type="xs:string" />
+						
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="param18"
+						type="xs:base64Binary"/>
+					
+
+					
+					<!--  <xs:element minOccurs="0" maxOccurs="unbounded" name="param5"
+						type="tns:MySimpleTypeList" /> -->
+						
+					 <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param19" type="xs:duration" />
+						 <xs:element minOccurs="0" maxOccurs="unbounded" name="param20"
+						type="xs:dateTime" /> <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param21" type="xs:time" /> <xs:element
+						minOccurs="0" maxOccurs="unbounded" name="param22"
+						type="xs:gYearMonth" /> <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param23" type="xs:gYear" />
+
+
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param24"
+						type="xs:gMonthDay" /> <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param25" type="xs:gDay" /> <xs:element
+						minOccurs="0" maxOccurs="unbounded" name="param26"
+						type="xs:gMonth" />
+				
+						<!--  <xs:element minOccurs="0" maxOccurs="unbounded" name="param27"
+						type="xs:hexBinary" />  -->
+					
+					
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param28"
+						type="xs:QName" /> 
+						  <xs:element minOccurs="0" maxOccurs="unbounded"
+						name="param29" type="xs:unsignedByte" /> <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param30" type="xs:unsignedInt" />
+
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param31"
+						type="xs:unsignedLong" /> <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param32" type="xs:unsignedShort" />
+						 <xs:element minOccurs="0"
+						maxOccurs="unbounded" name="param33" type="xs:short" />
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="param8"
+						type="xs:positiveInteger" />
+					
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="test" type="tns:TestComplexType"></xs:element>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="add">
+		<wsdl:part name="add" element="tns:test" />
+	</wsdl:message>
+	<wsdl:message name="addResponse">
+		<wsdl:part name="addResponse" element="tns:test" />
+	</wsdl:message>
+	<wsdl:portType name="Calculator">
+		<wsdl:operation name="add">
+			<wsdl:input name="add" message="tns:add" />
+			<wsdl:output name="addResponse" message="tns:addResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="add">
+			<soap:operation soapAction="add" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CalculatorService">
+		<wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+			<soap:address location="http://localhost:8080/calculator" />
+			<wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

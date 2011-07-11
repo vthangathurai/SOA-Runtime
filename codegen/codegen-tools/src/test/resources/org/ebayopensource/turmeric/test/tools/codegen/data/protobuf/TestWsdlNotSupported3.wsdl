@@ -1,0 +1,181 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+               
+               			
+               
+               			
+       					
+							<xs:redefine schemaLocation="Myschema1.xsd">
+							  <xs:complexType name="pname">
+							    <xs:complexContent>
+							      <xs:extension base="pname">
+							        <xs:sequence>
+							          <xs:element name="country"/>
+							        </xs:sequence>
+							      </xs:extension>
+							    </xs:complexContent>
+							  </xs:complexType>
+							</xs:redefine>
+							<xs:element name="comment"></xs:element>
+								<xs:element name="AnonymousType"> 
+									    <xs:complexType> 
+									      <xs:sequence minOccurs="1"> 
+									      <xs:choice minOccurs="1">
+									        <xs:element name="test" type="xs:string"/> 
+									        </xs:choice>
+									      </xs:sequence> 
+									    </xs:complexType> 
+									  </xs:element> 
+									
+                    	<xs:element name="AnonymousType2"> 
+									    <xs:complexType> 
+									      <xs:sequence> 
+									      <xs:choice minOccurs="1">
+									        <xs:element name="test" type="xs:string"/> 
+									        </xs:choice>
+									      </xs:sequence> 
+									    </xs:complexType> 
+									  </xs:element> 
+							
+							<xs:element name="author" type="tns:pname"/> 
+							
+							
+							<xs:complexType name="withOptionalSequence">
+							  <xs:annotation>
+							   <xs:documentation>
+							    This complex type defines
+							    the sequence of subsequences: the first
+							    subsequence is optional while the
+							    second one is mandatory.
+							    Note that subelements of both subsequences
+							    are optional.
+							   </xs:documentation>
+							  </xs:annotation>
+							  <xs:sequence>
+							   <xs:sequence minOccurs="0" maxOccurs="3">
+
+							    <xs:element name="t1" type="xs:short" minOccurs="0"/>
+							    <xs:element name="t2" type="xs:short" minOccurs="0"/>
+							   </xs:sequence>
+							   <xs:sequence>
+							    <xs:element name="t3" type="xs:short" minOccurs="0"/>
+							    <xs:element name="t4" type="xs:short" minOccurs="0"/>
+							   </xs:sequence>
+							  </xs:sequence>
+							 </xs:complexType>
+							 <xs:element name="test" type="tns:withOptionalSequence"/>
+							
+								
+							<xs:simpleType name="RequestType" > 
+				                <xs:restriction base="xs:string"> 
+				                        <xs:enumeration value="Set"/> 
+				                        <xs:enumeration value="Get"/> 
+				                </xs:restriction> 
+								</xs:simpleType> 
+       								
+  
+       								
+       								
+									  <xs:complexType name="ShoeType" final="#all" block="#all">
+									    <xs:simpleContent>
+									      <xs:extension base="tns:RequestType">						  
+									      </xs:extension>
+									    </xs:simpleContent>
+									  </xs:complexType>
+									  
+									  <xs:element name="Shoesize" type="tns:ShoeType"></xs:element>
+									  
+								 
+									  <xs:element name="person">
+									  <xs:complexType>
+									    <xs:sequence>
+									      <xs:element name="firstname" type="xs:string"/>
+									      <xs:element name="lastname" type="xs:string"/>
+									      <xs:any></xs:any>
+									    </xs:sequence>
+									    <xs:anyAttribute/>
+									  </xs:complexType>
+									</xs:element>
+									
+								
+									
+									<xs:complexType name="custinfo">
+									  <xs:sequence>
+									     <xs:element name="name" type="xs:string"/>
+									  </xs:sequence>
+									</xs:complexType>
+									
+									<xs:element name="customer" type="custinfo" block="substitution"/>
+									<xs:element name="kunde" substitutionGroup="customer"/>
+
+					
+						<xs:element name="mortgage">
+						    <xs:complexType>
+						        <xs:sequence>
+						            <xs:element name="property" type="xs:string"/>
+						            <xs:element name="date" type="xs:date" minOccurs="0"/>
+						            <xs:element name="loanAmount" type="xs:decimal"/>
+						            <xs:element name="term">
+						                <xs:simpleType>
+						                    <xs:restriction base="xs:integer">
+						                        <xs:maxInclusive value="30"/>
+						                    </xs:restriction>
+						                </xs:simpleType>
+						            </xs:element>
+						        </xs:sequence>
+						        <xs:attribute name="loanNumber" type="xs:integer"/>
+						    </xs:complexType>
+						</xs:element> 
+
+
+
+
+
+       
+           
+        </xs:schema>
+ 
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

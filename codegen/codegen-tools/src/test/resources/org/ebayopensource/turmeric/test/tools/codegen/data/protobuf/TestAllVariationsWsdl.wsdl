@@ -1,0 +1,437 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://codegen.tools.soaframework.test.ebay.com"
+                  targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                  name="Calculator">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://codegen.tools.soaframework.test.ebay.com"
+                    targetNamespace="http://codegen.tools.soaframework.test.ebay.com"
+                    attributeFormDefault="unqualified"
+                    elementFormDefault="qualified">
+                    
+                    
+                    
+                    <xs:element name="comment" type="xs:string"/>
+                    
+                   <!-- <xs:element name="reference">
+                    <xs:complexType>
+                    <xs:sequence>
+                    <xs:element name="god" type="xs:string"></xs:element>
+                    </xs:sequence>
+                    </xs:complexType>
+                    </xs:element> -->
+                    
+             <xs:complexType name="Sample3">
+            <xs:complexContent>
+            <xs:extension base="tns:Sample2">
+
+            
+            </xs:extension>
+            </xs:complexContent>
+            </xs:complexType>       
+                    
+            <xs:complexType name="Sample">
+            <xs:complexContent>
+            <xs:extension base="tns:Sample2">
+            <xs:sequence>
+            <xs:element name="test" type="xs:string"/>
+            <xs:element name="test1" type="tns:Sample1">
+            </xs:element>
+            
+            </xs:sequence>
+
+            </xs:extension>
+            </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="Sample1">
+            <xs:sequence>
+            
+            <xs:element name="test" type="xs:string">
+            </xs:element>
+            </xs:sequence>
+            </xs:complexType>     
+            
+            <xs:complexType name="Sample2">
+            <xs:sequence>
+            
+            <xs:element name="test2" type="xs:string">
+            </xs:element>
+            </xs:sequence>
+            </xs:complexType>   
+                    
+            <xs:complexType name="USAddress" >
+			  <xs:sequence>
+					  <xs:choice>
+							  <xs:sequence>
+									   <xs:element name="param" type="xs:string"></xs:element>
+									   <xs:element name="param1" type="xs:string"></xs:element>
+									   <xs:choice>
+									   		<xs:sequence>
+									   		<xs:element name="param2" type="xs:string"></xs:element>
+									   		<xs:element name="param3" type="xs:string"></xs:element>
+									   		</xs:sequence>
+									   
+									   </xs:choice>
+							   </xs:sequence>
+							   <xs:element name="param5" type="xs:string"></xs:element>
+					 </xs:choice>
+					   
+	
+			    <xs:element name="name"  type="xs:string"/>
+			    <xs:element minOccurs="0" name="street" type="xs:string" default="sada"/>
+			    <xs:element minOccurs="1" name="city"   type="xs:string" fixed="sum"/>
+			    <xs:element minOccurs="2" maxOccurs="3" name="state"  type="xs:string" default="def"/>
+			    <xs:element name="zip"    type="xs:decimal" fixed="23"/>
+			    <xs:element minOccurs="0" maxOccurs="unbounded" ref="comment"></xs:element>
+			    <xs:element maxOccurs="unbounded" name="god" type="xs:string"></xs:element>
+			     <xs:element maxOccurs="3" name="god1" type="xs:string"></xs:element>
+			      <xs:element minOccurs="1" maxOccurs="1" name="god2" type="xs:string"></xs:element>
+			       <xs:element minOccurs="0" maxOccurs="0" name="god3" type="xs:string"></xs:element>
+			        <xs:element name="god4" type="xs:string"></xs:element>
+			         <xs:element name="god5" type="xs:string"></xs:element>"
+			  </xs:sequence>
+			  <xs:attribute name="country" type="xs:NMTOKEN" use="prohibited"/>
+			  <xs:attribute name="country1" type="xs:NMTOKEN" use="optional"/>
+			  <xs:attribute name="country2" type="xs:NMTOKEN" use="required"/>
+			  <xs:attribute name="country3" type="xs:NMTOKEN"/>
+			</xs:complexType>
+			
+			
+			
+			<xs:element name="internationalPrice">
+			  <xs:complexType>
+			    <xs:simpleContent>
+			      <xs:extension base="xs:decimal">
+			        <xs:attribute name="currency" type="xs:string"/>
+			      </xs:extension>
+			    </xs:simpleContent>
+			  </xs:complexType>
+			</xs:element>
+			
+			<!-- mixed="true"-->
+			
+			<xs:element name="letterBody">
+			  <xs:complexType>
+			    <xs:sequence>
+			     
+			      <xs:element name="quantity"    type="xs:positiveInteger"/>
+			      <xs:element name="productName" type="xs:string"/>
+			      <xs:element name="shipDate"    type="xs:date" minOccurs="0"/>
+			      <!-- etc. -->
+			    </xs:sequence>
+			  </xs:complexType>
+			</xs:element>
+			
+			
+			
+			
+			<xs:element name="IntPrice2">
+			  <xs:complexType>
+			    <xs:attribute name="currency" type="xs:string"/>
+			    <xs:attribute name="value"    type="xs:decimal"/>
+			  </xs:complexType>
+			</xs:element>
+			
+			
+			<xs:element name="InternationalPrice1">
+		  <xs:annotation>
+		    <xs:documentation xml:lang="en">
+		         element declared with anonymous type
+		    </xs:documentation>
+		  </xs:annotation>
+		  <xs:complexType>
+		    <xs:annotation>
+		      <xs:documentation xml:lang="en">
+		           empty anonymous type with 2 attributes
+		      </xs:documentation>
+		    </xs:annotation>
+		    <xs:complexContent>
+		      <xs:extension base="tns:Sample3">
+		        <xs:sequence>
+		        <xs:element name="tst" type="xs:string"></xs:element>
+		        </xs:sequence>
+		         <xs:attribute name="currency" type="xs:string"/>
+		        <xs:attribute name="value"    type="xs:decimal"/>
+		      </xs:extension>
+		      
+		    </xs:complexContent>
+		    
+		  </xs:complexType>
+		</xs:element>
+		  
+		<xs:complexType name="PurchaseOrderType4">
+			  <xs:sequence>
+			    <xs:choice>
+			      <xs:group  ref="shipAndBill"/>
+			      <xs:element name="singleUSAddress" type="tns:USAddress"/>
+			    </xs:choice>
+			    <xs:element ref="comment" /> <!-- minOccurs="0" -->
+			    <xs:element name="items"  type="xs:string"/>
+			  </xs:sequence>
+			  <xs:attribute name="orderDate" type="xs:date"/>
+			</xs:complexType>
+			
+			<xs:group name="shipAndBill">
+			  <xs:sequence>
+			    <xs:element name="shipTo" type="tns:USAddress"/>
+			    <xs:element name="billTo" type="tns:USAddress"/>
+			  </xs:sequence>
+			</xs:group>  
+			
+			<xs:complexType name="PurchaseOrderType2">
+			  <xs:all>
+			    <xs:element name="shipTo" type="xs:string"/>
+			    <xs:element name="billTo" type="xs:string"/>
+			   <xs:element ref="comment" /><!-- minOccurs="0" -->
+			    <xs:element name="items"  type="xs:string"/>
+			  </xs:all>
+			  <xs:attribute name="orderDate" type="xs:date"/>
+			</xs:complexType>
+           
+           
+           <xs:complexType name="PurchaseOrderType3">
+			  <xs:sequence>
+			    <xs:choice>
+			      <xs:element name="shipTo" type="tns:USAddress"/>
+			      <xs:element name="billTo" type="tns:USAddress"/>
+			      <xs:element name="items"  type="xs:string"/>
+			    </xs:choice>
+			    <xs:sequence>
+			      <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+			    </xs:sequence>
+			  </xs:sequence>
+			  <xs:attribute name="orderDate" type="xs:date"/>
+			</xs:complexType>
+			
+			<!-- <xs:element name="item" >
+				  <xs:complexType>
+				    <xs:sequence>
+				      <xs:element   name="productName" type="xs:string"/>
+				      <xs:element   name="quantity">
+				        <xs:simpleType>
+				          <xs:restriction base="xs:positiveInteger">
+				            <xs:maxExclusive value="100"/>
+				          </xs:restriction>
+				        </xs:simpleType>
+				      </xs:element>
+				      <xs:element name="USPrice"  type="xs:decimal"/>
+				      <xs:element ref="comment"   minOccurs="0"/>
+				      <xs:element name="shipDate" type="xs:date" minOccurs="0"/>
+				    </xs:sequence>
+				    <xs:attribute name="partNum"  type="xs:integer" use="required"/>
+				    add weightKg and shipBy attributes -->
+				   <!--  <xs:attribute name="weightKg" type="xs:decimal"/>
+				    <xs:attribute name="shipBy">
+				      <xs:simpleType>
+				        <xs:restriction base="xs:string">
+				          <xs:enumeration value="air"/>
+				          <xs:enumeration value="land"/>
+				          <xs:enumeration value="any"/>
+				        </xs:restriction>
+				      </xs:simpleType>
+				    </xs:attribute>
+				  </xs:complexType>
+				</xs:element> -->
+				
+				
+				<xs:element name="item1">
+				  <xs:complexType>
+				    <xs:sequence>
+				      <xs:element name="productName" type="xs:string"/>
+				      <xs:element name="quantity" type="xs:integer"></xs:element>
+				      
+				      <xs:element name="usPrice"  type="xs:decimal"/>
+				      <xs:element ref="comment"   /> <!-- minOccurs="0" -->
+				      <xs:element name="shipDate" type="xs:date" minOccurs="0"/>
+				    </xs:sequence>
+				
+				    <!-- attributeGroup replaces individual declarations -->
+				    <xs:attributeGroup ref="ItemDelivery"/>
+				  </xs:complexType>
+				</xs:element>
+				
+				<xs:attributeGroup name="ItemDelivery">
+				  <xs:attribute name="partNum"  type="xs:integer" use="required"/>
+				  <xs:attribute name="weightKg" type="xs:decimal"/>
+				  <xs:attribute name="shipBy" type="xs:string"/>
+				    
+				
+				</xs:attributeGroup>
+							
+			
+			<!-- <xs:complexType name="RestrictedPurchaseOrderType">
+			  <xs:complexContent>
+			    <xs:restriction base="tns:PurchaseOrderType">
+			      <xs:sequence>
+			        <xs:element name="shipTo" type="ipo:Address"/>
+			        <xs:element name="billTo" type="ipo:Address"/>
+			        <xs:element ref="comment" minOccurs="1"/>
+			        <xs:element name="items"  type="ipo:Items"/>
+			      </xs:sequence>
+			    </xs:restriction>
+			  </xs:complexContent>
+			</xs:complexType> -->
+			
+			
+			
+  <xs:element name="test" type="tns:USAddress"></xs:element>
+  <xs:element name="test1" type="tns:Sample1"></xs:element>   
+  <xs:element name="test2" type="tns:Sample2"></xs:element>   
+  <xs:element name="test3" type="tns:Sample3"></xs:element>       
+  <xs:element name="test7" type="tns:PurchaseOrderType4"></xs:element> 
+   <xs:element name="test8" type="tns:PurchaseOrderType2"></xs:element>   
+    <xs:element name="test9" type="tns:PurchaseOrderType3"></xs:element>
+
+   
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="add">
+        <wsdl:part name="add" element="tns:test"/>
+    </wsdl:message>
+    <wsdl:message name="addResponse">
+        <wsdl:part name="addResponse" element="tns:test1"/>
+    </wsdl:message>
+    <wsdl:message name="subRequest">
+    	<wsdl:part name="parameters" element="tns:test7"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="subResponse">
+    	<wsdl:part name="parameters" element="tns:test8"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="mulRequest">
+    	<wsdl:part name="parameters" element="tns:test2"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="mulResponse">
+    	<wsdl:part name="parameters" element="tns:test3"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="divRequest">
+    	<wsdl:part name="parameters" element="tns:test9"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="divResponse">
+    	<wsdl:part name="parameters" element="tns:internationalPrice"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="sub2Request">
+    	<wsdl:part name="parameters" element="tns:InternationalPrice1"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="sub2Response">
+    	<wsdl:part name="parameters" element="tns:letterBody"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="mul2Request">
+    	<wsdl:part name="parameters" element="tns:letterBody"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="mul2Response">
+    	<wsdl:part name="parameters" element="tns:IntPrice2"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="add2Request">
+    	<wsdl:part name="parameters" element="tns:item1"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="add2Response">
+    	<wsdl:part name="parameters" element="tns:test"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="Calculator">
+        <wsdl:operation name="add">
+            <wsdl:input name="add" message="tns:add"/>
+            <wsdl:output name="addResponse" message="tns:addResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="sub">
+        	<wsdl:input message="tns:subRequest"></wsdl:input>
+        	<wsdl:output message="tns:subResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="mul">
+        	<wsdl:input message="tns:mulRequest"></wsdl:input>
+        	<wsdl:output message="tns:mulResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="div">
+        	<wsdl:input message="tns:divRequest"></wsdl:input>
+        	<wsdl:output message="tns:divResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sub2">
+        	<wsdl:input message="tns:sub2Request"></wsdl:input>
+        	<wsdl:output message="tns:sub2Response"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="mul2">
+        	<wsdl:input message="tns:mul2Request"></wsdl:input>
+        	<wsdl:output message="tns:mul2Response"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="add2">
+        	<wsdl:input message="tns:add2Request"></wsdl:input>
+        	<wsdl:output message="tns:add2Response"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CalculatorSoapBinding" type="tns:Calculator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="add">
+            <soap:operation soapAction="add" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sub">
+            <soap:operation soapAction="sub" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="mul">
+            <soap:operation soapAction="mul" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="div">
+            <soap:operation soapAction="div" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <wsdl:operation name="add2">
+            <soap:operation soapAction="add2" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sub2">
+            <soap:operation soapAction="sub2" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="mul2">
+            <soap:operation soapAction="mul2" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CalculatorService">
+        <wsdl:port name="Calculator" binding="tns:CalculatorSoapBinding">
+            <soap:address location="http://localhost:8080/calculator"/>
+            <wswa:UsingAddressing xmlns:wswa="http://www.w3.org/2005/08/addressing/wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
