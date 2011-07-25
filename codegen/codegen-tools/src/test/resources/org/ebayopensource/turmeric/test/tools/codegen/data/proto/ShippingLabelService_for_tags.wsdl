@@ -1,0 +1,1893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/shipping/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ShippingLabelService"
+	targetNamespace="http://www.ebay.com/marketplace/shipping/v1/services">
+	<wsdl:types>
+		<xs:schema
+			xmlns:tns1="http://www.ebay.com/marketplace/shipping/v1/services"
+			xmlns:tns2="http://www.ebay.com/marketplace/services"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/shipping/v1/services">
+			<xs:element name="getShippingRateRequest"
+				type="tns1:GetShippingRateRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Input container where user can specify the
+						Shipping Carrier and the package details (From
+						Address, To Address, Package Details, Shipping
+						service, additional options etc.)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getShippingRateResponse"
+				type="tns1:GetShippingRateResponse" />
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ContactAddress">
+				<xs:annotation>
+					<xs:documentation>
+						Postal mail address
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="addressLine1" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="addressLine2" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="addressLine3" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="suiteOrApt" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="city"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="stateOrProvince" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="postalCode" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="additionalPostalCode" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="country" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="urbancode" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="LinearMeasure">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="unit"
+							type="tns:LinearMeasurementUnit" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="LinearMeasurementUnit">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="cm"></xs:enumeration>
+					<xs:enumeration value="mm"></xs:enumeration>
+					<xs:enumeration value="inches"></xs:enumeration>
+					<xs:enumeration value="ft"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Unit">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="WeightMeasure">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="unit"
+							type="tns:WeightMeasurementUnit" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="WeightMeasurementUnit">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="kg"></xs:enumeration>
+					<xs:enumeration value="gm"></xs:enumeration>
+					<xs:enumeration value="lbs"></xs:enumeration>
+					<xs:enumeration value="oz"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ContactInfo">
+				<xs:annotation>
+					<xs:documentation>
+						Detailed Contact information - Contact name,
+						address and phone number
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="firstName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="middleName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lastName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="contactAddress" type="tns:ContactAddress">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="companyName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="phone"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="extension" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingPackageDetails">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="weightMajor"
+						type="tns:WeightMeasure">
+					</xs:element>
+					<xs:element minOccurs="1" name="weightMinor"
+						type="tns:WeightMeasure">
+					</xs:element>
+					<xs:element minOccurs="1" name="packageType"
+						type="xs:token">
+					</xs:element>
+					<xs:element minOccurs="0" name="packageLength"
+						type="tns:LinearMeasure">
+					</xs:element>
+					<xs:element minOccurs="0" name="packageWidth"
+						type="tns:LinearMeasure">
+					</xs:element>
+					<xs:element minOccurs="0" name="packageDepth"
+						type="tns:LinearMeasure">
+					</xs:element>
+					<xs:element minOccurs="0" name="declaredValue"
+						type="tns:Amount">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"></xs:enumeration>
+					<xs:enumeration value="Application"></xs:enumeration>
+					<xs:enumeration value="Request"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"></xs:element>
+					<xs:element name="domain" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+					</xs:element>
+					<xs:element name="message" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"></xs:enumeration>
+					<xs:enumeration value="Warning"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string"
+							use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+
+
+			<xs:complexType name="LabelCost">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="totalCostWithDiscount" type="tns:Amount">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="toalCostWithoutDiscount" type="tns:Amount">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="costBreakUp" type="tns:CostBreakUp">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ServiceOption">
+				<xs:annotation>
+					<xs:documentation>
+						To hold Service Names and Values
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="value"
+						type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AdditionalOptions">
+				<xs:annotation>
+					<xs:documentation>
+						Tag to hold information regarding
+						ClientSpecificService,CarrierSpecificService and
+						ExtraFeature
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="serviceOption" type="tns:ServiceOption">
+						<xs:annotation>
+							<xs:documentation>
+								Any additional options or services the
+								user wants. The valid service names will
+								be published as a token documentation.
+								The valid values that are identified so
+								far are - INSURANCE,
+								SIGNATURE_CONFIRMATION,
+								DELIVERY_CONFIRMATION, STEALTH_POSTAGE
+								etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CostBreakUp">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="value"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="cost"
+						type="tns:Amount">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"
+				type="tns1:GetVersionRequest">
+
+			</xs:element>
+			<xs:element name="getVersionResponse"
+				type="tns1:GetVersionResponse">
+
+			</xs:element>
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns1:BaseServiceRequest"></xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns1:BaseServiceResponse"></xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="AddressType">
+				<xs:annotation>
+					<xs:documentation>
+						RESIDENTIAL,COMMERCIAL,UNKNOWN - Default
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token"></xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="getShippingRatesRequest"
+				type="tns1:GetShippingRatesRequest">
+
+			</xs:element>
+			<xs:element name="getShippingRatesResponse"
+				type="tns1:GetShippingRatesResponse">
+
+			</xs:element>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<xs:complexType name="ShippingLabelsResponseData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="errorMessage" type="tns:ErrorMessage">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelUrl" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelCost" type="tns:LabelCost">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="correlationId" type="xs:string">
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="trackingNumber" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="shipmentId" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+			<xs:complexType name="ShippingLabelsRequestData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelCost" type="tns:LabelCost">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingDate" type="xs:dateTime">
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="correlationId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingPackageDetails" type="tns:ShippingPackageDetails">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipFrom" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipTo" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="additionalOptions" type="tns:AdditionalOptions">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingService" type="tns:ShippingService">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="printerType" type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="GetShippingRateRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingRateRequestData"
+								type="tns:ShippingRateRequestData">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+
+						</xs:sequence>
+
+
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ShippingOption">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="optionValue" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="optionName" type="xs:token">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetShippingRateResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingRateResponseData"
+								type="tns:ShippingRateResponseData">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetShippingRatesRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+
+
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingRatesReferenceId" type="xs:long">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="createShippingRatesRequest"
+				type="tns1:CreateShippingRatesRequest">
+
+			</xs:element>
+			<xs:element name="createShippingRatesResponse"
+				type="tns1:CreateShippingRatesResponse">
+
+			</xs:element>
+			<xs:complexType name="CreateShippingRatesRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="shippingRateRequestData"
+								type="tns:ShippingRateRequestData">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="correlationId" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="createShippingLabelsRequest"
+				type="tns1:CreateShippingLabelsRequest">
+
+			</xs:element>
+			<xs:element name="createShippingLabelsResponse"
+				type="tns1:CreateShippingLabelsResponse">
+
+			</xs:element>
+
+
+			<xs:element name="getShippingLabelsRequest"
+				type="tns1:GetShippingLabelsRequest">
+
+			</xs:element>
+			<xs:element name="getShippingLabelsResponse"
+				type="tns1:GetShippingLabelsResponse">
+
+			</xs:element>
+			<xs:complexType name="GetShippingLabelsRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingLabelsReferenceId" type="xs:long">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingLabelResponseData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelUrl" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelCost" type="tns:LabelCost">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="correlationId" type="xs:string">
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="trackingNumber" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipmentId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingService" type="tns:ShippingService">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="VoidShippingLabelResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="trackingNumber" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="voidStatus" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shipmentId" type="xs:long">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="RecreateShippingLabelRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="trackingNumber" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="shipmentId" type="xs:long">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RecreateShippingLabelResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="trackingNumber" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingLabelURL" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shipmentId" type="xs:long">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="voidShippingLabelRequest"
+				type="tns1:VoidShippingLabelRequest">
+
+			</xs:element>
+			<xs:element name="voidShippingLabelResponse"
+				type="tns1:VoidShippingLabelResponse">
+
+			</xs:element>
+			<xs:element name="getShippingLabelVoidStatusRequest"
+				type="tns1:GetShippingLabelVoidStatusRequest">
+
+			</xs:element>
+			<xs:element name="getShippingLabelVoidStatusResponse"
+				type="tns1:GetShippingLabelVoidStatusResponse">
+
+			</xs:element>
+			<xs:element name="recreateShippingLabelRequest"
+				type="tns1:RecreateShippingLabelRequest">
+
+			</xs:element>
+			<xs:element name="recreateShippingLabelResponse"
+				type="tns1:RecreateShippingLabelResponse">
+
+			</xs:element>
+
+			<xs:complexType name="GetShippingLabelVoidStatusResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="trackingNumber" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="voidStatus" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shipmentId" type="xs:long">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CreateShippingLabelsResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="correlationId" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingLabelsReferenceId" type="xs:long">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingRateRequestData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingService" type="tns:ShippingService">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipFrom" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipTo" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="correlationId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="serviceOptions" type="tns:ShippingOption">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingPackageDetails" type="tns:ShippingPackageDetails">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingRateResponseData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelCost" type="tns:LabelCost">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="correlationId" type="xs:string">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipFrom" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipTo" type="tns:ContactInfo">
+					</xs:element>
+
+
+
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingService" type="tns:ShippingService">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="errorMessage" type="tns:ErrorMessage">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingService">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="shippingServiceName"
+						type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CreateShippingLabelsRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="correlationId" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="shippingLabelRequestData"
+								type="tns:ShippingLabelRequestData">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="CreateShippingRatesResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingRatesReferenceId" type="xs:long">
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="correlationId" type="xs:string">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="USPSCustomsFormData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="licenseNumber" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippedItemDetail" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippedItemType" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="comments" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="invoiceNumber" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="certificateNumber" type="xs:string">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetShippingLabelVoidStatusRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="shipmentId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="trackingNumber" type="xs:string">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CustomsFormData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="uspsCustomsFormData" type="tns:USPSCustomsFormData">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingLabelRequestData">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelCost" type="tns:LabelCost">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingDate" type="xs:dateTime">
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="correlationId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingPackageDetails" type="tns:ShippingPackageDetails">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipFrom" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipTo" type="tns:ContactInfo">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="serviceOptions" type="tns:ShippingOption">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingService" type="tns:ShippingService">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="printerType" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="labelOption" type="tns:ShippingOption">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="customsForm" type="tns:CustomsFormData">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="customMessage" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetShippingRatesResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingCarrier" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="totalCost" type="tns:Amount">
+							</xs:element>
+
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="shippingRatesReferenceId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="status" type="xs:token">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="shippingRateResponseData"
+								type="tns:ShippingRateResponseData">
+							</xs:element>
+
+						</xs:sequence>
+
+
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetShippingLabelsResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingLabelsReferenceId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingCarrier" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="labelCost" type="tns:Amount">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="shippingLabelResponseData"
+						type="tns:ShippingLabelResponseData">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="status" type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="VoidShippingLabelRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="shipmentId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="trackingNumber" type="xs:string">
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="responseCode" type="xs:token">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getShippingRateRequest">
+		<wsdl:part element="tns:getShippingRateRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getShippingRateResponse">
+		<wsdl:part element="tns:getShippingRateResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="parameters" element="tns:getVersionRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="parameters" element="tns:getVersionResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingRatesRequest">
+		<wsdl:part name="parameters"
+			element="tns:getShippingRatesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingRatesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getShippingRatesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createShippingRatesRequestRequest">
+		<wsdl:part name="parameters"
+			element="tns:createShippingRatesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createShippingRatesRequestResponse">
+		<wsdl:part name="parameters"
+			element="tns:createShippingRatesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createShippingLabelsRequestRequest">
+		<wsdl:part name="parameters"
+			element="tns:createShippingLabelsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createShippingLabelsRequestResponse">
+		<wsdl:part name="parameters"
+			element="tns:createShippingLabelsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingLabelsRequest">
+		<wsdl:part name="parameters"
+			element="tns:getShippingLabelsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingLabelsResponse">
+		<wsdl:part name="parameters"
+			element="tns:getShippingLabelsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="voidShippingLabelRequest">
+		<wsdl:part name="parameters"
+			element="tns:voidShippingLabelRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="voidShippingLabelResponse">
+		<wsdl:part name="parameters"
+			element="tns:voidShippingLabelResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingLabelVoidStatusRequest">
+		<wsdl:part name="parameters"
+			element="tns:getShippingLabelVoidStatusRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingLabelVoidStatusResponse">
+		<wsdl:part name="parameters"
+			element="tns:getShippingLabelVoidStatusResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="recreateShippingLabelRequest">
+		<wsdl:part name="parameters"
+			element="tns:recreateShippingLabelRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="recreateShippingLabelResponse">
+		<wsdl:part name="parameters"
+			element="tns:recreateShippingLabelResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ShippingLabelServicePort">
+		<wsdl:documentation></wsdl:documentation>
+		<wsdl:operation name="getShippingRate">
+			<wsdl:documentation>
+				Calculates Shipping Cost for the given Shipping Package
+				and Addresses.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getShippingRateRequest" />
+			<wsdl:output message="tns:getShippingRateResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Returns the version.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest"></wsdl:input>
+			<wsdl:output message="tns:getVersionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingRates">
+			<wsdl:documentation>
+				Provides the status of the rating progress for the given
+				Shipping Rates Reference ID. If the rating process is
+				complete, then returns the shipping rates.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getShippingRatesRequest"></wsdl:input>
+			<wsdl:output message="tns:getShippingRatesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createShippingRatesRequest">
+			<wsdl:documentation>
+				This operation is used to set the input to create rate
+				shipping packages. Users send the required information
+				to rate one or more shipping packages in this operation.
+				User provided information is captured and a reference ID
+				is returned. Then User should use getShippingRates
+				request with this reference ID to fetch the shipping
+				rates.
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:createShippingRatesRequestRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:createShippingRatesRequestResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createShippingLabelsRequest">
+			<wsdl:documentation>
+				This operation is used to set the input to create
+				shipping labels. Users send the required information to
+				print one or more shipping labels in this operation.
+				User provided information is captured and a reference ID
+				is returned. Then User should use getShippingLabels
+				request with this reference ID to fetch the shipping
+				labels.
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:createShippingLabelsRequestRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:createShippingLabelsRequestResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingLabels">
+			<wsdl:documentation>
+				Provides the status of the label generation progress for
+				the given Shipping Label Reference ID. If the label
+				generation process is complete, then returns the
+				shipping Label URLs.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getShippingLabelsRequest"></wsdl:input>
+			<wsdl:output message="tns:getShippingLabelsResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="voidShippingLabel">
+			<wsdl:documentation>
+				This operation can be used to cancel the shipping label
+				that was generated.
+			</wsdl:documentation>
+			<wsdl:input message="tns:voidShippingLabelRequest"></wsdl:input>
+			<wsdl:output message="tns:voidShippingLabelResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingLabelVoidStatus">
+			<wsdl:documentation>
+				User should use this operation after voidShippingLabel
+				operation for a given shipment or tracking number. This
+				operation provides the current status of the shipping
+				label void request.
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:getShippingLabelVoidStatusRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getShippingLabelVoidStatusResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="recreateShippingLabel">
+			<wsdl:documentation>
+				If the URL to print the label doens't work, this
+				operation can be used to re-generate the URL from where
+				the label can be retrieved.
+			</wsdl:documentation>
+			<wsdl:input message="tns:recreateShippingLabelRequest"></wsdl:input>
+			<wsdl:output message="tns:recreateShippingLabelResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ShippingLabelServiceHttpBinding"
+		type="tns:ShippingLabelServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getShippingRate">
+			<http:operation location="/getRates" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createShippingRatesRequest">
+			<http:operation location="/createShippingRatesRequest" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingRates">
+			<http:operation location="/getShippingRates" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createShippingLabelsRequest">
+			<http:operation location="/createShippingLabelsRequest" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingLabels">
+			<http:operation location="/getShippingLabels" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="voidShippingLabel">
+			<http:operation location="/voidShippingLabel" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingLabelVoidStatus">
+			<http:operation location="/getShippingLabelVoidStatus" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="recreateShippingLabel">
+			<http:operation location="/recreateShippingLabel" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ShippingLabelServiceSOAPBinding"
+		type="tns:ShippingLabelServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getShippingRate">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/getRates" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createShippingRatesRequest">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/createShippingRatesRequest" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingRates">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/getShippingRates" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createShippingLabelsRequest">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/createShippingLabelsRequest" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingLabels">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/getShippingLabels" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="voidShippingLabel">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/voidShippingLabel" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShippingLabelVoidStatus">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/getShippingLabelVoidStatus" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="recreateShippingLabel">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/recreateShippingLabel" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/labels/v1/services/getVersion"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ShippingLabelService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			This is a suite of Shipping Label operations and provides
+			API for the users to enable Rating Shipping Packages, Label
+			Printing, Label Management.
+		</wsdl:documentation>
+		<wsdl:port binding="tns:ShippingLabelServiceHttpBinding"
+			name="ShippingLabelServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/shipping/ShippingLabelService/v1" />
+		</wsdl:port>
+		<wsdl:port binding="tns:ShippingLabelServiceSOAPBinding"
+			name="ShippingLabelServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/shipping/ShippingLabelService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

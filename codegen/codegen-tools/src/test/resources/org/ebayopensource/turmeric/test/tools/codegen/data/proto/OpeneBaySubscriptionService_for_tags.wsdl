@@ -1,0 +1,3449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by eBay, Inc. (eBay, Inc.) -->
+<wsdl:definitions name="OpeneBaySubscriptionService" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ebay.com/marketplace/openebay/v1/services" targetNamespace="http://www.ebay.com/marketplace/openebay/v1/services">
+	<wsdl:types>
+		<xs:schema targetNamespace="http://www.ebay.com/marketplace/openebay/v1/services" attributeFormDefault="unqualified" elementFormDefault="qualified">
+			<xs:element name="addUsageRequest"  type="tns:AddUsageRequest"/>
+			<xs:element name="addUsageResponse"  type="tns:AddUsageResponse"/>
+			<xs:element name="getBillingStatementsRequest"  type="tns:GetBillingStatementsRequest"/>
+			<xs:element name="getBillingStatementsResponse"  type="tns:GetBillingStatementsResponse"/>
+			<xs:element name="getBillingRecordsRequest"  type="tns:GetBillingRecordsRequest"/>
+			<xs:element name="getBillingRecordsResponse"  type="tns:GetBillingRecordsResponse"/>
+			<xs:element name="setBillingStartDateRequest"  type="tns:SetBillingStartDateRequest"/>
+			<xs:element name="setBillingStartDateResponse"  type="tns:SetBillingStartDateResponse"/>
+			<xs:element name="setSubscriptionStateRequest"  type="tns:SetSubscriptionStateRequest"/>
+			<xs:element name="setSubscriptionStateResponse"  type="tns:SetSubscriptionStateResponse"/>
+			<xs:element name="getSubscriptionPlansRequest"  type="tns:GetSubscriptionPlansRequest"/>
+			<xs:element name="getSubscriptionPlansResponse"  type="tns:GetSubscriptionPlansResponse"/>
+			<xs:element name="getSubscribersRequest"  type="tns:GetSubscribersRequest"/>
+			<xs:element name="getSubscribersResponse"  type="tns:GetSubscribersResponse"/>
+			<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Requests the version of the service.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Requests the version of the service.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Returns the version of the service.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Returns the version of the service.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="SubscriptionChargeType">
+				<xs:annotation>
+					<xs:documentation>
+				Container for available types of charges that your application's subscribers can incur.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="FreeTrial">
+						<xs:annotation>
+							<xs:documentation>
+	 					The subscription is on a free trial.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NRC">
+						<xs:annotation>
+							<xs:documentation>
+	 					Non-recurring charge (one-time subscription fee).
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NRCSetup">
+						<xs:annotation>
+							<xs:documentation>
+	 					Non-recurring setup charge.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Recurring">
+						<xs:annotation>
+							<xs:documentation>
+	 					Recurring charge for a plan when the plan charges are not to be pro-rated at the
+						end of subscription. Not applicable for usage. For this kind of charge
+						originating from the addUsage call, a manual credit is needed for a desired adjustment.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="RecurringProRateEnd">
+						<xs:annotation>
+							<xs:documentation>
+	 					Recurring charge for a plan when the plan charges are to be pro-rated at the
+						end of subscription. Not applicable for usage.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Usage">
+						<xs:annotation>
+							<xs:documentation>
+	 					Indicates a charge for which the subscriber will pay usage charges.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Free">
+						<xs:annotation>
+							<xs:documentation>
+	 					A free plan that will not have usage or other charges.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NonPlanUsage">
+						<xs:annotation>
+							<xs:documentation>
+	 					Billable charge that is not included in the plan and is not subject to
+						eBay service fee. For example, shipping charges.
+	 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="BillingRecordType">
+				<xs:annotation>
+					<xs:documentation>
+						Container for details about the type of billing record.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="SubscriptionCharge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a recurring subscription charge.
+								Pre-defined in the billing plan (not ever applied through the addUsage call).
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="OneTimeCharge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a one-time subscription charge
+								or a setup fee.
+								Equivalent to NRC (non-recurring charge).
+								Pre-defined in the billing plan (not ever applied through the addUsage call).
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="UsageCharge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates just that the charge
+								in the billing record was applied by the addUsage call.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Statement">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a statement.
+								Pre-defined in the billing plan (not ever applied through the addUsage call).
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CreditSubscriptionCharge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a credit for subscription charge.								
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CreditOneTimeCharge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a credit for one time charge.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CreditUsageCharge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a credit for usage charge.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CreditStatement">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a credit for statement.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CreditReversal">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a credit reversal.								
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PaymentReversal">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a payment reversal.	
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PaymentRefund">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a payment refund.	
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Payment">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents all transactions related to payment like reversal and refund and not just payment.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Discount">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents a discount.	
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Credit">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents all types of credit such as CreditSubscriptionCharge, CreditOneTimeCharge, CreditUsageCharge, CreditStatement, CreditReversal.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Charge">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the billing record represents all types of charges such as SubscriptionCharge, OneTimeCharge, UsageCharge.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="All">
+						<xs:annotation>
+							<xs:documentation>							
+								Indicates that the biling record represents all transactions in the invoice.				
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ImageFormat">
+				<xs:annotation>
+					<xs:documentation>
+						Format of the image
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="text/html">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the format of the image is text/html.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>					
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ImageCompressionType">
+				<xs:annotation>
+					<xs:documentation>
+						Compression type of the image
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="none">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the image is uncompressed.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>	
+					<xs:enumeration value="gzip">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the image is compressed.
+			 				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>					
+				</xs:restriction>
+			</xs:simpleType>				
+			<xs:complexType name="StatementImage">
+				<xs:annotation>
+					<xs:documentation>
+						Data and Metadata of Statement Image. 
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getBillingStatements</CallName>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="imageData" type="xs:base64Binary">
+						<xs:annotation>
+							<xs:documentation>
+								Image Data
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>					
+				    <xs:element minOccurs="0" name="imageFormat" type="tns:ImageFormat">
+						<xs:annotation>
+							<xs:documentation>
+								Format of the image.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+				    </xs:element>
+				    <xs:element minOccurs="0" name="imageCompressionType" type="tns:ImageCompressionType">
+						<xs:annotation>
+							<xs:documentation>
+								Compression type of the image
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+				    </xs:element>				    
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BillingStatement">
+				<xs:annotation>
+					<xs:documentation>
+			Container for details about a billing statement.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="statementId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+					Unique identifier for a billing statement, created at statement-time.
+				</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>256</MaxLength>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="statementTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+					Time a statement was generated. Subscribers see the date only.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="closedTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+					Time at which full payment was made.
+					Note that a payment reversal can reopen a statement.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="statementTotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+					Previous statement balance, plus new charges (RC, NRC, Usage, Prebill Usage
+					Adjustments, Discounts, Unit Credits and Taxes) and payments.
+					This value doesn't change after statement creation.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="adjustmentTotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+					Net adjustments (credits) applied to this statement.
+					Varies, depending on credits applied.
+					These are post-bill adjustments only.
+					Changes such as payments or adjustments are made against statements.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="paymentTotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+					Total payments already applied to the statement.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="newChargeTotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+					Total new charges (combination of postitive and negative charges). The newChargeTotal
+					minus the adjustmentTotal lets you know the available balance to credit for the
+					statement. This value doesn't change after statement creation.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="newCreditTotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+					Total new negative charges for a statement. Includes pre-billed adjustments. Not
+					changed after statement creation.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="balanceDue" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+					Sum of the new charges, plus adjustments, plus payments.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="statementImage" type="tns:StatementImage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Billing Statement Image
+				            </xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="statementImageMessage" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Message for Billing Statement Image
+				            </xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingStatements</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Usage">
+				<xs:annotation>
+					<xs:documentation>
+			Container for details about a usage charged to a subscriber.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="subscriptionId" type="xs:long" minOccurs="1" >
+						<xs:annotation>
+							<xs:documentation>
+							For a particular application, the subscriptionId
+							uniquely identifies a user's subscription and the plan ID.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userName" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+							Reserved for future use.
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+							The transaction date assigned to the transaction by the application.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="externalChargeId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+							The transaction reference number assigned by the third party developer.
+						</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>10</MaxLength>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="memo" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+							Memo that will be visible on the subscriber statement.
+						</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>60</MaxLength>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+							Amount that eBay will display, as a charge, to the subscriber, on behalf of your
+							application. The charge amount must have two or fewer digits after the decimal
+							point and 12 or fewer digits before the decimal point.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeType" type="tns:SubscriptionChargeType">
+						<xs:annotation>
+							<xs:documentation>
+							Identifier of the charge.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllValuesExcept>Free, FreeTrial, NRCSetup, RecurringProRateEnd</AllValuesExcept>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="immediatePayment" type="xs:boolean" default="false" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+							Set to true when you require immediate payment for the charge type.
+							Not available if the subscription is cancelled.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>No</RequiredInput>
+									<Default>false</Default>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AddUsageRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Adds charges for a subscriber, including some nonusage types of charges,
+			e.g. a monthly subscription fee.
+			Also can be used after a subscription is cancelled.
+			Available whether or not the subscriber is on a free trial.
+			See the usage.chargeType input field for the ways the call can be used.
+			The App ID and the EIDP token are sent in the HTTPS header.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Adds charges for a subscriber, including some nonusage types
+				of charges, e.g. a monthly subscription fee.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="usage" type="tns:Usage">
+								<xs:annotation>
+									<xs:documentation>
+							Container for information about the charge for which the subscriber will be billed.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>addUsage</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AddUsageResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Response container for the addUsage operation.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="chargeId" type="xs:long" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+							An ID assigned to the transaction.
+							Store this for reference, because this value is displayed
+							on the user's statement.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>addUsage</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetBillingStatementsRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Retrieves all available billing statements for a subscriber.
+			For each statement, provides a balance due.
+			The call is generally used before a getBillingRecords call.
+			The call is for statements that already have been billed.
+			The application identity and
+			token are sent in HTTPS header.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Retrieves all available billing statements for a subscriber.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="subscriptionId" type="xs:long" minOccurs="1" >
+								<xs:annotation>
+									<xs:documentation>
+										For a particular application, the subscriptionId
+										uniquely identifies a user's subscription.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingStatements</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+									</xs:annotation>
+							</xs:element>
+							<xs:element name="includeStatementImage" type="xs:boolean" minOccurs="0" default="false">
+								<xs:annotation>
+									<xs:documentation>
+										Setting this field to true would return the StatementImage in the response.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingStatements</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetBillingStatementsResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Response container for the getBillingStatements operation.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="statement" type="tns:BillingStatement" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+							Billing statement details.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingStatements</CallName>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetBillingRecordsRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Retrieves the detailed billing records associated with a subscriber's account.
+			The call is for records already billed.
+			The getBillingRecords call is used
+			after you have used getBillingStatements to retrieve a statementId.
+			The application identity and token are sent in HTTPS header.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Retrieves detailed billing records associated with a subscriber's account.
+				The getBillingRecords call is used
+				after you have used getBillingStatements to retrieve a statementId.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="subscriptionId" type="xs:long" minOccurs="1" >
+								<xs:annotation>
+									<xs:documentation>
+							For a particular application, the subscriptionId
+							uniquely identifies a user's subscription.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingRecords</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="recordType" minOccurs="0" type="tns:BillingRecordType">
+								<xs:annotation>
+									<xs:documentation>
+							Specifies whether the record is a one-time charge, a statement, a
+							subscription charge, or a usage charge.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingRecords</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="statementId" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+							Unique identifier for a billing statement, created by eBay at statement time. Obtain this value from
+							the response to the getBillingStatements request.
+						</xs:documentation>
+									<xs:appinfo>
+										<MaxLength>256</MaxLength>
+										<CallInfo>
+											<CallName>getBillingRecords</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="recordTimeRange" type="tns:TimeRange" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+							Requested time range for records.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingRecords</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetBillingRecordsResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Response container for the getBillingRecords operation.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="record" type="tns:BillingRecord" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+							Transaction record for a billing account.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getBillingRecords</CallName>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetBillingStartDateRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Advances the billing start date for a subscription when a subscriber wants to upgrade to a
+			full subscription before the end of the free trial period.
+			Use this request during the free trial period, between the subscription start date
+			and the billing start date. For more information, see the Users Guide.
+			Set, for example, seven days after the start of the
+			free trial period.  The App ID and the EIDP token are sent in the HTTPS header.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Advances the billing start date for a subscription when a subscriber wants to upgrade to a full subscription before
+				the end of the free trial period.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="subscriptionId" type="xs:long" minOccurs="1" >
+								<xs:annotation>
+									<xs:documentation>
+							For a particular application, the subscriptionId
+							uniquely identifies a user's subscription.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>setBillingStartDate</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="billingStartDate" type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>
+							Date from which a subscription begins to incur subscription charges.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>setBillingStartDate</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetBillingStartDateResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+		</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetSubscriptionStateRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Requests a change in the subscription state of a user.
+			The App ID and the EIDP token are sent in the HTTPS header.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Requests a change in the subscription state of a user.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="subscriptionId" type="xs:long" minOccurs="1" >
+								<xs:annotation>
+									<xs:documentation>
+							For a particular application, the subscriptionId uniquely identifies a
+							user's subscription and billing plan.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>setSubscriptionState</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="subscriptionState" type="tns:SubscriptionState">
+								<xs:annotation>
+									<xs:documentation>
+							The new state of the user's subscription.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<AllValuesExcept>CancelledPending, Created</AllValuesExcept>
+											<CallName>setSubscriptionState</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="note" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+							Reason for the change in the subscription state of the user.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>setSubscriptionState</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="immediateCancellation" type="xs:boolean" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+							Whether the subscription should immediately be cancelled.
+							For more information on cancelling a subscription,
+							see the Managed Billing Platform Guide.
+							Only can apply if the subscription state is set to
+							cancelled and the plan is non-prorated-at-end.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>setSubscriptionState</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetSubscriptionStateResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetSubscriptionPlansRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Returns a list of subscription plans, including details, for the application making the request. Filterable by plan
+			state.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Returns a list of subscription plans, including details, for the application making the request.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="planState" minOccurs="0" type="tns:SubscriptionPlanState">
+								<xs:annotation>
+									<xs:documentation>
+							Filters response by specifying the state of plans to be returned.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscriptionPlans</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetSubscriptionPlansResponse">
+				<xs:annotation>
+					<xs:documentation>
+			Response container for getSubscriptionPlans
+			operation in the application integration service.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="subscriptionPlan" type="tns:SubscriptionPlan">
+								<xs:annotation>
+									<xs:documentation>
+							Information about a subscription plan.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscriptionPlans</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetSubscribersRequest">
+				<xs:annotation>
+					<xs:documentation>
+			Returns information about an application's subscribers. The application
+			identity and token are sent in the HTTPS header.
+		</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+				Returns information about an application's subscribers.
+			</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="userName" minOccurs="0" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+							The eBay user ID of the subscriber. If the output selector
+							is SubscriptionHistory, then this field is required.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="subscriptionState" minOccurs="0" type="tns:SubscriptionState">
+								<xs:annotation>
+									<xs:documentation>
+							Specifies the subscription state of the subscribers to be returned.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="subscriptionStartTimeRange" minOccurs="0" type="tns:TimeRange">
+								<xs:annotation>
+									<xs:documentation>
+							Specifies the start of a time range for filtering the subscribers to be returned.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="subscriptionEndTimeRange" minOccurs="0" type="tns:TimeRange">
+								<xs:annotation>
+									<xs:documentation>
+							Specifies the end of a time range for filtering the subscribers to be returned.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="outputSelector" minOccurs="0" type="tns:SubscriberOutputSelector">
+								<xs:annotation>
+									<xs:documentation>
+							Specify a value of SubscriberCount in this field if you want to get a count of subscribers.
+							Specify a value of SubscriptionHistory in this field if you want to get subscribers's history.
+							If you specify a value of SubscriptionHistory, you must specify the user name(s) in the request.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="paginationInput" minOccurs="0" type="tns:PaginationInput">
+								<xs:annotation>
+									<xs:documentation>
+							Controls the pagination of the result set.
+						</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetSubscribersResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response container for the getSubscribers call.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="subscriberCount" type="xs:int" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Not returned if the output selector is set to SubscriptionHistory.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="subscriber" type="tns:Subscriber">
+								<xs:annotation>
+									<xs:documentation>
+										Information about the subscriber and subscription history.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										The page number of the response data, the number of entries, etc.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>getSubscribers</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Subscriber">
+				<xs:annotation>
+					<xs:documentation>
+						Container for information about a subscriber.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="userName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The user ID of the eBay member.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="subscription" type="tns:Subscription">
+						<xs:annotation>
+							<xs:documentation>
+								Details about the subscription.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="subscriptionHistory" type="tns:SubscriptionHistory">
+						<xs:annotation>
+							<xs:documentation>
+								Details about the subscription history.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SubscriptionHistory">
+				<xs:annotation>
+					<xs:documentation>
+						Container for a subscription in the subscription history.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="subscription" type="tns:Subscription">
+						<xs:annotation>
+							<xs:documentation>
+								Information about one of the subscriptions in the subscriber's history
+								with the application.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="SubscriberOutputSelector">
+				<xs:annotation>
+					<xs:documentation>
+						In the case of getSubscribers, you can specify an output selector
+						of SubscriptionHistory or of SubscriberCount.
+						If you specify an output selector of SubscriptionHistory,
+						then you must include the user name
+						of the user whose history you are retrieving.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getSubscribers</CallName>
+							<RequiredInput>No</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="SubscriberCount">
+						<xs:annotation>
+							<xs:documentation>
+								Use this value if you want to get a count of subscribers.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SubscriptionHistory">
+						<xs:annotation>
+							<xs:documentation>
+								Use this value if you want to get subscribers' history.
+								If you specify a value of SubscriptionHistory,
+								you must specify the user name(s) in the request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="SubscriptionState">
+				<xs:annotation>
+					<xs:documentation>
+						Defines possible subscription states.
+						Used in getSubscribers to filter by subscription state.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Created">
+						<xs:annotation>
+							<xs:documentation>
+								For internal use.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Pending">
+						<xs:annotation>
+							<xs:documentation>
+								The subscription has been created and is not yet active.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Active">
+						<xs:annotation>
+							<xs:documentation>
+								The user is actively subscribed to the application.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Suspended">
+						<xs:annotation>
+							<xs:documentation>
+								Suspended state, possibly due to a payment failure or past due account. There is a block (which can be
+								removed) on the user's access to the application. The user cannot start the application.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Cancelled">
+						<xs:annotation>
+							<xs:documentation>
+								User is no longer subscribed to the application.
+								When a user clicks the "unsubscribe" link to unsubscribe from your non-prorated plan, eBay sends an
+								updateSubscriber call to your application with the the subscription end date in the note field. The
+								subscriptionStateChangeInfo.newState field may still be Active, but the user's status in in your Active
+								Subscribers list will be CancelledPending. If you want to cancel the user's subscription immediately, use
+								the control in the embedded applications tab in your My Account page as follows. In the embedded
+								applications tab, select Active Users, and search for the user. Pull down the Status selection list, select
+								Cancel Immediately, and then click Submit.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Rejected">
+						<xs:annotation>
+							<xs:documentation>
+								One of the following has occurred: your application rejected the subscription after
+								receiving an addSubscriber call, or you have manually changed the subscription to the rejected state.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CancelledPending">
+						<xs:annotation>
+							<xs:documentation>
+								When a user clicks the "unsubscribe" link to unsubscribe from your non-prorated plan, eBay sends an
+								updateSubscriber call to your application with the the subscription end date in the note field. The
+								subscriptionStateChangeInfo.newState field may still be Active, but the user's status in in your Active
+								Subscribers list will be CancelledPending. If you want to cancel the user's subscription immediately, use
+								the control in the embedded applications tab in your My Account page as follows. In the embedded
+								applications tab, select Active Users, and search for the user. Pull down the Status selection list, select
+								Cancel Immediately, and then click Submit.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Expired">
+						<xs:annotation>
+							<xs:documentation>
+								The user's free trial period has elapsed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="SubscriptionPlanState">
+				<xs:annotation>
+					<xs:documentation>
+						Defines possible subscription plan lifecycle states.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Stored">
+						<xs:annotation>
+							<xs:documentation>
+								Plan has been created. With a plan in this state you can test how it displays in the
+								subscription flow, and subscribe to the plan without incurring charges. You can also
+								continue to make changes to the plan.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Submitted">
+						<xs:annotation>
+							<xs:documentation>
+								A plan in this state has been submitted for approval and is being tested by
+								eBay. Plans in this state cannot be changed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Pending">
+						<xs:annotation>
+							<xs:documentation>
+								Applies when eBay begins configuring the plan in the Managed Billing
+								Platform. If the Developers Program finds an error in the information
+								you provided or in the app, you are notified and the plan is placed in
+								a "change requested" state for you to edit. Please note:
+								When a plan is in a "non-active" state (stored, submitted for
+								configuration, pending, or change requested), the plan is treated as
+								private, meaning that only users specified in the Permission tag of the
+								deployment descriptor can view the plan. Plans in this state cannot be
+								changed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ChangeRequested">
+						<xs:annotation>
+							<xs:documentation>
+								For future use.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Active">
+						<xs:annotation>
+							<xs:documentation>
+								The plan is subscribable. The plan can remain hidden from the public in the
+								active state, during final verification.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="SubscriptionPlan">
+				<xs:annotation>
+					<xs:documentation>
+							Container for information about a subscription plan.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getSubscriptionPlans</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="planId" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								ID assigned to the subscription plan by eBay.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="externalPlanId" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								A developer-assigned value identifying the plan.
+								Also passed in the externalPlanID
+								field of the addSubscriber call.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+									Defined in the billing plan, the planName accompanies the application name in statements
+									sent to subscribers.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="globalId" type="tns:GlobalId" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+									Corresponds to the site ID. For example, EBAY-US.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="billable" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+									Specifies whether the plan is free to subscribers, or must be paid for.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="visible" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								If true, the plan is visible to all users,
+								on the condition that the start date is in the past
+								(because users never see a plan with a start date that is in the future).
+								If false, visible only to you and eBay administrators.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planVersion" type="tns:SubscriptionPlanVersion" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Information about the version
+								that eBay assigned to a subscription plan.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Subscription">
+				<xs:annotation>
+					<xs:documentation>
+						Container for information about a user's subscription to a subscription plan.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getSubscribers</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="subscriptionId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Identifies a user's subscription to a billing plan offered by an Open
+								eBay app.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="planId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Identifies the plan to which the user is subscribed.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="externalPlanId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A developer-assigned Plan ID that will be passed in the externalID
+								field of the addSubscriber call to notify you of a new subscription.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subscriptionState" type="tns:SubscriptionState">
+						<xs:annotation>
+							<xs:documentation>
+								Identifies the state of the subscription.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="reasonCode" type="tns:SubscriptionReasonCode">
+						<xs:annotation>
+							<xs:documentation>
+								The reason for the subscription state.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="property" type="tns:SubscriptionPropertyCode">
+						<xs:annotation>
+							<xs:documentation>
+								Information about a subscriber's eligibility for a free trial.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subscriptionStartTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The date when the user subscribed to the plan, e.g. the start of the free trial.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subscriptionEndTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								End date of the user's subscription.
+								Specifically, the endDate is the date on which the subscription actually ends.
+								That is, for a prorated-at-end plan, it is the date when the user unsubscribed.
+								(For prorated-at-end plans, the cancel and end dates are the same.)
+								For a nonprorated-at-end plan, it is the date of the term end.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="billingStartDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Start date of the user's term for purposes of billing.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="note" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SubscriptionPlanVersion">
+				<xs:annotation>
+					<xs:documentation>
+						Container for information about the version that the
+						third-party developer assigned to a subscription plan.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getSubscriptionPlans</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="planVersionId" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The ID of the entire version of the plan, at the plan level.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planVersion" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The version number of the plan.
+								When the third-party developer submits updates to the plan,
+								eBay increments the version of the plan.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planDescription" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information about the plan that is displayed
+								to potential subscribers in the subscription flow.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planState" type="tns:SubscriptionPlanState" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								State of the plan, e.g. Active.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planVersionStartTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Start time of the plan version.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planVersionEndTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								End time of the plan version.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="planVersionDetail" type="tns:SubscriptionPlanVersionDetail" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Details about this version of the plan.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="SubscriptionReasonCode">
+				<xs:annotation>
+					<xs:documentation>
+						Container for reasons for subscription states.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="EPIPending">
+						<xs:annotation>
+							<xs:documentation>
+								Subscription is pending an OEPI response. eBay has made
+								the corresponding OEPI call to your application's listener
+								but has not received a response, or has received a response with
+								a Pending status. Or eBay has not yet made the OEPI call.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BillingPending">
+						<xs:annotation>
+							<xs:documentation>
+								Subscription is pending on eBay internal billing processing.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AccountPastDue">
+						<xs:annotation>
+							<xs:documentation>
+								User has been billed, and a payment failure has occurred. The subscription
+								is still active. User will be suspended by eBay if the account balance is
+								greater than one dollar and more than 18 days have elapsed since the last
+								billing statement. eBay will cancel the subscription at 22 days after the
+								last billing statement.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SuspendedByDeveloper">
+						<xs:annotation>
+							<xs:documentation>
+								Developer has suspended the subscription.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SuspendedByEbay">
+						<xs:annotation>
+							<xs:documentation>
+								eBay has suspended the subscription, possibly because of a payment failure
+								and an account past due. User can not use the application until the
+								subscription state returns to Active. After the user brings the account
+								current, the subscription's transition back to the Active state takes about
+								five minutes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AccountNotPaidInTime">
+						<xs:annotation>
+							<xs:documentation>
+								Following the suspension of a past due subscription, if the account remains
+								unpaid, eBay will put the subscription in the AccountNotPaidInTime state and
+								cancel the the subscription.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CancelledByDeveloper">
+						<xs:annotation>
+							<xs:documentation>
+								Account has been cancelled by developer.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CancelledBySubscriber">
+						<xs:annotation>
+							<xs:documentation>
+								User has cancelled the subscription. If this occurs during the free trial
+								period, the subscription is cancelled immediately. If the user requests
+								immediate cancellation from a paid subscription, see Cancel Immediately in
+								the Managed Billing Platform Guide for steps you should take.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CancelledByEbay">
+						<xs:annotation>
+							<xs:documentation>
+								eBay has cancelled the subscription, possibly because the account remained
+								unpaid for 22 days following a billing statement.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="RejectedByDeveloper">
+						<xs:annotation>
+							<xs:documentation>
+								Developer has declined to accept the subscription.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="RejectedByEbay">
+						<xs:annotation>
+							<xs:documentation>
+								eBay has declined to accept the subscription.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="SubscriptionPropertyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Contains information about a subscriber's eligibility for a free trial.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="NotEligibleForFreeTrial">
+						<xs:annotation>
+							<xs:documentation>
+								The subscription is not eligible for a free trial, probably because the
+								user has previously subscribed to a free trial.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AuthTokenRevoked">
+						<xs:annotation>
+							<xs:documentation>
+								The subscription is ineligible for a free trial because the user's token
+								has been revoked.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="SubscriptionPlanVersionDetail">
+				<xs:annotation>
+					<xs:documentation>
+							Container for information about a version of a subscription plan.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="planVersionDetailId" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								ID for the charge type (there is a charge type of each version of the plan).
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeType" type="tns:SubscriptionChargeType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The type of charge the plan utilizes. Examples include recurring fee, usage fee, and
+								non-recurring setup fee.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeTerm" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Length of the term in charge term units (specifically, see the chargeTermUnit field).
+								For example, if the term unit is month, the chargeTerm value is the
+								number of months.
+								Note that if the plan is a free trial, this field is the number of days.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeTermUnit" type="tns:SubscriptionChargeTermUnit" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The term unit. Multiply the chargeTerm value by the chargeTermUnit value
+								to arrive at the length of the plan version, as set by the third party developer.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="chargeAmount" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The amount of money charged for the plan, as set by the third party developer,
+								based on the charge type.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extendedDescription" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Additional plan information that is displayed on the page
+								where a user views plans, under "Usage Fee."
+								The value in the extendedDescription field is only applicable
+								when information was added with the addUsage call.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="usageBilled" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Applied with addUsage, for the charge type.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscriptionPlans</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="SubscriptionChargeTermUnit">
+				<xs:annotation>
+					<xs:documentation>
+						For recurring charges, defines the unit of time for which a user is charged.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Day">
+						<xs:annotation>
+							<xs:documentation>
+								Charge recurs daily. Only applies to a free trial.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Month">
+						<xs:annotation>
+							<xs:documentation>
+								Charge recurs monthly.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Week">
+						<xs:annotation>
+							<xs:documentation>
+								Charge recurs weekly.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Quarter">
+						<xs:annotation>
+							<xs:documentation>
+								Charge recurs quarterly.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Year">
+						<xs:annotation>
+							<xs:documentation>
+								Charge is annual.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="RecordAmountType">
+				<xs:annotation>
+					<xs:documentation>
+						Container for attributes that identify the amounts in a billing record.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Rated">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordAmount has this attribute, amount represents the amount charged in
+								the biller's currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Billed">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordAmount has this attribute, amount represents the amount charged in
+								the subscriber's currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Discount">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordAmount has this attribute, amount represents the amount of a
+								discount applied to the charges in the billing record, to two or fewer
+								digits after the decimal point, in the billing currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Tax">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordAmount has this attribute, amount represents the amount of the
+								tax to two or fewer digits after the decimal point, in the billing
+								currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Credited">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordAmount has this attribute, the amount represents the amount
+								credited to the subscriber in a statement, in the subscriber's currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Payment">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordAmount has this attribute, the amount represents the payment amount
+								in the subscriber's currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="RecordTimeType">
+				<xs:annotation>
+					<xs:documentation>
+						Container for attributes that identify the time values in a billing record.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Statement">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordTime has this attribute, the time specified represents the
+								statement date.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Transaction">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordTime has this attribute, the time specified is the timestamp
+								of the transaction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Creation">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordTime has this attribute, the time specified is the timestamp
+								of the statement creation.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="From">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordTime has this attribute, the time specified is the
+								beginning of the time range for which the subscriber is being charged.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="To">
+						<xs:annotation>
+							<xs:documentation>
+								When RecordTime has this attribute, the time specified is the
+								end of the time range for which the subscriber is being charged.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="RecordAmount">
+				<xs:annotation>
+					<xs:documentation>
+						An amount value in a billing record.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getBillingRecords</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="tns:Amount">
+						<xs:attribute name="type" type="tns:RecordAmountType" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									The type of amount value of a record.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>getBillingRecords</CallName>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name="RecordTime">
+				<xs:annotation>
+					<xs:documentation>
+						A time value in a record.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getBillingRecords</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:dateTime">
+						<xs:attribute name="type" type="tns:RecordTimeType" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									The type of time value of a record.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>getBillingRecords</CallName>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<!-- Common types start -->
+			<xs:complexType name="BillingRecord">
+				<xs:annotation>
+					<xs:documentation>
+			Container for details about a billing record. For future use: amounts can be in the
+			biller's currency, that is, in the currency in which your third-party application
+			will be paid, or it can be in the user's currency, if different. Currently the only
+			currency available is the U.S. dollar.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="billingAccountId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+					A unique identifier for each combination of an application and a subscriber.
+					Used for billing-related calls (getBillingStatements, getBillingRecords).
+					Also known as EID.
+				</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>32</MaxLength>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="recordType" type="tns:BillingRecordType">
+						<xs:annotation>
+							<xs:documentation>
+					Specifies the type of record.
+					The possible types are one-time charge, statement, subscription
+					charge, and usage charge.
+					In the case of each record type, the values
+					of other fields, such as taxAmount and recordTime, are
+					appropriate to the record type. For example, if the recordType is
+					usage charge, then recordTime represents the transaction date. If
+					recordType is statement, recordTime represents the time of the
+					statement's creation.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="recordId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+					Unique identifier for the record, assigned by eBay. Contains state and location
+					information about the record. An example of a recordId: 1111:222:333:444:x.
+					Retrieve a recordID using getBillingRecords.
+				</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>256</MaxLength>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="billed" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+					For this record, specifies whether the fee appeared on the user's statement
+					(i.e., whether it's been billed).
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="statementId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+					Unique identifier for a billing statement, created at statement-time.
+				</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>256</MaxLength>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="recordTime" type="tns:RecordTime" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+					The recordType determines what this value signifies.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is SubscriptionCharge, recordTime represents the transaction date.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is OneTimeCharge, recordTime represents the time of the transaction.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is UsageCharge, recordTime represents the time of the transaction.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is Statement, recordTime represents the statement date.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="recordAmount" type="tns:RecordAmount" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+					The recordType determines what this value signifies.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is SubscriptionCharge, amount represents the total amount due for the
+					subscription to two or fewer digits after the decimal point in the subscriber's currency.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is OneTimeCharge, amount represents the amount of the charge to
+					two or fewer digits after the decimal	point in the subscriber's currency.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is UsageCharge, amount represents the total of the usage charge to
+					two or fewer digits after the decimal point in the subscriber's currency.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is Statement, amount represents the amount available to credit at
+					the time of the statement, to two or fewer digits after the decimal
+					point, in the subscriber's currency.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="recordDescription" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+					The recordType determines what this value signifies.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is SubscriptionCharge, recordDescription contains a text description of the subscription.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is OneTimeCharge, recordDescription contains a text description of the charge.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is UsageCharge, recordDescription contains a text description of the usage.
+					&lt;br&gt;&lt;br&gt;
+					If recordType is Statement, recordDescription contains a text description of the statement.
+				</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>1024</MaxLength>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="recordAdditionalDescription" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								This provides additional description for the record.
+							</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>1024</MaxLength>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="adjustable" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+					True if the transaction can be credited.
+					Only applicable to one-time charges and setup fees.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getBillingRecords</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<!-- Base request types -->
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:documentation>
+			Basic type for specifying monetary amounts. A double value (e.g.,
+			1.00 or 1.0) is meaningful as a monetary amount when accompanied by a
+			specification of the currency, in which case the value specifies
+			the amount in that currency. An Amount expresses both the value
+			(a double) and the currency. Details such as prices, fees, costs,
+			and payments are specified as amount types.
+		</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>
+						Currency in which the monetary amount is specified. A three-letter ID, such as
+						USD, CAD, DEM. Currently, USD is the only available value.
+					</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>addUsage</CallName>
+										<RequiredInput>Yes</RequiredInput>
+									</CallInfo>
+									<CallInfo>
+										<CallName>getBillingStatements</CallName>
+										<CallName>getBillingRecords</CallName>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name="TimeRange">
+				<xs:annotation>
+					<xs:documentation>
+				Container for time ranges.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						<CallInfo>
+							<CallName>getSubscribers</CallName>
+							<CallName>getBillingRecords</CallName>
+							<RequiredInput>No</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="timeFrom" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+				Specifies the earliest (oldest) date to be used in a date range.
+			</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<CallName>getBillingRecords</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timeTo" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+				Specifies the latest (most recent) date to be used in a date range.
+			</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>addUsage</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<CallName>getBillingRecords</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+				This is the base class for request container for all
+				service operations.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- Base response types -->
+			<xs:complexType name="BaseResponse" abstract="true">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+				Base response container for all service operations.
+				Contains error information associated with the request.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+						Indicates whether or not errors or warnings were generated during the
+						processing of the request.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+						Information for an error or warning that
+						occurred when eBay processed the request.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+						The release version that eBay used to process the request. Developer
+						Technical Support may ask you for the version value if you work with them
+						to troubleshoot issues.
+						&lt;br&gt;&lt;br&gt;
+						&lt;span class="tablenote"&gt;&lt;strong&gt;Note:&lt;/strong&gt;
+							The version in use is normally the latest release version, as specified
+							in the release notes.
+						&lt;/span&gt;
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+						This value represents the date and time when eBay processed the request.
+						This value is returned in GMT, the ISO 8601 date and time format (YYYY-
+						MM- DDTHH:MM:SS.SSSZ). See the "dateTime" type for information about the
+						time format, and for details on converting to and from the GMT time zone.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger">
+					</xs:element>
+					<xs:element name="version" type="xs:string">
+					</xs:element>
+					<xs:element name="contentType" type="xs:string">
+					</xs:element>
+					<xs:element name="value" type="xs:string">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+			Indicates whether the error is a severe error (causing the request to fail)
+			or an informational error (a warning) that should be communicated to the
+			user.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+					The request was processed successfully, but something occurred that may
+					affect your application or the user.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+					The request that triggered the error was not processed successfully.
+					When a serious application-level error occurs, the error is returned
+					instead of the business data.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+					The request that triggered the error was processed successfully but with some warnings.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+					The request that triggered the error was processed successfully but with some warnings.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+			ErrorMessage to indicate any Error/Warning occured as part of service call.
+			Any run time error will not be reported here, but will be reported aspart of
+			soap fault.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData"  minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+					ActivityProfile about a single error.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+			This represents error details.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+						A unique code that identifies the particular error condition that occurred.
+						Your application can use error codes as identifiers in your customized
+						error-handling algorithms.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+					Name of the domain upon which the error occurred.
+					&lt;dl&gt;
+					&lt;lh&gt;Domains include:&lt;/lh&gt;
+					&lt;dt&gt;
+						Marketplace
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						A business or validation error occurred for the UserProfile Service.
+					&lt;/dd&gt;
+					&lt;dt&gt;
+						SOA
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						An exception occurred in the Service Oriented Architecture (SOA) framework.
+					&lt;/dd&gt;
+					&lt;/dl&gt;
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+					Indicates whether the error caused the request to fail (Error) or not
+					(Warning).
+					&lt;br&gt;&lt;br&gt;
+					If the request fails and the source of the problem is within the application
+					(such as a missing required element), please change the application before you
+					retry the request. If the problem is due to end-user input data, please alert
+					the end-user to the problem and provide the means for them to correct the data.
+					Once the problem in the application or data is resolved, you can attempt to re-
+					send the request to eBay.
+					&lt;br&gt;&lt;br&gt;
+					If the source of the problem is on eBay's side, you can retry the request as-is
+					a reasonable number of times (eBay recommends twice). If the error persists,
+					contact Developer Technical Support. Once the problem has been resolved, the
+					request may be resent in its original form.
+					&lt;br&gt;&lt;br&gt;
+					When a warning occurs, the error is returned in addition to the business data.
+					In this case, you do not need to retry the request (as the original request was
+					successful). However, depending on the cause or nature of the warning, you
+					might need to contact either the end user or eBay to effect a long term
+					solution to the problem to prevent it from reoccurring in the future.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+					There are three categories of errors: request errors, application errors, and
+					system errors.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+					A detailed description of the condition that resulted in the error.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subdomain" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+					Name of the subdomain upon which the error occurred. Subdomains include the
+					following: UserProfile (in which the error is specific to the UserProfile
+					service) and MarketplaceCommon (in which the error is common to all
+					Marketplace
+					services).
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="exceptionId" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+					Unique identifier for an exception associated with an error.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="parameter" type="tns:ErrorParameter"  minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+					Some warning and error messages return one or more variables that contain
+					contextual information about the error. This is often the field or value that
+					triggered the error.
+				</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+			Contextual information associated with an error.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+						The name of the parameter in the list of parameter types returned
+						within the error type.
+					</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+			Indicates whether the error is a severe error (causing the request to fail)
+			or an informational error (a warning) that should be communicated to the
+			user.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+					The request that triggered the error was not processed successfully.
+					When a serious application-level error occurs, the error is returned
+					instead of the business data.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+					The request was processed successfully, but something occurred that may
+					affect your application or the user. For example, eBay may have changed a
+					value the user sent in. In this case, eBay returns a normal, successful
+					response and also returns the warning.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+			There are three categories of error: request errors, application errors,
+			and system errors. Request and application errors are caused primarily by
+			invalid data passed in the request. System errors are caused primarily by
+			application failures and cannot be corrected by changing request values.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+					Indicates that an error has occurred on the eBay system side, such as a
+					database or server down. An application can retry the request as-is a
+					reasonable number of times (eBay recommends twice). If the error
+					persists, contact Developer Technical Support. Once the problem has been
+					resolved, the request may be resent in its original form.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+					An error occurred due to a problem with the request, such as missing or
+					invalid fields. The problem must be corrected before the request can be
+					made again. If the problem is due to something in the application (such
+					as a missing required field), the application must be changed. Once the
+					problem in the appilcation or data is resolved, resend the corrected
+					request to eBay.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+					An error occurred due to a problem with the request, such as invalid or
+					missing data. The problem must be corrected before the request can be
+					made again. If the problem is a result of end-user data, the application
+					must alert the end-user to the problem and provide the means for the
+					end-user to correct the data. Once the problem in the data is resolved,
+					resend the request to eBay with the corrected data.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="GlobalId">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+					<xs:documentation>
+					This type is used to represent a combination of site and Locale. Locales are combination of language and territory.
+					Some territories have a default language. Others can have more than one language and there might not be a default one.
+					Example:	EBAY-US   indicates language English in territory U.S.
+										EBAY-ENCA indicates language en_US in territory Canada.
+										EBAY-FRCA indicates language en_FR in territory Canada.
+					Accepted values are use case specific.
+					The syntax is: ebay_properties '-' site ('_' variant)?
+					where ? emans optional. Example for ebay_properties are: EBAY, AC, SDC, PP etc
+					site is not just limited to country language.  We actually have MOTOR.
+					The only use of variant for now is OLD for depreciated sites.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token"/>
+			</xs:simpleType>
+			<xs:complexType name="PaginationInput">
+				<xs:annotation>
+					<xs:documentation>
+				The page number and the entries per page.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						<CallInfo>
+							<CallName>getSubscribers</CallName>
+							<RequiredInput>No</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="pageNumber" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+							Specifies the number of the page of data to return in the current call.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+							Specifies the maximum number of entries to return in a single call.
+							If the number of entries that can be returned is less
+							than the value in EntriesPerPage, then the lower number
+							is returned.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PaginationOutput">
+				<xs:annotation>
+					<xs:documentation>
+				The pagination response data.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="totalPages" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The total number of pages of data that could be returned by repeated
+								search requests. Note that if you modify the value of
+								inputPagination.entriesPerPage in a request, the value output for
+								totalPages will change.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="totalEntries" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The total number of entries. Depending on the input
+								value for entriesPerPage, the response
+								might include only a portion (a page) of the entire result set.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The subset of item data returned in the current response. Search results
+								are divided into sets, or "pages," of item data. The number of pages is
+								equal to the total number of entries divided
+								by the value specified for entriesPerPage in the request. The response
+								for a request contains one "page" of item data.
+								&lt;br&gt; &lt;br&gt;
+								This returned value indicates the page number of data returned (a
+								subset of the complete result set). If this field contains 1, the
+								response contains the first page of data (the default). If the value
+								returned in totalEntries is less than the value for entriesPerPage,
+								pageNumber returns 1 and the response contains the entire set of data.
+								&lt;br&gt; &lt;br&gt;
+								The value of pageNumber is normally equal to the value input for
+								paginationInput.pageNumber. However, if the number input for pageNumber
+								is greater than the total possible pages of output, eBay returns the last
+								page of data in the set of data, and the value for pageNumber is set
+								to the respective (last) page number.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The maximum number of entries that can be returned in the response. This
+								number is always equal to the value that you specified for
+								paginationInput.entriesPerPage.
+								&lt;br&gt; &lt;br&gt;
+								The end of the result set has been reached if the number specified for
+								entriesPerPage is greater than the number of entries found on the specified
+								pageNumber. In this case, there will be fewer entries returned than the
+								number specified in entriesPerPage.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getSubscribers</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="marker" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<!-- Common types end -->
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="addUsageRequest">
+		<wsdl:part name="addUsageRequest" element="tns:addUsageRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addUsageResponse">
+		<wsdl:part name="addUsageResponse" element="tns:addUsageResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getBillingStatementsRequest">
+		<wsdl:part name="getBillingStatementsRequest" element="tns:getBillingStatementsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getBillingStatementsResponse">
+		<wsdl:part name="getBillingStatementsResponse" element="tns:getBillingStatementsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getBillingRecordsRequest">
+		<wsdl:part name="getBillingRecordsRequest" element="tns:getBillingRecordsRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getBillingRecordsResponse">
+		<wsdl:part name="getBillingRecordsResponse" element="tns:getBillingRecordsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="setBillingStartDateRequest">
+		<wsdl:part name="setBillingStartDateRequest" element="tns:setBillingStartDateRequest"/>
+	</wsdl:message>
+	<wsdl:message name="setBillingStartDateResponse">
+		<wsdl:part name="setBillingStartDateResponse" element="tns:setBillingStartDateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="setSubscriptionStateRequest">
+		<wsdl:part name="setSubscriptionStateRequest" element="tns:setSubscriptionStateRequest"/>
+	</wsdl:message>
+	<wsdl:message name="setSubscriptionStateResponse">
+		<wsdl:part name="setSubscriptionStateResponse" element="tns:setSubscriptionStateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getSubscriptionPlansRequest">
+		<wsdl:part name="getSubscriptionPlansRequest" element="tns:getSubscriptionPlansRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getSubscriptionPlansResponse">
+		<wsdl:part name="getSubscriptionPlansResponse" element="tns:getSubscriptionPlansResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getSubscribersRequest">
+		<wsdl:part name="getSubscribersRequest" element="tns:getSubscribersRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getSubscribersResponse">
+		<wsdl:part name="getSubscribersResponse" element="tns:getSubscribersResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="getVersionRequest" element="tns:getVersionRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="getVersionResponse" element="tns:getVersionResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="OpeneBaySubscriptionServicePort">
+		<wsdl:operation name="addUsage">
+			<wsdl:input message="tns:addUsageRequest"/>
+			<wsdl:output message="tns:addUsageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getBillingStatements">
+			<wsdl:input message="tns:getBillingStatementsRequest"/>
+			<wsdl:output message="tns:getBillingStatementsResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getBillingRecords">
+			<wsdl:input message="tns:getBillingRecordsRequest"/>
+			<wsdl:output message="tns:getBillingRecordsResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="setBillingStartDate">
+			<wsdl:input message="tns:setBillingStartDateRequest"/>
+			<wsdl:output message="tns:setBillingStartDateResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="setSubscriptionState">
+			<wsdl:input message="tns:setSubscriptionStateRequest"/>
+			<wsdl:output message="tns:setSubscriptionStateResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getSubscriptionPlans">
+			<wsdl:input message="tns:getSubscriptionPlansRequest"/>
+			<wsdl:output message="tns:getSubscriptionPlansResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getSubscribers">
+			<wsdl:input message="tns:getSubscribersRequest"/>
+			<wsdl:output message="tns:getSubscribersResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:input message="tns:getVersionRequest"/>
+			<wsdl:output message="tns:getVersionResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="OpeneBaySubscriptionServiceHttpBinding" type="tns:OpeneBaySubscriptionServicePort">
+		<http:binding verb="POST"/>
+		<wsdl:operation name="addUsage">
+			<http:operation location="OpeneBaySubscriptionService/addUsage"/>
+			<wsdl:input>
+				<mime:content part="addUsageRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="addUsageResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBillingStatements">
+			<http:operation location="OpeneBaySubscriptionService/getBillingStatements"/>
+			<wsdl:input>
+				<mime:content part="getBillingStatementsRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getBillingStatementsResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBillingRecords">
+			<http:operation location="OpeneBaySubscriptionService/getBillingRecords"/>
+			<wsdl:input>
+				<mime:content part="getBillingRecordsRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getBillingRecordsResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setBillingStartDate">
+			<http:operation location="OpeneBaySubscriptionService/setBillingStartDate"/>
+			<wsdl:input>
+				<mime:content part="setBillingStartDateRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="setBillingStartDateResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setSubscriptionState">
+			<http:operation location="OpeneBaySubscriptionService/setSubscriptionState"/>
+			<wsdl:input>
+				<mime:content part="setSubscriptionStateRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="setSubscriptionStateResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSubscriptionPlans">
+			<http:operation location="OpeneBaySubscriptionService/getSubscriptionPlans"/>
+			<wsdl:input>
+				<mime:content part="getSubscriptionPlansRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getSubscriptionPlansResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSubscribers">
+			<http:operation location="OpeneBaySubscriptionService/getSubscribers"/>
+			<wsdl:input>
+				<mime:content part="getSubscribersRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getSubscribersResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<http:operation location="OpeneBaySubscriptionService/getVersion"/>
+			<wsdl:input>
+				<mime:content part="getVersionRequest" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getVersionResponse" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="OpeneBaySubscriptionServiceSOAPBinding" type="tns:OpeneBaySubscriptionServicePort">
+		<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="addUsage">
+			<soap12:operation soapAction="urn:addUsage" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBillingStatements">
+			<soap12:operation soapAction="urn:getBillingStatements" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBillingRecords">
+			<soap12:operation soapAction="urn:getBillingRecords" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setBillingStartDate">
+			<soap12:operation soapAction="urn:setBillingStartDate" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setSubscriptionState">
+			<soap12:operation soapAction="urn:setSubscriptionState" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSubscriptionPlans">
+			<soap12:operation soapAction="urn:getSubscriptionPlans" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSubscribers">
+			<soap12:operation soapAction="urn:getSubscribers" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap12:operation soapAction="urn:getVersion" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="OpeneBaySubscriptionService">
+		<wsdl:documentation>
+			<Version>1.1.0</Version>
+		</wsdl:documentation>
+		<wsdl:port name="OpeneBaySubscriptionServiceSOAP" binding="tns:OpeneBaySubscriptionServiceSOAPBinding">
+			<soap12:address location="https://svcs.ebay.com/services/openebay/v1/OpeneBaySubscriptionService"/>
+		</wsdl:port>
+		<wsdl:port name="OpeneBaySubscriptionServiceHttp" binding="tns:OpeneBaySubscriptionServiceHttpBinding">
+			<http:address location="https://svcs.ebay.com/services/openebay/v1/OpeneBaySubscriptionService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

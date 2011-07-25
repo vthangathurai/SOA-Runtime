@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.ebay.com/marketplace/advertising/v1/types"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.ebay.com/marketplace/advertising/v1/types"
+	version="1.0.0">
+	<xs:include schemaLocation="ComplexTypeA.xsd"></xs:include>
+	<xs:group name="Literal">
+		<xs:choice>
+			<xs:element name="xInt" type="xs:int" />
+			<xs:element name="xBoolean" >
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AAA" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="xString" type="tns:ComplexTypeA" />
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="ComplexTypeB">
+		<xs:group ref="tns:Literal"></xs:group>
+	</xs:complexType>
+</xs:schema>
+

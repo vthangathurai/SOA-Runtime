@@ -1,0 +1,4883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="UserVoiceService" 
+targetNamespace="http://www.ebay.com/marketplace/uservoice/v1/services"
+xmlns="http://schemas.xmlsoap.org/wsdl/" 
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+xmlns:tns="http://www.ebay.com/marketplace/uservoice/v1/services"
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/uservoice/v1/services"
+ xmlns:tns="http://www.ebay.com/marketplace/uservoice/v1/services"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for all
+						service operations.
+					</xs:documentation>
+				<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<!--  standard framework response types  -->
+			<xs:complexType name="BaseResponse" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				<xs:appinfo>
+				<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+				</typeLibrarySource>
+				</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded" /> 
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether or not errors or
+								warnings were generated during the
+								processing of the request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Description of an error or warning that
+								occurred when eBay processed the
+								request. Not returned if the ack value
+								is Success.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The release version that eBay used to
+								process the request. Developer Technical
+								Support may ask you for the version
+								value if you work with them to
+								troubleshoot issues. &lt;br /&gt; &lt;br
+								/&gt; &lt;span
+								class="tablenote"&gt;&lt;strong&gt;Note:&lt;/strong&gt;
+								The version in use is normally the
+								latest release version, as specified in
+								the release notes. Note that eBay
+								releases the API to international sites
+								about a week after the API version is
+								released to the US site. &lt;/span&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time
+								when eBay processed the request. This
+								value is returned in GMT, the ISO 8601
+								date and time format (YYYY-MM-
+								DDTHH:MM:SS.SSSZ). See the "dateTime"
+								type for information about the time
+								format, and for details on converting to
+								and from the GMT time zone.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning
+						occured as part of service call. Any run time
+						error will not be reported here, but will be
+						reported aspart of soap fault.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"  type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+			 <xs:annotation>
+			  <xs:documentation>Documentation goes here</xs:documentation> 
+			  <xs:appinfo>
+				<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>			  
+			  </xs:appinfo> 
+			  </xs:annotation>
+			  <xs:sequence>
+			  <xs:element name="id" type="xs:positiveInteger" /> 
+			  <xs:element name="version" type="xs:string" /> 
+			  <xs:element name="contentType" type="xs:string" /> 
+			  <xs:element name="value" type="xs:string" /> 
+
+			  </xs:sequence>
+			  </xs:complexType>
+			
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the
+								particular error condition that
+								occurred. Your application can use error
+								codes as identifiers in your customized
+								error-handling algorithms.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain upon which the error
+								occurred. &lt;dl&gt; &lt;lh&gt;Domains
+								include:&lt;/lh&gt; &lt;dt&gt;
+								Marketplace &lt;/dt&gt; &lt;dd&gt; A
+								business or validation error occurred
+								for the Merchandising Service.
+								&lt;/dd&gt; &lt;dt&gt; SOA &lt;/dt&gt;
+								&lt;dd&gt; An exception occurred in the
+								Service Oriented Architecture (SOA)
+								framework. &lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error caused the
+								request to fail (Error) or not
+								(Warning). &lt;br&gt;&lt;br&gt; If the
+								request fails and the source of the
+								problem is within the application (such
+								as a missing required element), please
+								change the application before you retry
+								the request. If the problem is due to
+								end-user input data, please alert the
+								end-user to the problem and provide the
+								means for them to correct the data. Once
+								the problem in the application or data
+								is resolved, you can attempt to re- send
+								the request to eBay.
+								&lt;br&gt;&lt;br&gt; If the source of
+								the problem is on eBay's side, you can
+								retry the request as-is a reasonable
+								number of times (eBay recommends twice).
+								If the error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+								&lt;br&gt;&lt;br&gt; When a warning
+								occurs, the error is returned in
+								addition to the business data. In this
+								case, you do not need to retry the
+								request (as the original request was
+								successful). However, depending on the
+								cause or nature of the warning, you
+								might need to contact either the end
+								user or eBay to effect a long term
+								solution to the problem to prevent it
+								from reoccurring in the future.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors:
+								request errors, application errors, and
+								system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition
+								that resulted in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain upon which the
+								error occurred. &lt;dl&gt;
+								&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+								&lt;dt&gt; Merchandising &lt;/dt&gt;
+								&lt;dd&gt; The error is specific to the
+								Merchandising service. &lt;/dd&gt;
+								&lt;dt&gt; MarketplaceCommon &lt;/dt&gt;
+								&lt;dd&gt; The error is common to all
+								Marketplace services. &lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception
+								associated with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"  type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Some warning and error messages return
+								one or more variables that contain
+								contextual information about the error.
+								This is often the field or value that
+								triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The name of the parameter in the
+									list of parameter types returned
+									within the error type.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>
+											Conditionally
+										</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user. For
+								example, eBay may have changed a value
+								the user sent in. In this case, eBay
+								returns a normal, successful response
+								and also returns the warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of error: request
+						errors, application errors, and system errors.
+						Request and application errors are caused
+						primarily by invalid data passed in the request.
+						System errors are caused primarily by
+						application failures and cannot be corrected by
+						changing request values.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on
+								the eBay system side, such as a database
+								or server down. An application can retry
+								the request as-is a reasonable number of
+								times (eBay recommends twice). If the
+								error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as missing or invalid
+								fields. The problem must be corrected
+								before the request can be made again. If
+								the problem is due to something in the
+								application (such as a missing required
+								field), the application must be changed.
+								Once the problem in the application or
+								data is resolved, resend the corrected
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as invalid or missing
+								data. The problem must be corrected
+								before the request can be made again. If
+								the problem is a result of end-user
+								data, the application must alert the
+								end-user to the problem and provide the
+								means for the end-user to correct the
+								data. Once the problem in the data is
+								resolved, resend the request to eBay
+								with the corrected data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="PaginationInput">
+				<xs:annotation>
+					<xs:documentation>
+						Controls the pagination of the result set. Child
+						elements specify the maximum number of item
+						listings to return per call and which page of
+						data to return. Controls the way the listings
+						are organized in the response (not the details
+						to return for each listing).
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies the maximum number of entries
+								to return in a single call. If the
+								number of entries that can be returned
+								is less than the value in
+								entriesPerPage, then the lower number is
+								returned.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName/>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the maximum number of items
+								that can be returned in a SearchResults
+								for any given request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName/>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="PaginationOutput">
+				<xs:annotation>
+					<xs:documentation/>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the page of data returned by
+								the current call. For instance, for the
+								first set of items returned, this field
+								has a value of 1.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the maximum number of items
+								that can be returned in a
+								SearchResultItemArray for any given
+								call.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="totalPages" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the total number of pages of
+								data that could be returned by repeated
+								requests. Returned with a value of 0 if
+								no pages are available.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="totalEntries" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the total number of items that
+								could be returned by repeated requests.
+								Returned with a value of 0 if no items
+								match your search request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<!--VRT types start  -->
+			
+			<xs:simpleType name="UserVoiceType">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="External Subject" />
+					<xs:enumeration value="Rating" />
+					<xs:enumeration value="Review" />
+					<xs:enumeration value="Tag" />
+					<xs:enumeration value="Comment" />
+				</xs:restriction>
+			</xs:simpleType>
+			 
+			
+			<xs:simpleType name="Vote">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+						<xs:enumeration value="Agree"/>
+						<xs:enumeration value="Disagree"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="UserVoiceIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="userVoiceId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier of the user voice.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="userVoiceType" type="tns:UserVoiceType">
+						<xs:annotation>
+							<xs:documentation>
+								Represents the UserVoiceTypeDef such as
+								rating, review, tag or a comment.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>	
+		 		  
+		  	<xs:complexType name="SubjectReferenceIdentifier">
+		  		<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="subjectReferenceId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The external identifier of the subject.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="subjectType" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The externally defined subject type.
+								This is defined in the metadata.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="SubjectIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+						Holds the userVoiceIdentifier if the subject is
+						a user voice or the externalSubjectIdentifier if
+						the subject is an external subject.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation> 
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="userVoiceId" type="tns:UserVoiceIdentifier">
+						<xs:annotation>
+							<xs:documentation>
+								The user voice identifier.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="subjectId" type="tns:SubjectReferenceIdentifier">
+						<xs:annotation>
+							<xs:documentation>
+								The external subject identifier.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="TagIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+						A tag object identifier. Both tagId and
+						tagPhrase can uniquely identiy a tag for a
+						particular subjectType and userVoiceType within
+						a Tenant.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="tagId" type="xs:long">
+					</xs:element>
+					<xs:element minOccurs="0" name="tagPhrase" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The phrase or name that will be used to
+								identify the tag for a given Tenant.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="TypedIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="id" type="xs:string">
+					</xs:element>
+					<xs:element minOccurs="0" name="type" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The generic type to represent the instance of a 
+								typed object. The instance could be : an external sujbectRef
+								, a User Voice ( a rating, a review, a tag or a comment etc.).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="FacetType">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="facetId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The unique system defined identifier of
+								the Facet.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="facetName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The user defined name for the facet that
+								is uniquely defined for a
+								subjectReferenceId and subjectType.
+								Display names for a facet need to be
+								handled on the client side if different
+								from the facet name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="RatingValue">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="ratingSchemeId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The rating scheme id (example: rating
+								scheme id for star rating)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="value" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>
+								The rating value
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+				
+			<xs:complexType name="RatingHistogram">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="ratingValue" type="tns:RatingValue">
+					</xs:element>
+					<xs:element minOccurs="0" name="count" type="xs:int">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+												
+			<xs:complexType name="RatingFacet">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ratingValue" type="tns:RatingValue">
+						<xs:annotation>
+							<xs:documentation>
+								The rating value for the facet instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="facetType" type="tns:FacetType">
+						<xs:annotation>
+							<xs:documentation>
+								The identifier for the facet.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="Rating">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="id" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The rating id
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="value" type="tns:RatingValue">
+						<xs:annotation>
+							<xs:documentation>
+								The overall rating value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creatorId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								User id of the comment creator
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="facet" type="tns:RatingFacet">
+						<xs:annotation>
+							<xs:documentation>
+								There can be any number of available rating facets that are associated with the rating.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="RatingRangeFilter">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<!--  min and max ratings are all inclusive -->
+					<xs:element minOccurs="1" name="minRating" type="tns:RatingValue">
+						<xs:annotation>
+							<xs:documentation>
+								the min and max values are all inclusive
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="maxRating" type="tns:RatingValue">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="TimeRangeFilter">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<!--  min and max time frames are all inclusive -->
+					<xs:element minOccurs="0" maxOccurs="1" name="fromTime" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>
+								the min time value (the fromTime)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="toTime" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>
+								the max time value (the toTime)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="CommentFacet">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="commentFacetContent" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The content associated with the comment.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="facetType" type="tns:FacetType">
+						<xs:annotation>
+							<xs:documentation>
+								The identifier for the facet.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+	
+			<xs:complexType name="Comment">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="id" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The comment id
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="title" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The title associated with the comment.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="content" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The content associated with the comment.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creatorId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								User id of the comment creator
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="facet" type="tns:CommentFacet">
+						<xs:annotation>
+							<xs:documentation>
+								Can be any number of available comment facets
+								that are associated with the comment.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+						 
+			<xs:complexType name="ReviewFacet">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="reviewFacetContent" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The content of the review facet
+								instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="facetType" type="tns:FacetType">
+						<xs:annotation>
+							<xs:documentation>
+								The identifier for the facet.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="Review">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="id" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The Review id
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="title" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The title associated with the review.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creatorId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The user id of the review creator
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="content" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The content associated with the review.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="facet" type="tns:ReviewFacet">
+						<xs:annotation>
+							<xs:documentation>
+								Can be any number of available review facets that are associated with the review.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="ratingStatistics" type="tns:RatingStatisticsType">
+						<xs:annotation>
+							<xs:documentation>
+								rating statistics for this review.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="commentCount" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								total count of comment for this review.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				 </xs:sequence>
+	    	</xs:complexType>
+			
+			
+			<xs:complexType name="Tag">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+			<xs:sequence>
+				<xs:element name="tagIdentifier" type="tns:TagIdentifier"/>
+				<xs:element minOccurs="0" name="voteValue" type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							the value of the vote provided by a user (-1 or +1)
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="creatorId" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							the user id of the report creator
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>						
+		    </xs:sequence>
+	       </xs:complexType> 
+
+			<xs:complexType name="TagVote">
+					<xs:annotation>
+						<xs:documentation>
+								A tag object identifier.  Both tagId and tagPhrase can 
+								uniquely identiy a tag for a particular subjectType and
+								userVoiceTypeDef within a Tenant.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource
+								library="UserVoiceTypeLibrary"
+								namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+							</typeLibrarySource>
+						</xs:appinfo>	
+					</xs:annotation>
+					<xs:sequence>
+					<xs:element minOccurs="1" name="tagIdentifier" type="tns:TagIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The identifier for the tag on which the vote applies.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>				
+					<xs:element minOccurs="1" name="vote" type="tns:Vote">
+							<xs:annotation>
+							<xs:documentation>
+								The vote to be associated with the tag.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>		
+					</xs:sequence>					
+			</xs:complexType>								
+			
+			<xs:complexType name="RatingStatisticsType">
+				<xs:annotation>
+					<xs:documentation>
+						This contains the values that are compiled for ratings.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="loginUserRating" type="tns:RatingValue">
+						<xs:annotation>
+							<xs:documentation>
+								The rating that was set by the user that is making the request, if exists.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>	
+					<xs:element minOccurs="1" name="averageRating" type="tns:RatingValue">
+						<xs:annotation>
+							<xs:documentation>
+								The average of all the ratings for the subject.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>	
+					<xs:element minOccurs="0" name="count" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The number of ratings for the subject.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>	
+					<xs:element minOccurs="0" name="lastRatingTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The date/time that the last rating was entered.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>	
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="ratingHistogram" type="tns:RatingHistogram">
+						<xs:annotation>
+							<xs:documentation>
+								Specific rating statistics, including the number of ratings for each
+								possible rating.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>	
+				</xs:sequence>	
+			</xs:complexType>
+			
+			<xs:complexType name="RatingStatisticsFacetType">
+				<xs:annotation>
+					<xs:documentation>
+						This holds the rating statistics for rating facets.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="facetType" type="tns:FacetType">
+						<xs:annotation>
+						<xs:documentation>
+							The facet type to which the rating statistics pertain.
+						</xs:documentation>
+					</xs:annotation>
+					</xs:element>		
+					<xs:element minOccurs="0" name="ratingStatisticsType" type="tns:RatingStatisticsType">
+						<xs:annotation>
+						<xs:documentation>
+							The statistics for the rating facet.
+						</xs:documentation>
+					</xs:annotation>
+					</xs:element>			
+				</xs:sequence>	
+			</xs:complexType>	
+				
+			<xs:complexType name="TaggedSubjectHistogram">
+				<xs:annotation>
+					<xs:documentation>
+						A tagSubjectHistogram object, including phrase,
+						tag count and tag value.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="tagIdentifier" type="tns:TagIdentifier">
+					</xs:element>
+					<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+						<xs:annotation>
+							<xs:documentation>
+								The subject for which the histogram is
+								requested.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="tagScore" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The total of times the subject was
+								tagged minus the negative tag votes for
+								the subject tag.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="tagCount" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The total tag count for the subject.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="UserVoiceDetail">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="review" type="tns:Review"/>
+					<xs:element minOccurs="0" maxOccurs="1" name="rating" type="tns:Rating"/>
+					<xs:element minOccurs="0" maxOccurs="1" name="comment" type="tns:Comment"/>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="tag" type="tns:Tag"/>
+				</xs:sequence>
+			</xs:complexType> 
+
+			<xs:complexType name="Report">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="UserVoiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/uservoice/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="id" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								the report id in the user voice system
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="title" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The report title
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creatorId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the user id of the report creator
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>						
+					<xs:element name="content" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the report content
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>	
+			<!--VRT types end  -->
+			
+			<!-- Request Response start -->
+			
+			<xs:complexType abstract="true" name="BaseUserVoiceServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all operations in Rating Service
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="invocationId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										a unique ID assigned to each
+										request by client within the
+										context of this service call.
+										This ID is sent back to client
+										in service response so that
+										client can correlate response
+										with request in batch processing
+										mode
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseUserVoiceServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations in the UserVoiceService.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="returnMessage" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										informational string message
+										from the service operation
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="invocationId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										a unique ID assigned to each
+										request by client. This ID is
+										sent back to client in service
+										response so that client can
+										correlate response with request
+										in batch processing mode
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest" />
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="SetSubjectRefsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="setSubjectRefRequest" type="tns:SetSubjectRefRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of setSubjectRefRequest for batch
+								operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SetSubjectRefsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						setSubjectRefResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="setSubjectRefResponse" type="tns:SetSubjectRefResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one setSubjectRef request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="SetSubjectRefRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectReferenceIdentifier" type="tns:SubjectReferenceIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The external subject Reference identifier.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="externalCategory" type="xs:string">
+							<xs:annotation>
+							<xs:documentation>
+								The comma seperated list of external categories that are associated with the subject.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorId" type="xs:string">
+							<xs:annotation>
+							<xs:documentation>
+								The creator of the subject in the system.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetSubjectRefResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for setSubjectRef operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+						<xs:element minOccurs="0" name="subjectRefId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The unique subject reference identifier which is assigned when a new 
+								subject is entered into the system.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="DeleteSubjectRefsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="deleteSubjectRefRequest" type="tns:DeleteSubjectRefRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of deleteSubjectRefRequest for
+								batch operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DeleteSubjectRefsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						deleteSubjectRefResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="deleteSubjectRefResponse" type="tns:DeleteSubjectRefResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one deleteSubjectRef
+								request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="DeleteSubjectRefRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectRef" type="tns:SubjectReferenceIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The identifier for the subject that is to be deleted.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+							<xs:annotation>
+							<xs:documentation>
+								The user who is making the request.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>	
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteSubjectRefResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for deleteSubjectRef operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+											
+			<xs:complexType name="RateSubjectsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="rateSubjectRequest" type="tns:RateSubjectRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of rateSubjectsRequest for
+								batch operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RateSubjectsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						rateSubjectRefResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="rateSubjectResponse" type="tns:RateSubjectResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one rateSubjectRef
+								request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="RateSubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+						<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+						<xs:annotation>
+							<xs:documentation>
+								The external subject of the rating.
+							</xs:documentation>
+						</xs:annotation>
+						</xs:element>					
+						<xs:element minOccurs="1" name="rating" type="tns:Rating">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RateSubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="ratingId" type="xs:long">
+							<xs:annotation>
+							<xs:documentation>
+								The unique identifier of the rating.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="DeleteRatingsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="deleteRatingRequest" type="tns:DeleteRatingRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of deleteRatingRequest for batch
+								operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DeleteRatingsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						deleteRatingResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="deleteRatingResponse" type="tns:DeleteRatingResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one deleteRating request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="DeleteRatingRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="ratingId" type="xs:long">
+							<xs:annotation>
+							<xs:documentation>
+								The unique identifier of the rating to be deleted.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>		
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteRatingResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+																	
+			<xs:complexType name="ReviewSubjectRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The subject identifier of the review.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="review" type="tns:Review">
+							<xs:annotation>
+							<xs:documentation>
+								The review object.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>	
+							<xs:element minOccurs="0" name="rating" type="tns:Rating">
+							<xs:annotation>
+							<xs:documentation>
+								A rating of the subjet that is part of the review.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>	
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+							
+			<xs:complexType name="ReviewSubjectResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for reviewUserVoice operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="reviewId" type="xs:long">
+							<xs:annotation>
+							<xs:documentation>
+								The unique identifier of the review that is assigned by the system
+								when the review is created.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>	
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>										
+			
+			<xs:complexType name="GetRatingStatisticsForSubjectsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="getRatingStatisticsForSubjectRequest" type="tns:GetRatingStatisticsForSubjectRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of GetRatingStatisticsForSubject
+								for batch operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetRatingStatisticsForSubjectsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						getRatingStatisticsForSubjectResponse.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="getRatingStatisticsForSubjectResponse" type="tns:GetRatingStatisticsForSubjectResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one
+								GetRatingStatisticsForSubject request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="GetRatingStatisticsForSubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The subject of the request.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>	
+							<xs:element minOccurs="0" name="userId" type="xs:string">
+							<xs:annotation>
+							<xs:documentation>
+								The user who is making the request.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>				
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetRatingStatisticsForSubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+						<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The subject of the response.
+							</xs:documentation>
+							</xs:annotation>
+						</xs:element>	
+						<xs:element minOccurs="1" name="ratingStatisticsType" type="tns:RatingStatisticsType">
+							<xs:annotation>
+							<xs:documentation>
+								The container for base rating statistics.
+							</xs:documentation>
+							</xs:annotation>
+						</xs:element>	
+						<xs:element maxOccurs="unbounded"  minOccurs="0" name="ratingStatisticsFacetType" type="tns:RatingStatisticsFacetType">
+							<xs:annotation>
+							<xs:documentation>
+								The container for facet rating statistics.
+							</xs:documentation>
+							</xs:annotation>
+						</xs:element>	
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+														
+			<xs:complexType name="FindSubjectRefsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The subjectType filter,
+										the valid values are userVoice types such as: Comment, Tag and Review
+										or external subjectTypes such as product-review, echo-app etc. 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="userVoiceTypeFilter" type="tns:UserVoiceType">
+								<xs:annotation>
+									<xs:documentation>
+										The valid values are: Rating,
+										Review, Comment, Tag etc.
+										Default value is Rating
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorIdFilter" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The filter for the user that created the subject in the system.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										The valid values are:
+										lastModifiedDate. Default value
+										is lastModifiedDate
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindSubjectRefsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="subjectReference" type="tns:SubjectReferenceIdentifier">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+									
+			<xs:complexType name="CommentOnSubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+							<xs:documentation>
+								The subject on which the comment is made.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="comment" type="tns:Comment">
+							<xs:annotation>
+							<xs:documentation>
+								The comment object.
+							</xs:documentation>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CommentOnSubjectResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for CommentOnSubject operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+					<xs:sequence>
+						<xs:element minOccurs="0" name="commentId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier of the comment which 
+								is assigned by the system when the comment
+								is created.
+							</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>	
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="DeleteCommentsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="deleteCommentRequest" type="tns:DeleteCommentRequest">
+						<xs:annotation>
+							<xs:documentation>
+								A list of deleteComment for batch
+								operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DeleteCommentsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						deleteCommentResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="deleteCommentResponse" type="tns:DeleteCommentResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one deleteComment request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="DeleteCommentRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="commentId" type="xs:long">
+								<xs:annotation>
+								<xs:documentation>
+									The comment to be deleted can be uniquely identified by commentId.
+								</xs:documentation>
+							</xs:annotation>							
+							</xs:element>				
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+							<xs:annotation>
+							<xs:documentation>
+								The user who is making the request.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>								
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteCommentResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for deleteComment operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="UpdateCommentRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="comment" type="tns:Comment">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UpdateCommentResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for updateComment operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GetReviewsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="reviewId" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										review Id.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetReviewsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="review" type="tns:Review">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>			
+			
+			<xs:complexType name="DeleteReviewsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="deleteReviewRequest" type="tns:DeleteReviewRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of deleteReview for batch
+								operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DeleteReviewsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						deleteReviewResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="deleteReviewResponse" type="tns:DeleteReviewResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one deleteReview request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="DeleteReviewRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="reviewId" type="xs:long">
+							<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the review.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>				
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+							<xs:annotation>
+							<xs:documentation>
+								The user who is making the request.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>			
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteReviewResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for deleteReview operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+						
+			<xs:complexType name="UpdateReviewRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="review" type="tns:Review">
+							<xs:annotation>
+							<xs:documentation>
+								.
+							</xs:documentation>
+						</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="rating" type="tns:Rating">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UpdateReviewResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for updateReview operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+				
+			<xs:complexType name="ReplaceTagsInSubjectRequest">
+				<xs:annotation>
+						<xs:documentation>
+							Adds tag(s) to a subject, deleting the current tags for the subject.
+							This is a convinience method that can used after retrieving tags for
+							a subject, after making tag changes.
+						</xs:documentation>
+				</xs:annotation>			
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							</xs:element>	
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The Id of the user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="tagIdentifiers" type="tns:TagIdentifier">
+									<xs:annotation>
+									<xs:documentation>
+										The list of tags. If no tags are entered, then all tags will be removed for the subject.
+									</xs:documentation>
+									</xs:annotation>
+								</xs:element>				
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ReplaceTagsInSubjectResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for replaceTagsInSubject operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">		
+					<xs:sequence>
+							<xs:element minOccurs="1" maxOccurs="unbounded" name="tagIdentifiers" type="tns:TagIdentifier">
+						</xs:element>
+						</xs:sequence>					
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+	
+			<xs:complexType name="TagSubjectRequest">
+				<xs:annotation>
+						<xs:documentation>
+							Adds tag(s) to a subject.  Existing tags will remain.
+						</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+									<xs:documentation>
+										The external subject to be tagged.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorId" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The Id of the user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" maxOccurs="unbounded" name="tagsCollection" type="tns:TagIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										The list of tags.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="TagSubjectResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for tagSubject operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">		
+					<xs:sequence>
+							<xs:element minOccurs="1" maxOccurs="unbounded" name="tagIdentifier" type="tns:TagIdentifier">
+						</xs:element>
+						</xs:sequence>					
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+					
+			<xs:complexType name="VoteTagOnSubjectRequest">
+				<xs:annotation>
+						<xs:documentation>
+								Add to the tag vote count for a subject.
+						</xs:documentation>
+				</xs:annotation>			
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+									<xs:documentation>
+										The external subject of the vote tag.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorId" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The Id of the user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" maxOccurs="unbounded" name="tagVote" type="tns:TagVote">
+								<xs:annotation>
+									<xs:documentation>
+										A list of tags and votes.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="VoteTagOnSubjectResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for voteTagOnSubject operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">				
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>					
+								
+			<xs:complexType name="GetTaggedSubjectsRequest">
+				<xs:annotation>
+							<xs:documentation>
+								Gets a list of subjects that were tagged with a specific tag.
+							</xs:documentation>
+						</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+						<xs:element minOccurs="1" name="tagIdentifier" type="tns:TagIdentifier">
+						<xs:annotation>
+									<xs:documentation>
+										The tag for which to search tagged subjects.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						<xs:element minOccurs="0" name="subjectTypeFilter" type="xs:string" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+								The subject type(s) that the subject belongs to. These are configured by the client of the service. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>						
+						<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										only one sortOrder is supported
+										- tagScore
+									</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+						</xs:element>						
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetTaggedSubjectsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectIdentifier" type="tns:SubjectIdentifier">
+							<xs:annotation>
+									<xs:documentation>
+										The subject identifier for which the tags will be returned.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>							
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+				
+			<xs:complexType name="GetTagsForSubjectsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="getTagsForSubjectRequest" type="tns:GetTagsForSubjectRequest">
+						<xs:annotation>
+							<xs:documentation>
+								a list of GetTagsForSubject
+								for batch operation
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetTagsForSubjectsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a container for list of
+						getTagsForSubjectResponses.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="getTagsForSubjectResponse" type="tns:GetTagsForSubjectResponse">
+						<xs:annotation>
+							<xs:documentation>
+								response for one
+								GetTagesForSubject request
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="GetTagsForSubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										The unique identifier of the subject from which to get tags.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>		
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										The valid values are - tagScore, timeAscending, timeDescending, alphabeticalAscending, alphabeticalDescending
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>																
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetTagsForSubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="taggedSubjectHistogram" type="tns:TaggedSubjectHistogram">
+							</xs:element>
+								<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>							
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>			
+						
+			<xs:complexType name="GetCommentsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="commentId" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										comment Id.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetCommentsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="comment" type="tns:Comment">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>								
+			
+			<xs:complexType name="FindUserVoiceDetailBySubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="userId" type="xs:string">
+								<xs:annotation>
+								<xs:documentation>
+									if specified,only user voice created by this user will be returned.
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element> 
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+								<xs:documentation>
+									The unique identifier of the subject from which the tags are to be removed.
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+			
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+								<xs:annotation>
+									<xs:documentation>
+									the time range (fromTime and toTime)
+									</xs:documentation>
+								</xs:annotation>							
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="outputSelector" type="tns:UserVoiceType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+                               <xs:annotation>
+									<xs:documentation>
+									 currently we do not support sortOrder, pagination is based on useId ASC, customerized sortOrder may be provided in the future. 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			
+			<xs:complexType name="FindUserVoiceDetailBySubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="userVoiceDetail" type="tns:UserVoiceDetail"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+						
+			<xs:complexType name="UntagSubjectRequest">
+				<xs:annotation>
+						<xs:documentation>
+							Removes tags from subject.  The subjects tag count will be reduced for the
+							desired tag(s).  
+						</xs:documentation>
+				</xs:annotation>						
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+								<xs:documentation>
+									The unique identifier of the subject from which the tags are to be removed.
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The Id of the user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" maxOccurs="unbounded" name="tagIdentifiers" type="tns:TagIdentifier">
+									<xs:annotation>
+									<xs:documentation>
+									The list of tags.
+									</xs:documentation>
+									</xs:annotation>
+								</xs:element>									
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UntagSubjectResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for untagSubject operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+						
+			<xs:complexType name="ReportReviewRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="reviewId" type="xs:long">
+							<xs:annotation>
+									<xs:documentation>
+										The unique system identifier of the review that is to be reported.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						<xs:element minOccurs="0" name="report" type="tns:Report">
+						<xs:annotation>
+							<xs:documentation>
+								the report details (title, content, creator etc)
+							</xs:documentation>
+						</xs:annotation>
+						</xs:element>							
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ReportReviewResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for reportReview operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+						<xs:element minOccurs="0" name="reportId" type="xs:long">
+						<xs:annotation>
+									<xs:documentation>
+										The unique system idenfifier of the report.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<xs:complexType name="ReportCommentRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="commentId" type="xs:long">
+							<xs:annotation>
+									<xs:documentation>
+										The unique system identifier of the comment that is to be reported.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						<xs:element minOccurs="0" name="report" type="tns:Report">
+						<xs:annotation>
+							<xs:documentation>
+								the report details (title, content, creator etc)
+							</xs:documentation>
+						</xs:annotation>
+						</xs:element>							
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ReportCommentResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for reportComment operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+						<xs:element minOccurs="0" name="reportId" type="xs:long">
+						<xs:annotation>
+									<xs:documentation>
+										The unique system idenfifier of the report.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>				
+	
+		<xs:complexType name="FindReviewsBySubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										the subject of the review.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+								<xs:annotation>
+									<xs:documentation>
+									the time range (fromTime and toTime)
+									</xs:documentation>
+								</xs:annotation>							
+							</xs:element>
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										only one sortOrder is supported, which sorts by creation date ascending 
+										- creationDateAsc
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindReviewsBySubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the review.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+					
+		<xs:complexType name="FindCommentsBySubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										the subject of the comment.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>				
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+								<xs:annotation>
+									<xs:documentation>
+									the time range (fromTime and toTime)
+									</xs:documentation>
+								</xs:annotation>							
+							</xs:element>
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										only one sortOrder is supported, which sorts by creation date ascending 
+										- creationDateAsc
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindCommentsBySubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="commentId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the comment.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+				
+		<xs:complexType name="FindRatingsBySubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										the subject of the rating.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="ratingRangeFilter" type="tns:RatingRangeFilter">
+							<xs:annotation>
+									<xs:documentation>
+										The min and max rating range filter for the requested user voices.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+								<xs:annotation>
+									<xs:documentation>
+									the time range (fromTime and toTime)
+									</xs:documentation>
+								</xs:annotation>							
+							</xs:element>
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										only one sortOrder is supported, which sorts by creation date ascending 
+										- creationDateAsc
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindRatingsBySubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="ratingId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the rating.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>				
+				
+			<xs:complexType name="FindReviewsByUserRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are userVoice types such as: Comment, Tag and Review
+										or external subjectTypes such as product-review, echo-app etc. 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+								<xs:annotation>
+									<xs:documentation>
+									the time range (fromTime and toTime)
+									</xs:documentation>
+								</xs:annotation>							
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorIdFilter" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The filter for the user that created the user voice.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are:
+										lastModifiedDate. Default value
+										is lastModifiedDate
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindReviewsByUserResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the review.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="FindCommentsByUserRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>									
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+								<xs:annotation>
+									<xs:documentation>
+									the time range (fromTime and toTime)
+									</xs:documentation>
+								</xs:annotation>							
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorIdFilter" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The filter for the user that created the user voice.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are:
+										lastModifiedDate. Default value
+										is lastModifiedDate
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindCommentsByUserResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="commentId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the comment.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="FindRatingsByUserRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are userVoice types such as: Comment, Tag and Review
+										or external subjectTypes such as product-review, echo-app etc. 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorIdFilter" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The filter for the user that created the user voice.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are:
+										lastModifiedDate. Default value
+										is lastModifiedDate
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindRatingsByUserResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="ratingId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the rating.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="FindTagsByUserRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="userId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The user who is making the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+									The subject type(s) that the subject belongs to. These are configured by the client of the service. 									
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="creatorIdFilter" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The filter for the user that created the user voice.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are:
+										lastModifiedDate. Default value
+										is lastModifiedDate
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindTagsByUserResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="tagId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the tag.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<xs:complexType name="FindTagsBySubjectRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="subjectIdentifier" type="tns:SubjectIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										the subject which has been tagged
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+									The subject type(s) that the subject belongs to. These are configured by the client of the service. 									
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="creatorIdFilter" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										The filter for the user that tagged the subject.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>					
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are:
+										lastModifiedDate. Default value
+										is lastModifiedDate
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindTagsBySubjectResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="tagId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+									The unique system generated identifier of the tag.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<xs:complexType name="FindReviewsByKeywordsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="subjectIdFilter" type="tns:SubjectReferenceIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										the subject of the user voice.
+										If none is passed, all subjects will be searched for keyword.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="externalCategoryReferenceFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Any number of optional, comma seperated external categories to search in.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are userVoice types such as: Comment, Tag and Review
+										or external subjectTypes such as product-review, echo-app etc. 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element maxOccurs="1" minOccurs="1" name="keywords" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										A space delimited list of keywords to search for in the content.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="ratingRangeFilter" type="tns:RatingRangeFilter">
+							<xs:annotation>
+									<xs:documentation>
+										The min and max rating range filter for the requested user voices.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+							<xs:annotation>
+							<xs:documentation>
+								the time range (fromTime and toTime)
+							</xs:documentation>
+							</xs:annotation>							
+							</xs:element>											
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										only one sortOrder is supported, which sorts by creation date ascending 
+										- creationDateAsc
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindReviewsByKeywordsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="reviewId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+								The unique system generated identifier of the review.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>				
+			
+
+			<xs:complexType name="FindCommentsByKeywordsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="subjectIdFilter" type="tns:SubjectReferenceIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										the subject of the comment.
+										If none is passed, all subjects will be searched for keyword.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="externalCategoryReferenceFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Any number of optional, comma seperated external categories to search in.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="subjectTypeFilter" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										the valid values are userVoice types such as: Comment, Tag and Review
+										or external subjectTypes such as product-review, echo-app etc. 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>							
+							<xs:element maxOccurs="1" minOccurs="1" name="keywords" type="xs:string">
+							<xs:annotation>
+									<xs:documentation>
+										A space delimited list of keywords to search for in the content.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="ratingRangeFilter" type="tns:RatingRangeFilter">
+							<xs:annotation>
+									<xs:documentation>
+										The min and max rating range filter for the requested user voices.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="timeRangeFilter" type="tns:TimeRangeFilter">
+							<xs:annotation>
+							<xs:documentation>
+								the time range (fromTime and toTime)
+							</xs:documentation>
+							</xs:annotation>							
+							</xs:element>											
+							<xs:element minOccurs="0" name="sortOrder" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										only one sortOrder is supported, which sorts by creation date ascending 
+										- creationDateAsc
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindCommentsByKeywordsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseUserVoiceServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="commentId" type="xs:long">
+							  <xs:annotation>
+								<xs:documentation>
+								The unique system generated identifier of the comment.
+								</xs:documentation>
+							  </xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput" type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the
+										result set. Child elements
+										indicate the maximum number of
+										item listings returned per
+										response and which page of data
+										has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName/>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+			<xs:element name="setSubjectRefsRequest"  type="tns:SetSubjectRefsRequest"/>
+			<xs:element name="setSubjectRefsResponse"  type="tns:SetSubjectRefsResponse"/>
+			<xs:element name="setSubjectRefRequest"  type="tns:SetSubjectRefRequest"/>
+			<xs:element name="setSubjectRefResponse"  type="tns:SetSubjectRefResponse"/>
+			<xs:element name="deleteSubjectRefsRequest"  type="tns:DeleteSubjectRefsRequest"/>
+			<xs:element name="deleteSubjectRefsResponse"  type="tns:DeleteSubjectRefsResponse"/>
+			<xs:element name="deleteSubjectRefRequest"  type="tns:DeleteSubjectRefRequest"/>
+			<xs:element name="deleteSubjectRefResponse"  type="tns:DeleteSubjectRefResponse"/>
+			<xs:element name="rateSubjectsRequest" nillable="false" type="tns:RateSubjectsRequest"/>
+			<xs:element name="rateSubjectsResponse"  type="tns:RateSubjectsResponse"/>
+			<xs:element name="rateSubjectRequest" nillable="false" type="tns:RateSubjectRequest"/>
+			<xs:element name="rateSubjectResponse"  type="tns:RateSubjectResponse"/>
+			<xs:element name="deleteRatingsRequest"  type="tns:DeleteRatingsRequest"/>
+			<xs:element name="deleteRatingsResponse"  type="tns:DeleteRatingsResponse"/>
+			<xs:element name="deleteRatingRequest"  type="tns:DeleteRatingRequest"/>
+			<xs:element name="deleteRatingResponse"  type="tns:DeleteRatingResponse"/>
+			
+			<xs:element name="reviewSubjectRequest"  type="tns:ReviewSubjectRequest" />
+			<xs:element name="reviewSubjectResponse"  type="tns:ReviewSubjectResponse" />
+			<xs:element name="getRatingStatisticsForSubjectsRequest"  type="tns:GetRatingStatisticsForSubjectsRequest"/>
+			<xs:element name="getRatingStatisticsForSubjectsResponse"  type="tns:GetRatingStatisticsForSubjectsResponse"/>
+			<xs:element name="getRatingStatisticsForSubjectRequest"  type="tns:GetRatingStatisticsForSubjectRequest"/>
+			<xs:element name="getRatingStatisticsForSubjectResponse"  type="tns:GetRatingStatisticsForSubjectResponse"/>
+			<xs:element name="findSubjectRefsRequest"  type="tns:FindSubjectRefsRequest"/>
+			<xs:element name="findSubjectRefsResponse"  type="tns:FindSubjectRefsResponse"/>
+			<xs:element name="commentOnSubjectRequest"  type="tns:CommentOnSubjectRequest"/>
+			<xs:element name="commentOnSubjectResponse"  type="tns:CommentOnSubjectResponse"/>
+			<xs:element name="deleteCommentsRequest"  type="tns:DeleteCommentsRequest"/>
+			<xs:element name="deleteCommentsResponse"  type="tns:DeleteCommentsResponse"/>
+			<xs:element name="deleteCommentRequest"  type="tns:DeleteCommentRequest"/>
+			<xs:element name="deleteCommentResponse"  type="tns:DeleteCommentResponse"/>
+			<xs:element name="updateCommentRequest"  type="tns:UpdateCommentRequest"/>
+			<xs:element name="updateCommentResponse"  type="tns:UpdateCommentResponse"/>
+			
+			<xs:element name="getReviewsRequest"  type="tns:GetReviewsRequest"/>
+			<xs:element name="getReviewsResponse"  type="tns:GetReviewsResponse"/>
+			<xs:element name="deleteReviewsRequest"  type="tns:DeleteReviewsRequest"/>
+			<xs:element name="deleteReviewsResponse"  type="tns:DeleteReviewsResponse"/>
+			<xs:element name="deleteReviewRequest"  type="tns:DeleteReviewRequest"/>
+			<xs:element name="deleteReviewResponse"  type="tns:DeleteReviewResponse"/>
+			<xs:element name="updateReviewRequest"  type="tns:UpdateReviewRequest"/>
+			<xs:element name="updateReviewResponse"  type="tns:UpdateReviewResponse"/>
+			
+			<xs:element name="replaceTagsInSubjectRequest"  type="tns:ReplaceTagsInSubjectRequest"/>
+			<xs:element name="replaceTagsInSubjectResponse"  type="tns:ReplaceTagsInSubjectResponse"/>
+			<xs:element name="tagSubjectRequest"  type="tns:TagSubjectRequest"/>
+			<xs:element name="tagSubjectResponse"  type="tns:TagSubjectResponse"/>
+			<xs:element name="voteTagOnSubjectRequest"  type="tns:VoteTagOnSubjectRequest"/>
+			<xs:element name="voteTagOnSubjectResponse"  type="tns:VoteTagOnSubjectResponse"/>
+			<xs:element name="getTaggedSubjectsRequest"  type="tns:GetTaggedSubjectsRequest"/>
+			<xs:element name="getTaggedSubjectsResponse"  type="tns:GetTaggedSubjectsResponse"/>
+			<xs:element name="getTagsForSubjectsRequest"  type="tns:GetTagsForSubjectsRequest"/>
+			<xs:element name="getTagsForSubjectsResponse"  type="tns:GetTagsForSubjectsResponse"/>
+			<xs:element name="getTagsForSubjectRequest"  type="tns:GetTagsForSubjectRequest"/>
+			<xs:element name="getTagsForSubjectResponse"  type="tns:GetTagsForSubjectResponse"/>
+			
+			<xs:element name="getCommentsRequest"  type="tns:GetCommentsRequest"/>
+			<xs:element name="getCommentsResponse"  type="tns:GetCommentsResponse"/>
+			<xs:element name="findUserVoiceDetailBySubjectRequest"  type="tns:FindUserVoiceDetailBySubjectRequest"/>
+			<xs:element name="findUserVoiceDetailBySubjectResponse"  type="tns:FindUserVoiceDetailBySubjectResponse"/>
+			<xs:element name="untagSubjectRequest"  type="tns:UntagSubjectRequest"/>
+			<xs:element name="untagSubjectResponse"  type="tns:UntagSubjectResponse"/>
+			
+			<xs:element name="reportReviewRequest"  type="tns:ReportReviewRequest"/>
+			<xs:element name="reportReviewResponse"  type="tns:ReportReviewResponse"/>
+			<xs:element name="reportCommentRequest"  type="tns:ReportCommentRequest"/>
+			<xs:element name="reportCommentResponse"  type="tns:ReportCommentResponse"/>
+			
+			<xs:element name="findReviewsBySubjectRequest"  type="tns:FindReviewsBySubjectRequest"/>
+			<xs:element name="findReviewsBySubjectResponse"  type="tns:FindReviewsBySubjectResponse"/>
+			<xs:element name="findCommentsBySubjectRequest"  type="tns:FindCommentsBySubjectRequest"/>
+			<xs:element name="findCommentsBySubjectResponse"  type="tns:FindCommentsBySubjectResponse"/>
+			<xs:element name="findRatingsBySubjectRequest"  type="tns:FindRatingsBySubjectRequest"/>
+			<xs:element name="findRatingsBySubjectResponse"  type="tns:FindRatingsBySubjectResponse"/>
+			<xs:element name="findReviewsByUserRequest"  type="tns:FindReviewsByUserRequest"/>
+			<xs:element name="findReviewsByUserResponse"  type="tns:FindReviewsByUserResponse"/>
+			<xs:element name="findCommentsByUserRequest"  type="tns:FindCommentsByUserRequest"/>
+			<xs:element name="findCommentsByUserResponse"  type="tns:FindCommentsByUserResponse"/>
+			<xs:element name="findRatingsByUserRequest"  type="tns:FindRatingsByUserRequest"/>
+			<xs:element name="findRatingsByUserResponse"  type="tns:FindRatingsByUserResponse"/>
+			<xs:element name="findTagsByUserRequest"  type="tns:FindTagsByUserRequest"/>
+			<xs:element name="findTagsByUserResponse"  type="tns:FindTagsByUserResponse"/>
+			<xs:element name="findTagsBySubjectRequest"  type="tns:FindTagsBySubjectRequest"/>
+			<xs:element name="findTagsBySubjectResponse"  type="tns:FindTagsBySubjectResponse"/>
+			<xs:element name="findReviewsByKeywordsRequest"  type="tns:FindReviewsByKeywordsRequest"/>
+			<xs:element name="findReviewsByKeywordsResponse"  type="tns:FindReviewsByKeywordsResponse"/>
+			<xs:element name="findCommentsByKeywordsRequest"  type="tns:FindCommentsByKeywordsRequest"/>
+			<xs:element name="findCommentsByKeywordsResponse"  type="tns:FindCommentsByKeywordsResponse"/>
+			
+		</xs:schema>
+	</types>
+	<message name="getVersionRequest">
+		<part name="parameters" element="tns:getVersionRequest">
+		</part>
+	</message>
+	<message name="getVersionResponse">
+		<part name="parameters" element="tns:getVersionResponse">
+		</part>
+	</message>
+	<message name="rateSubjectsRequest">
+		<part name="messageParameters" element="tns:rateSubjectsRequest">
+		</part>
+	</message>
+	<message name="rateSubjectsResponse">
+		<part name="messageParameters" element="tns:rateSubjectsResponse">
+		</part>
+	</message>
+	<message name="rateSubjectRequest">
+		<part name="messageParameters" element="tns:rateSubjectRequest">
+		</part>
+	</message>
+	<message name="rateSubjectResponse">
+		<part name="messageParameters" element="tns:rateSubjectResponse">
+		</part>
+	</message>			
+	<message name="setSubjectRefsRequest">
+		<part name="messageParameters" element="tns:setSubjectRefsRequest">
+		</part>
+	</message>
+	<message name="setSubjectRefsResponse">
+		<part name="messageParameters" element="tns:setSubjectRefsResponse">
+		</part>
+	</message>
+	<message name="setSubjectRefRequest">
+		<part name="messageParameters" element="tns:setSubjectRefRequest">
+		</part>
+	</message>
+	<message name="setSubjectRefResponse">
+		<part name="messageParameters" element="tns:setSubjectRefResponse">
+		</part>
+	</message>	
+	<message name="deleteSubjectRefsRequest">
+		<part name="messageParameters" element="tns:deleteSubjectRefsRequest">
+		</part>
+	</message>
+	<message name="deleteSubjectRefsResponse">
+		<part name="messageParameters" element="tns:deleteSubjectRefsResponse">
+		</part>
+	</message>
+	<message name="deleteSubjectRefRequest">
+		<part name="messageParameters" element="tns:deleteSubjectRefRequest">
+		</part>
+	</message>
+	<message name="deleteSubjectRefResponse">
+		<part name="messageParameters" element="tns:deleteSubjectRefResponse">
+		</part>
+	</message>
+	<message name="deleteRatingsRequest">
+		<part name="messageParameters" element="tns:deleteRatingsRequest">
+		</part>
+	</message>
+	<message name="deleteRatingsResponse">
+		<part name="messageParameters" element="tns:deleteRatingsResponse">
+		</part>
+	</message>
+	<message name="deleteRatingRequest">
+		<part name="messageParameters" element="tns:deleteRatingRequest">
+		</part>
+	</message>
+	<message name="deleteRatingResponse">
+		<part name="messageParameters" element="tns:deleteRatingResponse">
+		</part>
+	</message>
+	<message name="getRatingStatisticsForSubjectsRequest">
+		<part name="messageParameters" element="tns:getRatingStatisticsForSubjectsRequest">
+		</part>
+	</message>
+	<message name="getRatingStatisticsForSubjectsResponse">
+		<part name="messageParameters" element="tns:getRatingStatisticsForSubjectsResponse">
+		</part>
+	</message>
+	<message name="getRatingStatisticsForSubjectRequest">
+		<part name="messageParameters" element="tns:getRatingStatisticsForSubjectRequest">
+		</part>
+	</message>
+	<message name="getRatingStatisticsForSubjectResponse">
+		<part name="messageParameters" element="tns:getRatingStatisticsForSubjectResponse">
+		</part>
+	</message>
+	<message name="findSubjectRefsResponse">
+		<part name="messageParameters" element="tns:findSubjectRefsResponse">
+		</part>
+	</message>
+	<message name="findSubjectRefsRequest">
+		<part name="messageParameters" element="tns:findSubjectRefsRequest">
+		</part>
+	</message>
+	<message name="commentOnSubjectResponse">
+		<part name="messageParameters" element="tns:commentOnSubjectResponse">
+		</part>
+	</message>
+	<message name="commentOnSubjectRequest">
+		<part name="messageParameters" element="tns:commentOnSubjectRequest">
+		</part>
+	</message>
+	<message name="deleteCommentsResponse">
+		<part name="messageParameters" element="tns:deleteCommentsResponse">
+		</part>
+	</message>
+	<message name="deleteCommentsRequest">
+		<part name="messageParameters" element="tns:deleteCommentsRequest">
+		</part>
+	</message>
+	<message name="deleteCommentResponse">
+		<part name="messageParameters" element="tns:deleteCommentResponse">
+		</part>
+	</message>
+	<message name="deleteCommentRequest">
+		<part name="messageParameters" element="tns:deleteCommentRequest">
+		</part>
+	</message>
+	<message name="updateCommentResponse">
+		<part name="messageParameters" element="tns:updateCommentResponse">
+		</part>
+	</message>
+	<message name="updateCommentRequest">
+		<part name="messageParameters" element="tns:updateCommentRequest">
+		</part>
+	</message>
+	<message name="reviewSubjectResponse">
+		<part name="messageParameters" element="tns:reviewSubjectResponse">
+		</part>
+	</message>
+	<message name="reviewSubjectRequest">
+		<part name="messageParameters" element="tns:reviewSubjectRequest">
+		</part>
+	</message>
+	<message name="deleteReviewsResponse">
+		<part name="messageParameters" element="tns:deleteReviewsResponse">
+		</part>
+	</message>
+	<message name="deleteReviewsRequest">
+		<part name="messageParameters" element="tns:deleteReviewsRequest">
+		</part>
+	</message>
+	<message name="deleteReviewResponse">
+		<part name="messageParameters" element="tns:deleteReviewResponse">
+		</part>
+	</message>
+	<message name="deleteReviewRequest">
+		<part name="messageParameters" element="tns:deleteReviewRequest">
+		</part>
+	</message>
+	<message name="updateReviewResponse">
+		<part name="messageParameters" element="tns:updateReviewResponse">
+		</part>
+	</message>
+	<message name="updateReviewRequest">
+		<part name="messageParameters" element="tns:updateReviewRequest">
+		</part>
+	</message>
+	<message name="tagSubjectResponse">
+		<part name="messageParameters" element="tns:tagSubjectResponse">
+		</part>
+	</message>
+	<message name="tagSubjectRequest">
+		<part name="messageParameters" element="tns:tagSubjectRequest">
+		</part>
+	</message>
+	<message name="voteTagOnSubjectResponse">
+		<part name="messageParameters" element="tns:voteTagOnSubjectResponse">
+		</part>
+	</message>
+	<message name="voteTagOnSubjectRequest">
+		<part name="messageParameters" element="tns:voteTagOnSubjectRequest">
+		</part>
+	</message>
+	<message name="replaceTagsInSubjectRequest">
+		<part name="messageParameters" element="tns:replaceTagsInSubjectRequest">
+		</part>
+	</message>
+	<message name="replaceTagsInSubjectResponse">
+		<part name="messageParameters" element="tns:replaceTagsInSubjectResponse">
+		</part>
+	</message>
+	<message name="getTaggedSubjectsResponse">
+		<part name="messageParameters" element="tns:getTaggedSubjectsResponse">
+		</part>
+	</message>
+	<message name="getTaggedSubjectsRequest">
+		<part name="messageParameters" element="tns:getTaggedSubjectsRequest">
+		</part>
+	</message>	
+		<message name="getTagsForSubjectsResponse">
+		<part name="messageParameters" element="tns:getTagsForSubjectsResponse">
+		</part>
+	</message>
+	<message name="getTagsForSubjectsRequest">
+		<part name="messageParameters" element="tns:getTagsForSubjectsRequest">
+		</part>
+	</message>	
+	<message name="getTagsForSubjectResponse">
+		<part name="messageParameters" element="tns:getTagsForSubjectResponse">
+		</part>
+	</message>
+	<message name="getTagsForSubjectRequest">
+		<part name="messageParameters" element="tns:getTagsForSubjectRequest">
+		</part>
+	</message>	
+	<message name="untagSubjectResponse">
+		<part name="messageParameters" element="tns:untagSubjectResponse">
+		</part>
+	</message>
+	<message name="untagSubjectRequest">
+		<part name="messageParameters" element="tns:untagSubjectRequest">
+		</part>
+	</message>
+	<message name="reportCommentRequest">
+		<part name="messageParameters" element="tns:reportCommentRequest">
+		</part>
+	</message>
+	<message name="reportCommentResponse">
+		<part name="messageParameters" element="tns:reportCommentResponse">
+		</part>
+	</message>			
+	<message name="reportReviewRequest">
+		<part name="messageParameters" element="tns:reportReviewRequest">
+		</part>
+	</message>
+	<message name="reportReviewResponse">
+		<part name="messageParameters" element="tns:reportReviewResponse">
+		</part>
+	</message>		
+	<message name="findReviewsBySubjectRequest">
+		<part name="messageParameters" element="tns:findReviewsBySubjectRequest">
+		</part>
+	</message>
+	<message name="findReviewsBySubjectResponse">
+		<part name="messageParameters" element="tns:findReviewsBySubjectResponse">
+		</part>
+	</message>
+	
+	
+	<message name="findTagsBySubjectRequest">
+		<part name="messageParameters" element="tns:findTagsBySubjectRequest">
+		</part>
+	</message>
+	
+	<message name="findTagsBySubjectResponse">
+		<part name="messageParameters" element="tns:findTagsBySubjectResponse">
+		</part>
+	</message>
+	
+	
+	
+	
+	<message name="findRatingsBySubjectRequest">
+		<part name="messageParameters" element="tns:findRatingsBySubjectRequest">
+		</part>
+	</message>
+	
+	<message name="findRatingsBySubjectResponse">
+		<part name="messageParameters" element="tns:findRatingsBySubjectResponse">
+		</part>
+	</message>	
+	<message name="findCommentsBySubjectRequest">
+		<part name="messageParameters" element="tns:findCommentsBySubjectRequest">
+		</part>
+	</message>
+	<message name="findCommentsBySubjectResponse">
+		<part name="messageParameters" element="tns:findCommentsBySubjectResponse">
+		</part>
+	</message>	
+	<message name="findReviewsByUserResponse">
+		<part name="messageParameters" element="tns:findReviewsByUserResponse">
+		</part>
+	</message>
+	<message name="findReviewsByUserRequest">
+		<part name="messageParameters" element="tns:findReviewsByUserRequest">
+		</part>
+	</message>
+	<message name="findCommentsByUserResponse">
+		<part name="messageParameters" element="tns:findCommentsByUserResponse">
+		</part>
+	</message>
+	<message name="findCommentsByUserRequest">
+		<part name="messageParameters" element="tns:findCommentsByUserRequest">
+		</part>
+	</message>	
+	<message name="findRatingsByUserResponse">
+		<part name="messageParameters" element="tns:findRatingsByUserResponse">
+		</part>
+	</message>
+	<message name="findRatingsByUserRequest">
+		<part name="messageParameters" element="tns:findRatingsByUserRequest">
+		</part>
+	</message>		
+	<message name="findTagsByUserResponse">
+		<part name="messageParameters" element="tns:findTagsByUserResponse">
+		</part>
+	</message>
+	<message name="findTagsByUserRequest">
+		<part name="messageParameters" element="tns:findTagsByUserRequest">
+		</part>
+	</message>		
+	<message name="findReviewsByKeywordsResponse">
+		<part name="messageParameters" element="tns:findReviewsByKeywordsResponse">
+		</part>
+	</message>
+	<message name="findReviewsByKeywordsRequest">
+		<part name="messageParameters" element="tns:findReviewsByKeywordsRequest">
+		</part>
+	</message>
+	<message name="findCommentsByKeywordsResponse">
+		<part name="messageParameters" element="tns:findCommentsByKeywordsResponse">
+		</part>
+	</message>
+	<message name="findCommentsByKeywordsRequest">
+		<part name="messageParameters" element="tns:findCommentsByKeywordsRequest">
+		</part>
+	</message>	
+	<message name="getReviewsRequest">
+		<part name="messageParameters" element="tns:getReviewsRequest">
+		</part>
+	</message>			
+    <message name="getReviewsResponse">
+		<part name="messageParameters" element="tns:getReviewsResponse">
+		</part>
+    </message>
+	<message name="getCommentsRequest">
+		<part name="messageParameters" element="tns:getCommentsRequest">
+		</part>
+	</message>			
+    <message name="getCommentsResponse">
+		<part name="messageParameters" element="tns:getCommentsResponse">
+		</part>
+    </message>
+    
+    <message name="findUserVoiceDetailBySubjectRequest">
+		<part name="messageParameters" element="tns:findUserVoiceDetailBySubjectRequest">
+		</part> 
+	</message>			
+    <message name="findUserVoiceDetailBySubjectResponse">
+		<part name="messageParameters" element="tns:findUserVoiceDetailBySubjectResponse">
+		</part>
+    </message>
+
+
+	<portType name="UserVoiceServicePort">
+		<operation name="getVersion">
+			<wsdl:documentation>
+				Retrieves the version of this service.
+			</wsdl:documentation>
+			<input message="tns:getVersionRequest"/>
+			<output message="tns:getVersionResponse"/>
+		</operation>
+				<operation name="rateSubjects">
+			<wsdl:documentation>
+				Set the rating of the subject. If rating exists in the
+				system, the old value will be replaced with new value.
+			</wsdl:documentation>
+			<input message="tns:rateSubjectsRequest"/>
+			<output message="tns:rateSubjectsResponse"/>
+		</operation>
+		<operation name="rateSubject">
+			<wsdl:documentation>
+				singular form of rateSubjects.
+			</wsdl:documentation>
+			<input message="tns:rateSubjectRequest"/>
+			<output message="tns:rateSubjectResponse"/>
+		</operation>
+		<operation name="setSubjectRefs">
+			<wsdl:documentation>
+				Set up subject mappings from a client Application
+				context to the Service context. This could be done
+				implicitly thru rateSubjects operation as well.
+			</wsdl:documentation>
+			<input message="tns:setSubjectRefsRequest">
+			</input>
+			<output message="tns:setSubjectRefsResponse">
+			</output>
+		</operation>
+		<operation name="setSubjectRef">
+			<wsdl:documentation>
+				singular form of setSubjectRefs.
+			</wsdl:documentation>
+			<input message="tns:setSubjectRefRequest"/>
+			<output message="tns:setSubjectRefResponse">
+			</output>
+		</operation>
+		<operation name="deleteSubjectRefs">
+			<wsdl:documentation>
+				delete subject mappings from a client Application context
+				to the Service context.
+			</wsdl:documentation>
+			<input message="tns:deleteSubjectRefsRequest">
+			</input>
+			<output message="tns:deleteSubjectRefsResponse">
+			</output>
+		</operation>
+		<operation name="deleteSubjectRef">
+			<wsdl:documentation>
+				singular form of deleteSubjectRefs.
+			</wsdl:documentation>
+			<input message="tns:deleteSubjectRefRequest">
+			</input>
+			<output message="tns:deleteSubjectRefResponse">
+			</output>
+		</operation>
+		<operation name="getRatingStatisticsForSubjects">
+			<wsdl:documentation>
+				Get the rating statistics such as aggregate ratings,
+				ratings histogram, average ratings and date of last
+				rating for a given SubjectRef
+			</wsdl:documentation>
+			<input message="tns:getRatingStatisticsForSubjectsRequest">
+			</input>
+			<output message="tns:getRatingStatisticsForSubjectsResponse">
+			</output>
+		</operation>
+		<operation name="getRatingStatisticsForSubject">
+			<wsdl:documentation>
+				singular form of getRatingStatisticsForSubjects.
+			</wsdl:documentation>
+			<input message="tns:getRatingStatisticsForSubjectRequest">
+			</input>
+			<output message="tns:getRatingStatisticsForSubjectResponse">
+			</output>
+		</operation>
+		<operation name="deleteRatings">
+			<wsdl:documentation>
+				Delete a Rating based on the rating ids.
+			</wsdl:documentation>
+			<input message="tns:deleteRatingsRequest"/>
+			<output message="tns:deleteRatingsResponse">
+			</output>
+		</operation>
+		<operation name="deleteRating">
+			<wsdl:documentation>
+				singular form of deleteRatings.
+			</wsdl:documentation>
+			<input message="tns:deleteRatingRequest"/>
+			<output message="tns:deleteRatingResponse">
+			</output>
+		</operation>
+		<operation name="findSubjectRefs">
+			<wsdl:documentation>
+				Retrieve subjectRefs which user have voices on. The
+				result is filtered by subject type, and userVoice type.
+				For example, to retrieve userA's rated reviews, the
+				request could be: userId - userA, subjectFilter -
+				Review, userVoiceTypeFilter - Rating
+			</wsdl:documentation>
+			<input message="tns:findSubjectRefsRequest">
+			</input>
+			<output message="tns:findSubjectRefsResponse">
+			</output>
+		</operation>
+		<operation name="commentOnSubject">
+			<wsdl:documentation>
+				Inserts a comment for a subjects, 
+				usually used to add comments to reviews.
+			</wsdl:documentation>
+			<input message="tns:commentOnSubjectRequest"/>
+			<output message="tns:commentOnSubjectResponse">
+			</output>
+		</operation>
+		<operation name="deleteComment">
+			<wsdl:documentation>
+			   Singular form of deleteComments.
+			</wsdl:documentation>
+			<input message="tns:deleteCommentRequest"/>
+			<output message="tns:deleteCommentResponse">
+			</output>
+		</operation>
+		<operation name="deleteComments">
+			<wsdl:documentation>
+				Deletes comments.  This operation is usually limited to the user that
+				created the comment.
+			</wsdl:documentation>
+			<input message="tns:deleteCommentsRequest"/>
+			<output message="tns:deleteCommentsResponse">
+			</output>
+		</operation>
+		<operation name="updateComment">
+			<wsdl:documentation>
+				Update UserVoice Comments.
+			</wsdl:documentation>
+			<input message="tns:updateCommentRequest"/>
+			<output message="tns:updateCommentResponse">
+			</output>
+		</operation>			
+		<operation name="reviewSubject">
+			<wsdl:documentation>
+				Adds a review to be associated with the request UserVoiceable Subject.
+			</wsdl:documentation>
+			<input message="tns:reviewSubjectRequest"/>
+			<output message="tns:reviewSubjectResponse">
+			</output>
+		</operation>
+		<operation name="deleteReviews">
+			<wsdl:documentation>
+				Delete reviews and all UserVoices associated to the reviews.
+			</wsdl:documentation>
+			<input message="tns:deleteReviewsRequest"/>
+			<output message="tns:deleteReviewsResponse">
+			</output>
+		</operation>
+		<operation name="deleteReview">
+			<wsdl:documentation>
+				Singular form of deleteReviews.
+			</wsdl:documentation>
+			<input message="tns:deleteReviewRequest"/>
+			<output message="tns:deleteReviewResponse">
+			</output>
+		</operation>
+		<operation name="updateReview">
+			<wsdl:documentation>
+				Updates a userVoice review.
+			</wsdl:documentation>
+			<input message="tns:updateReviewRequest"/>
+			<output message="tns:updateReviewResponse">
+			</output>
+		</operation>
+		<operation name="tagSubject">
+			<wsdl:documentation>
+				Tags a UserVoiceable Subject which can be
+				an External Subject or UserVoice.  The tags are incrementally added,
+				so existing tags will not be effected.
+			</wsdl:documentation>
+			<input message="tns:tagSubjectRequest"/>
+			<output message="tns:tagSubjectResponse">
+			</output>
+		</operation>
+
+		<operation name="voteTagOnSubject">
+			<wsdl:documentation>
+				Registers a vote on a Tag.  The vote is either 
+				positive or negative.
+			</wsdl:documentation>
+			<input message="tns:voteTagOnSubjectRequest"/>
+			<output message="tns:voteTagOnSubjectResponse">
+			</output>
+		</operation>		
+		<operation name="replaceTagsInSubject">
+			<wsdl:documentation>
+				Singular form of replaceTagsInSubject.  
+				Tags a UserVoiceable Subject which can be 
+				an External Subject or UserVoice.  Existing tags for
+				the subject are overwritten.
+			</wsdl:documentation>
+			<input message="tns:replaceTagsInSubjectRequest"/>
+			<output message="tns:replaceTagsInSubjectResponse">
+			</output>
+		</operation>
+		<operation name="getTaggedSubjects">
+			<wsdl:documentation>
+				Retrieves subjects that have been tagged with the tag in the request.
+			</wsdl:documentation>
+			<input message="tns:getTaggedSubjectsRequest"/>
+			<output message="tns:getTaggedSubjectsResponse">
+			</output>
+		</operation>		
+		<operation name="getTagsForSubjects">
+			<wsdl:documentation>
+				Retrieves tags for subjects that have been tagged.
+			</wsdl:documentation>
+			<input message="tns:getTagsForSubjectsRequest"/>
+			<output message="tns:getTagsForSubjectsResponse">
+			</output>
+		</operation>
+		<operation name="getTagsForSubject">
+			<wsdl:documentation>
+				Singular form of getTagsForSubjects.
+			</wsdl:documentation>
+			<input message="tns:getTagsForSubjectRequest"/>
+			<output message="tns:getTagsForSubjectResponse">
+			</output>
+		</operation>		
+		<operation name="untagSubject">
+			<wsdl:documentation>
+				Disassociate the tag from the subject.  
+				This will reduce the tag count for the subject.
+			</wsdl:documentation>
+			<input message="tns:untagSubjectRequest"/>
+			<output message="tns:untagSubjectResponse">
+			</output>
+		</operation>
+		<operation name="reportComment">
+			<wsdl:documentation>
+				Logs a reports pertaining to inappropriate content in 
+				the comment, to be acted upon by admins.
+			</wsdl:documentation>
+			<input message="tns:reportCommentRequest"/>
+			<output message="tns:reportCommentResponse">
+			</output>
+		</operation>			
+		<operation name="reportReview">
+			<wsdl:documentation>
+				Logs a reports pertaining to inappropriate content in 
+				the review, to be acted upon by admins.
+			</wsdl:documentation>
+			<input message="tns:reportReviewRequest"/>
+			<output message="tns:reportReviewResponse">
+			</output>
+		</operation>
+		<operation name="findReviewsBySubject">
+			<wsdl:documentation>
+				Find reviews for a given subject. The result is
+				filtered by Rating Range.
+			</wsdl:documentation>
+			<input message="tns:findReviewsBySubjectRequest">
+			</input>
+			<output message="tns:findReviewsBySubjectResponse">
+			</output>
+		</operation>
+		<operation name="findTagsBySubject">
+			<wsdl:documentation>
+				Find tags for a given subject. 
+			</wsdl:documentation>
+			<input message="tns:findTagsBySubjectRequest">
+			</input>
+			<output message="tns:findTagsBySubjectResponse">
+			</output>
+		</operation>
+		<operation name="findRatingsBySubject">
+			<wsdl:documentation>
+				Find ratings for a given subject. The result is
+				filtered by Rating Range.
+			</wsdl:documentation>
+			<input message="tns:findRatingsBySubjectRequest">
+			</input>
+			<output message="tns:findRatingsBySubjectResponse">
+			</output>
+		</operation>
+		<operation name="findCommentsBySubject">
+			<wsdl:documentation>
+				Find comments for a given subject. The result is
+				filtered by Rating Range.
+			</wsdl:documentation>
+			<input message="tns:findCommentsBySubjectRequest">
+			</input>
+			<output message="tns:findCommentsBySubjectResponse">
+			</output>
+		</operation>		
+		<operation name="findReviewsByUser">
+			<wsdl:documentation>
+				Retrieve the reviews of a user. The result is filtered
+				by userVoice's subject's type. For example, 
+				to retrieve userA's reviews on reviews, the
+				request could be: userId - userA, subjectFilter -
+				Review
+			</wsdl:documentation>
+			<input message="tns:findReviewsByUserRequest">
+			</input>
+			<output message="tns:findReviewsByUserResponse">
+			</output>
+		</operation>			
+		
+		<operation name="findCommentsByUser">
+			<wsdl:documentation>
+				Retrieve the comments of a user. The result is filtered
+				by userVoice's subject's type. For
+				example, to retrieve userA's comments on reviews, the
+				request could be: userId - userA, subjectFilter -
+				Comment
+			</wsdl:documentation>
+			<input message="tns:findCommentsByUserRequest">
+			</input>
+			<output message="tns:findCommentsByUserResponse">
+			</output>
+		</operation>			
+		
+		<operation name="findRatingsByUser">
+			<wsdl:documentation>
+				Retrieve the ratings of a user. The result is filtered
+				by subject's type. For
+				example, to retrieve userA's ratings on reviews, the
+				request could be: userId - userA, subjectFilter -
+				Review
+			</wsdl:documentation>
+			<input message="tns:findRatingsByUserRequest">
+			</input>
+			<output message="tns:findRatingsByUserResponse">
+			</output>
+		</operation>		
+		
+		<operation name="findTagsByUser">
+			<wsdl:documentation>
+				Retrieve the tags of a user. The result is filtered
+				by subject's type. For
+				example, to retrieve userA's tags on reviews, the
+				request could be: userId - userA, subjectFilter -
+				Review
+			</wsdl:documentation>
+			<input message="tns:findTagsByUserRequest">
+			</input>
+			<output message="tns:findTagsByUserResponse">
+			</output>
+		</operation>				
+		
+		<operation name="findReviewsByKeywords">
+			<wsdl:documentation>
+				Searches the specified Reviews for keywords and returns the list of reviewIds.
+			</wsdl:documentation>
+			<input message="tns:findReviewsByKeywordsRequest"/>
+			<output message="tns:findReviewsByKeywordsResponse">
+			</output>
+		</operation>			
+
+		<operation name="findCommentsByKeywords">
+			<wsdl:documentation>
+				Searches the specified comments for keywords and returns the list of commentIds.
+			</wsdl:documentation>
+			<input message="tns:findCommentsByKeywordsRequest"/>
+			<output message="tns:findCommentsByKeywordsResponse">
+			</output>
+		</operation>
+
+       <operation name="getReviews">
+		  <wsdl:documentation>
+				Retrieve review details given review identifiers
+		  </wsdl:documentation>
+		  <input message="tns:getReviewsRequest">
+	 	 </input>
+         <output message="tns:getReviewsResponse">
+         </output>
+      </operation>
+
+       <operation name="getComments">
+		  <wsdl:documentation>
+				Retrieve comment details given comment identifiers
+		  </wsdl:documentation>
+		  <input message="tns:getCommentsRequest">
+	 	 </input>
+         <output message="tns:getCommentsResponse">
+         </output>
+      </operation>
+      
+      <operation name="findUserVoiceDetailBySubject">
+		  <wsdl:documentation>
+				Retrieve subject detail given subject reference
+		  </wsdl:documentation>
+		  <input message="tns:findUserVoiceDetailBySubjectRequest">
+	 	 </input>
+         <output message="tns:findUserVoiceDetailBySubjectResponse">
+         </output>
+      </operation>
+
+
+	</portType>
+	
+	<binding name="UserVoiceServiceHttpBinding" type="tns:UserVoiceServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="UserVoiceService/getVersion"/>
+      <output>
+        <mime:content part="getVersion" type="text/xml"/>
+      </output>
+		</operation>
+	  </binding>	
+	
+ <binding name="UserVoiceServiceSoapBinding"
+  	type="tns:UserVoiceServicePort">
+
+  	<soap:binding style="document"
+  		transport="http://schemas.xmlsoap.org/soap/http" />
+  	<operation name="getVersion">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/services/getVersion" />
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>		
+  			<operation name="rateSubjects">
+			<soap:operation soapAction="urn:rateSubjects" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="rateSubject">
+			<soap:operation soapAction="urn:rateSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+  	<operation name="setSubjectRefs">
+			<soap:operation soapAction="urn:setSubjectRefs" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="setSubjectRef">
+			<soap:operation soapAction="urn:setSubjectRef" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="deleteSubjectRefs">
+			<soap:operation soapAction="urn:deleteSubjectRefs" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="deleteSubjectRef">
+			<soap:operation soapAction="urn:deleteSubjectRef" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getRatingStatisticsForSubjects">
+			<soap:operation soapAction="urn:getRatingStatisticsForSubjects" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getRatingStatisticsForSubject">
+			<soap:operation soapAction="urn:getRatingStatisticsForSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="deleteRatings">
+			<soap:operation soapAction="urn:deleteRatings" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="deleteRating">
+			<soap:operation soapAction="urn:deleteRating" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="findSubjectRefs">
+			<soap:operation soapAction="urn:findSubjectRefs" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="commentOnSubject">
+			<soap:operation soapAction="urn:commentOnSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		
+		<operation name="voteTagOnSubject">
+			<soap:operation soapAction="urn:voteTagOnSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		
+
+		<operation name="getTagsForSubject">
+			<soap:operation soapAction="urn:getTagsForSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+
+		<operation name="getTagsForSubjects">
+			<soap:operation soapAction="urn:getTagsForSubjects" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+			
+	<operation name="deleteReviews">
+			<soap:operation soapAction="urn:deleteReviews" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		
+		<operation name="deleteReview">
+			<soap:operation soapAction="urn:deleteReview" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>				
+		
+	<operation name="deleteComments">
+			<soap:operation soapAction="urn:deleteComments" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="deleteComment">
+			<soap:operation soapAction="urn:deleteComment" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>				
+	
+	
+	<operation name="getTaggedSubjects">
+			<soap:operation soapAction="urn:getTaggedSubjects" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="reviewSubject">
+			<soap:operation soapAction="urn:reviewSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>			
+		<operation name="tagSubject">
+			<soap:operation soapAction="urn:tagSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="replaceTagsInSubject">
+			<soap:operation soapAction="urn:replaceTagsInSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>				
+	
+		<operation name="untagSubject">
+			<soap:operation soapAction="urn:untagSubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>	
+		<operation name="updateComment">
+			<soap:operation soapAction="urn:updateComment" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>	
+		<operation name="updateReview">
+			<soap:operation soapAction="urn:updateReview" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>			
+		<operation name="reportComment">
+			<soap:operation soapAction="urn:reportComment" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>			
+		<operation name="reportReview">
+			<soap:operation soapAction="urn:reportReview" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>		
+			<operation name="findReviewsBySubject">
+			<soap:operation soapAction="urn:findReviewsBySubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+			<operation name="findTagsBySubject">
+			<soap:operation soapAction="urn:findTagsBySubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+			<operation name="findCommentsBySubject">
+			<soap:operation soapAction="urn:findCommentsBySubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+			<operation name="findRatingsBySubject">
+			<soap:operation soapAction="urn:findRatingsBySubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>		
+		<operation name="findReviewsByUser">
+			<soap:operation soapAction="urn:findReviewsByUser" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="findCommentsByUser">
+			<soap:operation soapAction="urn:findCommentsByUser" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>		
+		<operation name="findRatingsByUser">
+			<soap:operation soapAction="urn:findRatingsByUser" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>	
+		<operation name="findTagsByUser">
+			<soap:operation soapAction="urn:findTagsByUser" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="findReviewsByKeywords">
+			<soap:operation soapAction="urn:findReviewsByKeywords" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="findCommentsByKeywords">
+			<soap:operation soapAction="urn:findCommentsByKeywords" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>		
+		<operation name="getReviews">
+			<soap:operation soapAction="urn:getReviews" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getComments">
+			<soap:operation soapAction="urn:getComments" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>		
+		
+		<operation name="findUserVoiceDetailBySubject">
+			<soap:operation soapAction="urn:findUserVoiceDetailBySubject" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+				
+	</binding>				
+				
+	 <service name="UserVoiceService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			The UserVoice service allows end user to provide user voices such as
+			reviews, ratings, comments and tags etc on a external
+			subject such as a product, an app etc. The service also
+			allows end user to provide user voices on other people's user voices.
+		</wsdl:documentation>
+		<port name="UserVoiceServiceSOAP" binding="tns:UserVoiceServiceSoapBinding">
+			<soap12:address location="https://svcs.ebay.com/services/uservoice/v1/UserVoiceService"/>
+		</port>
+	</service>
+</definitions>

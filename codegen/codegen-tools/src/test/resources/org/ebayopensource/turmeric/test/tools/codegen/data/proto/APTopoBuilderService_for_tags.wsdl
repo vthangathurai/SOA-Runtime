@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="APTopoBuilderService"
+	targetNamespace="http://www.ebay.com/marketplace/cloud/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:com="http://www.ebay.com/bw/common/types"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/cloud/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/cloud/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/cloud/v1/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+			<xs:element name="createTopology" type="tns:CreateTopology" />
+
+			<xs:element name="createTopologyResponse" type="tns:CreateTopologyResponse" />
+
+			<xs:complexType name="CreateTopologyResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="wisbCollectionXml" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CloudAssetInfo">
+				<xs:sequence>
+					<xs:element name="assetId" type="xs:string" />
+					<xs:element name="assetName" type="xs:string" />
+					<xs:element name="governanceState" type="xs:string" />
+					<xs:element name="ownerContact" type="xs:string" />
+					<xs:element name="ownerEscalation" type="xs:string" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element name="costCenter" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="getAssetInfo" type="tns:GetAssetInfo" />
+			<xs:complexType name="GetAssetInfo">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="assetName" type="xs:string" />
+							<xs:element name="assetType" type="xs:string" />
+							<xs:element name="version" type="xs:string" />
+							<xs:element name="published" type="xs:boolean"
+								default="true" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="getAssetInfoResponse" type="tns:GetAssetInfoResponse" />
+			<xs:complexType name="GetAssetInfoResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="assetInfo" type="tns:CloudAssetInfo" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:simpleType name="FunctionalEnvironment">
+        		<xs:annotation><xs:appinfo><typeLibrarySource library="CMTypeLibrary" namespace="http://www.ebay.com/cloud/common/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+        <xs:restriction base="xs:token">
+			<xs:enumeration value="PROD"></xs:enumeration>
+			<xs:enumeration value="QA"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType><xs:complexType name="RequestContext">
+        		<xs:annotation><xs:appinfo><typeLibrarySource library="CMTypeLibrary" namespace="http://www.ebay.com/cloud/common/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+        <xs:sequence>
+			<xs:element name="dryRun" type="xs:boolean"></xs:element>
+			<xs:element minOccurs="0" name="processId" type="xs:int"></xs:element>
+			<xs:element minOccurs="0" name="processTaskId" type="xs:int"></xs:element>
+			<xs:element name="userId" type="xs:string"></xs:element>
+			<xs:element name="correlationId" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="callbackId" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="ticketId" type="xs:string"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="TopoRequest">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="CMTypeLibrary" namespace="http://www.ebay.com/cloud/common/types"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element name="fqdn" type="xs:string"></xs:element>
+			<xs:element name="nugget" type="xs:string"></xs:element>
+			<xs:element name="contact" type="xs:string"></xs:element>
+			<xs:element name="escalation" type="xs:string"></xs:element>
+			<xs:element name="profileName" type="xs:string"></xs:element>
+			<xs:element name="numberOfServers" type="xs:int"></xs:element>
+			<xs:element name="functionalEnvironment" type="tns:FunctionalEnvironment"></xs:element>
+			<xs:element name="costCenter" type="xs:string"></xs:element>
+			<xs:element name="applicationId" type="xs:string"></xs:element>
+			<xs:element name="duration" type="xs:string"></xs:element>
+			<xs:element name="packageRef" type="xs:string"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:simpleType name="AckValue">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+	
+			<xs:enumeration value="Success">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Failure">
+				<xs:annotation>
+	
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+	
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PartialFailure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+	
+		</xs:restriction>
+	</xs:simpleType><xs:complexType abstract="true" name="BaseResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Base response container for all service operations.
+				Contains error information associated with the request.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="ack" type="tns:AckValue">
+				<xs:annotation>
+					<xs:documentation>
+
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information for an error or warning that
+						occurred when eBay processed the request.
+					</xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element minOccurs="0" name="version" type="xs:string">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+
+			</xs:element>
+			<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="System"></xs:enumeration>
+        <xs:enumeration value="Application"></xs:enumeration>
+        <xs:enumeration value="Request"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+	
+	  <xs:sequence>
+        	<xs:element name="errorId" type="xs:long"></xs:element>
+		  	<xs:element name="domain" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="subdomain" type="xs:string"></xs:element>
+			<xs:element name="severity" type="tns:ErrorSeverity"></xs:element>
+	  		<xs:element name="category" type="tns:ErrorCategory"></xs:element>
+	  		<xs:element name="message" type="xs:string"></xs:element>
+	  		<xs:element minOccurs="0" name="exceptionId" type="xs:token"></xs:element>
+	  		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"></xs:element>
+		</xs:sequence>
+	
+	
+	</xs:complexType><xs:complexType name="ErrorMessage">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		
+		<!-- 
+		<xs:sequence>
+
+				processContents="lax" />
+		</xs:sequence>
+		-->
+		
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+    		</xs:element>
+    	</xs:sequence>
+		
+	</xs:complexType><xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:simpleContent>
+		  <xs:extension base="xs:string">
+		    <xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
+		  </xs:extension>
+		</xs:simpleContent>
+	</xs:complexType><xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="Error"></xs:enumeration>
+        <xs:enumeration value="Warning"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ExtensionType">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element name="id" type="xs:positiveInteger"></xs:element>
+			<xs:element name="version" type="xs:string"></xs:element>
+			<xs:element name="contentType" type="xs:string"></xs:element>
+			<xs:element name="value" type="xs:string"></xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType abstract="true" name="BaseRequest">
+		<xs:annotation>
+			<xs:documentation>
+				This is the base class for request container for all
+				service operations.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="CreateTopology">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="CMServiceTypeLibrary" namespace="http://www.ebay.com/cloud/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseRequest">
+				<xs:sequence>
+
+					<xs:element name="requestContext" type="tns:RequestContext">
+					</xs:element>
+					<xs:element name="topologyRequest" type="tns:TopoRequest"></xs:element>
+					<xs:element default="true" name="saveTopologyFlag" type="xs:boolean"></xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType></xs:schema>
+	</wsdl:types>
+
+	<message name="topoBuilderServiceException">
+		<part name="topoBuilderServiceException" element="xs:string" />
+	</message>
+    <message name="assetInfoRetrievalServiceException">
+		<part name="assetInfoRetrievalServiceException" element="xs:string" />
+	</message>
+	<message name="createTopologyRequest">
+		<part name="createTopologyRequest" element="tns:createTopology"></part>
+	</message>
+	<message name="createTopologyResponse">
+		<part name="createTopologyResponse" element="tns:createTopologyResponse"></part>
+	</message>
+	<message name="getAssetInfoRequest">
+		<part name="getAssetInfoRequest" element="tns:getAssetInfo"></part>
+	</message>
+	<message name="getAssetInfoResponse">
+		<part name="getAssetInfoResponse" element="tns:getAssetInfoResponse"></part>
+	</message>
+	<portType name="APTopoBuilderServicePort">
+		<operation name="createTopology">
+			<input message="tns:createTopologyRequest"></input>
+			<output message="tns:createTopologyResponse"></output>
+			<fault name="topoBuilderException" message="tns:topoBuilderServiceException" />
+		</operation>
+		<operation name="getAssetInfo">
+			<input message="tns:getAssetInfoRequest"></input>
+			<output message="tns:getAssetInfoResponse"></output>
+			<fault name="assetInfoRetrievalException" message="tns:assetInfoRetrievalServiceException" />
+		</operation>
+	</portType>
+	<binding name="APTopoBuilderServiceSOAPBinding" type="tns:APTopoBuilderServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="createTopology">
+			<soap:operation soapAction="urn:createTopology" style="document" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="topoBuilderException">
+				<soap:fault name="topoBuilderException" use="literal" />
+			</fault>
+		</operation>
+		<operation name="getAssetInfo">
+			<soap:operation soapAction="urn:getAssetInfo" style="document" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="assetInfoRetrievalException">
+				<soap:fault name="assetInfoRetrievalException" use="literal" />
+			</fault>
+		</operation>
+	</binding>
+	<service name="APTopoBuilderService">
+		<port name="APTopoBuilderServiceSOAPPort" binding="tns:APTopoBuilderServiceSOAPBinding">
+			<soap:address
+				location="http://svcs.ebay.com/services/cloud/v1/APTopoBuilderService" />
+		</port>
+	</service>
+</definitions>

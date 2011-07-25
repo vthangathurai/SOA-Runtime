@@ -1,0 +1,1728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/listing/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ListingDraftService"
+	targetNamespace="http://www.ebay.com/marketplace/listing/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/listing/v1/services">
+			<xs:element name="createListingDraftRequest"
+				type="tns:CreateListingDraftRequest" />
+			<xs:complexType name="CreateListingDraftRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="draftInitInfo" type="tns:DraftInitialization" />
+							<xs:element name="directive"
+								type="tns:Directive" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createListingDraftResponse"
+				type="tns:CreateListingDraftResponse" />
+			<xs:complexType name="CreateListingDraftResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="listingDraft" type="tns:ListingDraft" />
+							<xs:element name="draftId" type="xs:long"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="updateListingDraftRequest"
+				type="tns:UpdateListingDraftRequest" />
+
+			<xs:complexType name="UpdateListingDraftRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="listing"
+								type="tns:Listing" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="deletedField"
+								type="tns:DeletedField" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="directive"
+								type="tns:Directive" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="listingMode"
+								type="xs:token" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="draftId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+
+							<xs:element name="template"
+								type="tns:Template" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="updateListingDraftResponse"
+				type="tns:UpdateListingDraftResponse" />
+
+			<xs:complexType name="UpdateListingDraftResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element name="listingDraft"
+								type="tns:ListingDraft" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="publishListingDraftRequest"
+				type="tns:PublishListingDraftRequest" />
+			<xs:complexType name="PublishListingDraftRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="draftId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="directive"
+								type="tns:Directive" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="listingMode"
+								type="xs:token" maxOccurs="1" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="publishListingDraftResponse"
+				type="tns:PublishListingDraftResponse" />
+			<xs:complexType name="PublishListingDraftResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element name="listingDraft"
+								type="tns:ListingDraft" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getListingDraftsRequest"
+				type="tns:GetListingDraftsRequest" />
+			<xs:complexType name="GetListingDraftsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+
+							<xs:element name="draftInfo"
+								type="tns:DraftInfo" maxOccurs="unbounded" minOccurs="1">
+							</xs:element>
+							<xs:element name="directive"
+								type="tns:Directive" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getListingDraftsResponse"
+				type="tns:GetListingDraftsResponse" />
+			<xs:complexType name="GetListingDraftsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element name="listingDraft"
+								type="tns:ListingDraft" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element
+								name="listingDraftResponseContainer"
+								type="tns:ListingDraftResponseContainer" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DraftInfo">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="draftId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="listingMode" type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+			<xs:complexType name="DeletedField">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="xPath"
+						type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Directive">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="action" type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DraftInitialization">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="listingMode" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="listingSource" type="tns:ListingSource">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+
+
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+
+
+
+			<xs:complexType name="ListingSource">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="sourceType" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="id"
+						type="xs:long">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"></xs:enumeration>
+					<xs:enumeration value="Application"></xs:enumeration>
+					<xs:enumeration value="Request"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"></xs:element>
+					<xs:element name="domain" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+					</xs:element>
+					<xs:element name="message" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter">
+					</xs:element>
+				</xs:sequence>
+
+
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData">
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"></xs:enumeration>
+					<xs:enumeration value="Warning"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="Fee">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element minOccurs="0" name="feeType"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="value"
+						type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="promoValue" type="xs:double">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Fees">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="fee" type="tns:Fee">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="currency" type="tns:IsoCurrencyCode">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="symbol" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="decimalPlaces" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="decimalSymbol" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="singularName" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="pluralName" type="xs:token">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Field">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="fieldId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="bMode"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="selectedValue" type="tns:ValueHolder">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="optionValue" type="tns:OptionValue">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="message" type="tns:ErrorMessage">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="dataType" type="xs:token">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+			<xs:complexType name="ListingDraft">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="draftId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="listing" type="tns:Listing">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="field" type="tns:Field">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="fees"
+						type="tns:Fees">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="error"
+						type="tns:ErrorMessage">
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="template" type="tns:Template">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OptionValue">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element minOccurs="1" name="caption"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="tns:ValueHolder">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Template">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="templateId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="templateName" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:complexType name="ListingDraftResponseContainer">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="errorMessage" type="tns:ErrorMessage">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="listingDraft" type="tns:ListingDraft">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+
+			<xs:complexType name="ListingDraftRevisionDetail">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="original" type="tns:Field">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="current" type="tns:Field">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getListingDraftRevisionDetailsResponse"
+				type="tns:GetListingDraftRevisionDetailsResponse" />
+			<xs:complexType
+				name="GetListingDraftRevisionDetailsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="revisionDetail"
+								type="tns:ListingDraftRevisionDetail" minOccurs="0"
+								maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getListingDraftRevisionDetailsRequest"
+				type="tns:GetListingDraftRevisionDetailsRequest" />
+			<xs:complexType
+				name="GetListingDraftRevisionDetailsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="listingMode"
+								type="xs:token" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="draftId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ValueHolder">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element minOccurs="0" name="booleanValue"
+						type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="stringValue" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="intValue" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="longValue" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="floatValue" type="xs:float">
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="doubleValue" type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="dateValue" type="xs:dateTime">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BestOffer">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="autodeclineAmount" type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="autoAcceptAmount" type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="autoDecline" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="autoAccept" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="bestOfferEnabled" type="xs:boolean">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CategoryInfo">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="0" name="id"
+						type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="type"
+						type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Enhancement">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="subTitle" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="bold"
+						type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="border" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="featuredPlus" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="highlight" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="privateListing" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="galleryType" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="featuredFirstDuration" type="xs:unsignedInt">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="proPack" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="valuePack" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="homePageFeatured" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="featureFirst" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="photoDisplayType" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="layoutId" type="xs:unsignedInt">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="themeId" type="xs:unsignedInt">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="IsoCurrencyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Currency representation based on ISO 4217
+						Standard:
+						http://www.iso.org/iso/currency_codes_list-1
+						Every currency has the following attributs:
+						Numeric Code - 3 Digits Zero Padded Numeric
+						Code, which uniquely identifies a currency.
+						Alphabetic Code - 3 Letter Alphabetic Code,
+						which uniquely identifies a currency. Currency -
+						The name of the currency Antity - The
+						country/Entity, which uses this currency.
+
+						This type exposes only a sub-set of ISO 4217.
+						The enumeration represents the Alphabetic Code.
+						Comments are included for quick reference.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token"><!-- Currency,                         Entity                          ISO Currency Code -->
+					<xs:enumeration value="USD"></xs:enumeration>
+					<!-- U.S. Dollar                       United States                   840               -->
+					<xs:enumeration value="CAD"></xs:enumeration>
+					<!-- Canadian Dollar                   Canada                          124               -->
+					<xs:enumeration value="GBP"></xs:enumeration>
+					<!-- Pound Sterling                    United Kingdom                  826               -->
+					<xs:enumeration value="DEM"></xs:enumeration>
+					<!-- German Mark                       Germany                         276               -->
+					<xs:enumeration value="AUD"></xs:enumeration>
+					<!-- Australian Dollar                 Australia                       036               -->
+					<xs:enumeration value="JPY"></xs:enumeration>
+					<!-- Japanese Yen                      Japanese Yen                    392               -->
+					<xs:enumeration value="EUR"></xs:enumeration>
+					<!-- Euro                              European Union                  978               -->
+					<xs:enumeration value="FRF"></xs:enumeration>
+					<!-- French Franc                      France                          250               -->
+					<xs:enumeration value="ATS"></xs:enumeration>
+					<!-- Austrian Schilling                Austria                         040               -->
+					<xs:enumeration value="BEF"></xs:enumeration>
+					<!-- Belgian Franc                     Belgium                         056               -->
+					<xs:enumeration value="CHF"></xs:enumeration>
+					<!-- Swiss Franc                       Switzerland                     756               -->
+					<xs:enumeration value="CNY"></xs:enumeration>
+					<!-- Chinese Yuan Renminbi             China                           156               -->
+					<xs:enumeration value="CZK"></xs:enumeration>
+					<!-- Czech Koruna                      Czech Republic                  203               -->
+					<xs:enumeration value="DKK"></xs:enumeration>
+					<!-- Danish Krone                      Denmark                         208               -->
+					<xs:enumeration value="ESP"></xs:enumeration>
+					<!-- Spanish Peseta                    Spain                           724               -->
+					<xs:enumeration value="FIM"></xs:enumeration>
+					<!-- Finnish Markka                    Finland                         246               -->
+					<xs:enumeration value="GRD"></xs:enumeration>
+					<!-- Greek Drachma                     Greece                          300               -->
+					<xs:enumeration value="HKD"></xs:enumeration>
+					<!-- Hong Kong Dollar                  Hong Kong                       344               -->
+					<xs:enumeration value="HUF"></xs:enumeration>
+					<!-- Hungarian Forint                  Hungary                         348               -->
+					<xs:enumeration value="IDR"></xs:enumeration>
+					<!-- Indonesian Rupiah                 Indonesia                       360               -->
+					<xs:enumeration value="IEP"></xs:enumeration>
+					<!-- Irish Pound                       Ireland                         372               -->
+					<xs:enumeration value="ILS"></xs:enumeration>
+					<!-- Israeli new Shekel                Israel                          376               -->
+					<xs:enumeration value="ITL"></xs:enumeration>
+					<!-- Italian Lira                      Italy                           380               -->
+					<xs:enumeration value="NLG"></xs:enumeration>
+					<!-- Dutch Guilder                     Netherlands                     528               -->
+					<xs:enumeration value="NOK"></xs:enumeration>
+					<!-- Norwegian Krone                   Norway                          578               -->
+					<xs:enumeration value="NZD"></xs:enumeration>
+					<!-- New Zealand Dollar                New Zealand                     554               -->
+					<xs:enumeration value="PHP"></xs:enumeration>
+					<!-- Philippine Peso                   Philippines                     608               -->
+					<xs:enumeration value="PLN"></xs:enumeration>
+					<!-- Polish New Zloty                  Poland                          985               -->
+					<xs:enumeration value="PTE"></xs:enumeration>
+					<!-- Portuguese Escudo                 Portugal                        620               -->
+					<xs:enumeration value="RUR"></xs:enumeration>
+					<!-- Russian Ruble                     Russian Federation              810               -->
+					<xs:enumeration value="SEK"></xs:enumeration>
+					<!-- Swedish Krona                     Sweden                          752               -->
+					<xs:enumeration value="SGD"></xs:enumeration>
+					<!-- Singapore Dollar                  Singapore                       702               -->
+					<xs:enumeration value="THB"></xs:enumeration>
+					<!-- Thai Baht                         Thailand                        764               -->
+					<xs:enumeration value="TWD"></xs:enumeration>
+					<!-- New Taiwan dollar                 Taiwan                          901               -->
+					<xs:enumeration value="ZAR"></xs:enumeration>
+					<!-- South African Rand                South Africa                    710               -->
+					<xs:enumeration value="INR"></xs:enumeration>
+					<!-- Indian Rupee                      India                           356               -->
+					<xs:enumeration value="PEN"></xs:enumeration>
+					<!-- Peruvian New Sol                  Peru                            604               -->
+					<xs:enumeration value="MYR"></xs:enumeration>
+					<!-- Malaysian Ringgit                 Malaysia                        458               -->
+					<xs:enumeration value="VND"></xs:enumeration>
+					<!-- Vietnamese New Dong               Vietnam                         704               -->
+					<xs:enumeration value="KRW"></xs:enumeration>
+					<!-- South Korean Won                  South Korea                     410               -->
+					<xs:enumeration value="TRY"></xs:enumeration>
+					<!-- New Turkish Lira                  Turkey                          949               -->
+					<xs:enumeration value="ANG"></xs:enumeration>
+					<!-- Antillian Guilder                 Netherlands Antilles            532               -->
+					<xs:enumeration value="AWG"></xs:enumeration>
+					<!-- Aruban Guilder                    Aruba                           533               -->
+					<xs:enumeration value="BMD"></xs:enumeration>
+					<!-- Bermudan Dollar                   Bermudan Dollar                 060               -->
+					<xs:enumeration value="CRC"></xs:enumeration>
+					<!-- Costa Rican Colon                 Costa Rica                      188               -->
+					<xs:enumeration value="RON"></xs:enumeration>
+					<!-- Romanian New Leu                  Romania                         946               -->
+					<xs:enumeration value="VEF"></xs:enumeration>
+					<!-- Venezuelan Bolivar Fuerte         Venezuela                       937               -->
+					<xs:enumeration value="BBD"></xs:enumeration>
+					<!-- Barbados Dollar                   Barbados                        052               -->
+					<xs:enumeration value="BGN"></xs:enumeration>
+					<!-- Bulgarian Lev                     Bulgaria                        975               -->
+					<xs:enumeration value="BND"></xs:enumeration>
+					<!-- Brunei Dollar                     Brunei                          096               -->
+					<xs:enumeration value="BSD"></xs:enumeration>
+					<!-- Bahamian Dollar                   Bahamas                         044               -->
+					<xs:enumeration value="COP"></xs:enumeration>
+					<!-- Colombian Peso                    Columbia                        170               -->
+					<xs:enumeration value="DOP"></xs:enumeration>
+					<!-- Dominican Peso                    Dominican Republic              214               -->
+					<xs:enumeration value="GTQ"></xs:enumeration>
+					<!-- Guatemalan Quetzal                Guatemala                       320               -->
+					<xs:enumeration value="KYD"></xs:enumeration>
+					<!-- Cayman Isles Dollar               Cayman Islands                  136               -->
+					<xs:enumeration value="MVR"></xs:enumeration>
+					<!-- Maldivian Rufiyaa                 Maldives                        462               -->
+					<xs:enumeration value="QAR"></xs:enumeration>
+					<!-- Qatari Rial                       Qatar                           634               -->
+					<xs:enumeration value="SAR"></xs:enumeration>
+					<!-- Saudi Riyal                       Saudi Arabia                    682               -->
+					<xs:enumeration value="TTD"></xs:enumeration>
+					<!-- Trinidadian and Tobagonian Dollar Trinidad and Tobago             780               -->
+					<xs:enumeration value="UAH"></xs:enumeration>
+					<!-- Ukrainian hryvnia                 Ukraine                         980               -->
+					<xs:enumeration value="UYU"></xs:enumeration>
+					<!-- Peso Uruguayo                     Uruguay                         858               -->
+					<xs:enumeration value="XCD"></xs:enumeration>
+					<!-- East Caribbean Dollar             East Caribbean Currency Area    951               -->
+					<xs:enumeration value="XPF"></xs:enumeration>
+					<!-- French Polynesian Franc           French Polynesia                953               -->
+					<xs:enumeration value="JMD"></xs:enumeration>
+					<!-- Jamaican Dollar                   Jamaica                         388               -->
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Item">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="0" name="title"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="description" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="sku"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="subTitle" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="listingVariation" type="tns:ListingVariation">
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="variationItem" type="tns:Item">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="variationSpecific" type="tns:NameValue">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="variationSpecificsMetaData" type="tns:NameValue">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="itemSpecific" type="tns:NameValue">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemLocation">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="city"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="state"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="zipCode" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="countryId" type="xs:int">
+					</xs:element>
+
+
+
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="version" type="xs:int">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Listing">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ListingDraftServiceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element minOccurs="0" name="format"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="quantity" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="startPrice" type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="price"
+						type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="duration" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="startDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="scheduledListing" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="auctionReservePrice" type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lotSize" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="sellerId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="goodTillCancelled" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="Item"
+						type="tns:Item">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="enhancementInfo" type="tns:Enhancement">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="categoryInfo" type="tns:CategoryInfo">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="storeCategoryInfo" type="tns:CategoryInfo">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="listingCurrency" type="tns:IsoCurrencyCode">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="itemId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="siteId" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="condition" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="itemLocation" type="tns:ItemLocation">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="paymentMethod" type="tns:PaymentMethod">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="returnPolicy" type="tns:ReturnPolicy">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="bestOffer" type="tns:BestOffer">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="listingVariation" type="tns:ListingVariation">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ListingVariation">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="id"
+						type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="price"
+						type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="quantity" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="restockedOn" type="xs:date">
+					</xs:element>
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="NameValue">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="value" type="xs:token">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PaymentMethod">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="acceptedPaymentMethod" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="paypalEmailAddress" type="xs:token">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ReturnPolicy">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/listing/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="policyDetails" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="returnsAccepted" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="refundMethod" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="refundBy" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="refundShipmentPayee" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="returnPeriod" type="xs:unsignedInt">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="warrantyDurationOption" type="xs:token">
+					</xs:element>
+
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="warrantyTypeOption" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="warrantyOfferedOption" type="xs:token">
+					</xs:element>
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="verifyListingDraftRequest"
+				type="tns:VerifyListingDraftRequest" />
+			<xs:complexType name="VerifyListingDraftRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="listing"
+								type="tns:Listing" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="deletedField"
+								type="tns:DeletedField" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="directive"
+								type="tns:Directive" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="listingMode"
+								type="xs:token" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="draftId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="template"
+								type="tns:Template" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="verifyListingDraftResponse"
+				type="tns:VerifyListingDraftResponse" />
+			<xs:complexType name="VerifyListingDraftResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element name="listingDraft"
+								type="tns:ListingDraft" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="createListingDraftRequest">
+		<wsdl:part element="tns:createListingDraftRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="createListingDraftResponse">
+		<wsdl:part element="tns:createListingDraftResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="updateListingDraftRequest">
+		<wsdl:part name="params"
+			element="tns:updateListingDraftRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateListingDraftResponse">
+		<wsdl:part name="params"
+			element="tns:updateListingDraftResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="publishListingDraftRequest">
+		<wsdl:part name="params"
+			element="tns:publishListingDraftRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="publishListingDraftResponse">
+		<wsdl:part name="params"
+			element="tns:publishListingDraftResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getListingDraftsRequest">
+		<wsdl:part name="params"
+			element="tns:getListingDraftsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getListingDraftsResponse">
+		<wsdl:part name="params"
+			element="tns:getListingDraftsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getListingDraftRevisionDetailsRequest">
+		<wsdl:part name="params"
+			element="tns:getListingDraftRevisionDetailsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getListingDraftRevisionDetailsResponse">
+		<wsdl:part name="params"
+			element="tns:getListingDraftRevisionDetailsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="verifyListingDraftRequest">
+		<wsdl:part name="params"
+			element="tns:verifyListingDraftRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="verifyListingDraftResponse">
+		<wsdl:part name="params"
+			element="tns:verifyListingDraftResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ListingDraftServicePort">
+		<wsdl:operation name="createListingDraft">
+			<wsdl:input message="tns:createListingDraftRequest" />
+			<wsdl:output message="tns:createListingDraftResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="updateListingDraft">
+			<wsdl:input message="tns:updateListingDraftRequest"></wsdl:input>
+			<wsdl:output message="tns:updateListingDraftResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="publishListingDraft">
+			<wsdl:input message="tns:publishListingDraftRequest"></wsdl:input>
+			<wsdl:output message="tns:publishListingDraftResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getListingDrafts">
+			<wsdl:input message="tns:getListingDraftsRequest"></wsdl:input>
+			<wsdl:output message="tns:getListingDraftsResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getListingDraftRevisionDetails">
+			<wsdl:input
+				message="tns:getListingDraftRevisionDetailsRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getListingDraftRevisionDetailsResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="verifyListingDraft">
+			<wsdl:input message="tns:verifyListingDraftRequest"></wsdl:input>
+			<wsdl:output message="tns:verifyListingDraftResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ListingDraftServiceHttpBinding"
+		type="tns:ListingDraftServicePort">
+
+		<http:binding verb="POST" />
+		<wsdl:operation name="createListingDraft">
+
+			<http:operation location="/createListingDraft" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateListingDraft">
+
+			<http:operation location="/updateListingDraft" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="publishListingDraft">
+
+			<http:operation location="/publishListingDraft" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getListingDrafts">
+
+			<http:operation location="/getListingDrafts" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getListingDraftRevisionDetails">
+			<http:operation location="/getListingDraftRevisionDetails" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="verifyListingDraft">
+			<http:operation location="/verifyListingDraft" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ListingDraftServiceSOAPBinding"
+		type="tns:ListingDraftServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="createListingDraft">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/listing/v1/services/createListingDraft" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateListingDraft">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/listing/v1/services/updateListingDraft" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="publishListingDraft">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/listing/v1/services/publishListingDraft" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getListingDrafts">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/listing/v1/services/getListingDrafts" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getListingDraftRevisionDetails">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/listing/v1/services/getListingDraftRevisionDetails" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="verifyListingDraft">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/listing/v1/services/verifyListingDraft" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ListingDraftService">
+		<wsdl:port binding="tns:ListingDraftServiceHttpBinding"
+			name="ListingDraftServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/listing/ListingDraftService/v1" />
+		</wsdl:port>
+		<wsdl:port binding="tns:ListingDraftServiceSOAPBinding"
+			name="ListingDraftServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/listing/ListingDraftService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

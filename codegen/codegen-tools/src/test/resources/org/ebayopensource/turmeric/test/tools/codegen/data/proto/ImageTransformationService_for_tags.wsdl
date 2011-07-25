@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ImageTransformationService" targetNamespace="http://www.ebay.com/marketplace/image/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/image/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/image/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation> 
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+					 <xs:annotation>
+             <xs:documentation>
+              Reserved for future use.
+             </xs:documentation>
+					 </xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+               The released version of this service that eBay uses to process the request.
+               The version in use is normally the latest release version,
+               as specified in the service documentation.
+               </xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+							This value represents the date and time when eBay processed the request.
+							This value is returned in GMT, the ISO 8601 date and time format 
+							(YYYY-MM-DDTHH:MM:SS.SSSZ). See the &quot;dateTime&quot; type for information 
+							about the time format, and for details on converting to and from the GMT time zone.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+					 <xs:annotation>
+             <xs:documentation>
+              Reserved for future use.
+             </xs:documentation>
+					 </xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of errors:
+								request errors, application errors, and
+								system errors.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System">
+					  <xs:annotation>
+					   <xs:documentation>
+					     System error.
+						 </xs:documentation>
+					 </xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+					  <xs:annotation>
+					   <xs:documentation>
+					     Application error.
+						 </xs:documentation>
+					 </xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+					  <xs:annotation>
+					   <xs:documentation>
+					     Request error.
+						 </xs:documentation>
+					 </xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+					  <xs:annotation>
+              <xs:documentation>
+                A unique code that identifies the particular error condition that
+                occurred. Your application can use error codes as identifiers in your
+                customized error-handling algorithms.
+              </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					
+				<xs:element name="domain" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Name of the domain in which the error occurred.
+          &lt;dl&gt;
+          &lt;dt&gt;
+            &lt;b&gt;domain values:&lt;/b&gt;
+          &lt;/dt&gt;
+          &lt;dt&gt;
+            Marketplace
+          &lt;/dt&gt;
+          &lt;dd&gt;
+            A business or validation error occurred in the service.
+          &lt;/dd&gt;
+          &lt;dt&gt;
+            SOA 
+          &lt;/dt&gt;
+          &lt;dd&gt;
+            An exception occurred in the SOA (Service Oriented Architecture)
+            framework.
+          &lt;/dd&gt;
+          &lt;/dl&gt;
+         </xs:documentation>
+        </xs:annotation>
+       </xs:element>
+       
+			 <xs:element minOccurs="0" name="subdomain" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Name of the subdomain in which the error occurred:
+          &lt;dl&gt;
+          &lt;dt&gt;Subdomain values:&lt;/dt&gt;
+          &lt;dt&gt;&lt;i&gt;ThisServiceDomain&lt;/i&gt;&lt;/dt&gt;
+          &lt;dd&gt;The error is specific to this service.&lt;/dd&gt;
+          &lt;dt&gt;MarketplaceCommon&lt;/dt&gt;
+          &lt;dd&gt;The error is common to all services.&lt;/dd&gt;
+          &lt;/dl&gt;
+         </xs:documentation>
+        </xs:annotation>
+       </xs:element>
+       
+       <xs:element name="severity" type="tns:ErrorSeverity">
+        <xs:annotation>
+         <xs:documentation>
+          Indicates whether the reported problem is fatal (an error) or is less-
+          severe (a warning). Review the error message details for information on
+          the cause.
+          &lt;br&gt;&lt;br&gt;
+          If the request fails and the application is the source of the error (for
+          example, a required element is missing), update the application before
+          you retry the request. If the problem is due to incorrect user data,
+          alert the end-user to the problem and provide the means for them to
+          correct the data. 
+          &lt;br&gt;&lt;br&gt;
+          If the source of the problem is in the service, you can retry the request
+          a reasonable number of times (try the request twice).
+          After the problem is resolved, you can resend the request in its original
+          form.
+          &lt;br&gt;&lt;br&gt;
+          If a warning occurs, warning information is returned in addition to the
+          business data. Normally, you do not need to resend the request (as the
+          original request was successful). 
+         </xs:documentation>
+        </xs:annotation>
+       </xs:element>
+       
+       <xs:element name="category" type="tns:ErrorCategory">
+        <xs:annotation>
+         <xs:documentation>
+          There are three categories of errors: Request errors, application 
+          errors, and system errors.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element name="message" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          A detailed description of the condition that caused the error.
+         </xs:documentation>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element minOccurs="0" name="exceptionId" type="xs:token">
+        <xs:annotation>
+         <xs:documentation>
+          Unique identifier for an exception associated with an error.
+         </xs:documentation>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+        type="tns:ErrorParameter">
+        <xs:annotation>
+         <xs:documentation>
+          Various warning and error messages that return one or more variables that 
+          contain contextual information about the error. This is often the 
+          field or value that triggered the error.
+         </xs:documentation>
+        </xs:annotation>
+       </xs:element>
+			 
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information for an error or warning that
+								occurred when eBay processed the
+								request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+					  <xs:annotation>
+             <xs:documentation>
+              A container for error details.
+             </xs:documentation>
+            </xs:annotation>
+        </xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional">
+						  <xs:annotation>
+               <xs:documentation>
+               Error parameter name.
+               </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+     <xs:restriction base="xs:token">
+       <xs:enumeration value="Error">
+        <xs:annotation>
+          <xs:documentation>
+           Error type.
+          </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+       <xs:enumeration value="Warning">
+        <xs:annotation>
+          <xs:documentation>
+           Warning type.
+          </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+     </xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="ExtensionType">
+     <xs:annotation>
+       <xs:documentation>
+        Reserved for future use.
+       </xs:documentation>
+         <xs:appinfo> 
+          <NoCalls/>
+         </xs:appinfo>
+     </xs:annotation>
+     <xs:sequence>
+       <xs:element name="id" type="xs:positiveInteger">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+          <xs:appinfo> 
+	         <NoCalls/>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element name="version" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo> 
+            <NoCalls/>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element name="contentType" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo> 
+            <NoCalls/>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element name="value" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo> 
+            <NoCalls/>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+			 </xs:sequence>
+			</xs:complexType>
+			
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Gets the version of this service and a timestamp for when the request processes.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Gets the version of this service and a timestamp for when the request processes.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DimensionConstraint">
+				<xs:annotation>
+					<xs:documentation>
+						Dimension Constraint details - the type of
+						constraint like width, height, etc. and the value.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="dimensionValue" type="tns:DimensionMeasure">
+						<xs:annotation>
+							<xs:documentation>
+								The dimension value is positive integer value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="dimensionType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The dimensionType can be height, width, etc.
+								It's defined as enumeration in DimensionTypeEnum. It's a String type enum.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DimensionMeasure">
+				<xs:annotation>
+					<xs:documentation>
+						Dimension measure type contains the dimension value, and its unit like pixel, cm, etc.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:annotation>
+						<xs:documentation>
+							The dimension unit value can be pixel, cm, etc.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:extension base="xs:int">
+						<xs:annotation>
+								<xs:documentation>
+									The dimension unit value can be pixel, cm, etc.
+								</xs:documentation>
+							</xs:annotation>
+						<xs:attribute name="unit" type="xs:token">
+							<xs:annotation>
+								<xs:documentation>
+									The measurement unit can be px, cm, or in.
+								</xs:documentation>
+							</xs:annotation>			
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name="ImageProcessingSpec">
+				<xs:annotation>
+					<xs:documentation>
+					The details of the processing spec, which includes following elements:&lt;br&gt;
+						format - image format&lt;br&gt;
+						filter - image filter, Lansen&lt;br&gt;
+						dimensionConstraint - provide dimensions details for image height, width, etc.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="padding" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								If this flag is true, includes padding in the generated image. 
+								The default value is false.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="format" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Contains image format info. 
+								This is defined in the MediaFormatEnum class. All enumeration values 
+								are represented using String enumeration. 
+								Example: BMP, GIF, JPG, PNG, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="filter" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Filter type for image processing.
+								This is defined in the EpsImageResizeFilterTypeEnum class. 
+								All enumeration values are represented using int enumeration.
+								Example: 0, 1, 2, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="dimensionConstraint" type="tns:DimensionConstraint">
+						<xs:annotation>
+							<xs:documentation>
+								Dimension Constraint - the types of dimension constraints like width, height, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Dimensions">
+				<xs:annotation>
+					<xs:documentation>
+						The dimensions of the image.
+						</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="height" type="xs:unsignedInt">
+						<xs:annotation>
+							<xs:documentation>
+							Contains the height of an image as a positive value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="width" type="xs:unsignedInt">
+						<xs:annotation>
+							<xs:documentation>
+							Contains the width of image as a positive value.							
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ImageMetaData">
+				<xs:annotation>
+					<xs:documentation>
+						Image metadata details of an image. it can be of type system or user metadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Value of metadata.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the metadata, like Last-Modified, size, namespace, 
+								FileType, Filename, ObjectID, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="type" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								A type of System or User metadata.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Image">
+				<xs:annotation>
+					<xs:documentation>Contains details about the input image, which includes,
+					raw binary of image, colorSpace, image format type, hash, image digest signature, 
+					image quality (jpeg compression), dimensions (height/width),
+					and other metadata details. 
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="binaryData" type="xs:hexBinary">
+						<xs:annotation>
+							<xs:documentation>
+							Contains raw image binaries.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="imageSpecification" type="tns:ImageSpecification">
+						<xs:annotation>
+							<xs:documentation>
+							Contains colorspace, image format, hash, image signature, 
+							image quality and image dimensions (width, height, etc).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="metadata" type="tns:ImageMetaData">
+						<xs:annotation>
+							<xs:documentation>
+								Image metadata details of an image. It can be of type system or user metadata.	
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="userId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Image uploader's userId.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="url" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the input image URL as a string. If both binaryData and 
+								externalPictureUrl are provided, URL input is used as the preferred input.							
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="externalPictureUrl" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Returns an image URL of the external hosted image URL 
+								that's provided with the input request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ImageSpecification">
+				<xs:annotation>
+					<xs:documentation>
+						Metadata details of an image.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ImageTypeLibraryV1" namespace="http://www.ebay.com/marketplace/image/v1/types"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="colorSpace" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Color space, such as CMYK, RGB, etc.
+							</xs:documentation>
+						</xs:annotation>					
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="format" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Contains image format type info, image format is defined as 
+								a String: Example, JPG, GIF, BMP,PNG, etc.
+								The format is defined using enumeration in MediaFormatEnum using a String value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="hash" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A unique value that identifies an image. Image hash can be calculated 
+								using md5 hashing algorithm. This service performs a 64-bit encryption 
+								on a generated md5 hash and returns the hash value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="signature" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Contains image signature digest info.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="quality" type="xs:unsignedInt">
+						<xs:annotation>
+							<xs:documentation>
+								Contains image quality(jpeg compression) info.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="dimensions" type="tns:DimensionConstraint">
+						<xs:annotation>
+							<xs:documentation>
+								Contains image dimensions info like height, width, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="resizeImageRequest" type="tns:ResizeImageRequest"/>
+			<xs:complexType name="ResizeImageRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Contains info about the resize operation, which can be input image binaries or an image URL, 
+						and details about the required resized image.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="processingSpec" type="tns:ImageProcessingSpec">
+								<xs:annotation>
+									<xs:documentation>
+										The details of the processing spec, which includes following elements:&lt;br&gt;
+										format - image format&lt;br&gt;
+										filter - image filter, Lansen&lt;br&gt;
+										dimensionConstraint - provide dimensions details for image height, width, etc.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" name="image" type="tns:Image">
+								<xs:annotation>
+									<xs:documentation>
+									Contains image details info, which may include a 
+									raw binary of the image, color space, image format type, hash, image digest signature, 
+									image quality(jpeg compression), dimensions (height/width),
+									and other metadata details.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ResizeImageResponse">
+				<xs:annotation>
+					<xs:documentation>
+						A container contains that holds the service response.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="image" type="tns:Image">
+								<xs:annotation>
+									<xs:documentation>
+										Contains image details info, which may include the 
+										raw binary of an image, color space, image format type, hash, 
+										image signature digest, 
+										image quality(jpeg compression), dimensions (height/width),
+										and other metadata details.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="resizeImageResponse" type="tns:ResizeImageResponse">
+				<xs:annotation>
+					<xs:documentation>
+					Returns resized image ouput.
+				</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:schema>
+	</types>
+	<message name="getVersionRequest">
+		<part name="params" element="tns:getVersionRequest">
+    </part>
+	</message>
+	<message name="resizeImageRequest">
+		<part name="messageParameters" element="tns:resizeImageRequest">
+    </part>
+	</message>
+	<message name="resizeImageResponse">
+		<part name="messageParameters" element="tns:resizeImageResponse">
+    </part>
+	</message>
+	<message name="getVersionResponse">
+		<part name="params" element="tns:getVersionResponse">
+    </part>
+	</message>
+	<portType name="ImageTransformationServicePort">
+		<operation name="getVersion">
+			<wsdl:documentation>
+				Gets the version of this service and a timestamp for when the request processes.
+			</wsdl:documentation>
+			<input message="tns:getVersionRequest">
+    </input>
+			<output message="tns:getVersionResponse">
+    </output>
+		</operation>
+		<operation name="resizeImage">
+			<input message="tns:resizeImageRequest">
+    </input>
+			<output message="tns:resizeImageResponse">
+    </output>
+		</operation>
+	</portType>
+	<binding name="ImageTransformationServiceHttpBinding" type="tns:ImageTransformationServicePort">
+		<http:binding verb="POST"/>
+		<operation name="getVersion">
+			<http:operation location="/getVersion"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="resizeImage">
+			<http:operation location="/resizeImage"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="ImageTransformationServiceSOAPBinding" type="tns:ImageTransformationServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="getVersion">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/image/v1/services/getVersion"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="resizeImage">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/image/v1/services/resizeImage"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="ImageTransformationService">
+		<wsdl:documentation>
+			<version>1.0.0</version>
+			Image Transformation operations include changes to the image content like
+			resizing, unsharpening, watermarking etc.
+		</wsdl:documentation>
+		<port name="ImageTransformationServiceHttpPort" binding="tns:ImageTransformationServiceHttpBinding">
+			<http:address location="https://svcs.ebay.com/services/image/v1/ImageTransformationService"/>
+		</port>
+		<port name="ImageTransformationServiceSOAPPort" binding="tns:ImageTransformationServiceSOAPBinding">
+			<soap12:address location="https://svcs.ebay.com/services/image/v1/ImageTransformationService"/>
+		</port>
+	</service>
+</definitions>

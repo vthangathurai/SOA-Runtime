@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/gemcache/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GemDashboardService"
+	targetNamespace="http://www.ebay.com/marketplace/gemcache/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/gemcache/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element 
+						name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded"  />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element  name="errorMessage" type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element  name="version"	type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element  name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extension" type="tns:ExtensionType"  minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element name="subdomain"
+						type="xs:string" minOccurs="0"  />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element name="exceptionId"
+						type="xs:token" minOccurs="0"  />
+					<xs:element 
+						name="parameter" type="tns:ErrorParameter" minOccurs="0"  maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element 
+						name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded"  />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+						processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"	type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						GetVersionRequest
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						getVersionResponse
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence><!--
+							<xs:element 
+								name="version" type="xs:string" minOccurs="1" maxOccurs="1" />
+						--></xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<!--  1. Gem  -->
+			<xs:element name="getGemReportRequest"	type="tns:GetGemReportRequest" />
+			<xs:complexType name="GetGemReportRequest">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="s_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="e_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemId" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="summaryFlag" type="xs:int" minOccurs="1"  maxOccurs="1" />
+							<xs:element  name="step" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemNumId" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="getGemReportResponse"	type="tns:GetGemReportResponse" />
+			<xs:complexType name="GetGemReportResponse">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element  name="gem" type="tns:GemResponseBean"  minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="summaryFlag" type="xs:int" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GemResponseBean">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+					<xs:sequence>
+					<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gem" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="date" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="insertCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="updateCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="readCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="deleteCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="writeCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="expiredCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="cookieGemCompareFailedCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="accountTackenoverCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="readWriteTimeoutCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="readWriteErrorCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="gemNotFoundCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="fallbackToCookieEventCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="fallbackToCookieEventCookieNotConvertToGemCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="writeErrorCount" type="xs:long" minOccurs="1" maxOccurs="1" />
+					<xs:element  name="gemNumId" type="xs:string" minOccurs="0"  maxOccurs="1" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<!-- 2. Gem Recoard -->
+			<xs:element name="getGemRecordReportRequest" type="tns:GetGemRecordReportRequest" />
+			<xs:complexType name="GetGemRecordReportRequest">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="s_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="e_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="summaryFlag" type="xs:int" minOccurs="1" maxOccurs="1" />
+							<xs:element name="step" type="xs:string" minOccurs="0"  maxOccurs="1" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getGemRecordReportResponse"
+				type="tns:GetGemRecordReportResponse" />
+			<xs:complexType name="GetGemRecordReportResponse">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element  name="gemRecord" type="tns:GemRecordResponseBean" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="summaryFlag" type="xs:int" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			 <xs:complexType name="GemRecordResponseBean">
+            	<xs:sequence>
+            		<xs:element name="dc" type="xs:string" minOccurs="0"
+            			maxOccurs="1" />
+            		<xs:element name="pool" type="xs:string"
+            			minOccurs="0" maxOccurs="1" />
+            		<xs:element name="url" type="xs:string"
+            			minOccurs="0" maxOccurs="1" />
+            		<xs:element name="gemCache" type="xs:string"
+            			minOccurs="0" maxOccurs="1" />
+            		<xs:element name="gemType" type="xs:string"
+            			minOccurs="0" maxOccurs="1" />
+            		<xs:element name="gemBag" type="xs:string"
+            			minOccurs="0" maxOccurs="1" />
+            		<xs:element name="date" type="xs:string"
+            			minOccurs="0" maxOccurs="1" />
+            		<!-- TODO need to change base on report output  -->
+            		<xs:element name="hitCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+            		<xs:element name="backendHitCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+
+            		<xs:element name="offSiteCacheHitCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="offSiteBackendHitCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="offSiteCacheMissCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="offSiteOracleMissCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="saveCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+            		<xs:element name="missCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+            		<xs:element name="cacheMissCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+            		<xs:element name="backendMissCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+            		<xs:element name="backendReadOnlyMissCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="backendReadOnlyHitCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="newRecordCount" type="xs:long"
+            			minOccurs="1" maxOccurs="1" />
+            		<xs:element name="newRecordBackendMarkedCount"
+            			type="xs:long" minOccurs="1" maxOccurs="1" />
+            		<xs:element name="localColo" type="xs:long" 
+            		 minOccurs="1" maxOccurs="1" />
+            		<xs:element name="crossColo" type="xs:long" 
+            		 minOccurs="1" maxOccurs="1" />
+            		
+            	</xs:sequence>
+			 </xs:complexType>
+			
+			<!-- 3. -->
+			<xs:element name="getGemTableReportRequest"	type="tns:GetGemTableReportRequest" />
+			<xs:complexType name="GetGemTableReportRequest">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemcache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="table" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="s_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="e_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="summaryFlag" type="xs:int" minOccurs="1"  maxOccurs="1" />
+							<xs:element  name="step" type="xs:string" minOccurs="0" maxOccurs="1" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="getGemTableReportResponse" type="tns:GetGemTableReportResponse" />
+			<xs:complexType name="GetGemTableReportResponse">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element  name="gemRecord" type="tns:GemTableResponseBean" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="summaryFlag" type="xs:int" minOccurs="1"  maxOccurs="1" />
+						
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GemTableResponseBean">
+            	<xs:sequence>
+					<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gem" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="date" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="insertCount" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element  name="selectCount" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element  name="updateCount" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element  name="deleteCount" type="xs:long" minOccurs="1"  maxOccurs="1" />
+				</xs:sequence>
+            </xs:complexType>
+            
+			<!-- 4. -->
+			<xs:element name="getGemSizeReportRequest"	type="tns:GetGemSizeReportRequest" />
+			<xs:complexType name="GetGemSizeReportRequest">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+						<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="host" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="s_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="e_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemId" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="summaryFlag" type="xs:int" minOccurs="1"  maxOccurs="1" />
+							<xs:element  name="step" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemNumId" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="getGemSizeReportResponse"
+				type="tns:GetGemSizeReportResponse" />
+			<xs:complexType name="GetGemSizeReportResponse">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="gem" type="tns:GemSizeResponseBean"  minOccurs="0"  maxOccurs="unbounded"/>
+							<xs:element name="summaryFlag" type="xs:int" minOccurs="1"  maxOccurs="1" />
+					
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GemSizeResponseBean">
+				<xs:sequence>
+					<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gem" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="date" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					
+					<xs:element name="min" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="max" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					
+					<xs:element name="medium" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="total" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="count" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="average" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element  name="gemNumId" type="xs:string" minOccurs="0"  maxOccurs="1" />
+
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<!-- 5. GemBagSize  -->
+			<xs:element name="getGemBagSizeReportRequest" type="tns:GetGemBagSizeReportRequest" />
+			<xs:complexType name="GetGemBagSizeReportRequest">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="s_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="e_date" type="xs:long" minOccurs="0"  maxOccurs="1" />
+							<xs:element  name="summaryFlag" type="xs:int" minOccurs="1"  maxOccurs="1" />
+							<xs:element  name="step" type="xs:string" minOccurs="0"  maxOccurs="1" />
+						
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="getGemBagSizeReportResponse"	type="tns:GetGemBagSizeReportResponse" />
+			<xs:complexType name="GetGemBagSizeReportResponse">
+				<xs:annotation>
+					<xs:documentation>	 </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element  name="gemRecord" type="tns:GemBagSizeResponseBean" minOccurs="0"  maxOccurs="unbounded"/>
+							<xs:element name="summaryFlag" type="xs:int"  minOccurs="1"  maxOccurs="1" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GemBagSizeResponseBean">
+            	<xs:sequence>
+					<xs:element  name="dc" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="pool" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="url" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemCache" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemType" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="gemBag" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					<xs:element  name="date" type="xs:string" minOccurs="0"  maxOccurs="1" />
+					
+					<xs:element name="min" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="max" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					
+					<xs:element name="medium" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="total" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="count" type="xs:long" minOccurs="1"  maxOccurs="1" />
+					<xs:element name="average" type="xs:long" minOccurs="1"  maxOccurs="1" />
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			
+			
+			
+			
+			
+			
+			
+		</xs:schema>
+	</wsdl:types>
+	
+	
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemRecordReportRequest">
+		<wsdl:part element="tns:getGemRecordReportRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemRecordReportResponse">
+		<wsdl:part element="tns:getGemRecordReportResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemSizeReportRequest">
+		<wsdl:part element="tns:getGemSizeReportRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemSizeReportResponse">
+		<wsdl:part element="tns:getGemSizeReportResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemBagSizeReportRequest">
+		<wsdl:part element="tns:getGemBagSizeReportRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemBagSizeReportResponse">
+		<wsdl:part element="tns:getGemBagSizeReportResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemTableReportRequest">
+		<wsdl:part element="tns:getGemTableReportRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemTableReportResponse">
+		<wsdl:part element="tns:getGemTableReportResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemReportRequest">
+		<wsdl:part element="tns:getGemReportRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getGemReportResponse">
+		<wsdl:part element="tns:getGemReportResponse" name="params" />
+	</wsdl:message>
+	<wsdl:portType name="GemDashboardServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getGemRecordReport">
+		<wsdl:documentation>
+				GemRecord Summary  Report : will show counts based on GemRecord events.  In addition, this report will also display cross data center counts.
+		</wsdl:documentation>
+		
+			<wsdl:input message="tns:getGemRecordReportRequest" />
+			<wsdl:output message="tns:getGemRecordReportResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getGemSizeReport">
+		<wsdl:documentation>
+				Gem Size report: will show max size, minimum size, medium size and average size of a gem (per gem id) based on gem size transaction.  
+		</wsdl:documentation>
+			<wsdl:input message="tns:getGemSizeReportRequest" />
+			<wsdl:output message="tns:getGemSizeReportResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getGemBagSizeReport">
+		<wsdl:documentation>
+				GemBag Size report : will show max size, minimum size, medium size and average size of a gem bag (per gem bag id) based on gem bag size transaction 
+		</wsdl:documentation>
+			<wsdl:input message="tns:getGemBagSizeReportRequest" />
+			<wsdl:output message="tns:getGemBagSizeReportResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getGemTableReport">
+		<wsdl:documentation>
+				Gem Table Pool Host Summary Report :-  will show counts on a table base.  The displayed count will be select, insert, update, delete. 
+		</wsdl:documentation>
+			<wsdl:input message="tns:getGemTableReportRequest" />
+			<wsdl:output message="tns:getGemTableReportResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getGemReport">
+		<wsdl:documentation>
+				Gem Summary Reports : will show number of counts based on gem events. Number of counts showing on report can be aggregated according to a group of filters and "summarized by" .  The calculation will use the gem/gem bag mapping metadata.  
+		</wsdl:documentation>
+			<wsdl:input message="tns:getGemReportRequest" />
+			<wsdl:output message="tns:getGemReportResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="GemDashboardServiceHttpBinding"
+		type="tns:GemDashboardServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemRecordReport">
+			<http:operation location="/getGemRecordReport" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemSizeReport">
+			<http:operation location="/getGemSizeReport" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemBagSizeReport">
+			<http:operation location="/getGemBagSizeReport" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemTableReport">
+			<http:operation location="/getGemTableReport" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemReport">
+			<http:operation location="/getGemReport" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="GemDashboardServiceSOAPBinding"
+		type="tns:GemDashboardServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/gemcache/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemRecordReport">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/gemcache/v1/services/getGemRecordReport" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemSizeReport">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/gemcache/v1/services/getGemSizeReport" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemBagSizeReport">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/gemcache/v1/services/getGemBagSizeReport" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemTableReport">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/gemcache/v1/services/getGemTableReport" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGemReport">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/gemcache/v1/services/getGemReport" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="GemDashboardService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			For Gem Dashboard : This service fetches data from Calanalytics host and generates report based on selected fields. 
+		</wsdl:documentation>
+		<wsdl:port binding="tns:GemDashboardServiceHttpBinding"	name="GemDashboardServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/gemcache/v1/GemDashboardService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:GemDashboardServiceSOAPBinding"	name="GemDashboardServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/gemcache/v1/GemDashboardService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

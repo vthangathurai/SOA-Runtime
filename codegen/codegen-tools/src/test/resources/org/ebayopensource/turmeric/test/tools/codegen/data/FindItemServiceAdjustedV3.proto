@@ -1,0 +1,272 @@
+message FieldValue{
+	optional ShippingCostFieldValue shippingCostFieldValue = 1;
+	optional TraitFieldValue traitFieldValue = 2;
+	optional SellerLogoFieldValue sellerLogoFieldValue = 3;
+	optional BooleanFieldValue booleanFieldValue = 4;
+	optional DateFieldValue dateFieldValue = 5;
+	optional DoubleFieldValue doubleFieldValue = 6;
+	optional LongFieldValue longFieldValue = 7;
+	optional MoneyFieldValue moneyFieldValue = 8;
+	optional StringFieldValue stringFieldValue = 9;
+	optional FitmentFieldValue fitmentFieldValue = 10;	
+}
+message ShippingCostFieldValue{
+	required double shipCost = 1;
+	required double insuranceCost = 2;
+	required sint32 mailClass = 3;
+	required sint32 errorCode = 4;
+	required double shipCostWithInsurance = 5;
+	required sint32 shippingZone = 6;
+}
+message SortType{
+	optional BestMatchSortType bestMatchSortType = 1;
+	optional DistanceSortType distanceSortType = 2;
+	optional ItemSortType itemSortType = 3;
+	optional PricePlusShippingSortType pricePlusShippingSortType = 4;
+	optional ImageSimilaritySortTypeByItem imageSimilaritySortTypeByItem = 5;
+	optional ImageSimilaritySortTypeBySignature imageSimilaritySortTypeBySignature = 6;
+}
+message FindItemsResponse{
+	required AckValueEnum.AckValue ack = 1;
+	optional ErrorMessage errorMessage = 2;
+	optional string version = 3;
+	optional sint64 timestamp = 4;
+	optional ResultSummaryInfo resultSummaryInfo = 5;
+	repeated SearchRecord searchResultSet = 6;
+	repeated AbstractDistributionResponse distributionResultSet = 7;
+	repeated BucketResponse bucketResultSet = 8;
+	optional PermutationResponse permutationResult = 9;
+	optional FitmentResponse fitmentResult = 10;
+	repeated DiagnosticInfo diagnosticInfo = 11;
+	required sint64 executionTime = 12;
+	optional DominantProductTypeResponse dfnResponse = 13;
+}
+message AckValueEnum{
+	enum AckValue{
+		SUCCESS = 1;
+		FAILURE = 2;
+		WARNING = 3;
+		PARTIAL_FAILURE = 4;
+	}
+}
+message ErrorMessage{
+	repeated ErrorData error = 1;
+}
+message ErrorParameter{
+    optional string value = 1;
+    optional string name = 1;
+}
+message ErrorData{
+	required sint64 errorId = 1;
+	required string domain = 2;
+	optional string subdomain = 3;
+	required ErrorSeverityEnum.ErrorSeverity severity = 4;
+	required ErrorCategoryEnum.ErrorCategory category = 5;
+	required string message = 6;
+	optional string exceptionId = 7;
+	repeated ErrorParameter parameter = 8;
+}
+message TestAnonymousType{
+	optional string attrC = 1;
+	optional string attrA = 3;
+	optional string attrB = 2;
+
+}
+message TestAnonymousSimpleTypeEnum{
+	enum TestAnonymousSimpleType{
+		SUCCESS = 1;
+		FAILURE = 2;
+	}
+}
+message TestGroupType{
+	optional sint64 elemA = 1;
+}
+message TestSimplContent{
+	optional string value = 1;
+	optional string attrB = 3;
+	optional string attrC = 2;
+	optional double extraAttr = 2;
+}
+message TestSimplContentSub{
+	optional string value = 1;
+	optional string attrC = 3;
+	optional string attrB = 2;
+	optional double extraAttr = 5;
+}
+message ComplexTypeBase{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+}
+message ComplexTypeSubB{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+	optional sint64 elemA = 3;
+}
+message ComplexTypeSubA{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+	optional sint64 elemA = 3;
+	optional double myElAACA = 3;
+}
+message ComplexTypeSub{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+	optional sint64 elemA = 3;
+	optional double myElAACA = 3;
+	required string myElAA = 4;
+	required string myElBB = 5;
+	optional double extraAttr = 7;
+}
+message ComplexTypeSubAAAA{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+	optional sint64 elemA = 3;
+	optional double myElAACA = 3;
+	required string myElAA = 4;
+	required string myElBB = 5;
+	optional double extraAttr = 6;
+}
+message ComplexTypeSubAAAB{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+	optional sint64 elemA = 3;
+	optional double myElAACA = 3;
+	required string myElAA = 4;
+	required string myElBB = 5;
+	optional double extraAttr = 6;
+}
+message ComplexTypeSubAAAC{
+	optional double myElAAC = 1;
+	optional string myElBBC = 2;
+	optional sint64 elemA = 3;
+	optional double myElAACA = 3;
+	required string myElAA = 4;
+	required string myElBB = 5;
+	required sint64 elemB = 6;
+	optional double extraAttr = 7;
+	optional double extraAttrA = 8;
+}
+
+message TestAttributes{
+	optional double attrA = 1;
+}
+
+message TestRareTypes{
+	repeated string attrA = 1;
+	optional sint32 attrB = 2;
+	optional sint64 attrC = 3;
+	optional string attrD = 4;
+	optional sint32 attrE = 5;
+	optional string attrF = 6;
+	repeated string attrG = 7;
+	repeated string elemA = 8; 
+	optional string attrH = 8;	
+
+	required string elemB = 9;
+	required sint32 elemC = 9;
+	required string elemD = 9;
+	required string elemE = 9;
+	required sint64 elemF = 9;
+	required string elemG = 9;
+	required string elemH = 9;
+	required bool elemI = 9;
+	required sint32 elemJ = 9;
+	required bytes elemK = 9;
+	required sint64 elemL = 9;
+	required float elemM = 9;
+	required double elemN = 9;
+	required sint64 elemO = 9;
+	required sint64 elemP = 9;
+	required sint64 elemQ = 9;
+	required sint64 elemR = 9;
+	required sint64 elemS = 9;
+	required sint64 elemU = 9;
+	required sint64 elemV = 9;
+	required sint64 elemW = 9;
+	required bytes elemX = 9;
+	required string elemZ = 9;
+	required string elem1A = 9;
+	required string elem2B = 9;
+	required string elem2C = 9;
+	required string elem2D = 9;
+	required string elem2E = 9;
+	required string elem2F = 9;
+	required string elem2G = 9;
+	required string elem2H = 9;
+	required sint32 elem2I = 9;
+}
+
+message TestKeyWords{
+	required sint32 _int = 1;
+	required bool _boolean = 1;
+	required string string = 1;
+	required string iint = 1;
+}
+message RestrictedTypeEnum{
+	enum RestrictedType{
+		ONE = 1;
+		TWO = 2;
+	}
+}
+message MyComplexSimpleContentType2{
+	optional RestrictedTypeEnum.RestrictedType value = 1;
+	required bool argB = 2;
+}
+message TestElementNames{
+	optional double attrA = 1;
+	optional double _int = 2;
+	optional double _double = 2;
+}
+message TestRefTypes{
+	repeated TestElementNames usedByRef = 1;
+	optional sint64 usedByAttrRef = 1;
+	required sint64 usedByAttrRefA = 1;
+	required Test9 test9 = 2;
+}
+message TestAll{
+	optional string name = 1;
+	required Field field = 1;
+}
+message TestAllUsingGroup{
+		optional string name = 1;
+	required Field field = 1;
+}
+
+message TestAllUsingRestriction{
+	optional string name = 1;
+	required Field field = 2;
+}
+message TestAllUsingRestrictionA{
+	optional string name = 1;
+	required Field field = 2;
+}
+message ProductType{
+   optional string routingNum = 1 ;
+   required string number =2 ;
+   required string name = 3;
+   optional string description = 4;
+   optional sint64 effDate = 4;
+   optional string lang = 4;
+}
+message RestrictedProductType{
+   optional string routingNum = 1 ;
+   required string number =2 ;
+   required string name = 3;
+   optional string description = 4;
+   optional sint64 effDate = 4;
+   optional string lang = 4;
+}
+message ComplexTypeList{
+	repeated double routingNum = 1;
+	optional sint32 testintegerWithFacets = 2;
+	optional string testintegerWithFacetsA = 2;
+	optional string testintegerWithFacetsB = 2;
+	optional sint64 testintegerWithFacetsC = 4;
+	optional string testintegerWithFacetsD = 5;
+
+	optional sint32 testLongWithFacets = 2;
+	optional sint64 testLongWithFacetsA = 2;
+	optional sint64 testLongWithFacetsB = 2;
+	optional sint64 testLongWithFacetsC = 3;
+
+}

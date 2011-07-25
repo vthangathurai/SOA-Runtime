@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="HalfIncentiveService" targetNamespace="http://www.ebay.com/marketplace/half/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/half/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+		<types>
+			<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/half/v1/services" xmlns:tns="http://www.ebay.com/marketplace/half/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+				<xs:element name="getVersionRequest"  type="tns:GetVersionRequest" /> 
+				<xs:element name="getVersionResponse"  type="tns:GetVersionResponse" /> 
+				<xs:element name="issueIncentiveRequest" type="tns:IssueIncentiveRequest" /> 
+				<xs:element name="issueIncentiveResponse" type="tns:IssueIncentiveResponse" />
+
+				
+				<xs:complexType name="GetVersionRequest">
+					<xs:annotation>
+						<xs:documentation>
+							Returns the current version of the service. This simple call can be used to monitor
+							the service for availability. This call has no input parameters and the response
+							contains only the standard output fields.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseRequest"/>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="GetVersionResponse">
+					<xs:annotation>
+						<xs:documentation>
+							Response to getVersion.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseResponse"/>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="IssueIncentiveRequest">
+					<xs:annotation>
+						<xs:documentation>
+							This service will be a prive service invoked to issue rewards to the buyer if a rental transaction is completed successfully
+						</xs:documentation>						
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseRequest">
+							<xs:sequence>
+								<xs:element name="transactionArray" type="tns:TransactionArrayType" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											List of Transaction objects representing the transactions resulting
+											from the rental listing. Each Transaction object contains the data for one purchase
+											(of one or more items in the same listing). 
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>issueIncentive</CallName>
+												<RequiredInput>yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="IssueIncentiveResponse">
+					<xs:annotation>
+						<xs:documentation>
+							Response to issueIncentive.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseResponse">
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			 
+				<xs:complexType abstract="true" name="BaseRequest">
+					<xs:annotation>
+						<xs:documentation>
+							The base request container for all service operations.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>	
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType" />
+					</xs:sequence>				
+				</xs:complexType>				
+				
+				<xs:complexType abstract="true" name="BaseResponse">
+					<xs:annotation>
+						<xs:documentation>
+							The base response container for all service operations.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="ack" type="tns:AckValue">
+							<xs:annotation>
+								<xs:documentation>
+									Acknowledgement of the operation's success or failure.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+							<xs:annotation>
+								<xs:documentation>
+									An error or warning that occurred when eBay processed the request.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="version" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The version of the schema that your WSDL is based on.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>
+									The date and time of the response.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>	
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType" />					
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:complexType name="ExtensionType">
+					<xs:annotation>
+						<xs:documentation>
+							Documentation goes here
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="id" type="xs:positiveInteger"/>
+						<xs:element name="version" type="xs:string"/>
+						<xs:element name="contentType" type="xs:string"/>
+						<xs:element name="value" type="xs:string"/>
+
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:complexType name="ErrorData">
+					<xs:annotation>
+						<xs:documentation>
+							This represents error details.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="errorId" type="xs:long">
+							<xs:annotation>
+								<xs:documentation>
+									A unique code that identifies the particular error condition that
+									occurred. Your application can use error codes as identifiers in your
+									customized error-handling algorithms.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="domain" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the domain upon which the error occurred.
+									&lt;dl&gt;
+									&lt;lh&gt;Domains include:&lt;/lh&gt;
+									&lt;dt&gt;
+										Marketplace
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										A business or validation error occurred for the Merchandising Service.
+									&lt;/dd&gt;
+									&lt;dt&gt;
+										SOA
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										An exception occurred in the Service Oriented Architecture (SOA)
+										framework.
+									&lt;/dd&gt;
+									&lt;/dl&gt;
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="subdomain" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the subdomain upon which the error occurred.
+									&lt;dl&gt;
+									&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+									&lt;dt&gt;
+										Merchandising
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										The error is specific to the Merchandising service.
+									&lt;/dd&gt;
+									&lt;dt&gt;
+										MarketplaceCommon
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										The error is common to all Marketplace services.
+									&lt;/dd&gt;
+									&lt;/dl&gt;
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="severity" type="tns:ErrorSeverity">
+							<xs:annotation>
+								<xs:documentation>
+									Indicates whether the error caused the request to fail (Error) or not
+									(Warning).
+									&lt;br&gt;&lt;br&gt;
+									If the request fails and the source of the problem is within the
+									application (such as a missing required element), please change the
+									application before you retry the request. If the problem is due to end-
+									user input data, please alert the end-user to the problem and provide the
+									means for them to correct the data. Once the problem in the application
+									or data is resolved, you can attempt to re- send the request to eBay.
+									&lt;br&gt;&lt;br&gt;
+									If the source of the problem is on eBay's side, you can retry the request
+									as-is a reasonable number of times (eBay recommends twice). If the error
+									persists, contact Developer Technical Support. Once the problem has been
+									resolved, the request may be resent in its original form.
+									&lt;br&gt;&lt;br&gt;
+									When a warning occurs, the error is returned in addition to the business
+									data. In this case, you do not need to retry the request (as the original
+									request was successful). However, depending on the cause or nature of the
+									warning, you might need to contact either the end user or eBay to effect
+									a long term solution to the problem to prevent it from reoccurring in the
+									future.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="category" type="tns:ErrorCategory">
+							<xs:annotation>
+								<xs:documentation>
+									There are three categories of errors: request errors, application errors,
+									and system errors.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="message" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									A detailed description of the condition that resulted in the error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+							<xs:annotation>
+								<xs:documentation>
+									Unique identifier for an exception associated with an error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter">
+							<xs:annotation>
+								<xs:documentation>
+									Some warning and error messages return one or more variables that contain
+									contextual information about the error. This is often the field or value
+									that triggered the error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>				
+				
+				<xs:complexType name="ErrorMessage">
+					<xs:annotation>
+						<xs:documentation>
+							ErrorMessage to indicate any Error/Warning that occured as part of service
+							call. Any run time error will not be reported here, but will be reported as
+							part of a SOAP fault.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									Details about a single error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:complexType name="ErrorParameter">
+					<xs:annotation>
+						<xs:documentation>
+							Contextual information associated with an error.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The name of the parameter in the get of parameter types returned within the
+										error type.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<AllCalls/>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+				
+				<xs:simpleType name="ErrorCategory">
+					<xs:annotation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+						<xs:documentation>
+							The source of the error.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="System">
+							<xs:annotation>
+								<xs:documentation>
+									System error
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Application">
+							<xs:annotation>
+								<xs:documentation>
+									Application error
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Request">
+							<xs:annotation>
+								<xs:documentation>
+									Problems in the request
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+             
+				<xs:simpleType name="ErrorSeverity">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates whether the error is a severe error (causing the request to fail) or an
+							informational error (a warning) that should be communicated to the user.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Error">
+							<xs:annotation>
+								<xs:documentation>
+									The request that triggered the error was not processed successfully.
+									When a serious application-level error occurs, the error is returned
+									instead of the business data.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Warning">
+							<xs:annotation>
+								<xs:documentation>
+									The request was processed successfully, but something occurred that may
+									affect your application or the user. For example, eBay may have changed a
+									value the user sent in. In this case, eBay returns a normal, successful
+									response and also returns the warning.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+				
+
+				<xs:complexType name="TransactionArrayType">
+					<xs:annotation>
+						<xs:documentation>
+							Defines an array of transactions.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="transaction" type="tns:TransactionType" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									Information about one transaction.
+									Also applicable to Half.com (for GetOrders).
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>issueIncentive</CallName>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+				<xs:complexType name="TransactionType">
+					<xs:annotation>
+						<xs:documentation>
+							Defines a single transaction 
+						</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="transactionID" type="xs:string" minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Transaction ID
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>issueIncentive</CallName>
+										<RequiredInput>Always</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:simpleType name="AckValue">
+					<xs:annotation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+						<xs:documentation>
+							The nature of the response.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Success">
+							<xs:annotation>
+								<xs:documentation>
+									eBay successfully processed the request and the business data is returned
+									in the response. Note that it is possible for a response to return
+									Success, but still not contain the expected data in the result.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Failure">
+							<xs:annotation>
+								<xs:documentation>
+									eBay encountered a fatal error during the processing of the request,
+									causing the request to fail. When a serious application-level error
+									occurs, the error is returned instead of the business data.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Warning">
+							<xs:annotation>
+								<xs:documentation>
+									The request was successfully processed, but eBay encountered a non-fatal
+									error during the processing. For best results, requests should return
+									without warnings. Inspect the warning details and resolve the problem
+									before resubmitting the request.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="PartialFailure">
+							<xs:annotation>
+								<xs:documentation>
+									eBay successfully processed the request, but one or more non-fatal errors
+									occurred during the processing. For best results, requests should return
+									without warning messages. Inspect the message details and resolve any
+									problems before resubmitting the request.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+	
+				</xs:schema>
+			</types>
+		<message name="getVersionRequest">
+			<part name="messageParameters" element="tns:getVersionRequest"/>
+		</message>
+		<message name="getVersionResponse">
+			<part name="messageParameters" element="tns:getVersionResponse"/>
+		</message>
+		<message name="issueIncentiveRequest">
+			<part name="params" element="tns:issueIncentiveRequest"/>
+		</message>
+		<message name="issueIncentiveResponse">
+			<part name="params" element="tns:issueIncentiveResponse"/>
+		</message>
+		
+		<portType name="HalfIncentiveServicePort">
+			<operation name="getVersion">
+				<documentation>
+					Operation to test the health ot status of the service endpoint.
+				</documentation>
+				<input name="getVersionRequest" message="tns:getVersionRequest"/>
+				<output name="getVersionResponse" message="tns:getVersionResponse"/>
+			</operation>
+			<operation name="issueIncentive">
+				<documentation>
+					Allows seller to file a claim for rental items
+				</documentation>
+				<input name="issueIncentiveRequest" message="tns:issueIncentiveRequest"/>
+				<output name="issueIncentiveResponse" message="tns:issueIncentiveResponse"/>
+			</operation>
+		</portType>
+		
+		<binding name="HalfIncentiveServiceSOAPBinding" type="tns:HalfIncentiveServicePort">
+			<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>				
+			<operation name="getVersion">
+				<soap12:operation soapAction="urn:getVersion" style="document"/>
+				<input>
+					<soap12:body use="literal"/>
+				</input>
+				<output>
+					<soap12:body use="literal"/>
+				</output>
+			</operation>
+			<operation name="issueIncentive">
+				<soap12:operation soapAction="urn:issueIncentive" style="document"/>
+				<input>
+					<soap12:body use="literal"/>
+				</input>
+				<output>
+					<soap12:body use="literal"/>
+				</output>
+			</operation>
+			
+		</binding>
+		
+		<binding name="HalfIncentiveServiceHttpBinding" type="tns:HalfIncentiveServicePort">
+			<http:binding verb="POST"/>				
+			<operation name="getVersion">
+				<http:operation location="HalfIncentiveService/getVersion"/>
+				<input>
+					<mime:content type="application/x-www-form-urlencoded"/>
+				</input>
+				<output>
+					<mime:content type="text/xml"/>
+				</output>
+			</operation>	
+			<operation name="issueIncentive">
+				<http:operation location="HalfIncentiveService/issueIncentive"/>
+				<input>
+					<mime:content part="issueIncentive" type="text/xml"/>
+				</input>
+				<output>
+					<mime:content part="issueIncentive" type="text/xml"/>
+				</output>
+			</operation>		
+		</binding>
+		
+		<service name="HalfIncentiveService">
+			<documentation>
+				<Version>1.0.0</Version> 
+				This service provides the operations to issue gift coupons to the buyer if a rental transactionis successful
+			</documentation>
+			<port name="HalfIncentiveServiceHttpPort" binding="tns:HalfIncentiveServiceHttpBinding">
+				<http:address location="https://svcs.ebay.com/services/half/v1/HalfIncentiveService" /> 
+			</port>
+			<port name="HalfIncentiveServiceSOAPPort" binding="tns:HalfIncentiveServiceSOAPBinding">
+				<soap12:address location="https://svcs.ebay.com/services/half/v1/HalfIncentiveService" /> 
+			</port>
+		</service>
+	</definitions>

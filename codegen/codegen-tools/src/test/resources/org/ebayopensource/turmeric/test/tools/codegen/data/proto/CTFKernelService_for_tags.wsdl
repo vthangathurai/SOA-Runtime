@@ -1,0 +1,1993 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="CTFKernelService"
+	targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://www.ebay.com/marketplace/catalog/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:element name="createActivitiesRequest"
+				type="tns:CreateActivitiesRequest" />
+			<xs:complexType name="CreateActivitiesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="createActivityRequest"
+								type="tns:CreateActivityRequest" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createActivitiesResponse"
+				type="tns:CreateActivitiesResponse" />
+			<xs:complexType name="CreateActivitiesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="createActivityResponse"
+								type="tns:CreateActivityResponse" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="CreateActivityRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="createActivity" type="tns:CreateActivity">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="comment" type="xs:string">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="BaseCTFKernelServiceRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="invocationId" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CreateActivity">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="title"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="typeName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="priority" type="tns:PriorityType">
+
+                        <xs:annotation>
+                        	<xs:documentation>
+                        		if null a default value P2 will be used
+                        	</xs:documentation>
+                        </xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="sorting" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="payload" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="queueName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="parentId" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="dueDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="creatorUserId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="activityTag" type="tns:ActivityTag">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="CreateActivityTag">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:simpleType name="PriorityType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="P1" />
+					<xs:enumeration value="P2" />
+					<xs:enumeration value="P3" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="CreateActivityResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element name="readActivity"
+								type="tns:ReadActivity">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="BaseCTFKernelServiceResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="returnMessage" type="xs:string">
+							</xs:element>
+							<xs:element name="invocationId"
+								type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadActivity">
+				<xs:complexContent>
+					<xs:extension base="tns:UpdateActivity">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="state" type="tns:ActivityStateType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="createDate" type="xs:dateTime">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="lastModifyDate" type="xs:dateTime">
+							</xs:element>
+
+							<xs:element name="transitionLogs"
+								type="tns:ReadActivityTransitionLog" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</xs:complexType>
+
+			<xs:simpleType name="ActivityStateType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="OPEN" />
+					<xs:enumeration value="RESOLVED" />
+					<xs:enumeration value="CLOSED" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="UpdateActivity">
+				<xs:complexContent>
+					<xs:extension base="tns:CreateActivity">
+						<xs:sequence>
+							<xs:element name="activityId"
+								type="xs:long">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</xs:complexType>
+			<xs:element name="readActivitiesRequest"
+				type="tns:ReadActivitiesRequest">
+
+			</xs:element>
+			<xs:element name="readActivitiesResponse"
+				type="tns:ReadActivitiesResponse">
+
+			</xs:element>
+
+			<xs:complexType name="ReadActivitiesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="readActivityRequest"
+								type="tns:ReadActivityRequest">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadActivityRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element name="activityId"
+								type="xs:long">
+							</xs:element>
+							<xs:element name="activityQueryFilter"
+								type="tns:ActivityQueryFilter">
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="actingUserId" type="xs:string">
+							</xs:element>
+							<xs:element name="retrieveTransitionLogs"
+								type="xs:boolean">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ActivityQueryFilter">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="queueName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="pageSize" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="pageNumber" type="xs:int">
+					</xs:element>
+					<xs:element name="priority"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						type="tns:PriorityType">
+					</xs:element>
+					<xs:element name="tagValues" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="type" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="activityCreator" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="state"
+						type="tns:ActivityStateType" maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="parentId" type="xs:long"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="fromDate" type="xs:dateTime" maxOccurs="1" minOccurs="0"></xs:element>
+					<xs:element name="toDate" type="xs:dateTime" maxOccurs="1" minOccurs="0"></xs:element>
+
+
+
+
+
+
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="updateActivitiesRequest"
+				type="tns:UpdateActivitiesRequest">
+
+			</xs:element>
+			<xs:element name="updateActivitiesResponse"
+				type="tns:UpdateActivitiesResponse">
+
+			</xs:element>
+
+			<xs:complexType name="UpdateActivitiesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="updateActivityRequest"
+								type="tns:UpdateActivityRequest">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="UpdateActivityRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="updateActivity" type="tns:UpdateActivity">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="newComment" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="newState" type="tns:ActivityStateType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="actingUserId" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="UpdateActivitiesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="updateActivityResponse"
+								type="tns:UpdateActivityResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="UpdateActivityResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1"
+								minOccurs="0" name="activity" type="tns:ReadActivity">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createQueuesRequest"
+				type="tns:CreateQueuesRequest">
+
+			</xs:element>
+			<xs:element name="createQueuesResponse"
+				type="tns:CreateQueuesResponse">
+
+			</xs:element>
+
+			<xs:complexType name="CreateQueuesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="createQueues"
+								type="tns:CreateQueueRequest">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CreateQueueRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element name="createQueue"
+								type="tns:CreateQueue">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CreateQueue">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="description" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="queueType" type="tns:QueueType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="queueOwnerUserId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="expirationPeriod" type="xs:long">
+                        <xs:annotation>
+                        	<xs:documentation>
+                        		if value less than 0 it will be
+                        		overwritten with 0 (zero)
+                        	</xs:documentation>
+                        </xs:annotation>
+					</xs:element>
+                    <xs:element name="usersPermissions" type="tns:UserPermission" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+                </xs:sequence>
+
+
+
+
+
+
+			</xs:complexType>
+
+			<xs:simpleType name="QueueType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PRIVATE" />
+					<xs:enumeration value="SHARED" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="CreateQueuesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="queueResponse" type="tns:QueueResponse">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="QueueResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element name="readQueue"
+								type="tns:ReadQueue">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadQueue">
+				<xs:complexContent>
+					<xs:extension base="tns:UpdateQueue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="createDate" type="xs:dateTime">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="lastModifyDate" type="xs:dateTime">
+							</xs:element>
+
+							<xs:element name="closedCount"
+								type="xs:int">
+							</xs:element>
+							<xs:element name="openCount"
+								type="xs:int">
+							</xs:element>
+							<xs:element name="reopenCount"
+								type="xs:int">
+							</xs:element>
+							<xs:element name="resolvedCount"
+								type="xs:int">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</xs:complexType>
+
+			<xs:complexType name="UpdateQueue">
+				<xs:complexContent>
+					<xs:extension base="tns:CreateQueue">
+						<xs:sequence>
+							<xs:element name="queueName"
+								type="xs:string">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</xs:complexType>
+
+			<xs:element name="assignTheActivitiesResponse"
+				type="tns:AssignTheActivitiesResponse">
+
+			</xs:element>
+
+			<xs:complexType name="AssignTheActivitiesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="assignTheActivityRequest"
+								type="tns:AssignTheActivityRequest">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="AssignTheActivityRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="fromQueueName" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="toQueueName" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="activityId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="actingUserId" type="xs:string">
+
+
+
+
+
+
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="comment" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="AssignTheActivitiesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="assignTheActivityResponse"
+								type="tns:AssignTheActivityResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="AssignTheActivityResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1"
+								minOccurs="0" name="assignedActivity" type="tns:ReadActivity">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="assignTheActivitiesRequest"
+				type="tns:AssignTheActivitiesRequest">
+
+			</xs:element>
+			<xs:element name="assignNActivitiesResponse"
+				type="tns:AssignNActivitiesResponse">
+
+			</xs:element>
+
+			<xs:complexType name="AssignNActivitiesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="assignNActivityRequest"
+								type="tns:AssignNActivityRequest">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="AssignNActivityRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element name="fromQueueName"
+								type="xs:string">
+							</xs:element>
+							<xs:element name="toQueueName"
+								type="xs:string">
+							</xs:element>
+							<xs:element name="actingUserId"
+								type="xs:string">
+							</xs:element>
+							<xs:element name="comment"
+								type="xs:string">
+							</xs:element>
+							<xs:element
+								name="numberOfActivitiesToAssign" type="xs:int">
+
+
+
+
+
+
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="AssignNActivitiesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="assignNActivityResponse"
+								type="tns:AssignNActivityResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="AssignNActivityResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="assignedActivity" type="tns:ReadActivity">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadActivityTransitionLog">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:UpdateActivityTransitionLog">
+						<xs:sequence>
+							<xs:element name="createDate"
+								type="xs:dateTime">
+							</xs:element>
+
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+
+
+
+
+
+
+
+
+
+
+
+
+			</xs:complexType>
+
+			<xs:complexType name="UpdateActivityTransitionLog">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:CreateActivityTransitionLog">
+						<xs:sequence>
+							<xs:element name="logRecordId"
+								type="xs:long">
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CreateActivityTransitionLog">
+				<xs:sequence>
+					<xs:element name="activityId" type="xs:long" />
+					<xs:element name="logInitiator" type="xs:string" />
+					<xs:element name="comment" type="xs:string" />
+					<xs:element name="logRecordType"
+						type="tns:LogRecordType">
+					</xs:element>
+					<xs:element name="toQueueName" type="xs:string"></xs:element>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ReadActivitiesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="readActivityResponse"
+								type="tns:ReadActivityResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadActivityResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="readActivity" type="tns:ReadActivity">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadActivityTag" />
+
+			<xs:complexType name="ActivityTag">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" minOccurs="1"/>
+                    <xs:element name="displayName" type="xs:string" minOccurs="1"></xs:element>
+                    <xs:element name="sortOrder" type="xs:int" minOccurs="1"></xs:element>
+                    <xs:element name="value" type="xs:string" minOccurs="1"/>
+
+
+
+
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="assignNActivitiesRequest"
+				type="tns:AssignNActivitiesRequest">
+			</xs:element>
+
+			<xs:simpleType name="LogRecordType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ASSIGN" />
+					<xs:enumeration value="CREATION" />
+					<xs:enumeration value="STATE SET OPEN" />
+					<xs:enumeration value="STATE SET RESOLVED" />
+					<xs:enumeration value="STATE SET CLOSED" />
+					<xs:enumeration value="UPDATE" />
+					<xs:enumeration value="COMMENT" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="readQueuesRequest"
+				type="tns:ReadQueuesRequest">
+
+			</xs:element>
+			<xs:element name="readQueuesResponse"
+				type="tns:ReadQueuesResponse">
+
+			</xs:element>
+
+			<xs:complexType name="ReadQueuesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="readQueueRequest" type="tns:ReadQueueRequest">
+
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadQueueRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="queueFilter" type="tns:QueueFilter">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="QueueFilter">
+				<xs:sequence>
+					<xs:element name="queueName" type="xs:string" minOccurs="0" maxOccurs="1">
+
+						<xs:annotation>
+							<xs:documentation>
+								if specific queue name is know. other
+								arguments will be ignored
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="username" type="xs:string" minOccurs="0" maxOccurs="1">
+
+						<xs:annotation>
+							<xs:documentation>
+								set filter for queues that the user has
+								permission to access
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="permissionType"
+						type="tns:PermissionType" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								minimum permission type. if the value is
+								WRITE queus with READ will be returned
+								as well
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="queueType" type="tns:QueueType" minOccurs="0" maxOccurs="1">
+
+						<xs:annotation>
+							<xs:documentation>
+								if set to PRIVATE - only queues of type
+								'private' returned. if set to SHARED
+								only queues of type 'shared' are
+								returned. if value is empty both
+								'shared' and 'private' queues are
+								returned.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="PermissionType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="INVALID" />
+					<xs:enumeration value="READ" />
+					<xs:enumeration value="WRITE" />
+					<xs:enumeration value="OWNER" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ReadQueuesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="readQueueResponse"
+								type="tns:ReadQueueResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ReadQueueResponse">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCTFKernelServiceResponse">
+						<xs:sequence>
+							<xs:element name="readQueue"
+								type="tns:ReadQueue" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true"
+				name="BaseProductServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all operations in Product Service
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="invocationId"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										a unique ID assigned to each
+										request by client within the
+										context of this service call.
+										This ID is sent back to client
+										in service response so that
+										client can correlate response
+										with request in batch processing
+										mode
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether there are any errors
+								or warnings associated with the
+								processing of the request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request. Not returned when
+								responseStatus is Success. See TBD for a
+								list of errors and warnings that can be
+								returned by ProductService operations.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The version of the response payload
+								schema. Indicates the version of the
+								schema that eBay used to process the
+								request. Developer Technical Support may
+								ask you for the version value when you
+								work with them to troubleshoot issues.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time
+								when eBay processed the request. The
+								time zone of this value is &lt;a
+								href=&quot;types/simpleTypes.html#dateTime&quot;&gt;GMT&lt;/a&gt;
+								and the format is the ISO 8601 date and
+								time format (YYYY-MM-DDTHH:MM:SS.SSSZ).
+								See the &quot;dateTime&quot; type for
+								information about this time format and
+								converting to and from the GMT time
+								zone.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning that
+						occured as part of service call. Any run time
+						error will not be reported here, but will be
+						reported as part of a SOAP fault.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error"  type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the
+								particular error condition that
+								occurred. Your application can use error
+								codes as identifiers in your customized
+								error-handling algorithms.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain upon which the error
+								occurred. &lt;dl&gt; &lt;lh&gt;Domains
+								include:&lt;/lh&gt; &lt;dt&gt; Catalog
+								&lt;/dt&gt; &lt;dd&gt; A business or
+								validation error occurred for the
+								Catalog Service. &lt;/dd&gt; &lt;dt&gt;
+								SOA &lt;/dt&gt; &lt;dd&gt; An exception
+								occurred in the Service Oriented
+								Architecture (SOA) framework.
+								&lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error caused the
+								request to fail (Error) or not
+								(Warning). &lt;br&gt;&lt;br&gt; If the
+								request fails and the source of the
+								problem is within the application (such
+								as a missing required element), please
+								change the application before you retry
+								the request. If the problem is due to
+								end-user input data, please alert the
+								end-user to the problem and provide the
+								means for them to correct the data. Once
+								the problem in the application or data
+								is resolved, you can attempt to re- send
+								the request to eBay.
+								&lt;br&gt;&lt;br&gt; If the source of
+								the problem is on eBay's side, you can
+								retry the request as-is a reasonable
+								number of times (eBay recommends twice).
+								If the error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+								&lt;br&gt;&lt;br&gt; When a warning
+								occurs, the error is returned in
+								addition to the business data. In this
+								case, you do not need to retry the
+								request (as the original request was
+								successful). However, depending on the
+								cause or nature of the warning, you
+								might need to contact either the end
+								user or eBay to effect a long term
+								solution to the problem to prevent it
+								from reoccurring in the future.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors:
+								request errors, application errors, and
+								system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition
+								that resulted in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain upon which the
+								error occurred. &lt;dl&gt;
+								&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+								&lt;dt&gt; Product &lt;/dt&gt;
+								&lt;dd&gt; The error is specific to the
+								ProductService. &lt;/dd&gt; &lt;dt&gt;
+								Metadata &lt;/dt&gt; &lt;dd&gt; The
+								error is specific to the
+								MetadataService. &lt;/dd&gt; &lt;dt&gt;
+								ProductDuplicateSearch &lt;/dt&gt;
+								&lt;dd&gt; The error is specific to the
+								ProductDuplicateSearchService.
+								&lt;/dd&gt; &lt;dt&gt; MarketplaceCommon
+								&lt;/dt&gt; &lt;dd&gt; The error is
+								common to all Marketplace services.
+								&lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception
+								associated with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter"  type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Some warning and error messages return
+								one or more variables that contain
+								contextual information about the error.
+								This is often the field or value that
+								triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The name of the parameter in the
+									list of parameter types returned
+									within the error type.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls />
+										<Returned>
+											Conditionally
+										</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user. For
+								example, eBay may have changed a value
+								the user sent in. In this case, eBay
+								returns a normal, successful response
+								and also returns the warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of error: request
+						errors, application errors, and system errors.
+						Request and application errors are caused
+						primarily by invalid data passed in the request.
+						System errors are caused primarily by
+						application failures and cannot be corrected by
+						changing request values.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on
+								the eBay system side, such as a database
+								or server down. An application can retry
+								the request as-is a reasonable number of
+								times (eBay recommends twice). If the
+								error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as missing or invalid
+								fields. The problem must be corrected
+								before the request can be made again. If
+								the problem is due to something in the
+								application (such as a missing required
+								field), the application must be changed.
+								Once the problem in the application or
+								data is resolved, resend the corrected
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as invalid or missing
+								data. The problem must be corrected
+								before the request can be made again. If
+								the problem is a result of end-user
+								data, the application must alert the
+								end-user to the problem and provide the
+								means for the end-user to correct the
+								data. Once the problem in the data is
+								resolved, resend the request to eBay
+								with the corrected data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		
+			<xs:complexType name="UserPermission">
+				<xs:sequence>
+					<xs:element name="userId" type="xs:string"></xs:element>
+					<xs:element name="permissionType" type="tns:PermissionType">
+
+
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:simpleType name="UserPermissionType">
+				<xs:restriction base="xs:string"></xs:restriction>
+			</xs:simpleType>
+			<xs:element name="setPermissionsRequest" type="tns:SetPermissionsRequest">
+
+			</xs:element>
+			<xs:element name="setPermissionsResponse" type="tns:SetPermissionsResponse">
+
+			</xs:element>
+		
+            <xs:complexType name="SetPermissionsRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="permissionRequests"
+            					type="tns:SetPermissionRequest" minOccurs="1" maxOccurs="unbounded">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="SetPermissionRequest">
+            	<xs:complexContent>
+            		<xs:extension
+            			base="tns:BaseCTFKernelServiceRequest">
+            			<xs:sequence>
+                            <xs:element name="queueName" type="xs:string">
+            				</xs:element>
+                            <xs:element name="usersPermission"
+            					type="tns:UserPermission" minOccurs="1"
+            					maxOccurs="unbounded">
+            				</xs:element>
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="SetPermissionsResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="permissionReponses"
+            					type="tns:PermissionResponses" minOccurs="0" maxOccurs="unbounded">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="PermissionResponses">
+            	<xs:complexContent>
+            		<xs:extension
+            			base="tns:BaseCTFKernelServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="queueName"
+            					type="xs:string">
+            				</xs:element>
+            				<xs:element name="userPermissions"
+            					type="tns:UserPermission" minOccurs="0"
+            					maxOccurs="unbounded">
+            				</xs:element>
+            			</xs:sequence>
+
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+
+
+		</xs:schema>
+	</types>
+	<message name="readQueuesResponse">
+		<part name="parameters" element="tns:readQueuesResponse"></part>
+	</message>
+	<message name="updateActivitiesRequest">
+		<part name="parameters" element="tns:updateActivitiesRequest">
+		</part>
+	</message>
+	<message name="createQueuesResponse">
+		<part name="parameters" element="tns:createQueuesResponse">
+		</part>
+	</message>
+	<message name="assignTheActivitiesResponse">
+		<part name="parameters"
+			element="tns:assignTheActivitiesResponse">
+		</part>
+	</message>
+	<message name="createQueuesRequest">
+		<part name="parameters" element="tns:createQueuesRequest">
+		</part>
+	</message>
+	<message name="readQueuesRequest">
+		<part name="parameters" element="tns:readQueuesRequest"></part>
+	</message>
+	<message name="updateActivitiesResponse">
+		<part name="parameters"
+			element="tns:updateActivitiesResponse">
+		</part>
+	</message>
+	<message name="createActivitiesResponse">
+		<part name="params" element="tns:createActivitiesResponse">
+		</part>
+	</message>
+	<message name="readActivitiesRequest">
+		<part name="parameters" element="tns:readActivitiesRequest">
+		</part>
+	</message>
+	<message name="assignNActivitiesResponse">
+		<part name="parameters"
+			element="tns:assignNActivitiesResponse">
+		</part>
+	</message>
+	<message name="assignNActivitiesRequest">
+		<part name="parameters"
+			element="tns:assignNActivitiesRequest">
+		</part>
+	</message>
+	<message name="assignTheActivitiesRequest">
+		<part name="parameters"
+			element="tns:assignTheActivitiesRequest">
+		</part>
+	</message>
+	<message name="createActivitiesRequest">
+		<part name="params" element="tns:createActivitiesRequest">
+		</part>
+	</message>
+	<message name="readActivitiesResponse">
+		<part name="parameters" element="tns:readActivitiesResponse">
+		</part>
+	</message>
+	<wsdl:message name="setPermissionsRequest">
+		<wsdl:part name="parameters" element="tns:setPermissionsRequest"></wsdl:part>
+
+
+	</wsdl:message>
+	<wsdl:message name="setPermissionsResponse">
+		<wsdl:part name="parameters" element="tns:setPermissionsResponse"></wsdl:part>
+
+
+	</wsdl:message>
+	<portType name="CTFKernelServicePort">
+		<operation name="createActivities">
+			<input message="tns:createActivitiesRequest"></input>
+			<output message="tns:createActivitiesResponse"></output>
+		</operation>
+		<operation name="readActivities">
+			<input message="tns:readActivitiesRequest"></input>
+			<output message="tns:readActivitiesResponse"></output>
+		</operation>
+		<operation name="updateActivities">
+			<input message="tns:updateActivitiesRequest"></input>
+			<output message="tns:updateActivitiesResponse"></output>
+		</operation>
+		<operation name="createQueues">
+			<input message="tns:createQueuesRequest"></input>
+			<output message="tns:createQueuesResponse"></output>
+		</operation>
+		<operation name="assignTheActivities">
+			<input message="tns:assignTheActivitiesRequest"></input>
+			<output message="tns:assignTheActivitiesResponse"></output>
+		</operation>
+		<operation name="assignNActivities">
+			<input message="tns:assignNActivitiesRequest"></input>
+			<output message="tns:assignNActivitiesResponse"></output>
+		</operation>
+
+		<operation name="readQueues">
+			<input message="tns:readQueuesRequest"></input>
+			<output message="tns:readQueuesResponse"></output>
+		</operation>
+		<wsdl:operation name="setPermissions">
+			<wsdl:input message="tns:setPermissionsRequest"></wsdl:input>
+			<wsdl:output message="tns:setPermissionsResponse"></wsdl:output>
+		</wsdl:operation>
+	</portType>
+	<binding name="CTFKernelServiceHttpBinding"
+		type="tns:CTFKernelServicePort">
+		<http:binding verb="POST" />
+		<operation name="createActivities">
+			<http:operation location="/createActivities" />
+			<input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="readActivities">
+			<http:operation location="/readActivities" />
+			<input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="parameters" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="updateActivities">
+			<http:operation location="/updateActivities" />
+			<input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="parameters" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="createQueues">
+			<http:operation location="/createQueues" />
+			<input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="parameters" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="assignTheActivities">
+			<http:operation location="/assignTheActivities" />
+			<input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="parameters" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="assignNActivities">
+			<http:operation location="/assignNActivities" />
+			<input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="parameters" type="text/xml" />
+			</output>
+		</operation>
+	</binding>
+	<binding name="CTFKernelServiceSOAPBinding"
+		type="tns:CTFKernelServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="createActivities">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/createActivities" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="readActivities">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/readActivities" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="updateActivities">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/updateActivities" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="createQueues">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/createQueues" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="assignTheActivities">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/assignTheActivities" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="assignNActivities">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/assignNActivities" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="readQueues">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/readQueues" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<wsdl:operation name="setPermissions">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/setPermissions" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</binding>
+	<service name="CTFKernelService">
+		<port name="CTFKernelServiceHttp"
+			binding="tns:CTFKernelServiceHttpBinding">
+			<http:address
+				location="http://apicatalogs.vip.ebay.com/ws/spf/CTFKernelService" />
+		</port>
+		<port name="CTFKernelServiceSOAP"
+			binding="tns:CTFKernelServiceSOAPBinding">
+			<soap12:address
+				location="http://apicatalogs.vip.ebay.com/ws/spf/CTFKernelService" />
+		</port>
+	</service>
+</definitions>

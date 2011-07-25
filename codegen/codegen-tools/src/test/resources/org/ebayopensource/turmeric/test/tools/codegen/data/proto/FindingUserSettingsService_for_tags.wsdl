@@ -1,0 +1,1449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="FindingUserSettingsService"
+	targetNamespace="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/search/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/search/v1/services">
+			
+			<xs:element name="saveFavoriteSearchRequest"
+				type="tns:SaveFavoriteSearchRequest" />
+			<xs:element name="saveFavoriteSearchResponse"
+				type="tns:SaveFavoriteSearchResponse" />
+			<xs:complexType name="SaveFavoriteSearchRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseFindingServiceRequest">
+						<xs:sequence>
+							<xs:element name="favoriteSearchRecordRequest" type="tns:FavoriteSearchRecordRequest" maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										Specify settings applied with the favorite search, like email me or
+										not, email duration, etc.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="findItemsAdvancedRequest"  type="tns:FindItemsAdvancedRequest"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+				<xs:complexType name="FindItemsAdvancedRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request container for the findItemsAdvanced call.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Finds items by a keyword query and/or category and allows searching
+							within item descriptions.
+						</Summary>
+						<RelatedCalls>
+							saveFavoriteSearch
+						</RelatedCalls>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseFindingServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="1" name="keywords" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Specify one or more words to use in a search query for finding items
+										on eBay. By default, queries search item titles only. When running
+										queries, it is best to include complete keywords values--eBay checks
+										words in context with each other. If you are using a URL request and
+										your keyword query consists of multiple words, use "%20" to separate
+										the words. For example, use "Harry%20Potter" to search for items
+										containing those words in any order.
+										&lt;br&gt;&lt;br&gt;
+										You can incorporate wildcards in a multi-word search. For example,
+										"ap*%20ip*" returns results for "apple ipod" among other matches. The
+										words "and" and "or" are treated like any other word (and not their
+										logical connotation). Only use "and", "or", or "the" if you are
+										searching for listings containing those specific words.
+										&lt;br&gt;&lt;br&gt;
+										For a list of valid wildcard characters, see &lt;a
+										href="http://developer.ebay.com/DevZone/finding/Concepts/FindingAPIGuide.html#usekeywords" 
+										&gt;Searching by Keywords&lt;/a&gt;.
+										&lt;br&gt;&lt;br&gt;
+										findItemsAdvanced requires that you specify either keywords or a
+										categoryId in the search criteria.
+									</xs:documentation>
+									<xs:appinfo>
+										<MaxLength>350. The maximum length for a single word is 98</MaxLength>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>Conditionally</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="categoryId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Specifies the category from which you want to retrieve item listings.
+										This field can be repeated to include multiple categories.
+										&lt;br&gt;&lt;br&gt;
+										If a specified category ID doesn't match an existing category for the
+										site, eBay returns an invalid-category error message. To determine
+										valid categories, use the Trading API &lt;a 
+										href="http://developer.ebay.com/DevZone/XML/docs/Reference/eBay/GetCategories.html" 
+										&gt;GetCategories&lt;/a&gt; call. 
+										&lt;br&gt;&lt;br&gt;
+										Category searches are not supported on the eBay Italy site (global ID 
+										EBAY-IT) at this time.
+									</xs:documentation>
+									<xs:appinfo>
+										<MaxLength>10</MaxLength>
+										<MaxOccurs>3</MaxOccurs>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>Conditionally</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="itemFilter" type="tns:ItemFilter">
+								<xs:annotation>
+									<xs:documentation>
+										Reduces the number of items returned in the response according to the 
+										filters you specify.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="aspectFilter" type="tns:AspectFilter">
+								<xs:annotation>
+									<xs:documentation>
+										Aspect filters refine (limit) the number of items returned by a find
+										request. Obtain input values for aspectFilter fields from an
+										aspectHistogramContainer returned in the response of a previous
+										query.
+										&lt;br&gt;&lt;br&gt;
+										By issuing a series of find queries, you can continually refine the
+										items returned in your responses. Do this by repeating a query using
+										the aspect values returned in one response as the input values to
+										your next query.
+										&lt;br&gt;&lt;br&gt;
+										For example, the aspectHistogramContainer in a response on Men's
+										Shoes could contain an aspect of Size, along with "aspect values" for
+										the different sizes currently available in Men's Shoes. By populating
+										aspectFilter fields with the values returned in an
+										aspectHistogramContainer, you can hone the item results returned by
+										your new query.
+										&lt;br&gt;&lt;br&gt;
+										For more information on aspects, aspect values, and domains, refer to
+										&lt;a href="#Response.aspectHistogramContainer" 
+										&gt;aspectHistogramContainer&lt;/a&gt;. 
+										&lt;br&gt;
+										Refer to the following samples to see aspectFilters in action:
+										&lt;br&gt;
+										&amp;nbsp;&amp;nbsp;&lt;a 
+										href="http://developer.ebay.com/DevZone/finding/CallRef/findItemsByCategory.html#sampleaspectHist" 
+										&gt;Returning Aspect Histogram Information&lt;/a&gt;
+										&lt;br&gt;
+										&amp;nbsp;&amp;nbsp;&lt;a 
+										href="http://developer.ebay.com/DevZone/finding/CallRef/findItemsByCategory.html#sampleaspectFilter" 
+										&gt;Refining Results Using Aspect Filters&lt;/a&gt;
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="outputSelector" type="tns:OutputSelectorType">
+								<xs:annotation>
+									<xs:documentation>
+										Defines what data to return, in addition to the default set of data,
+										in a response.
+										&lt;br&gt;&lt;br&gt;
+										If you don't specify this field, eBay returns a default set of item
+										fields. Use outputSelector to include more information in the
+										response. The additional data is grouped into discrete nodes. You can
+										specify multiple nodes by including this field multiple times, as
+										needed, in the request.
+										&lt;br&gt;&lt;br&gt;
+										If you specify this field, the additional fields returned can affect
+										the call's response time (performance), including in the case with
+										feedback data.
+									</xs:documentation>
+									<xs:appinfo>
+										<PresentDetails>Yes</PresentDetails>
+										<SeeLink>
+											<Title>Detail Controls</Title>
+											<URL>#detailControls</URL>
+										</SeeLink>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="1" name="descriptionSearch" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+										Specifies whether your keyword query should be applied to item
+										descriptions in addition to titles. Searching the text of item
+										descriptions incurs a performance hit (it can take longer than
+										searches that don't include description searches). If true, the text
+										of the item's description and subtitles will be included in the
+										search. If false, only item titles are included in keyword searches.
+									</xs:documentation>
+									<xs:appinfo>
+										<Default>false</Default>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="domainFilter" type="tns:DomainFilter" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Restricts results to items listed within the specified domain.
+										Domains are a buy-side grouping of items. such as shoes or digital
+										cameras. A domain can span multiple eBay categories.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="SaveFavoriteSearchResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="1"
+								maxOccurs="1" name="favoriteSearchRecordResponse"
+								type="tns:FavoriteSearchRecordResponse">
+								<xs:annotation>
+									<xs:documentation>
+										Specify settings applied with the favorite search, like email me or
+										not, email duration and automatically generated information.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="FavoriteSearchRecordRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Description of favorite search record
+					</xs:documentation>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="searchName" minOccurs="1" maxOccurs="1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the name of the saved search.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="emailMe" minOccurs="0" maxOccurs="1" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies whether your favorite search needs daily email
+								when new items are listed.
+							</xs:documentation>
+							<xs:appinfo>
+								<Default>true</Default>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="emailDuration" type="tns:EmailDurationType"  maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies how long you'd like to get emails.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:sequence >
+						<xs:element name="delimiter" type="xs:string" />
+
+					</xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FavoriteSearchRecordResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Description of favorite search record response
+					</xs:documentation>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="searchName" minOccurs="1" maxOccurs="1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the name of the saved search.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="emailMe" minOccurs="0" maxOccurs="1" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies whether your favorite search needs daily email
+								when new items are listed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="emailDuration" type="tns:EmailDurationType"  maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies how long you'd like to get emails.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="createDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The create date of this favorite search.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastSentDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The last email sent date of this favorite search.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:sequence >
+						<xs:element name="delimiter" type="xs:string" />
+
+					</xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="EmailDurationType">
+				<xs:annotation>
+					<xs:documentation>
+						Specifies how many days you want to receive email. Value other 
+						than in documented will be treated as default value 180.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:int">
+					<xs:enumeration value="7" />
+					<xs:enumeration value="14" />
+					<xs:enumeration value="30" />
+					<xs:enumeration value="90" />
+					<xs:enumeration value="180" />
+					<xs:enumeration value="360" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="retrieveFavoriteSearchRequest"
+				type="tns:RetrieveFavoriteSearchRequest" />
+			<xs:element name="retrieveFavoriteSearchResponse"
+				type="tns:RetrieveFavoriteSearchResponse" />
+
+			<xs:complexType name="RetrieveFavoriteSearchRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request container for the retrieveFavoriteSearch
+						call.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Specify a search name to get the corresponding
+							favorite search record, or no search name to 
+							get all records.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="searchName" minOccurs="0" maxOccurs="1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the name of the favorite search.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RetrieveFavoriteSearchResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response container for the retrieveFavoriteSearch
+						call.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0"
+								maxOccurs="unbounded" name="favoriteSearchRecordResponse"
+								type="tns:FavoriteSearchRecordResponse" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="PaginationInput">
+				<xs:annotation>
+					<xs:documentation>
+						Controls the pagination of the result set. Child elements specify the maximum
+						number of item listings to return per call and which page of data to return.
+						Controls which listings are returned in the response, but does not control
+						the details associated with the returned items.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies which subset of data (or "page") to return in the call
+								response. The number of data pages is determined by the total number of
+								items matching the request search criteria (returned in
+								paginationOutput.totalEntries) divided by the number of entries to
+								display in each response (entriesPerPage). You can return up to the first
+								100 pages of the result set by issuing multiple requests and specifying, 
+								in sequence, the pages to return.
+							</xs:documentation>
+							<xs:appinfo>
+								<Default>1</Default>
+								<Max>100</Max>
+								<CallInfo>
+									<CallName>saveFavoriteSearch</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies the maximum number of entries to return in a single call. If
+								the number of entries found on the specified pageNumber is less than the
+								value specified here, the number of items returned will be less than the
+								value of entriesPerPage. This indicates the end of the result set.
+								&lt;br&gt;&lt;br&gt;
+								If entriesPerPage is set to a number greater than 100, the default value,
+								100, will be used.
+							</xs:documentation>
+							<xs:appinfo>
+								<Default>100</Default>
+								<Max>100</Max>
+								<CallInfo>
+									<CallName>saveFavoriteSearch</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:sequence >
+						<xs:element name="delimiter" type="xs:string"/>
+
+					</xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="SortOrderType">
+				<xs:annotation>
+					<xs:documentation>
+						Values that can be used to sort search results.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="BestMatch">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by Best Match, which is based on community buying activity
+								and other relevance-based factors.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CurrentPriceHighest">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by their current price, with the highest price first.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="DistanceNearest">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by distance from the buyer in ascending order. The request
+								must also include a buyerPostalCode.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="EndTimeSoonest">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by end time, with items ending soonest listed first.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PricePlusShippingLowest">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by the combined cost of the item price plus the shipping
+								cost, with the lowest combined price items listed first. Items are
+								returned in the following groupings: lowest total-cost items (for items
+								where shipping was properly specified) appear first, followed by freight-
+								shipping items, and then items for which no shipping was specified. Each
+								group is sorted by price.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PricePlusShippingHighest">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by the combined cost of the item price plus the shipping
+								cost, with highest combined price items listed first. Items are returned
+								in the following groupings: highest total-cost items (for items where
+								shipping was properly specified) appear first, followed by freight-
+								shipping items, and then items for which no shipping was specified. Each
+								group is sorted by price.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="StartTimeNewest">
+						<xs:annotation>
+							<xs:documentation>
+								Sorts items by the start time, the most recently listed (newest) items
+								appear first.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					 <xs:enumeration value="BidCountMost">
+					          <xs:annotation>
+					                   <xs:documentation>
+					                             Sorts items by the bid count.
+					                   </xs:documentation>
+					          </xs:annotation>
+					 </xs:enumeration>
+					 <xs:enumeration value="BidCountFewest">
+					          <xs:annotation>
+					                   <xs:documentation>
+					                             Sorts items by the bid count.
+					                   </xs:documentation>
+					          </xs:annotation>
+					 </xs:enumeration>
+					 <xs:enumeration value="CountryAscending">
+					          <xs:annotation>
+					                   <xs:documentation>
+					                             Sorts items by the country.
+					                   </xs:documentation>
+					          </xs:annotation>
+					 </xs:enumeration>
+					 <xs:enumeration value="CountryDescending">
+					          <xs:annotation>
+					                   <xs:documentation>
+					                             Sorts items by the country.
+					                   </xs:documentation>
+					          </xs:annotation>
+					 </xs:enumeration>
+					
+				</xs:restriction>		
+			</xs:simpleType>
+
+			<xs:complexType name="Affiliate">
+				<xs:annotation>
+					<xs:documentation>
+						eBay uses specified details to build a View Item URL and Product URL string
+						in the response. These URLs include correctly formatted affiliate tracking
+						information. When a user clicks through one of these URLs to eBay, the
+						respective affiliate might get a commission, based on the tasks performed by
+						the user.
+						&lt;br&gt;&lt;br&gt;
+						For information about commissions, see the &lt;a 
+						href="https://www.ebaypartnernetwork.com/"&gt;eBay Partner Network&lt;/a&gt; 
+						site.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="trackingId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the affiliate value obtained from your tracking partner. For the
+								eBay Partner Network, the tracking ID is the provided Campaign ID
+								("campid"). A Campaign ID is a unique 10-digit number used for 
+								associating traffic and is valid across all programs to which you have 
+								been accepted. Another example of this value is the Affiliate ID given to 
+								you by TradeDoubler.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="networkId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies your tracking partner for affiliate commissions. Affiliates
+								earn money from eBay for driving traffic to eBay. This field is required
+								if you specify a tracking ID. Depending on your tracking partner, specify
+								one of the following values. Not all partners are valid for all sites.
+								For PlaceOffer, only the eBay Partner Network and Mediaplex are valid:
+								&lt;br&gt;
+								&lt;br&gt;2 = Be Free
+								&lt;br&gt;3 = Affilinet
+								&lt;br&gt;4 = TradeDoubler
+								&lt;br&gt;5 = Mediaplex
+								&lt;br&gt;6 = DoubleClick
+								&lt;br&gt;7 = Allyes
+								&lt;br&gt;8 = BJMT
+								&lt;br&gt;9 = eBay Partner Network
+								&lt;br&gt;&lt;br&gt;
+								For information about commissions, see the &lt;a 
+								href="https://www.ebaypartnernetwork.com/"&gt;eBay Partner 
+								Network&lt;/a&gt;
+								site.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="customId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								You can define an affiliate customId if you want an ID to monitor your
+								marketing efforts. Chose an ID up to up to 256 characters in length. If
+								you are using the eBay Partner Network, and you provide a customId, the
+								tracking URL returned by the eBay Partner Network will contain your
+								customId value.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:sequence >
+						<xs:element name="delimiter" type="xs:string"/>
+
+					</xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseFindingServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base request container for all Finding Service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="1" name="paginationInput" type="tns:PaginationInput">
+								<xs:annotation>
+									<xs:documentation>
+										Controls the pagination of the result set. Child elements specify the
+										maximum number of item listings to return per call and the page of
+										data to return. Controls the number of listings returned in the
+										response, but does not specify the details to return for each
+										listing.
+										&lt;br&gt;&lt;br&gt;
+										&lt;span class="tablenote"&gt;&lt;strong&gt;Note:&lt;/strong&gt; 
+										No more than 10,000 items can be retrieved for a given search, 
+										regardless of how many matches are found. This limit is enforced 
+										by the maximum page number allowed (100) and the maximum entries per 
+										page allowed (100). &lt;/span&gt;
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" maxOccurs="1" name="buyerPostalCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The postal code of the buyer. This is used as the basis for proximity
+										searches as well as local searches.
+										&lt;br&gt;&lt;br&gt;
+										The following sample uses buyerPostalCode and the MaxDistance
+										itemFilter to perform a proximity search:
+										&lt;br&gt;
+										&amp;nbsp;&amp;nbsp;&lt;a 
+										href="http://developer.ebay.com/DevZone/finding/CallRef/findItemsByKeywords.html#sampleproximity"
+										&gt;Proximity Search&lt;/a&gt;
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="affiliate" type="tns:Affiliate">
+								<xs:annotation>
+									<xs:documentation>
+										Container for affiliate details. eBay uses the specified affiliate
+										information to build a View Item URL and Product URL string with
+										correctly formatted affiliate tracking information, which it returns
+										in the response. You can publish these URLs, and if a user clicks
+										them to access eBay, the respective affiliate might get a commission,
+										depending on the user's actions.
+										&lt;br&gt;&lt;br&gt;
+										See the &lt;a href="https://www.ebaypartnernetwork.com/"
+										target="_blank"&gt;eBay Partner Network&lt;/a&gt; site for
+										information about affiliate commissions.
+										&lt;br&gt; &lt;br&gt;
+										Refer to the following sample for details on including affiliate
+										information:
+										&lt;br&gt;
+										&amp;nbsp;&amp;nbsp;&lt;a 
+										href="http://developer.ebay.com/DevZone/finding/CallRef/findItemsByKeywords.html#sampleaffiliate" 
+										&gt;Specifying affiliate information&lt;/a&gt;
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="sortOrder" type="tns:SortOrderType" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Sort the returned items according to a single specified sort order.
+									</xs:documentation>
+									<xs:appinfo>
+										<Default>BestMatch</Default>
+										<CallInfo>
+											<CallName>saveFavoriteSearch</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="OutputSelectorType">
+				<xs:annotation>
+					<xs:documentation>
+						Values that can be used to retrieve additional information for in the search 
+						results.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SellerInfo">
+						<xs:annotation>
+							<xs:documentation>
+								Include information about the seller in the response.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="StoreInfo">
+						<xs:annotation>
+							<xs:documentation>
+								Include information about the seller's eBay store in the response.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CategoryHistogram">
+						<xs:annotation>
+							<xs:documentation>
+								Include a CategoryHistogram container with information about categories
+								that match your search. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AspectHistogram">
+						<xs:annotation>
+							<xs:documentation>
+								Include an AspectHistogram container with information about aspects from
+								the domain that is most relevant to your search.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ConditionHistogram"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ItemFilter">
+				<xs:annotation>
+					<xs:documentation>
+						Reduce the items returned using itemFilter
+						Name/Value pairs. In addition, some itemFilters
+						also make use of parameter Name/Value pairs,
+						most notably the filters that use currency
+						values. For example, if you use a MaxPrice
+						itemFilter, you will need to specify a parameter
+						Name of Currency with a value that specifies the
+						type of currency desired. &lt;br /&gt;&lt;br
+						/&gt; For a list of possible currency
+						enumeration values, see &lt;a
+						href=&quot;Enums/currencyIdList.html&quot;&gt;currencyId
+						Values&lt;/a&gt;.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="paramName"
+						type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								In addition to filter Name/Value pairs,
+								some itemFilters use an additional
+								parameter Name/Value pair. Specifically,
+								filters that use currency values
+								(MaxPrice and MinPrice) make use of
+								addition parameters. When you use these
+								itemFilters, set paramName to Currency
+								and provide the currency ID in
+								paramValue. &amp;lt;br
+								/&amp;gt;&amp;lt;br /&amp;gt; For
+								example, if you use the MaxPrice
+								itemFilter, you will need to specify a
+								parameter Name of Currency with a
+								parameter Value that specifies the type
+								of currency desired. &amp;lt;br
+								/&amp;gt;&amp;lt;br /&amp;gt; Note that
+								for MaxPrice and MinPrice itemFilters,
+								the default value for paramName is
+								Currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="paramValue"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+
+								The currency value associated with the
+								respective itemFilter parameter Name.
+								&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;
+								Usually paramName is set to Currency and
+								paramValue is set to the currency type
+								in which the monetary transaction
+								occurs. For a list of possible currency
+								enumeration values, see &amp;lt;a
+								href=&quot;Enums/currencyIdList.html&quot;&amp;gt;currencyId
+								Values&amp;lt;/a&amp;gt;. &amp;lt;br
+								/&amp;gt;&amp;lt;br /&amp;gt; Note that
+								for MaxPrice and MinPrice itemFilters,
+								the default value for paramValue is USD.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="tns:ItemFilterType">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the item filter. &lt;dl&gt;
+								&lt;dt&gt; &lt;strong&gt;ItemFilter Name
+								values:&lt;/strong&gt; &lt;/dt&gt;
+								&lt;dt&gt; AvailableTo &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; Condition &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; Currency &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; EndTimeFrom &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; EndTimeTo &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; ExcludeAutoPay &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; ExcludeSeller &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; FeaturedOnly &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; FeedbackScoreMax &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; FeedbackScoreMin &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; FreeShippingOnly &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; GetItFastOnly &lt;/dt&gt;
+								&lt;dd&gt; Description &lt;/dd&gt;
+								&lt;dt&gt; HideDuplicateItems
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; ListingType
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; LocalPickupOnly
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; LocalSearchOnly
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; LocatedIn
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; LotsOnly
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MaxBids
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MaxDistance
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MaxPrice
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MaxQuantity
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MinBids
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MinPrice
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; MinQuantity
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; PaymentMethod
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; Seller
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;dt&gt; WorldOfGoodOnly
+								&lt;/dt&gt; &lt;dd&gt; Description
+								&lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" name="value"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Value on which to filter the returned
+								items with regards to the associated
+								itemFilter Name value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ItemFilterType">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Condition"></xs:enumeration>
+					<xs:enumeration value="Currency"></xs:enumeration>
+					<xs:enumeration value="EndTimeFrom"></xs:enumeration>
+					<xs:enumeration value="EndTimeTo"></xs:enumeration>
+					<xs:enumeration value="ExcludeAutoPay"></xs:enumeration>
+					<xs:enumeration value="FeaturedOnly"></xs:enumeration>
+					<xs:enumeration value="FeedbackScoreMax"></xs:enumeration>
+					<xs:enumeration value="FeedbackScoreMin"></xs:enumeration>
+					<xs:enumeration value="FreeShippingOnly"></xs:enumeration>
+					<xs:enumeration value="GetItFastOnly"></xs:enumeration>
+					<xs:enumeration value="HideDuplicateItems"></xs:enumeration>
+					<xs:enumeration value="AvailableTo"></xs:enumeration>
+					<xs:enumeration value="LocatedIn"></xs:enumeration>
+					<xs:enumeration value="LocalPickupOnly"></xs:enumeration>
+					<xs:enumeration value="LocalSearchOnly"></xs:enumeration>
+					<xs:enumeration value="ListingType"></xs:enumeration>
+					<xs:enumeration value="LotsOnly"></xs:enumeration>
+					<xs:enumeration value="MaxBids"></xs:enumeration>
+					<xs:enumeration value="MinBids"></xs:enumeration>
+					<xs:enumeration value="MaxPrice"></xs:enumeration>
+					<xs:enumeration value="MinPrice"></xs:enumeration>
+					<xs:enumeration value="PaymentMethod"></xs:enumeration>
+					<xs:enumeration value="MaxQuantity"></xs:enumeration>
+					<xs:enumeration value="MinQuantity"></xs:enumeration>
+					<xs:enumeration value="Seller"></xs:enumeration>
+					<xs:enumeration value="ExcludeSeller"></xs:enumeration>
+					<xs:enumeration value="WorldOfGoodOnly"></xs:enumeration>
+					<xs:enumeration value="MaxDistance"></xs:enumeration>
+					<xs:enumeration value="SellerBusinessType"></xs:enumeration>
+					<xs:enumeration value="TopRatedSellerOnly"></xs:enumeration>
+					<xs:enumeration value="ModTimeFrom"></xs:enumeration>
+					<xs:enumeration value="BestOfferOnly"></xs:enumeration>
+					<xs:enumeration value="ExcludeCategory"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="DomainFilter">
+				<xs:annotation>
+					<xs:documentation>
+						Name of the domain to which search results will be restricted.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="domainName" type="xs:string" maxOccurs="unbounded" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the name of the domain to which you want to restrict search
+								results. Only items listed within the specified domain will be returned
+								in the search results. Domain names can be retrieved from an aspect
+								histogram.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:sequence >
+						<xs:element name="delimiter" type="xs:string"/>
+					</xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AspectFilter">
+				<xs:annotation>
+					<xs:documentation>
+						Use aspect filters to refine the number of results returned in a response.
+						Populate the aspectFilter container with aspect values obtained from the
+						response of a query that returns an aspectHistogram.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="aspectName" minOccurs="1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of a standard item characteristic associated with a given domain.
+								For example, "Optical Zoom" or "Megapixels" are aspects for the Digital
+								Cameras domain. The current aspect names associated with a specific
+								domain can be found in the aspect histogram. Aspect histograms can be
+								retrieved for a given keyword query or category. The aspect histogram
+								contains information about aspects from the domain that is most relevant
+								to your search (or category).
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>saveFavoriteSearch</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="aspectValueName" minOccurs="1" maxOccurs="unbounded" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A value name for a given aspect. For example, "Point &amp; Shoot" is a
+								value name for the "Product Type" aspect in the "Digital Cameras" domain.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>saveFavoriteSearch</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:sequence >
+						<xs:element name="delimiter" type="xs:string"/>
+
+					</xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+					</xs:element>
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter">
+					</xs:element>
+				</xs:sequence>
+
+
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="saveFavoriteSearchRequest">
+		<wsdl:part element="tns:saveFavoriteSearchRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="saveFavoriteSearchResponse">
+		<wsdl:part element="tns:saveFavoriteSearchResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="retrieveFavoriteSearchRequest">
+		<wsdl:part element="tns:retrieveFavoriteSearchRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="retrieveFavoriteSearchResponse">
+		<wsdl:part element="tns:retrieveFavoriteSearchResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:portType name="FindingUserSettingsServicePort">
+		<wsdl:operation name="saveFavoriteSearch">
+			<wsdl:input message="tns:saveFavoriteSearchRequest" />
+			<wsdl:output message="tns:saveFavoriteSearchResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="retrieveFavoriteSearch">
+			<wsdl:input message="tns:retrieveFavoriteSearchRequest" />
+			<wsdl:output message="tns:retrieveFavoriteSearchResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="FindingUserSettingsServiceSOAPBinding"
+		type="tns:FindingUserSettingsServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="saveFavoriteSearch">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/saveFavoriteSearch" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="retrieveFavoriteSearch">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/retrieveFavoriteSearch" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="FindingUserSettingsService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:FindingUserSettingsServiceSOAPBinding"
+			name="FindingUserSettingsServiceSOAPPort">
+			<soap12:address
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				location="https://svcs.ebay.com/services/search/FindingUserSettingsService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

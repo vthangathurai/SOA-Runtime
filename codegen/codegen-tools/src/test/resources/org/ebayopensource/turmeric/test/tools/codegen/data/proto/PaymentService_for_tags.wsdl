@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions 
+	name            = "PaymentService"
+    xmlns:wsdl      = "http://schemas.xmlsoap.org/wsdl/"
+    xmlns           = "http://schemas.xmlsoap.org/wsdl/"
+    xmlns:http      = "http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:mime      = "http://schemas.xmlsoap.org/wsdl/mime/"
+    xmlns:soap      = "http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soap12    = "http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:tns       = "http://www.ebay.com/marketplace/billing/v1/services"
+    xmlns:xs        = "http://www.w3.org/2001/XMLSchema" 
+    targetNamespace = "http://www.ebay.com/marketplace/billing/v1/services">
+	
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/billing/v1/services">
+			
+     <!-- Transaction Refund Request -->
+     <xs:element     name="applyTransactionRefundRequest" type="tns:ApplyTransactionRefundRequest" />
+     <xs:complexType name="ApplyTransactionRefundRequest">
+     	<xs:annotation>
+     		<xs:documentation>
+     			This operation applies a refund against a specific payment transaction. The original payment transaction MUST be specified.
+     			Optionally the consumer can specify what amount to be refunded. If the amount is not specified, then the whole payment
+     			transaction is being refunded.
+     		</xs:documentation>
+     	</xs:annotation>
+     	<xs:complexContent>
+     		<xs:extension base="tns:BaseBatchRequestType">
+     			<xs:sequence>
+     				<xs:element name="transactionRefundType" type="tns:TransactionRefundType"  minOccurs="1" maxOccurs="unbounded">
+						<xs:annotation>
+						    <xs:documentation>List of refunds to be applied.</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>1</minOccurs>
+					            <maxOccurs>5</maxOccurs>
+					            <callInfo>
+									<summary>List of refunds to be applied.</summary>
+					            	<allCalls />
+					            </callInfo>
+						    </xs:appinfo>
+						</xs:annotation>
+     				</xs:element>
+     			</xs:sequence>
+     		</xs:extension>
+     	</xs:complexContent>
+     </xs:complexType>
+
+     <xs:complexType name="TransactionRefundType">
+     	<xs:annotation>
+     		<xs:documentation>
+     			The element that represents a single transaction refund request.
+     		</xs:documentation>
+     	</xs:annotation>
+     	<xs:complexContent>
+     		<xs:extension base="tns:BaseRequestType">
+     			<xs:sequence>
+       				<xs:element name="refundAmount" type="tns:Money" minOccurs="0">
+       					<xs:annotation>
+       						<xs:documentation>
+       							Amount of the refund. If the amount is not specified, it will be the complete amount of the payment.
+       						</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>0</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Amount to be refunded.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>No</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+       					</xs:annotation>
+       				</xs:element>
+
+       				<xs:element name="reasonCode" type="xs:int" minOccurs="1">
+       					<xs:annotation>
+       						<xs:documentation>
+       							Pre-defined reason code, establishing the reason for the refund.
+       						</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>1</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Pre-defined reason code, establishing the reason for the refund.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>Yes</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+       					</xs:annotation>
+       				</xs:element>
+
+       				<xs:element name="refundDate" type="xs:dateTime" minOccurs="1">
+       					<xs:annotation>
+       						<xs:documentation>
+       							Date on which the refund was issued on the payment system.
+       						</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>1</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Date on which the refund was issued on the payment system.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>Yes</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+       					</xs:annotation>
+       				</xs:element>
+				
+       				<xs:element name="submitter" type="xs:string" minOccurs="0">
+       					<xs:annotation>
+       						<xs:documentation>
+       							Id or name of the person who is submitting the refund request.
+       						</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>0</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Identity of the person on behalf of whom the refund request was issued.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>No</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+       					</xs:annotation>
+       				</xs:element>
+
+       				<xs:element name="memo" type="xs:string" minOccurs="0">
+       					<xs:annotation>
+       						<xs:documentation>
+       							Any description associated with the refund.
+       						</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>0</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Any description associated with the refund.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>No</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+       					</xs:annotation>
+       				</xs:element>
+       				
+					<xs:element name="refundMode" type="tns:RefundMode" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates a full refund request or refund cancellation request.
+							</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>1</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Indicates a full refund request or refund cancellation request.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>Yes</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+     			
+     				<xs:element name="paymentId" type="xs:long" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Unique PGW tracking Id of the payment for which the refund is issued.
+							</xs:documentation>
+						    <xs:appinfo>
+					            <minOccurs>1</minOccurs>
+					            <maxOccurs>1</maxOccurs>
+					            <callInfo>
+									<summary>Unique PGW tracking Id of the payment for which the refund is issued.</summary>
+					            	<allCalls />
+					           	 	<requiredInput>Yes</requiredInput>
+					            </callInfo>
+						    </xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+     			</xs:sequence>
+     		</xs:extension>
+     	</xs:complexContent>
+     </xs:complexType>
+     
+     <!-- Transaction Refund Response -->
+	 <xs:element     name="applyTransactionRefundResponse" type="tns:ApplyTransactionRefundResponse"/>
+     <xs:complexType name="ApplyTransactionRefundResponse">
+       <xs:annotation>
+       <xs:documentation>
+              Response for the refund that was applied against a payment transaction.
+       </xs:documentation>
+       </xs:annotation>
+         <xs:complexContent>
+            <xs:extension base="tns:BaseBatchResponseType">
+              <xs:sequence>
+                <xs:element name="transactionRefundResponse" type="tns:TransactionRefundResponseType" minOccurs="1" maxOccurs="unbounded">
+					<xs:annotation>
+					    <xs:documentation>
+					    	This type represents the response for transactionRefund operation. 
+					    </xs:documentation>
+					    <xs:appinfo>
+				            <minOccurs>1</minOccurs>
+				            <maxOccurs>5</maxOccurs>
+				            <callInfo>
+								<summary>This type represents the response for transactionRefund operation.</summary>
+				           	 	<requiredInput>Yes</requiredInput>
+				            </callInfo>
+					    </xs:appinfo>
+					</xs:annotation>
+                </xs:element>
+              </xs:sequence>
+            </xs:extension>
+       </xs:complexContent>
+     </xs:complexType>     
+
+	<!-- TODO: How come we have a new PGW tracking Id returned? If it is the same, then it should not be returned. -->     
+     <xs:complexType name="TransactionRefundResponseType">           
+       <xs:annotation>
+	       <xs:documentation>
+	              Single response type for the refund that was applied against a payment transaction.
+	       </xs:documentation>
+       </xs:annotation>
+       <xs:complexContent>
+         <xs:extension base="tns:BaseResponseType">
+           <xs:sequence>
+             <xs:element name="refundTrackingId" type="xs:string" minOccurs="0">
+             	<xs:annotation>
+					<xs:documentation>
+						New PGW tracking Id for this refund transaction.
+					</xs:documentation>
+				    <xs:appinfo>
+			            <minOccurs>0</minOccurs>
+			            <maxOccurs>1</maxOccurs>
+			            <callInfo>
+							<summary>New PGW tracking Id for this refund transaction.</summary>
+							<returned>Conditionally</returned> 
+			            </callInfo>
+				    </xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+           </xs:sequence>
+         </xs:extension>
+       </xs:complexContent>
+     </xs:complexType>
+        
+     <xs:simpleType name="RefundMode">
+		<xs:restriction base="xs:token">
+			<xs:annotation>
+    				<xs:documentation>
+    					DEFAULT: full refund
+    					CANCEL: refund cancellation
+    				</xs:documentation>
+   	    		</xs:annotation>
+		</xs:restriction>
+	</xs:simpleType>
+     
+     <!--  TYPES DEFINED IN BILLING DOMAIN TYPE LIBRARY -->
+     <xs:complexType name="AccountIdType">
+       <xs:annotation>
+        <xs:documentation>This type uniquely identifies an account in the billing system.</xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="BillingTypeLibrary"
+               namespace="http://www.ebay.com/marketplace/billing/v1/services">
+            </typeLibrarySource>
+          </xs:appinfo>
+       </xs:annotation>
+       <xs:sequence>
+         <xs:element name="clientId" type="xs:string" minOccurs="1">
+				<xs:annotation>
+				    <xs:documentation>
+				          This is a predefined field, which is used to determine the business context for which the account is used.
+				          One user can have multiple accounts, each of which is used for different purpose. In most cases, it is coupled 
+				          with finance and legal requirement for isolation of transaction, based on this particular business context.
+				          Once the account is created, its business context can not be modified. 
+				    </xs:documentation>
+				    <xs:appinfo>
+			            <maxOccurs>1</maxOccurs>
+			            <maxLength>32</maxLength>
+			            
+			            <callInfo>
+			            	<allCalls />
+			           	 	<requiredInput>Yes</requiredInput>
+			            </callInfo>
+			             
+				    </xs:appinfo>
+				</xs:annotation>
+         </xs:element>
+         
+         <xs:element name="accountId"       type="xs:string" minOccurs="1">
+			<xs:annotation>
+			    <xs:documentation>
+			          This field combined with accountSuffixId field, uniquely identifies an account. It is an external identifier 
+			          provided during creation of the account. A good example, would be to pass identity of a user and additionally 
+			          qualify the account type by using accountSuffixId.
+			          Once the account is created, this field cannot be changed. 
+			    </xs:documentation>
+			    <xs:appinfo>
+		            <maxOccurs>1</maxOccurs>
+		            <maxLength>32</maxLength>
+		            <callInfo>
+		            	<allCalls />
+		           	 	<requiredInput>Yes</requiredInput>
+		            </callInfo>
+			    </xs:appinfo>
+			</xs:annotation>
+         </xs:element>
+         
+         <xs:element name="accountSuffixId" type="xs:string" minOccurs="1">
+			<xs:annotation>
+			    <xs:documentation>
+			          This field is used to additionally qualify an account. In many cases it represents the type of account created.
+			          All the allowed values and their meanings are predefined and can vary from one clientId to another.
+			          Once the account is created, this field cannot be changed.
+			    </xs:documentation>
+			    <xs:appinfo>
+		            <maxOccurs>1</maxOccurs>
+		            <maxLength>32</maxLength>
+		            <callInfo>
+		            	<allCalls />
+		           	 	<requiredInput>Yes</requiredInput>
+		            </callInfo>
+			    </xs:appinfo>
+			</xs:annotation>
+         </xs:element>
+       </xs:sequence>
+     </xs:complexType>
+     
+        <xs:complexType name="RequestHeaderType">
+          <xs:annotation>
+            <xs:documentation>This type is used to uniquely identifies a request.</xs:documentation>
+            <xs:appinfo>
+               <typeLibrarySource library="BillingTypeLibrary"
+                  namespace="http://www.ebay.com/marketplace/billing/v1/services">
+               </typeLibrarySource>
+            </xs:appinfo>
+          </xs:annotation>
+          <xs:sequence>
+            <xs:element name="requestId"     type="xs:string">
+				<xs:annotation>
+				    <xs:documentation>
+				    	This field uniquely identifies a request. Any two requests, (even from different batches) for the same operation with the same requestId, would 
+				    	be considered the same. The same identifier is returned as part of each response. 
+				    	Such a mechanism is used to match each response with its corresponding request. 
+				    	Consumers of the service should not assume the responses are being returned in the same order as requests.
+				    	If a consumer of the service needs to submit the same request again, exactly the same requestId MUST be passed. Otherwise, 
+				    	the same operation might be executed twice on the billing system. This can lead to undesirable results as double payment, etc.
+						Suggested approach for a service consumers is to generate an unique ID for each request issued by the consumer.				    	    
+				    </xs:documentation>
+				    <xs:appinfo>
+			            <minOccurs>1</minOccurs>
+			            <maxOccurs>1</maxOccurs>
+			            <callInfo>
+							<summary>This field is used to uniquely identifies a request.</summary>
+			            	<allCalls />
+			           	 	<requiredInput>Yes</requiredInput>
+			            </callInfo>
+				    </xs:appinfo>
+				</xs:annotation>
+            </xs:element>
+            
+            <xs:element name="requestTime"   type="xs:dateTime">
+				<xs:annotation>
+				    <xs:documentation>
+				    	This field specifies the time the request was created by service consumer. It is used for informational and 
+				    	tracking purpose only.    	    
+				    </xs:documentation>
+				    <xs:appinfo>
+			            <minOccurs>1</minOccurs>
+			            <maxOccurs>1</maxOccurs>
+			            <callInfo>
+							<summary>This field specifies the time the request was created by service consumer.</summary>
+			            	<allCalls />
+			           	 	<requiredInput>Yes</requiredInput>
+			            </callInfo>
+				    </xs:appinfo>
+				</xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+
+        <xs:complexType name="ResponseHeaderType">
+          <xs:annotation>
+            <xs:documentation>
+            	This field is used to return additional information related to processing of the request, agnostic to the actual operation executed.
+            </xs:documentation>
+            <xs:appinfo>
+              <typeLibrarySource library="BillingTypeLibrary"
+                 namespace="http://www.ebay.com/marketplace/billing/v1/services">
+              </typeLibrarySource>
+            </xs:appinfo>
+          </xs:annotation>
+          <xs:sequence>
+            <xs:element name="requestId" type="xs:string">
+					<xs:annotation>
+					    <xs:documentation>
+					    	The same requestId field passed as part of the request is being returned back. 
+					    	It should be used by the service consumer to explicitly match each request with its corresponding response.
+					    	Service Consumer should not assume the responses are coming in the same order as requests. 
+					    </xs:documentation>
+					    <xs:appinfo>
+				            <minOccurs>1</minOccurs>
+				            <maxOccurs>1</maxOccurs>
+				            <callInfo>
+								<summary>This field should be used to match each response with its corresponding request.</summary>
+				            	<allCalls />
+				           	 	<returned>Always</returned>
+				            </callInfo>
+					    </xs:appinfo>
+					</xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+
+        <xs:complexType name="BaseRequestType">
+          <xs:complexContent>
+            <xs:extension base="tns:BaseServiceRequest">
+            <xs:annotation>
+              <xs:documentation>
+                  This type is used as a base type for any single service requests.
+              </xs:documentation>
+                <xs:appinfo>
+                  <typeLibrarySource library="BillingTypeLibrary"
+                   namespace="http://www.ebay.com/marketplace/billing/v1/services">
+                  </typeLibrarySource>
+                </xs:appinfo>
+              </xs:annotation>
+              <xs:sequence>
+                <xs:element name="requestHeader" type="tns:RequestHeaderType"> 
+					<xs:annotation>
+					    <xs:documentation>
+					    	This field is used to uniquely identifies a request in the batch. 
+					    	The same identifier is returned as part of each response. This enables to explicitly match response to its request. 
+					    </xs:documentation>
+					    <xs:appinfo>
+				            <minOccurs>1</minOccurs>
+				            <maxOccurs>1</maxOccurs>
+				            <callInfo>
+								<summary>This field is used to uniquely identifies a request in the batch.</summary>
+				            	<allCalls />
+				           	 	<requiredInput>Yes</requiredInput>
+				            </callInfo>
+					    </xs:appinfo>
+					</xs:annotation>
+                </xs:element>
+                
+                <xs:element name="accountId"     type="tns:AccountIdType">
+					<xs:annotation>
+					    <xs:documentation>
+					    	This field uniquely identifies an account. Once the account is created, it cannot be changed. 
+					    </xs:documentation>
+					    <xs:appinfo>
+				            <minOccurs>1</minOccurs>
+				            <maxOccurs>1</maxOccurs>
+				            <callInfo>
+								<summary>This field uniquely identifies an account.</summary>
+				            	<allCalls />
+				           	 	<requiredInput>Yes</requiredInput>
+				            </callInfo>
+					    </xs:appinfo>
+					</xs:annotation>
+                </xs:element>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="BaseResponseType">
+          <xs:complexContent>
+            <xs:extension base="tns:BaseServiceResponse">
+              <xs:annotation>
+                <xs:documentation>This type is used as a base for any single response returned as part of the batch.</xs:documentation>
+                <xs:appinfo>
+                  <typeLibrarySource library="BillingTypeLibrary"
+                    namespace="http://www.ebay.com/marketplace/billing/v1/services">
+                  </typeLibrarySource>
+                </xs:appinfo>
+              </xs:annotation>
+              <xs:sequence>
+                <xs:element name="responseHeader" type="tns:ResponseHeaderType">
+					<xs:annotation>
+					    <xs:documentation>
+					    	This field is used to return information about processing of the request. It is agnostic to the operation type itself. 
+					    </xs:documentation>
+					    <xs:appinfo>
+				            <minOccurs>1</minOccurs>
+				            <maxOccurs>1</maxOccurs>
+				            <callInfo>
+								<summary>This field is used to return information about processing of the request.</summary>
+				            	<allCalls />
+				            	<returned>Always</returned>
+				            </callInfo>
+					    </xs:appinfo>
+					</xs:annotation>
+                </xs:element>
+              </xs:sequence>
+           </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+        
+        <xs:complexType name="BaseBatchRequestType">
+          <xs:annotation>
+            <xs:documentation>This type is used as a base for any billing service. It provides a way to submit more than one requests.</xs:documentation>
+              <xs:appinfo>
+                <typeLibrarySource library="BillingTypeLibrary"
+                     namespace="http://www.ebay.com/marketplace/billing/v1/services">
+                </typeLibrarySource>
+              </xs:appinfo>
+          </xs:annotation>
+           <xs:sequence>
+              <xs:element name="batchId"             type="xs:string"  minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+				    <xs:documentation>
+				          This element identifies the whole batch of requests as a single request. 
+				          It might be used internally for tacking purpose.
+				    </xs:documentation>
+				    <xs:appinfo>
+			            <requiredInput>No</requiredInput>
+			            <maxLength>32</maxLength>
+			            <callInfo>
+			            	<allCalls />
+			           	 	<requiredInput>No</requiredInput>
+			            </callInfo>
+				    </xs:appinfo>
+				</xs:annotation>
+              </xs:element>                
+           </xs:sequence>
+        </xs:complexType>
+        
+        <xs:complexType name="BaseBatchResponseType">
+          <xs:annotation>
+          <xs:documentation></xs:documentation>
+            <xs:appinfo>
+              <typeLibrarySource library="BillingTypeLibrary"
+                 namespace="http://www.ebay.com/marketplace/billing/v1/services">
+              </typeLibrarySource>
+		    </xs:appinfo>
+		  </xs:annotation>
+       </xs:complexType>
+
+      <xs:simpleType name="IsoCurrencyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Currency representation based on ISO 4217
+						Standard:
+						http://www.iso.org/iso/currency_codes_list-1
+						Every currency has the following attributs:
+						Numeric Code - 3 Digits Zero Padded Numeric
+						Code, which uniquely identifies a currency.
+						Alphabetic Code - 3 Letter Alphabetic Code,
+						which uniquely identifies a currency. Currency -
+						The name of the currency Antity - The
+						country/Entity, which uses this currency.
+
+						This type exposes only a sub-set of ISO 4217.
+						The enumeration represents the Alphabetic Code.
+						Comments are included for quick reference.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token"><!-- Currency,                         Entity                          ISO Currency Code -->
+					<xs:enumeration value="USD"></xs:enumeration>
+					<!-- U.S. Dollar                       United States                   840               -->
+					<xs:enumeration value="CAD"></xs:enumeration>
+					<!-- Canadian Dollar                   Canada                          124               -->
+					<xs:enumeration value="GBP"></xs:enumeration>
+					<!-- Pound Sterling                    United Kingdom                  826               -->
+					<xs:enumeration value="DEM"></xs:enumeration>
+					<!-- German Mark                       Germany                         276               -->
+					<xs:enumeration value="AUD"></xs:enumeration>
+					<!-- Australian Dollar                 Australia                       036               -->
+					<xs:enumeration value="JPY"></xs:enumeration>
+					<!-- Japanese Yen                      Japanese Yen                    392               -->
+					<xs:enumeration value="EUR"></xs:enumeration>
+					<!-- Euro                              European Union                  978               -->
+					<xs:enumeration value="FRF"></xs:enumeration>
+					<!-- French Franc                      France                          250               -->
+					<xs:enumeration value="ATS"></xs:enumeration>
+					<!-- Austrian Schilling                Austria                         040               -->
+					<xs:enumeration value="BEF"></xs:enumeration>
+					<!-- Belgian Franc                     Belgium                         056               -->
+					<xs:enumeration value="CHF"></xs:enumeration>
+					<!-- Swiss Franc                       Switzerland                     756               -->
+					<xs:enumeration value="CNY"></xs:enumeration>
+					<!-- Chinese Yuan Renminbi             China                           156               -->
+					<xs:enumeration value="CZK"></xs:enumeration>
+					<!-- Czech Koruna                      Czech Republic                  203               -->
+					<xs:enumeration value="DKK"></xs:enumeration>
+					<!-- Danish Krone                      Denmark                         208               -->
+					<xs:enumeration value="ESP"></xs:enumeration>
+					<!-- Spanish Peseta                    Spain                           724               -->
+					<xs:enumeration value="FIM"></xs:enumeration>
+					<!-- Finnish Markka                    Finland                         246               -->
+					<xs:enumeration value="GRD"></xs:enumeration>
+					<!-- Greek Drachma                     Greece                          300               -->
+					<xs:enumeration value="HKD"></xs:enumeration>
+					<!-- Hong Kong Dollar                  Hong Kong                       344               -->
+					<xs:enumeration value="HUF"></xs:enumeration>
+					<!-- Hungarian Forint                  Hungary                         348               -->
+					<xs:enumeration value="IDR"></xs:enumeration>
+					<!-- Indonesian Rupiah                 Indonesia                       360               -->
+					<xs:enumeration value="IEP"></xs:enumeration>
+					<!-- Irish Pound                       Ireland                         372               -->
+					<xs:enumeration value="ILS"></xs:enumeration>
+					<!-- Israeli new Shekel                Israel                          376               -->
+					<xs:enumeration value="ITL"></xs:enumeration>
+					<!-- Italian Lira                      Italy                           380               -->
+					<xs:enumeration value="NLG"></xs:enumeration>
+					<!-- Dutch Guilder                     Netherlands                     528               -->
+					<xs:enumeration value="NOK"></xs:enumeration>
+					<!-- Norwegian Krone                   Norway                          578               -->
+					<xs:enumeration value="NZD"></xs:enumeration>
+					<!-- New Zealand Dollar                New Zealand                     554               -->
+					<xs:enumeration value="PHP"></xs:enumeration>
+					<!-- Philippine Peso                   Philippines                     608               -->
+					<xs:enumeration value="PLN"></xs:enumeration>
+					<!-- Polish New Zloty                  Poland                          985               -->
+					<xs:enumeration value="PTE"></xs:enumeration>
+					<!-- Portuguese Escudo                 Portugal                        620               -->
+					<xs:enumeration value="RUR"></xs:enumeration>
+					<!-- Russian Ruble                     Russian Federation              810               -->
+					<xs:enumeration value="SEK"></xs:enumeration>
+					<!-- Swedish Krona                     Sweden                          752               -->
+					<xs:enumeration value="SGD"></xs:enumeration>
+					<!-- Singapore Dollar                  Singapore                       702               -->
+					<xs:enumeration value="THB"></xs:enumeration>
+					<!-- Thai Baht                         Thailand                        764               -->
+					<xs:enumeration value="TWD"></xs:enumeration>
+					<!-- New Taiwan dollar                 Taiwan                          901               -->
+					<xs:enumeration value="ZAR"></xs:enumeration>
+					<!-- South African Rand                South Africa                    710               -->
+					<xs:enumeration value="INR"></xs:enumeration>
+					<!-- Indian Rupee                      India                           356               -->
+					<xs:enumeration value="PEN"></xs:enumeration>
+					<!-- Peruvian New Sol                  Peru                            604               -->
+					<xs:enumeration value="MYR"></xs:enumeration>
+					<!-- Malaysian Ringgit                 Malaysia                        458               -->
+					<xs:enumeration value="VND"></xs:enumeration>
+					<!-- Vietnamese New Dong               Vietnam                         704               -->
+					<xs:enumeration value="KRW"></xs:enumeration>
+					<!-- South Korean Won                  South Korea                     410               -->
+					<xs:enumeration value="TRY"></xs:enumeration>
+					<!-- New Turkish Lira                  Turkey                          949               -->
+					<xs:enumeration value="ANG"></xs:enumeration>
+					<!-- Antillian Guilder                 Netherlands Antilles            532               -->
+					<xs:enumeration value="AWG"></xs:enumeration>
+					<!-- Aruban Guilder                    Aruba                           533               -->
+					<xs:enumeration value="BMD"></xs:enumeration>
+					<!-- Bermudan Dollar                   Bermudan Dollar                 060               -->
+					<xs:enumeration value="CRC"></xs:enumeration>
+					<!-- Costa Rican Colon                 Costa Rica                      188               -->
+					<xs:enumeration value="RON"></xs:enumeration>
+					<!-- Romanian New Leu                  Romania                         946               -->
+					<xs:enumeration value="VEF"></xs:enumeration>
+					<!-- Venezuelan Bolivar Fuerte         Venezuela                       937               -->
+					<xs:enumeration value="BBD"></xs:enumeration>
+					<!-- Barbados Dollar                   Barbados                        052               -->
+					<xs:enumeration value="BGN"></xs:enumeration>
+					<!-- Bulgarian Lev                     Bulgaria                        975               -->
+					<xs:enumeration value="BND"></xs:enumeration>
+					<!-- Brunei Dollar                     Brunei                          096               -->
+					<xs:enumeration value="BSD"></xs:enumeration>
+					<!-- Bahamian Dollar                   Bahamas                         044               -->
+					<xs:enumeration value="COP"></xs:enumeration>
+					<!-- Colombian Peso                    Columbia                        170               -->
+					<xs:enumeration value="DOP"></xs:enumeration>
+					<!-- Dominican Peso                    Dominican Republic              214               -->
+					<xs:enumeration value="GTQ"></xs:enumeration>
+					<!-- Guatemalan Quetzal                Guatemala                       320               -->
+					<xs:enumeration value="KYD"></xs:enumeration>
+					<!-- Cayman Isles Dollar               Cayman Islands                  136               -->
+					<xs:enumeration value="MVR"></xs:enumeration>
+					<!-- Maldivian Rufiyaa                 Maldives                        462               -->
+					<xs:enumeration value="QAR"></xs:enumeration>
+					<!-- Qatari Rial                       Qatar                           634               -->
+					<xs:enumeration value="SAR"></xs:enumeration>
+					<!-- Saudi Riyal                       Saudi Arabia                    682               -->
+					<xs:enumeration value="TTD"></xs:enumeration>
+					<!-- Trinidadian and Tobagonian Dollar Trinidad and Tobago             780               -->
+					<xs:enumeration value="UAH"></xs:enumeration>
+					<!-- Ukrainian hryvnia                 Ukraine                         980               -->
+					<xs:enumeration value="UYU"></xs:enumeration>
+					<!-- Peso Uruguayo                     Uruguay                         858               -->
+					<xs:enumeration value="XCD"></xs:enumeration>
+					<!-- East Caribbean Dollar             East Caribbean Currency Area    951               -->
+					<xs:enumeration value="XPF"></xs:enumeration>
+					<!-- French Polynesian Franc           French Polynesia                953               -->
+					<xs:enumeration value="JMD"></xs:enumeration>
+					<!-- Jamaican Dollar                   Jamaica                         388               -->
+
+				</xs:restriction>
+         </xs:simpleType>
+
+         <xs:complexType name="Money">
+            <xs:annotation>
+               <xs:documentation>
+                   This type is used to represent Money. It should
+                   be used by any WSDL, which needs to send/receive
+                   Money information.
+               </xs:documentation>
+               <xs:appinfo>
+                  <typeLibrarySource
+                       library="MarketPlaceServiceCommonTypeLibrary"
+                       namespace="http://www.ebay.com/marketplace/services">
+                  </typeLibrarySource>
+               </xs:appinfo>
+            </xs:annotation>
+
+            <xs:simpleContent>
+               <xs:extension base="xs:decimal">
+                  <xs:attribute name="currencyCode" type="tns:IsoCurrencyCode" use="required">
+                  </xs:attribute>
+               </xs:extension>
+            </xs:simpleContent>
+         </xs:complexType>      
+
+	     <!-- CORE TYPES -->
+	     <xs:simpleType name="AckValue">
+	       <xs:annotation>
+	         <xs:documentation>
+	             Indicates whether the error is a severe error
+	             (causing the request to fail) or an
+	             informational error (a warning) that should be
+	             communicated to the user.
+	         </xs:documentation>
+	         <xs:appinfo>
+	           <typeLibrarySource
+	             library="MarketPlaceServiceCommonTypeLibrary"
+	             namespace="http://www.ebay.com/marketplace/services" />
+	         </xs:appinfo>
+	       </xs:annotation>
+	       <xs:restriction base="xs:string">
+	         <xs:enumeration value="Success">
+	           <xs:annotation>
+	             <xs:documentation>
+	               The request was processed successfully,
+	               but something occurred that may affect
+	               your application or the user.
+	             </xs:documentation>
+	           </xs:annotation>
+	         </xs:enumeration>
+	         <xs:enumeration value="Failure">
+	           <xs:annotation>
+	             <xs:documentation>
+	               The request that triggered the error was
+	               not processed successfully. When a
+	               serious application-level error occurs,
+	               the error is returned instead of the
+	               business data.
+	             </xs:documentation>
+	           </xs:annotation>
+	         </xs:enumeration>
+	         <xs:enumeration value="Warning">
+	           <xs:annotation>
+	             <xs:documentation>
+	                The request that triggered the error was
+	                processed successfully but with some
+	                warnings.
+	             </xs:documentation>
+	           </xs:annotation>
+	         </xs:enumeration>
+	         <xs:enumeration value="PartialFailure">
+	           <xs:annotation>
+	             <xs:documentation>
+	                 The request that triggered the error was
+	                 processed successfully but with some
+	                 warnings.
+	             </xs:documentation>
+	           </xs:annotation>
+	         </xs:enumeration>
+	       </xs:restriction>
+	     </xs:simpleType>
+	
+	     <xs:complexType abstract="true" name="BaseServiceRequest">
+	       <xs:annotation>
+	         <xs:documentation>
+	           This is the base class for request container for
+	           all service operations.
+	         </xs:documentation>
+	         <xs:appinfo>
+	            <typeLibrarySource
+	               library="MarketPlaceServiceCommonTypeLibrary"
+	               namespace="http://www.ebay.com/marketplace/services" />
+	         </xs:appinfo>
+	       </xs:annotation>
+	     </xs:complexType>
+	
+	     <xs:complexType abstract="true" name="BaseServiceResponse">
+	     <xs:annotation>
+	       <xs:documentation>
+	          Base response container for all service
+	          operations. Contains error information
+	          associated with the request.
+	       </xs:documentation>
+	         <xs:appinfo>
+	           <typeLibrarySource
+	               library="MarketPlaceServiceCommonTypeLibrary"
+	                namespace="http://www.ebay.com/marketplace/services" />
+	         </xs:appinfo>
+	       </xs:annotation>
+	       <xs:sequence>
+	         <xs:element name="ack" type="tns:AckValue">
+	           <xs:annotation>
+	             <xs:documentation />
+	             <xs:appinfo>
+	               <CallInfo>
+	                 <AllCalls />
+	                 <Returned>Always</Returned>
+	               </CallInfo>
+	             </xs:appinfo>
+	           </xs:annotation>
+	         </xs:element>
+	         <xs:element name="errorMessage" type="tns:ErrorMessage" minOccurs="0" >
+	           <xs:annotation>
+	             <xs:documentation>
+	               Information for an error or warning that
+	               occurred when eBay processed the
+	               request.
+	             </xs:documentation>
+	             <xs:appinfo>
+	               <CallInfo>
+	                 <AllCalls />
+	                 <Returned>Conditionally</Returned>
+	               </CallInfo>
+	             </xs:appinfo>
+	           </xs:annotation>
+	         </xs:element>
+	         <xs:element name="version" type="xs:string" minOccurs="0">
+	           <xs:annotation>
+	             <xs:documentation />
+	             <xs:appinfo>
+	               <CallInfo>
+	                 <AllCalls />
+	                 <Returned>Always</Returned>
+	               </CallInfo>
+	             </xs:appinfo>
+	           </xs:annotation>
+	         </xs:element>
+	         <xs:element name="timestamp" type="xs:dateTime"  minOccurs="0">
+	           <xs:annotation>
+	             <xs:documentation />
+	             <xs:appinfo>
+	               <CallInfo>
+	                 <AllCalls />
+	                 <Returned>Always</Returned>
+	               </CallInfo>
+	             </xs:appinfo>
+	           </xs:annotation>
+	         </xs:element>
+	         </xs:sequence>
+	        </xs:complexType>
+	
+	        <xs:simpleType name="ErrorCategory">
+	          <xs:annotation>
+	            <xs:documentation>
+	              Documentation goes here.
+	            </xs:documentation>
+	            <xs:appinfo>
+	              <typeLibrarySource
+	                  library="SOACommonTypeLibrary"
+	                  namespace="http://www.ebay.com/marketplace/services" />
+	            </xs:appinfo>
+	          </xs:annotation>
+	          <xs:restriction base="xs:token">
+	            <xs:enumeration value="System" />
+	            <xs:enumeration value="Application" />
+	            <xs:enumeration value="Request" />
+	          </xs:restriction>
+	        </xs:simpleType>
+	
+	        <xs:complexType name="ErrorData">
+	          <xs:annotation>
+	            <xs:documentation>
+	              Documentation goes here
+	            </xs:documentation>
+	            <xs:appinfo>
+	              <typeLibrarySource
+	                 library="SOACommonTypeLibrary"
+	                 namespace="http://www.ebay.com/marketplace/services" />
+	            </xs:appinfo>
+	          </xs:annotation>
+	          <xs:sequence>
+	            <xs:element name="errorId" type="xs:long" />
+	            <xs:element name="domain" type="xs:string" />
+	            <xs:element name="subdomain" type="xs:string" minOccurs="0" />
+	            <xs:element name="severity" type="tns:ErrorSeverity" />
+	            <xs:element name="category" type="tns:ErrorCategory" />
+	            <xs:element name="message" type="xs:string" />
+	            <xs:element name="exceptionId" type="xs:token" minOccurs="0"/>
+	            <xs:element name="parameter" type="tns:ErrorParameter"  minOccurs="0" maxOccurs="unbounded"/>
+		      </xs:sequence>
+	        </xs:complexType>
+	
+	        <xs:complexType name="ErrorMessage">
+	          <xs:annotation>
+	            <xs:documentation>
+	              Documentation goes here
+	            </xs:documentation>
+	            <xs:appinfo>
+	              <typeLibrarySource
+	               library="SOACommonTypeLibrary"
+	               namespace="http://www.ebay.com/marketplace/services" />
+	            </xs:appinfo>
+	          </xs:annotation>
+	          <xs:sequence>
+	            <xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded" />
+	          </xs:sequence>
+	        </xs:complexType>
+	
+	        <xs:complexType name="ErrorParameter">
+	          <xs:annotation>
+	            <xs:documentation>
+	               Documentation goes here
+	            </xs:documentation>
+	            <xs:appinfo>
+	            <typeLibrarySource
+	                library="SOACommonTypeLibrary"
+	                namespace="http://www.ebay.com/marketplace/services" />
+	            </xs:appinfo>
+	          </xs:annotation>
+	          <xs:simpleContent>
+	            <xs:extension base="xs:string">
+	              <xs:attribute name="name" type="xs:string" use="optional" />
+	            </xs:extension>
+	          </xs:simpleContent>
+	        </xs:complexType>
+				
+	        <xs:simpleType name="ErrorSeverity">
+	          <xs:annotation>
+	            <xs:documentation>
+	              Documentation goes here.
+	            </xs:documentation>
+	            <xs:appinfo>
+	              <typeLibrarySource
+	                 library="SOACommonTypeLibrary"
+	                 namespace="http://www.ebay.com/marketplace/services" />
+	            </xs:appinfo>
+	          </xs:annotation>
+	          <xs:restriction base="xs:token">
+	            <xs:enumeration value="Error" />
+	            <xs:enumeration value="Warning" />
+	          </xs:restriction>
+	        </xs:simpleType>
+			
+			<!--  Begin of getVersion types  -->			
+            <xs:element     name="getVersionRequest" type="tns:PaymentServiceGetVersionRequest" />
+            <xs:complexType name="PaymentServiceGetVersionRequest">
+                <xs:annotation>
+                    <xs:documentation>
+                        Document goes here
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+                    <xs:extension base="tns:BaseServiceRequest">
+                        <xs:sequence />
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:element     name="getVersionResponse" type="tns:PaymentServiceGetVersionResponse" />
+            <xs:complexType name="PaymentServiceGetVersionResponse">
+                <xs:annotation>
+                    <xs:documentation>
+                        Document goes here
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+                    <xs:extension base="tns:BaseServiceResponse">
+                    	<!-- 
+                        <xs:sequence>
+                            <xs:element name="version" type="xs:string" maxOccurs="1" minOccurs="1" />
+                        </xs:sequence>
+                        -->
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+			<!--  End   of getVersion types  -->
+			
+		</xs:schema>
+	</wsdl:types>
+	
+    <wsdl:message name="applyTransactionRefundRequest">
+		<wsdl:part element="tns:applyTransactionRefundRequest" name="params" />
+    </wsdl:message>
+  
+    <wsdl:message name="applyTransactionRefundResponse">
+		<wsdl:part element="tns:applyTransactionRefundResponse" name="params"/>
+    </wsdl:message>
+
+	<!--  Begin of getVersion messages  -->    
+    <wsdl:message name="getVersionRequest">
+        <wsdl:part element="tns:getVersionRequest" name="params" />
+    </wsdl:message>
+    <wsdl:message name="getVersionResponse">
+        <wsdl:part element="tns:getVersionResponse" name="params" />
+    </wsdl:message>
+	<!--  End   of getVersion messages  -->    
+	
+	<wsdl:portType name="PaymentServicePort">
+	
+		<wsdl:operation name="applyTransactionRefund">
+	        <wsdl:documentation>Applies a refund against a specific payment transaction</wsdl:documentation>
+	        <wsdl:input message="tns:applyTransactionRefundRequest" />
+	        <wsdl:output message="tns:applyTransactionRefundResponse" />
+	    </wsdl:operation>
+	    
+        <wsdl:operation name="getVersion">
+	        <wsdl:documentation>Required operation for each service</wsdl:documentation>        
+            <wsdl:input message="tns:getVersionRequest" />
+            <wsdl:output message="tns:getVersionResponse" />
+        </wsdl:operation>
+	</wsdl:portType>
+	
+	<wsdl:binding name="PaymentServiceHttpBinding" type="tns:PaymentServicePort">
+		<http:binding verb="POST" />
+
+		<wsdl:operation name="applyTransactionRefund">
+			<http:operation location="/applyTransactionRefund" />
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+	</wsdl:binding>
+	
+	<wsdl:binding name="PaymentServiceSOAPBinding" type="tns:PaymentServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		
+	  	<wsdl:operation name="applyTransactionRefund">
+	  		<soap:operation
+	  			soapAction="http://www.ebay.com/marketplace/billing/v1/services/applyTransactionRefund" />
+	  		<wsdl:input>
+	  			<soap:body use="literal" />
+	  		</wsdl:input>
+	  		<wsdl:output>
+	  			<soap:body use="literal" />
+	  		</wsdl:output>
+	  	</wsdl:operation>
+	  	
+	  	<wsdl:operation name="getVersion">
+	  		<soap:operation
+	  			soapAction="http://www.ebay.com/marketplace/billing/v1/services/getVersion" />
+	  		<wsdl:input>
+	  			<soap:body use="literal" />
+	  		</wsdl:input>
+	  		<wsdl:output>
+	  			<soap:body use="literal" />
+	  		</wsdl:output>
+	  	</wsdl:operation>	  	
+	</wsdl:binding>
+	
+	<wsdl:service name="PaymentService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			This service is provides payment related functionality to the billing system. 
+		</wsdl:documentation>
+		
+		<wsdl:port binding="tns:PaymentServiceHttpBinding" name="PaymentServiceHttpPort">
+			<http:address location="https://svcs.ebay.com/services/billing/v1/PaymentService" />
+		</wsdl:port>
+		
+		<wsdl:port binding="tns:PaymentServiceSOAPBinding" name="PaymentServiceSOAPPort">
+			<soap12:address location="https://svcs.ebay.com/services/billing/v1/PaymentService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

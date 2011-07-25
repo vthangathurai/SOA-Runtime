@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="TnsTaxonomyService"
+	targetNamespace="http://www.ebay.com/marketplace/services">
+
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/services"
+			xmlns:tns="http://www.ebay.com/marketplace/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:element name="getVersionResponse" 
+				type="tns:GetVersionResponse" />
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation />
+
+					<xs:appinfo />
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation>
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage"
+						type="tns:ErrorMessage" minOccurs="0" >
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version"
+						type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp"
+						type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element name="subdomain"
+						type="xs:string" minOccurs="0" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element name="exceptionId"
+						type="xs:token" minOccurs="0" />
+					<xs:element name="parameter" type="tns:ErrorParameter"  minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getPolicyGroupsRequest">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="siteId" type="xs:int"
+								minOccurs="0" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPolicyGroupsResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="policyGroup"
+								type="tns:TnsPolicyGroup" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPoliciesRequest">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="siteId" type="xs:int"
+								minOccurs="0"/>
+							<xs:element name="policyGroupId" type="xs:int"
+								minOccurs="0"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPoliciesResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="policy"
+								type="tns:TnsPolicy" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addPolicyGroupRequest">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="siteId" type="xs:int"
+								 minOccurs="1" />
+							<xs:element name="policyGroupName" type="xs:string" minOccurs="1" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addPolicyGroupResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="policyGroup"
+								type="tns:TnsPolicyGroup" minOccurs="0" >
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addPolicyRequest">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="siteId" type="xs:int"
+								minOccurs="1" />
+							<xs:element name="policyGroupId" type="xs:int"
+								minOccurs="1" />
+							<xs:element name="policyName" type="xs:string" minOccurs="1" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addPolicyResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="policy"
+								type="tns:TnsPolicy" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPrioritiesRequest">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="siteId" type="xs:int"
+								minOccurs="0" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPrioritiesResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="priority"
+								type="tns:TnsPriority" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:complexType name="TnsPolicyGroup">
+				<xs:sequence>
+					<xs:element name="policyGroupId" type="xs:int"></xs:element>
+					<xs:element name="siteId" type="xs:int"></xs:element>
+					<xs:element name="policyGroupName" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TnsPolicy">
+				<xs:sequence>
+					<xs:element name="policyId" type="xs:int"></xs:element>
+					<xs:element name="siteId" type="xs:int"></xs:element>
+					<xs:element name="policyGroupId" type="xs:int"></xs:element>
+					<xs:element name="policyName" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TnsPriority">
+				<xs:sequence>
+					<xs:element name="priorityId" type="xs:int"></xs:element>
+					<xs:element name="siteId" type="xs:int"></xs:element>
+					<xs:element name="priorityName" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="parameters" />
+	</wsdl:message>
+
+	<wsdl:message name="getPolicyGroupsRequest">
+		<wsdl:part name="parameters"
+			element="tns:getPolicyGroupsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPolicyGroupsResponse">
+		<wsdl:part name="parameters"
+			element="tns:getPolicyGroupsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPoliciesRequest">
+		<wsdl:part name="parameters"
+			element="tns:getPoliciesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPoliciesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getPoliciesResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="addPolicyGroupRequest">
+		<wsdl:part name="parameters"
+			element="tns:addPolicyGroupRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addPolicyGroupResponse">
+		<wsdl:part name="parameters"
+			element="tns:addPolicyGroupResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addPolicyRequest">
+		<wsdl:part name="parameters"
+			element="tns:addPolicyRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addPolicyResponse">
+		<wsdl:part name="parameters"
+			element="tns:addPolicyResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPrioritiesRequest">
+		<wsdl:part name="parameters"
+			element="tns:getPrioritiesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPrioritiesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getPrioritiesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="TnsTaxonomyServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getPolicyGroups">
+			<wsdl:documentation>
+				Retrieves available policy groups - all or for given site
+			</wsdl:documentation>
+			<wsdl:input message="tns:getPolicyGroupsRequest"></wsdl:input>
+			<wsdl:output message="tns:getPolicyGroupsResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPolicies">
+			<wsdl:documentation>
+				Retrieves available policies - all or for given site/policy group
+			</wsdl:documentation>
+			<wsdl:input message="tns:getPoliciesRequest"></wsdl:input>
+			<wsdl:output message="tns:getPoliciesResponse"></wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="addPolicyGroup">
+			<wsdl:documentation>
+				Creates specified new policy group0
+			</wsdl:documentation>
+			<wsdl:input message="tns:addPolicyGroupRequest"></wsdl:input>
+			<wsdl:output message="tns:addPolicyGroupResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addPolicy">
+			<wsdl:documentation>
+				Creates specified new policy
+			</wsdl:documentation>
+			<wsdl:input message="tns:addPolicyRequest"></wsdl:input>
+			<wsdl:output message="tns:addPolicyResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPriorities">
+			<wsdl:documentation>
+				Retrieves available priorities - all or for given site
+			</wsdl:documentation>
+			<wsdl:input message="tns:getPrioritiesRequest"></wsdl:input>
+			<wsdl:output message="tns:getPrioritiesResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TnsTaxonomyServiceHttpBinding"
+		type="tns:TnsTaxonomyServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="TnsTaxonomyService/getVersion" />
+			<wsdl:output>
+				<mime:content part="getVersion" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="TnsTaxonomyServiceSOAPBinding"
+		type="tns:TnsTaxonomyServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getVersion" />
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPolicyGroups">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getPolicyGroups" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPolicies">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getPolicies" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addPolicyGroup">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/addPolicyGroup" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addPolicy">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/addPolicy" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPriorities">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/services/getPriorities" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TnsTaxonomyService">
+		<wsdl:documentation>
+		<Version>1.0.0</Version>
+		Provides definition of hierarchical classification buckets for the tns rules
+		</wsdl:documentation>		
+		<wsdl:port binding="tns:TnsTaxonomyServiceHttpBinding"
+			name="TnsTaxonomyServiceHttpPort">
+			<http:address
+				location="http://svcs.ebay.com/TnsTaxonomyService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:TnsTaxonomyServiceSOAPBinding"
+			name="TnsTaxonomyServiceSOAPPort">
+			<soap12:address
+				location="http://svcs.ebay.com/TnsTaxonomyService"
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

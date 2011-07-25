@@ -1,0 +1,4857 @@
+<definitions name="ResolutionCaseManagementService" targetNamespace="http://www.ebay.com/marketplace/resolution/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/resolution/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/resolution/v1/services">
+
+
+<xs:simpleType name="AckValue">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates the results of the call request.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+			<callInfo>
+			  <AllCalls/>
+			  <returned>Always</returned>
+			</callInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="Success">
+			<xs:annotation>
+				<xs:documentation>
+					eBay successfully processed the request and the business data is returned in
+					the response. Note that it is possible for a response to return Success, but
+					still not contain the expected data in the result.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Failure">
+			<xs:annotation>
+				<xs:documentation>
+					eBay encountered a fatal error during the processing of the request, causing
+					the request to fail. When a serious application-level error occurs, the error
+					is returned instead of the business data.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Warning">
+			<xs:annotation>
+				<xs:documentation>
+					The request that triggered the error was processed successfully but with
+					one or more warnings.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PartialFailure">
+			<xs:annotation>
+				<xs:documentation>
+					eBay successfully processed the request, but one or more non-fatal errors
+					occurred during the processing. Inspect the message details and resolve any
+					problems before resubmitting the request.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType abstract="true" name="BaseRequest">
+	<xs:annotation>
+		<xs:documentation>
+			This is the base class for the request container for all service operations.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<CallInfo>
+						<noCalls/>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType abstract="true" name="BaseResponse">
+	<xs:annotation>
+		<xs:documentation>
+			This is the base class for the response container for all service operations.
+			Returns error information associated with the request.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="ack" type="tns:AckValue">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+			<xs:annotation>
+				<xs:documentation>
+					Information for an error or warning that occurred when eBay processed the
+					request. This field is not returned if the ack value is Success.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="version" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The version of the response payload schema. Indicates the version of the schema that eBay used to process the request.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					This value represents the date and time when eBay processed the request. The time zone of this value is GMT and the format is the ISO 8601 date and time format (YYYY-MM-DDTHH:MM:SS.SSSZ). See Time Values in the eBay Web Services guide for information about this time format and converting to and from the GMT time zone. 
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+			<xs:annotation>
+				<xs:documentation>
+					This value represents the date and time when eBay processed the request. The time zone of this value is GMT and the format is the ISO 8601 date and time format (YYYY-MM-DDTHH:MM:SS.SSSZ). See Time Values in the eBay Web Services guide for information about this time format and converting to and from the GMT time zone. 
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<noCalls/>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:simpleType name="ErrorCategory">
+	<xs:annotation>
+		<xs:documentation>
+			Returned errors are categorized as either Application, Request, or System errors.
+			Request and application errors are often caused by passing invalid data in the
+			call request. System errors are primarily caused by application failures and
+			cannot be corrected by changing request values.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="System">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates that an error has occurred on the eBay system side. For example, a
+					database or server could be down. Inspect the error message to find the cause
+					of the problem. If the problem is on the eBay side, an application can retry
+					the request a reasonable number of times (eBay recommends twice). If the
+					error persists, contact Developer Technical Support. Once the problem has been
+					resolved, the request may be resent in its original form.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Application">
+			<xs:annotation>
+				<xs:documentation>
+					An error occurred due to a problem with the request, with the most likely
+					source being the application sending the request. For example, the request is
+					missing a required data element or it contains an invalid field. The problem
+					must be corrected before the request can be resent. Inspect the error message
+					to find the cause of the problem. If the problem is due to an application
+					error, modify the application and resend the request. If the error is due to
+					invalid data, the source of the data must be corrected before you resend the
+					resend request to eBay.
+					</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Request">
+			<xs:annotation>
+				<xs:documentation>
+					An error occurred due to a problem with the request, with the most likely
+					source being missing or invalid data in the request. The problem must be
+					corrected before the request can be retried. Inspect the error message to
+					find the cause of the problem. If the problem is a result of end-user data,
+					alert the end-user to the problem and provide the means for them to correct
+					the problem. Once the problem is resolved, resend the request to eBay.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="ErrorData">
+	<xs:annotation>
+		<xs:documentation>
+			A container for error details.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="errorId" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					A unique code that identifies the particular error condition that occurred. Your application can use error codes as identifiers in your customized error-handling algorithms.  
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="domain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the domain in which the error occurred.   
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="subdomain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the subdomain in which the error occurred.  
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="severity" type="tns:ErrorSeverity">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether the reported problem is fatal (an error) or is less- severe (a warning). Review the error message details for information on the cause. 
+					&lt;br&gt;
+					&lt;br&gt;
+					If the request fails and the application is the source of the error (for example, a required element is missing), update the application before you retry the request. If the problem is due to incorrect user data, alert the end-user to the problem and provide the means for them to correct the data. Once the problem in the application or data is resolved, re-send the request to eBay. 
+					&lt;br&gt;
+					&lt;br&gt;
+					If the source of the problem is on eBay's side, you can retry the request a reasonable number of times (eBay recommends you try the request twice). If the error persists, contact Developer Technical Support. Once the problem has been resolved, you can resend the request in its original form. 
+					&lt;br&gt;
+					&lt;br&gt;
+					If a warning occurs, warning information is returned in addition to the business data. Normally, you do not need to resend the request (as the original request was successful). However, depending on the cause of the warning, you might need to contact the end user, or eBay, to effect a long term solution to the problem.  
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="category" type="tns:ErrorCategory">
+			<xs:annotation>
+				<xs:documentation>
+					There are three categories of errors: request errors, application errors, and system errors. 
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="message" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					A detailed description of the condition that caused the error.  
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for an exception associated with an error.   
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter">
+			<xs:annotation>
+				<xs:documentation>
+					Various warning and error messages return one or more variables that contain contextual information about the error. This is often the field or value that triggered the error.   
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="ErrorMessage">
+	<xs:annotation>
+		<xs:documentation>
+			Information regarding an error or warning that occurred when eBay processed the request. Not returned when the ack value is Success.  
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<!--
+
+		processContents="lax" /> </xs:sequence>
+	-->
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+			<xs:annotation>
+				<xs:documentation>
+					Details about a single error. 				
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="ErrorParameter">
+	<xs:annotation>
+		<xs:documentation>
+			Contextual data associated with an error. 
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:simpleContent>
+		<xs:extension base="xs:string">
+			<xs:attribute name="name" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>
+						The name of the input parameter returned with the error. Inspecting the parameter (or its input value) will often aid in understanding the cause of the error. Not all error messages contain this value.  				
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:extension>
+	</xs:simpleContent>
+</xs:complexType>
+
+
+<xs:simpleType name="ErrorSeverity">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the error is a fatal error (causing the request to fail) or a less severe error (a warning) that should be communicated to the user. 
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="Error">
+			<xs:annotation>
+				<xs:documentation>
+					eBay encountered a fatal error during the processing of the request, causing the request to fail. When eBay encounters an error, it returns error data instead of the requested business data. Inspect the error details and resolve the problem before resubmitting the request.				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Warning">
+			<xs:annotation>
+				<xs:documentation>
+					The request was successfully processed, but eBay encountered a non-fatal error during the processing that could affect the data returned. For example, eBay might have changed the value of an input field. In this case, eBay returns a successful response, but it also returns a warning. For best results, requests should return without warnings. Inspect the warning details and resolve the problem before resubmitting the request.				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="ExtensionType">
+	<xs:annotation>
+		<xs:documentation>
+			Reserved for future use.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="id" type="xs:positiveInteger">
+			<xs:annotation>
+				<xs:documentation>
+					Reserved for future use.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<noCalls/>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="version" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Reserved for future use.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<noCalls/>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="contentType" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Reserved for future use.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<noCalls/>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="value" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Reserved for future use.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<noCalls/>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<!-- 	GETVERSION 		-->
+<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+
+<xs:complexType name="GetVersionRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Returns the current version of the service. This simple call can be used to
+			monitor the service for availability. This call has no input parameters and the
+			response contains only the standard output fields.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Returns the current service version.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence/>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+
+<xs:complexType name="GetVersionResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the getVersion API call.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- 	GETUSERCASES 		-->
+<xs:element name="getUserCasesRequest" type="tns:GetUserCasesRequest"/>
+<xs:complexType name="GetUserCasesRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieves the cases in which the eBay member is involved. The cases returned may
+			include disputes created through the eBay or PayPal Online Dispute Resolution
+			system (or through the Trading API) or cases or claims created through the eBay
+			Buyer Protection (eBP) system (eBay Resolution Center). 
+
+			&lt;br&gt;&lt;br&gt; Several filters are available for this call which can
+			restrict results by date, case status, case type, by item, or by transaction. If
+			more than one filter type is used in the call, boolean AND logic is applied to the
+			result set. Boolean OR logic is used for conditions within a filter.
+
+			&lt;br&gt;&lt;br&gt;Call flow for retrieving details on a specific case are as
+			follows: 
+			&lt;br&gt;&lt;ol&gt;
+				&lt;li&gt;Call &lt;b&gt;getUserCases&lt;/b&gt; with or without filters. Select
+				one case identified by the &lt;b&gt;CaseId&lt;/b&gt;.&lt;/li&gt; 
+				&lt;li&gt;If the &lt;b&gt;CaseType&lt;/b&gt; is EBP_INR or EBP_SNAD, call
+				&lt;b&gt;getEBPCaseDetail&lt;/b&gt;.&lt;/li&gt; 
+				&lt;li&gt;For all non-eBP case types, use
+				the &lt;b&gt;getDispute&lt;/b&gt; call in the Trading API.&lt;/li&gt; &lt;/ol&gt;
+		</xs:documentation>
+		<xs:appinfo>
+			<relatedCalls>getEBPCaseDetail</relatedCalls>
+			<relatedCallsOther>
+				<apiNickname>Trading</apiNickname>
+				<apiCallRefBaseURL>http://developer.ebay.com/devzone/xml/docs/Reference/eBay</apiCallRefBaseURL>
+				<relatedCall>
+					<name>GetDispute</name>
+					<summary>Gets the details of a case from the Online Dispute Resolution system.</summary>
+				</relatedCall>
+			</relatedCallsOther>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element minOccurs="0" name="itemFilter" type="tns:ItemFilterType">
+					<xs:annotation>
+						<xs:documentation>
+							Restricts results to cases filed against a specific item or a specific transaction involving the same item. If item or transaction filtering are not used, cases involving all items and transactions are returned.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="creationDateRangeFilter" type="tns:DateRangeFilterType">
+					<xs:annotation>
+						<xs:documentation>
+							This filter restricts results to cases created within a specified date range. The specified date range is inclusive. The maximum date range that can be specified with this filter is 90 days. Cases with creation dates dating back more than 18 months cannot be returned. If you want to return cases for a period longer than 90 days, you have to make multiple getUserCases calls using this filter and specifying different date ranges in each subsequent call. If date range filtering is not used, all cases from the last 90 days are returned.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="caseTypeFilter" type="tns:CaseTypeFilterType">
+					<xs:annotation>
+						<xs:documentation>
+							Container element for case type filters. One or more caseType elements may be used. The caseTypeFilter field uses Boolean OR logic, which means all specified and matching case types are returned. If case type filtering is not used, all cases are returned regardless of case type.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="caseStatusFilter" type="tns:CaseStatusFilterType">
+					<xs:annotation>
+						<xs:documentation>
+							Container element for case status filters. One or more caseStatus elements may be used. The caseStatusFilter field uses Boolean OR logic, which means all specified and matching case statuses are returned. If case status filtering is not used, all cases are returned regardless of status.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+					<xs:annotation>
+						<xs:documentation>
+							Controls the pagination of the result set, including the number of cases returned per page and the page number you want returned in the output.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="sortOrder" type="tns:CaseSortOrderType">
+					<xs:annotation>
+						<xs:documentation>
+							Sorts the results based on creation date or case status, in ascending or
+							descending order.
+						</xs:documentation>
+						<xs:appinfo>
+							<default>CREATION_DATE_ASCENDING</default>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:element name="getUserCasesResponse" type="tns:GetUserCasesResponse"/>
+<xs:complexType name="GetUserCasesResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Summary information on all cases matching input criteria is returned.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="cases" type="tns:CaseArrayType">
+					<xs:annotation>
+						<xs:documentation>
+							Results container for cases in which the user is involved in either as the Seller or Buyer.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<returned>Always</returned>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="paginationOutput" type="tns:PaginationOutput">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates the pagination of the result set.
+						</xs:documentation>
+						<xs:appinfo>
+							<callInfo>
+								<callName>getUserCases</callName>
+								<returned>Always</returned>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- 	GETEBPCASEDETAIL 		-->
+<xs:element name="getEBPCaseDetailRequest" type="tns:GetEBPCaseDetailRequest"/>
+<xs:complexType name="GetEBPCaseDetailRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Returns details for a specific case in the eBay Buyer Protection (eBP) system.
+			This call is restricted to Item Not Received (INR) and Significantly Not As
+			Described (SNAD) eBP cases. This call requires the caller to pass in the
+			Authentication Token as described in
+			&lt;a href="http://developer.ebay.com/DevZone/XML/docs/WebHelp/AuthAndAuth-.html"&gt;AuthNAuth.&lt;/a&gt;
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>getEBPCaseDetail</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:element name="getEBPCaseDetailResponse" type="tns:GetEBPCaseDetailResponse"/>
+<xs:complexType name="GetEBPCaseDetailResponse">
+	<xs:annotation>
+		<xs:documentation>
+			The details of a single INR or SNAD case in the eBP system.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element minOccurs="0" name="caseSummary" type="tns:CaseSummaryType">
+					<xs:annotation>
+						<xs:documentation>
+							Summary information.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getEBPCaseDetail</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="caseDetail" type="tns:EBPCaseDetailType">
+					<xs:annotation>
+						<xs:documentation>
+							The container for detailed eBP case information.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getEBPCaseDetail</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- 	GETACTIVITYOPTIONS 		-->
+	<xs:element name="getActivityOptionsRequest" type="tns:GetActivityOptionsRequest"/>
+	<xs:complexType name="GetActivityOptionsRequest">
+		<xs:annotation>
+  		<xs:documentation>
+		  Return the possible set of Activities, i.e. actions applicable on the given case at this moment.
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+  				<xs:sequence>
+					<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>getActivityOptions</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="getActivityOptionsResponse" type="tns:GetActivityOptionsResponse"/>
+	<xs:complexType name="GetActivityOptionsResponse">
+		<xs:annotation>
+  		<xs:documentation>Has the list of applicable activities.  Consumers of service can map activity to operations to call.
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+	  		<xs:sequence>
+	  			<xs:element maxOccurs="unbounded" minOccurs="0" name="activity" type="tns:EBPActivityOptionType">
+	  					<xs:annotation>
+  						<xs:documentation>TODO - table
+  						</xs:documentation>
+						</xs:annotation>
+	  			</xs:element>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!-- 	ISSUE FULL REDUND	 -->
+	<xs:element name="issueFullRefundRequest" type="tns:IssueFullRefundRequest"/>
+	<xs:complexType name="IssueFullRefundRequest">
+	<xs:annotation>
+  		<xs:documentation>
+		  Issues full refund to the buyer without requesting return of item.
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+  				<xs:sequence>
+					<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>issueFullRefund</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="additionalComments" type="xs:token">
+					   <xs:annotation>
+						 <xs:documentation>
+							TODO
+						 </xs:documentation>
+					     <xs:appinfo>					
+							<callInfo>
+							<callName>issueFullRefund</callName>
+							<requiredInput>No</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="issueFullRefundResponse" type="tns:IssueFullRefundResponse"/>
+	<xs:complexType name="IssueFullRefundResponse">
+		<xs:annotation>
+  		<xs:documentation>
+	  		TODO
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+  			<xs:sequence>
+	  			<xs:element minOccurs="0" name="fullRefundStatus" type="tns:RefundStatusType">
+	  					<xs:annotation>
+  						<xs:documentation>Full Refund Status
+  						</xs:documentation>
+						</xs:annotation>
+	  			</xs:element>
+	  			<xs:element minOccurs="0" name="refundDate" type="xs:dateTime">
+	  					<xs:annotation>
+  						<xs:documentation>Full Refund Date
+  						</xs:documentation>
+						</xs:annotation>
+	  			</xs:element>
+	  		</xs:sequence>	  		
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- 	PROVIDETRACKINGINFO		 -->
+	<xs:element name="provideTrackingInfoRequest" type="tns:ProvideTrackingInfoRequest"/>
+	<xs:complexType name="ProvideTrackingInfoRequest">
+		<xs:annotation>
+  		<xs:documentation>
+		  TODO
+  		</xs:documentation>
+  		<xs:appinfo>
+	  	<Summary>
+		  TODO
+	  	</Summary>
+  		</xs:appinfo>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+	  		<xs:sequence>
+	  			<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>provideTrackingInfo</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+	  			<xs:element name="trackingNumber" type="xs:string">
+	  					<xs:annotation>
+  						<xs:documentation>Tracking Number
+  						</xs:documentation>
+  						 <xs:appinfo>					
+							<callInfo>
+							<callName>provideTrackingInfo</callName>
+							<requiredInput>Yes</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+	  			</xs:element>
+	  			<xs:element name="carrierUsed" type="xs:string">
+	  					<xs:annotation>
+  						<xs:documentation>Carrier
+  						</xs:documentation>
+  						 <xs:appinfo>					
+							<callInfo>
+							<callName>provideTrackingInfo</callName>
+							<requiredInput>Yes</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+	  			</xs:element>
+	  			<xs:element maxOccurs="1" minOccurs="0" name="additionalComments" type="xs:token">
+					   <xs:annotation>
+						 <xs:documentation>
+							TODO
+						 </xs:documentation>
+					     <xs:appinfo>					
+							<callInfo>
+							<callName>provideTrackingInfo</callName>
+							<requiredInput>No</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+				</xs:element>
+	  		</xs:sequence>	  
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="provideTrackingInfoResponse" type="tns:ProvideTrackingInfoResponse"/>
+	<xs:complexType name="ProvideTrackingInfoResponse">
+		<xs:annotation>
+  		<xs:documentation>
+	  		TODO
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+	  		<xs:sequence>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	
+
+	<!-- 	SELLEROFFERANOTHERSOLUTION		 -->
+	<xs:element name="sellerOfferAnotherSolutionRequest" type="tns:SellerOfferAnotherSolutionRequest"/>
+	<xs:complexType name="SellerOfferAnotherSolutionRequest">
+		<xs:annotation>
+  		<xs:documentation>
+		  To offer another solution to the buyer
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+  				<xs:sequence>
+					<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>sellerOfferAnotherSolution</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+					<xs:element name="messageToBuyer" type="xs:token">
+					   <xs:annotation>
+						 <xs:documentation>
+							TODO
+						 </xs:documentation>
+					     <xs:appinfo>					
+							<callInfo>
+							<callName>sellerOfferAnotherSolution</callName>
+							<requiredInput>Yes</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="sellerOfferAnotherSolutionResponse" type="tns:SellerOfferAnotherSolutionResponse"/>
+	<xs:complexType name="SellerOfferAnotherSolutionResponse">
+		<xs:annotation>
+  		<xs:documentation>
+	  		TODO
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+	  		<xs:sequence>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!-- 	ESCALATETOCUSTOMERSUPPORT		 -->
+	<xs:element name="escalateToCustomerSupportRequest" type="tns:EscalateToCustomerSupportRequest"/>
+	<xs:complexType name="EscalateToCustomerSupportRequest">
+		<xs:annotation>
+  		<xs:documentation>
+		  Escalate to customer support.
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+  				<xs:sequence>
+					<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>escalateToCustomerSupport</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+					<xs:element name="escalationReason" type="xs:token">
+					<xs:annotation>
+						<xs:documentation>
+							Escalation reason. Meta Data API maps each reason to corresponding description. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>escalateToCustomerSupport</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="additionalComments" type="xs:token">
+					   <xs:annotation>
+						 <xs:documentation>
+							TODO
+						 </xs:documentation>
+					     <xs:appinfo>					
+							<callInfo>
+							<callName>escalateToCustomerSupport</callName>
+							<requiredInput>No</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="escalateToCustomerSupportResponse" type="tns:EscalateToCustomerSupportResponse"/>
+	<xs:complexType name="EscalateToCustomerSupportResponse">
+		<xs:annotation>
+  		<xs:documentation>
+	  		TODO
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+	  		<xs:sequence>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!-- 	APPEALTOCUSTOMERSUPPORT		 -->
+	<xs:element name="appealToCustomerSupportRequest" type="tns:AppealToCustomerSupportRequest"/>
+	<xs:complexType name="AppealToCustomerSupportRequest">
+		<xs:annotation>
+  		<xs:documentation>
+		  Escalate to customer support.
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+  				<xs:sequence>
+					<xs:element name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>appealToCustomerSupport</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+					<xs:element name="appealReason" type="xs:token">
+					<xs:annotation>
+						<xs:documentation>
+							Appeal reason. Meta Data API maps each reason to corresponding description. 
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>appealToCustomerSupport</callName>
+								<requiredInput>Yes</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="additionalComments" type="xs:token">
+					   <xs:annotation>
+						 <xs:documentation>
+							TODO
+						 </xs:documentation>
+					     <xs:appinfo>					
+							<callInfo>
+							<callName>appealToCustomerSupport</callName>
+							<requiredInput>No</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="appealToCustomerSupportResponse" type="tns:AppealToCustomerSupportResponse"/>
+	<xs:complexType name="AppealToCustomerSupportResponse">
+		<xs:annotation>
+  		<xs:documentation>
+	  		TODO
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+	  		<xs:sequence>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- 	GETMETADATA -->
+	<xs:element name="getEBPMetadataRequest" type="tns:GetEBPMetadataRequest"/>
+	<xs:complexType name="GetEBPMetadataRequest">
+		<xs:annotation>
+  		<xs:documentation>
+		  TODO
+  		</xs:documentation>
+  		<xs:appinfo>
+	  	<Summary>
+		  TODO
+	  	</Summary>
+  		</xs:appinfo>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseRequest">
+	  		<xs:sequence>
+	  			<xs:element maxOccurs="unbounded" minOccurs="0" name="metaDataRequestInfo" type="tns:EBPMetaDataRequestInfoType">
+					<xs:annotation>
+						<xs:documentation>
+							If this element is not passed then the operation returns the list of allowed
+							metadata types.
+						</xs:documentation>
+						<xs:appinfo>					
+							<callInfo>
+							<callName>getCaseMetadata</callName>
+							<requiredInput>Yes</requiredInput>
+							</callInfo>
+						 </xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="getEBPMetadataResponse" type="tns:GetEBPMetadataResponse"/>
+	<xs:complexType name="GetEBPMetadataResponse">
+		<xs:annotation>
+  		<xs:documentation>
+	  		TODO
+  		</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+  			<xs:extension base="tns:BaseResponse">
+	  		<xs:sequence>
+	  			<xs:element maxOccurs="unbounded" minOccurs="0" name="metaData" type="tns:EBPMetaDataType">
+	  					<xs:annotation>
+  						<xs:documentation>TODO - table
+  						</xs:documentation>
+						</xs:annotation>
+	  			</xs:element>
+	  		</xs:sequence>
+  			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+<xs:complexType name="ItemFilterType">
+	<xs:annotation>
+		<xs:documentation>
+			Used to restrict case results to a specific eBay item ID or even down to specific
+			transaction of that item (if transactionId is used).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="itemId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The eBay item ID. All cases filed against this itemId are returned.
+				</xs:documentation>
+				<xs:appinfo>
+					<maxLength>19</maxLength>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>Conditionally</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="transactionId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The eBay transaction ID. All cases filed against this transactionId are returned. The transactionId must match the itemId or an error is returned.
+				</xs:documentation>
+				<xs:appinfo>
+					<maxLength>19</maxLength>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>No</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="DateRangeFilterType">
+	<xs:annotation>
+		<xs:documentation>
+			Used to restrict case results to an inclusive date range. The date range cannot span more than 90 days in a getUserCases call.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="fromDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The starting date for the date range. The fromDate must be older than the toDate, and it cannot be set back more than 18 months in the past.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>Conditional</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="toDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The ending date for the date range. The toDate must be more recent than the fromDate. This field is optional. If it is omitted, all cases created from the fromDate up to the present (system date) are returned, unless the range specified by the fromDate and the present date is greater than 90 days, in which case the toDate defaults to 90 days forward from the fromDate.
+				</xs:documentation>
+					<xs:appinfo>
+						<callInfo>
+							<callName>getUserCases</callName>
+							<requiredInput>No</requiredInput>
+						</callInfo>
+					</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="CaseTypeFilterType">
+	<xs:annotation>
+		<xs:documentation>
+			Used to restrict case results to a particular case type or types.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="caseType" type="tns:CaseType">
+			<xs:annotation>
+				<xs:documentation>
+					The type of case (e.g., INR, EBP_SNAD, UPI, etc.). At least one caseType field must be used if caseTypeFilter is included in the input.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>Conditionally</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:simpleType name="CaseType">
+	<xs:annotation>
+		<xs:documentation>
+			The types cases in the eBay Resolution system.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="INR">
+			<xs:annotation>
+				<xs:documentation>
+					An Item Not Received (INR) case filed by a buyer through the eBay ODR system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SNAD">
+			<xs:annotation>
+				<xs:documentation>
+					An (Item) Significantly Not As Described (SNAD) case filed by a buyer through
+					the eBay ODR system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="UPI">
+			<xs:annotation>
+				<xs:documentation>
+					An Unpaid Item (UPI) case filed by a seller through the ODR system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EBP_INR">
+			<xs:annotation>
+				<xs:documentation>
+					An Item Not Received (INR) case filed by a buyer through the eBay Buyer
+					Protection system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EBP_SNAD">
+			<xs:annotation>
+				<xs:documentation>
+					An (Item) Significantly Not As Described (SNAD) case filed by a buyer through
+					the eBay Buyer Protection system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="RETURN">
+			<xs:annotation>
+				<xs:documentation>
+					An easy return case filed by a buyer through the eBay ODR system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CANCEL_TRANSACTION">
+			<xs:annotation>
+				<xs:documentation>
+					A mutually agreed upon transaction withdrawal case which is initiated by the
+					seller for an Unpaid Item (UPI).
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAYPAL_INR">
+			<xs:annotation>
+				<xs:documentation>
+					An Item Not Received (INR) case filed by a buyer through the Paypal system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAYPAL_SNAD">
+			<xs:annotation>
+				<xs:documentation>
+					An (Item) Significantly Not As Described (SNAD) case filed by a buyer through
+					the Paypal system.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="CaseStatusFilterType">
+	<xs:annotation>
+		<xs:documentation>
+			Used to restrict results to cases that are in a specific status.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="caseStatus" type="tns:CaseStatusInputType">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the case (e.g., Open, Closed, etc.). At least one caseStatus field must be used if caseStatusFilter is included in the input.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>Conditionally</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:simpleType name="CaseStatusInputType">
+	<xs:annotation>
+		<xs:documentation>
+			The status of a case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="OPEN">
+			<xs:annotation>
+				<xs:documentation>
+					An open case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					A closed case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A case that is awaiting response from the user.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A case that is awaiting response from the other involved party.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_PAYMENT_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A case that is expecting payment or reimbursement for an item by the user.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="ELIGIBLE_FOR_CREDIT">
+			<xs:annotation>
+				<xs:documentation>
+					A case where a user is eligible to receive an (Final Value Fee) FVF credit.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="CaseSortOrderType">
+	<xs:annotation>
+		<xs:documentation>
+			Sorting that can be applied to the cases result set.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CASE_STATUS_ASCENDING">
+			<xs:annotation>
+				<xs:documentation>
+					Cases are sorted based on the status of the case in ascending order .
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CASE_STATUS_DESCENDING">
+			<xs:annotation>
+				<xs:documentation>
+					Cases are sorted based on the status of the case in descending order.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CREATION_DATE_ASCENDING">
+			<xs:annotation>
+				<xs:documentation>
+					Cases are sorted based on creation date in ascending order.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CREATION_DATE_DESCENDING">
+			<xs:annotation>
+				<xs:documentation>
+					Cases are sorted based on creation date in descending order.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="CaseArrayType">
+	<xs:annotation>
+		<xs:documentation>
+			The container for user cases returned via getUserCases call.
+		</xs:documentation>
+		<xs:appinfo>
+			<callInfo>
+				<callName>getUserCases</callName>
+				<returned>Always</returned>
+			</callInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="caseSummary" type="tns:CaseSummaryType">
+			<xs:annotation>
+				<xs:documentation>
+					Container consisting of summary information for a case. One caseSummary
+					container will be returned for each case that matches the input criteria.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="CaseSummaryType">
+	<xs:annotation>
+		<xs:documentation>
+			Summary information on all cases returned via the getUserCases and
+			getEBPCaseDetail calls.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="caseId" type="tns:CaseIdType">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for a case, which includes a case ID and a case type.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="user" type="tns:CaseUserType">
+			<xs:annotation>
+				<xs:documentation>
+					The role (e.g. buyer, seller) of the user making the call. 
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="otherParty" type="tns:CaseUserType">
+			<xs:annotation>
+				<xs:documentation>
+					The role (e.g. buyer, seller) of the other party involved in the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="status" type="tns:CaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The case status container.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="item" type="tns:ItemType">
+			<xs:annotation>
+				<xs:documentation>
+					A container consisting of details on the item associated with the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="caseQuantity" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>The amount of items or transactions related to the case.</xs:documentation>
+				<xs:appinfo>
+					<min>1</min>
+					<max/>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="caseAmount" type="tns:Amount">
+			<xs:annotation>
+				<xs:documentation>
+					The amount of money involved in the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="respondByDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date by which the next action needs to be taken by the responsible party.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="creationDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date on which the case was created.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="lastModifiedDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date on which the case was last modified.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="CaseIdType">
+	<xs:annotation>
+		<xs:documentation>
+			The unique identifier for a case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="id" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					A unique ID for a case.
+				</xs:documentation>
+				<xs:appinfo>
+					<maxLength>38</maxLength>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<requiredInput>Yes</requiredInput>
+					</callInfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="type" type="tns:CaseType">
+			<xs:annotation>
+				<xs:documentation>
+					The case type. There are several applicable case types for PayPal and eBay ODR systems, and the eBP system.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<requiredInput>Yes</requiredInput>
+					</callInfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="CaseUserType">
+	<xs:annotation>
+		<xs:documentation>
+			A reference to a user involved in a case.
+		</xs:documentation>
+		<xs:appinfo>
+			<callInfo>
+				<callName>getUserCases</callName>
+				<callName>getEBPCaseDetail</callName>
+				<returned>Always</returned>
+			</callInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="userId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The eBay user ID for the user involved in the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="role" type="tns:CaseUserRoleType">
+			<xs:annotation>
+				<xs:documentation>
+					The user's role (e.g. buyer, seller) in the case .
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:simpleType name="CaseDecisionType">
+	<xs:annotation>
+		<xs:documentation>
+			The final disposition of an eBP case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="SELLER_FAULT">
+			<xs:annotation>
+				<xs:documentation>
+					The seller was found to be at fault in the final disposition of the case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="NEITHER_SELLER_NOR_BUYER_FAULT">
+			<xs:annotation>
+				<xs:documentation>
+					Neither the seller nor the buyer was found to be at fault in the final
+					disposition of the case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="BUYER_FAULT">
+			<xs:annotation>
+				<xs:documentation>
+					The buyer was found to be at fault in the final disposition of the case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="BUYER_FAULT_SELLER_FAULT">
+			<xs:annotation>
+				<xs:documentation>
+					The buyer and seller were both found to be at fault in the final disposition
+					of the case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The final disposition of the case was classifed as 'Other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="CaseUserRoleType">
+	<xs:annotation>
+		<xs:documentation>
+			The user role for a case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="BUYER">
+			<xs:annotation>
+				<xs:documentation>
+					The user's role in the case is buyer.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SELLER">
+			<xs:annotation>
+				<xs:documentation>
+					The user's role in the case is seller.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EBAY">
+			<xs:annotation>
+				<xs:documentation>
+					A representative of eBay involved in mediating the case.
+					</xs:documentation>
+				</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The user's role in the case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="CaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Container type that holds the current status value for all case types. 
+		</xs:documentation>
+	</xs:annotation>
+	<xs:choice>
+		<xs:element name="INRStatus" type="tns:INRCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of a INR case filed through eBay ODR system. This element only appears for an INR case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="SNADStatus" type="tns:SNADCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of a SNAD case filed through eBay ODR system. This element only appears for an SNAD case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="EBPINRStatus" type="tns:EBPINRCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of an eBP Item Not Received (INR) case. This element only appears for an eBP INR case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="EBPSNADStatus" type="tns:EBPSNADCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of an eBP Significantly Not As Described (SNAD) case. This element only appears for an eBP SNAD case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="UPIStatus" type="tns:UPICaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of an Unpaid Item (UPI) case. This element only appears for a UPI case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="cancelTransactionStatus" type="tns:CancelTransactionCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of a Cancel Transaction case. This element only appears for a Cancel Transaction case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="returnStatus" type="tns:ReturnCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of a returned item case. This element only appears for a returned item case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="PaypalINRStatus" type="tns:PaypalINRCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of a PayPal INR case. This element only appears for a PayPal INR case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="PaypalSNADStatus" type="tns:PaypalSNADCaseStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The current status of a PayPal SNAD case. This element only appears for a PayPal SNAD case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:choice>
+</xs:complexType>
+
+
+<xs:simpleType name="INRCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Status values applicable to an INR case filed through eBay ODR system.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					INR case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed INR case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the INR case has contacted customer support and is awaiting a
+					response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The other party in the INR case has contacted customer support and is awaiting
+					a response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_ABOUT_CLOSED_CASE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the INR case has contacted customer support regarding a closed
+					case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAID">
+			<xs:annotation>
+				<xs:documentation>
+					The disputed amount in the INR case has been paid.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_PAYMENT_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					The user's payment in the INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the INR case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the INR case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="SNADCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Status values applicable to a Significantly Not As Described (SNAD) case filed through eBay ODR system.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					SNAD case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed SNAD case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the SNAD case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the SNAD case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the SNAD case has contacted customer support and is awaiting a
+					response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The other party in the SNAD case has contacted customer support and is
+					awaiting a response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_ABOUT_CLOSED_CASE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the SNAD case has contacted customer support regarding a closed
+					case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAID">
+			<xs:annotation>
+				<xs:documentation>
+					The disputed amount in the SNAD case has been paid.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_PAYMENT_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					The user's payment in the SNAD case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the SNAD case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="WAITING_DELIVERY">
+			<xs:annotation>
+				<xs:documentation>
+					The user is awaiting the return shipment of the item(s) in the SNAD case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the SNAD case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="EBPINRCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Case statuses applicable to an eBP Item Not Received (INR) case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					eBP INR case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed eBP INR case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the eBP INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the eBP INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the eBP INR case has contacted customer support and is
+					awaiting a response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The other party in the eBP INR case has contacted customer support and is
+					awaiting a response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_ABOUT_CLOSED_CASE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the eBP INR case has contacted customer support regarding a
+					closed case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAID">
+			<xs:annotation>
+				<xs:documentation>
+					The disputed amount in the eBP INR case has been paid.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_PAYMENT_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					The user's payment in the eBP INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the eBP INR case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CASE_CLOSED_CS_RESPONDED">
+			<xs:annotation>
+				<xs:documentation>
+					Customer Support responded to closed case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the eBP INR case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="EBPSNADCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Case statuses applicable to an eBP Significantly Not As Described (SNAD) case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					eBP SNAD case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed eBP SNAD case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the eBP SNAD case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the eBP SNAD case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the eBP SNAD case has contacted customer support and is awaiting a
+					response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_CONTACTED_CS_AWAITING_RESPONSE">
+			<xs:annotation>
+				<xs:documentation>
+					The other party in the eBP SNAD case has contacted customer support and is
+					awaiting a response.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="YOU_CONTACTED_CS_ABOUT_CLOSED_CASE">
+			<xs:annotation>
+				<xs:documentation>
+					The user in the eBP SNAD case has contacted customer support regarding a
+					closed case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAID">
+			<xs:annotation>
+				<xs:documentation>
+					The disputed amount in the eBP SNAD case has been paid.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_PAYMENT_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					The user's payment in the eBP SNAD case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the eBP SNAD case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="WAITING_DELIVERY">
+			<xs:annotation>
+				<xs:documentation>
+					The user is awaiting the return shipment of the item(s) in the eBP SNAD case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CASE_CLOSED_CS_RESPONDED">
+			<xs:annotation>
+				<xs:documentation>
+					Customer Support responded to closed case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the eBP SNAD case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="UPICaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Case statuses applicable to Unpaid Item (UPI) cases.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					UPI case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed UPI case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the UPI case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the UPI case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_FVFCREDIT_STRIKE">
+			<xs:annotation>
+				<xs:documentation>
+					The UPI case has been closed with a Final Value Fee (FVF) credit applied to
+					the winning party's account and a strike applied against the party at
+					fault.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_FVFCREDIT_NOSTRIKE">
+			<xs:annotation>
+				<xs:documentation>
+					The UPI case has been closed with a Final Value Fee (FVF) credit applied to
+					the winning party's account but with no strike applied against the party
+					at fault.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_PAYMENT_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					The user's payment in the UPI case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_NOFVFCREDIT_STRIKE">
+			<xs:annotation>
+				<xs:documentation>
+					The UPI case has been closed with no Final Value Fee (FVF) credit applied to
+					the winning party's account but with a strike applied against the party
+					at fault.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_NOFVFCREDIT_NOSTRIKE">
+			<xs:annotation>
+				<xs:documentation>
+					The UPI case has been closed with no Final Value Fee (FVF) credit applied to
+					the winning party's account and no strike applied against the party at
+					fault.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the UPI case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the UPI case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="CancelTransactionCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Status values applicable to eBay and PayPal ODR Cancel Transaction cases.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Cancel Transaction case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed Cancel Transaction case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the Cancel Transaction case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the Cancel Transaction case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the Cancel Transaction case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_FVFCREDIT">
+			<xs:annotation>
+				<xs:documentation>
+					The Cancel Transaction case has been closed with a Final Value Fee (FVF)
+					credit applied to the seller's account.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_NOFVFCREDIT">
+			<xs:annotation>
+				<xs:documentation>
+					The Cancel Transaction case has been closed with no Final Value Fee (FVF)
+					credit applied to the seller's account.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CANCELLED">
+			<xs:annotation>
+				<xs:documentation>
+					The Cancel Transaction case has been cancelled.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the Cancel Transaction case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="ReturnCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Case statuses applicable to returned item cases.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CS_CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Returned Item case has been closed by customer service.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+				<xs:annotation>
+					<xs:documentation>
+						Closed Returned Item case.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the Returned Item case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the Returned Item case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EXPIRED">
+			<xs:annotation>
+				<xs:documentation>
+					The life of the Returned Item case has expired.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED_FVFCREDIT_STRIKE">
+			<xs:annotation>
+				<xs:documentation>
+					The Returned Item case has been closed with a Final Value Fee (FVF)
+					credit applied to the buyer's account and a strike applied against
+					the party at fault.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the Returned Item case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="PaypalINRCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Case statuses applicable to PayPal Item Not Returned (INR) cases.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="OPEN">
+			<xs:annotation>
+				<xs:documentation>
+					An open PayPal INR case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed PayPal INR case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the PayPal INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the PayPal INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the PayPal INR case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="PaypalSNADCaseStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Case statuses applicable to PayPal Significantly Not As Described (SNAD) cases.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="OPEN">
+			<xs:annotation>
+				<xs:documentation>
+					An open PayPal INR case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CLOSED">
+			<xs:annotation>
+				<xs:documentation>
+					Closed PayPal INR case.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER_PARTY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the other party in the PayPal INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="MY_RESPONSE_DUE">
+			<xs:annotation>
+				<xs:documentation>
+					A response from the user in the PayPal INR case is due.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the PayPal INR case is 'other'.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<!--  Simple Types for Phase 2 Start -->
+<xs:simpleType name="RefundStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			Full Refund status
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="REFUNDED">
+			<xs:annotation>
+				<xs:documentation>
+					Full refunded.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="REFUNDAGREED">
+			<xs:annotation>
+				<xs:documentation>
+					Full Refund agreed for non paypal.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="FAILED">
+			<xs:annotation>
+				<xs:documentation>
+					Full refund failed.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+			</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="ItemType">
+	<xs:annotation>
+		<xs:documentation>
+			eBay item information related to the case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="itemId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The eBay Item ID.
+				</xs:documentation>
+				<xs:appinfo>
+					<maxLength>19</maxLength>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="itemTitle" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The title of the item listing.
+				</xs:documentation>
+				<xs:appinfo>
+					<maxLength>55</maxLength>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="transactionPrice" type="tns:Amount">
+			<xs:annotation>
+				<xs:documentation>
+					The monetary amount for the transaction.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="transactionDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date of the eBay transaction.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="globalId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					The identifier for the eBay site on which the item is listed.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="transactionId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The eBay transaction ID.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="Amount">
+	<xs:annotation>
+		<xs:documentation>
+			Monetary amount.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+			<CallInfo>
+				<CallName>getUserCases</CallName>
+				<CallName>getEBPCaseDetail</CallName>
+			</CallInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:simpleContent>
+		<xs:extension base="xs:double">
+			<xs:attribute name="currencyId" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Currency in which the monetary amount is specified.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getUserCases</CallName>
+							<CallName>getEBPCaseDetail</CallName>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:extension>
+	</xs:simpleContent>
+</xs:complexType>
+
+
+<xs:complexType name="EBPCaseDetailType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains the details of a single eBP case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="openReason" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					For future use.
+				</xs:documentation>
+				<xs:appinfo>
+					<tagStatus>ComingSoon</tagStatus>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="decisionReason" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					The latest decision reason code associated with
+					case. Usually the case closure decision reason.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="decisionDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date when a decision was made and the case was
+					closed.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+
+		<xs:element minOccurs="0" name="decision" type="tns:CaseDecisionType">
+			<xs:annotation>
+				<xs:documentation>
+					The disposition of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="FVFCredited" type="xs:boolean">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether or not a Final Value Fee (FVF) was
+					credited as part of the case decision.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="notCountedInBuyerProtectionCases" type="xs:boolean">
+			<xs:annotation>
+				<xs:documentation>
+					If false, this case was counted against seller's
+					performance.  If true, this case was not counted against seller's performance.  Tag is not returned if not applicable.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="globalId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					The eBay site where case was filed.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="appeal" type="tns:AppealType">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether the appeal originated from a buyer
+					or seller.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="responseHistory" type="tns:EBPCaseResponseHistoryType">
+			<xs:annotation>
+				<xs:documentation>
+					The history of responses for the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="agreedRefundAmount" type="tns:Amount">
+			<xs:annotation>
+				<xs:documentation>
+					In the case of a partial or full refund, this value
+					indicates the monetary amount of the refund.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+			</xs:element>
+		<xs:element minOccurs="0" name="paymentDetail" type="tns:PaymentDetailType">
+			<xs:annotation>
+				<xs:documentation>
+					Money movement details.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="buyerReturnShipment" type="tns:ShipmentType">
+			<xs:annotation>
+				<xs:documentation>
+					In the case of a return, this field contains details
+					on the buyer's return shipment.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="sellerShipment" type="tns:ShipmentType">
+			<xs:annotation>
+				<xs:documentation>
+					The details on the seller's shipment.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="detailStatus" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					Additional status information.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="initialBuyerExpectation" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					Initial buyer expectation.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="PaymentDetailType">
+	<xs:annotation>
+		<xs:documentation>
+			Container consisting of the money movement details.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="moneyMovement" type="tns:MoneyMovementDetailType">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates the movement of the money based on whether the buyer or seller won
+					the dispute case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="balanceDue" type="tns:Amount">
+			<xs:annotation>
+				<xs:documentation>
+					The balance due to the buyer or seller.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="AppealType">
+	<xs:annotation>
+		<xs:documentation>
+			Details of the appeal. Buyer appeal information is returned for a buyer, and
+			seller appeal information is returned for a seller.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="decision" type="tns:AppealDecisionType">
+			<xs:annotation>
+				<xs:documentation>
+					The appeal decision. Some decisions favor the Seller and some decisions favor the Buyer.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="decisionReason" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					The decision reason code used while closing appeal.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>
+							getEBPCaseDetail
+						</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="decisionDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date when a decision was made and the case was closed.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>
+							getEBPCaseDetail
+						</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="creationDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The creation date of the appeal.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>
+							getEBPCaseDetail
+						</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+	<xs:attribute name="id" type="xs:string"/>
+</xs:complexType>
+
+
+<xs:complexType name="EBPCaseResponseHistoryType">
+	<xs:annotation>
+		<xs:documentation>
+			The response history of the eBP case that includes member notes.
+			Each response history activity may in addition have attributes.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="note" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The member notes for the response.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="author" type="tns:CaseUserType">
+			<xs:annotation>
+				<xs:documentation>
+					The type of user who added the response (e.g., Buyer, Seller, eBay).
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="activity" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					The response activity for the case. The possible token values and descriptions
+					are listed below: &lt;br/&gt; &lt;ul&gt; &lt;li&gt;&lt;b&gt;create&lt;/b&gt;:
+					A CPS case was created.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;autoDisposeReject&lt;/b&gt;: The case was rejected by the
+					system.&lt;/li&gt; &lt;li&gt;&lt;b&gt;autoDisposeResolve&lt;/b&gt;: The case
+					was resolved.&lt;/li&gt; &lt;li&gt;&lt;b&gt;sendMessage&lt;/b&gt;: A message
+					was sent from one party to another.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					systemExpireGrace&lt;/b&gt;: Case expired gracefully.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;systemExpire&lt;/b&gt;: Case expired.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;sellerOfferAnotherSolution&lt;/b&gt;: Seller offered
+					another solution.&lt;/li&gt; &lt;li&gt;&lt;b&gt;buyerClose&lt;/b&gt;: Buyer
+					closed the case.&lt;/li&gt; &lt;li&gt;&lt;b&gt;sellerFullRefund&lt;/b&gt;:
+					Seller issued full refund to buyer.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					buyerConfirmFullRefund&lt;/b&gt;: Buyer confirmed receipt of the full refund
+					from seller.&lt;/li&gt; &lt;li&gt;&lt;b&gt;sellerPartialRefund&lt;/b&gt;:
+					Seller issued partial refund to buyer.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					buyerConfirmPartialRefund&lt;/b&gt;: Buyer has agreed to accept a partial
+					refund from seller.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					buyerConfirmPartialRefund&lt;/b&gt;: Buyer confirmed receipt of the partial
+					refund from seller.&lt;/li&gt; &lt;li&gt;&lt;b&gt; systemPPRefunded&lt;/b&gt;:
+					PayPal account refunded by RCS callback.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					sellerProvideTrackingInfo&lt;/b&gt;: Seller provided tracking information for
+					shipment.&lt;/li&gt; &lt;li&gt;&lt;b&gt; sellerProvideShippingInfo&lt;/b&gt;:
+					Seller provided shipping information.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					sellerRequestReturn&lt;/b&gt;: Seller has requested return of the
+					item/order.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					buyerProvideReturnTrackingNo&lt;/b&gt;: Buyer provided tracking information
+					for the return shipment.&lt;/li&gt; &lt;li&gt;&lt;b&gt;
+					systemCheckReturnDelivered&lt;/b&gt;: Return shipment has been delivered.
+					&lt;/li&gt; &lt;li&gt;&lt;b&gt;contactCustomerSupport&lt;/b&gt;: User has
+					contacted customer supported. Other party cannot see this activity.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;agentResolve&lt;/b&gt;: Claim was resolved.&lt;/li&gt; 
+					&lt;li&gt;&lt;b&gt;agentReject&lt;/b&gt;: Case was rejected.&lt;/li&gt; 
+					&lt;li&gt;&lt;b&gt;agentActivate&lt;/b&gt;: Case was activated.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;agentRequestReturn&lt;/b&gt;: A return request has been initiated.&lt;/li&gt; 
+					&lt;li&gt;&lt;b&gt;buyerProvideForcedReturnTrackingNo&lt;/b&gt;: Buyer provided tracking information for forced return.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;contactCustomerSupportGeneral&lt;/b&gt;: Customer support has been contacted. Both parties can see this activity.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;systemPaymentDone&lt;/b&gt;: Payment has been completed.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;systemExpiredForcedReturnRequestedProvided&lt;/b&gt;: Case expired after a forced return request.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;PPClose&lt;/b&gt;: Case was closed after PayPal financial reversal.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;PPMoneyMovementClose&lt;/b&gt;: Case was closed after PayPal payment transaction.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;sellerProvideRefundInfo&lt;/b&gt;: Seller confirmed that buyer has been refunded.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;sellerProvideShippingOrTrackingInfo&lt;/b&gt;: Seller confirmed that item has been shipped.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;buyerProvideShippingOrTrackingInfo&lt;/b&gt;: Buyer has provided shipping and tracking information.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;inrSwitchSnad&lt;/b&gt;: Buyer has closed eBP INR case and switched to eBP SNAD case.&lt;/li&gt;
+					&lt;li&gt;&lt;b&gt;appealClose&lt;/b&gt;: Appeal has been closed.&lt;/li&gt;
+					&lt;/ul&gt;
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="creationDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The creation date of the response.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="attributes" type="tns:ResponseHistoryAttributesType">
+			<xs:annotation>
+				<xs:documentation>
+					Additional attributes for this response activity.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:simpleType name="AppealDecisionType">
+	<xs:annotation>
+		<xs:documentation>
+			The decision made on the case appeal.
+		</xs:documentation>
+		<xs:appinfo>
+			<callInfo>
+				<callName>getEBPCaseDetail</callName>
+				<returned>Conditionally</returned>
+			</callInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="BUYER_WINS">
+			<xs:annotation>
+				<xs:documentation>
+					An absolute win for the buyer on the appeal of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="BUYER_WINS_PARTIAL_CREDIT">
+			<xs:annotation>
+				<xs:documentation>
+					The buyer wins partial credit on the appeal of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="BUYER_DENIED">
+			<xs:annotation>
+				<xs:documentation>
+					The buyer is denied on the appeal of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SELLER_WINS">
+			<xs:annotation>
+				<xs:documentation>
+					An absolute win for the seller on the appeal of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SELLER_WINS_PARTIAL_CREDIT">
+			<xs:annotation>
+				<xs:documentation>
+					The seller wins partial credit on the appeal of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SELLER_DENIED">
+			<xs:annotation>
+				<xs:documentation>
+					The seller is denied on the appeal of the case.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The decision on the appeal of the case is "other".
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="ResponseHistoryAttributesType">
+	<xs:annotation>
+		<xs:documentation>
+			Additional information for this response activity.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="appealRef" type="xs:string">
+		</xs:element>
+		<xs:element minOccurs="0" name="moneyMovementRef" type="xs:token">
+		</xs:element>
+		<xs:element minOccurs="0" name="onholdReason" type="xs:token">
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="MoneyMovementDetailType">
+	<xs:annotation>
+		<xs:documentation>
+			The money movement details for the case.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="type" type="tns:MoneyMovementType">
+			<xs:annotation>
+				<xs:documentation>
+					The type of money movement.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="fromParty" type="tns:CaseUserType">
+			<xs:annotation>
+				<xs:documentation>
+					The source of the money movement.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="toParty" type="tns:CaseUserType">
+			<xs:annotation>
+				<xs:documentation>
+					The destination of the money movement.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="amount" type="tns:Amount">
+			<xs:annotation>
+				<xs:documentation>
+					The amount of the monetary transaction.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="paymentMethod" type="tns:PaymentMethodType">
+			<xs:annotation>
+				<xs:documentation>
+					The payment method used for the money movement.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="paypalTransactionId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The PayPal Transaction ID. This element is only applicable if PayPal was used
+					as the payment method.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="status" type="tns:MoneyMovementStatusType">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the money movement.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="transactionDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The date of the money movement transaction.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+	<xs:attribute name="id" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>
+				The ID of the money movement transaction. Unique values are assigned for each
+				transaction. This attribute is always returned with the
+				caseDetail.paymentDetail.moneyMovement field.
+			</xs:documentation>
+			<xs:appinfo>
+				<callInfo>
+					<callName>getEBPCaseDetail</callName>
+					<returned>Always</returned>
+				</callInfo>
+			</xs:appinfo>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="parentId" type="xs:string" use="optional">
+		<xs:annotation>
+			<xs:documentation>
+				The ID of the original money movement transaction. This attribute is returned with
+				the caseDetail.paymentDetail.moneyMovement field if the current money movement
+				transaction (indicated by the id attribute) is a reversal.
+			</xs:documentation>
+			<xs:appinfo>
+				<callInfo>
+					<callName>getEBPCaseDetail</callName>
+					<returned>Conditionally</returned>
+				</callInfo>
+			</xs:appinfo>
+		</xs:annotation>
+	</xs:attribute>
+</xs:complexType>
+
+
+<xs:simpleType name="MoneyMovementType">
+	<xs:annotation>
+		<xs:documentation>
+			The type of money movement transaction.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="REFUND">
+			<xs:annotation>
+				<xs:documentation>
+					A refund against a specific money movement transaction to the seller or buyer.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PAYOUT">
+			<xs:annotation>
+				<xs:documentation>
+					A refund to the seller or buyer.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="REIMBURSEMENT">
+			<xs:annotation>
+				<xs:documentation>
+					A charge against the seller.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="REVERSAL">
+			<xs:annotation>
+				<xs:documentation>
+					A reversal against a refund, payout, or reimbursement.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					A money movement transaction classified as "other".
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="MoneyMovementStatusType">
+	<xs:annotation>
+		<xs:documentation>
+			The status of the money movement transaction.
+			SUCCESS	- successful money movement
+			CANCELLED - movement initiated but was cancelled
+			COMPLETED - A special case, say, for partial money movement cases, where the reimbursement process is marked complete
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="SUCCESS">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates a successful money movement transaction.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CANCELLED">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates a cancelled money movement transaction.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="COMPLETED">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates a completed money movement transaction. The difference between a
+					COMPLETED and a SUCCESS money movement transaction is that additional money
+					movement transactions will follow a COMPLETED money movement, while for a
+					money movement transaction showing SUCCESS status, all money movement
+					transactions have been completed.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="PaymentMethodType">
+	<xs:annotation>
+		<xs:documentation>
+			The payment method used in the money movement transaction.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="PAYPAL">
+			<xs:annotation>
+				<xs:documentation>
+					PayPal is the selected payment method for the money movement transaction.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CREDIT_CARD">
+			<xs:annotation>
+				<xs:documentation>
+					A credit card is the selected payment method for the money movement
+					transaction.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="DIRECT_DEBIT">
+			<xs:annotation>
+				<xs:documentation>
+					Direct debit is the selected payment method for the money movement
+					transaction.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="OTHER">
+			<xs:annotation>
+				<xs:documentation>
+					The selected payment method for the money movement transaction is "other".
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="ShipmentType">
+	<xs:annotation>
+		<xs:documentation>
+			Base Shipment details.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="trackingNumber" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The tracking number used by the shipping carrier.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="carrierUsed" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The name of the shipment carrier.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="deliveryStatus" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					The status of the delivery.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="deliveryDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The expected date of delivery.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="shippingCost" type="tns:Amount">
+			<xs:annotation>
+				<xs:documentation>
+					The total shipping costs.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="shippingAddress" type="tns:Address">
+			<xs:annotation>
+				<xs:documentation>
+					The shipping address.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="Address">
+	<xs:annotation>
+		<xs:documentation>
+			The address of the eBay user.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+			<callInfo>
+				<callName>getEBPCaseDetail</callName>
+				<returned>Conditionally</returned>
+			</callInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="name" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The name of the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="street1" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The first line of the street for the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="street2" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The second line of the street for the eBay user. This field is not always needed.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="city" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The city for the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="county" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The county for the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="stateOrProvince" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The state or province for the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="country" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The country for the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="postalCode" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The postal code for the eBay user.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getEBPCaseDetail</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="PaginationInput">
+	<xs:annotation>
+		<xs:documentation>
+			Controls the pagination of the result set. Child elements specify the maximum
+			number of cases to return per call and which page of data to return.
+			Controls which cases are returned in the response, but does not control the
+			details associated with the returned cases.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+			<callInfo>
+				<callName>getUserCases</callName>
+				<requiredInput>No</requiredInput>
+			</callInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>
+					Specifies which subset of data (page) to return in the call response. The
+					number of data pages is determined by the total number of items matching the
+					request search criteria (returned in paginationOutput.totalEntries) divided by
+					the number of entries to display in each response (entriesPerPage). You can
+					return up to the first 200 pages of the result set by issuing multiple
+					requests and specifying, in sequence, the pages to return.
+				</xs:documentation>
+				<xs:appinfo>
+					<min>1</min>
+					<max>100</max>
+					<default>1</default>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>No</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>
+					Specifies the maximum number of entries to return in a single call. If the
+					number of entries found on the specified pageNumber is less than the value
+					specified here, the number of items returned will be less than the value of
+					entriesPerPage. This indicates the end of the result set. 
+				</xs:documentation>
+				<xs:appinfo>
+					<min>1</min>
+					<max>200</max>
+					<default>200</default>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<requiredInput>No</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="PaginationOutput">
+	<xs:annotation>
+		<xs:documentation>
+			Shows the pagination data for the item search. Child elements include the page
+			number returned, the maximum entries returned per page, the total number of pages
+			that can be returned, and the total number of cases that match the search
+			criteria.
+		</xs:documentation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>
+					The page of the subset of data in the response. The number of data pages is
+					determined by the total number of items matching the request search criteria
+					divided by the number of entries to display in each response (entriesPerPage).
+					You can return up to the first 200 pages of the result set by issuing multiple
+					requests and specifying, in sequence, the pages to return.
+				</xs:documentation>
+				<xs:appinfo>
+					<min>1</min>
+					<max>200</max>
+					<default>1</default>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>
+					The number of entries (cases) per returned page.
+				</xs:documentation>
+				<xs:appinfo>
+					<min>1</min>
+					<max>100</max>
+					<default>1</default>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="totalPages" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>
+					The total number of results pages that can be returned with repeated requests.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="totalEntries" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>
+					The total number of entries that can be returned with repeated requests.
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getUserCases</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		
+	</xs:sequence>
+</xs:complexType>
+	
+		
+	<!--  Type definitions for Phase 2 Start -->
+	<xs:complexType name="EBPActivityOptionType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains the details of a single eBP Activity Option.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="activityOptionId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="activityOptionName" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="activityOptionTitle" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		
+		<xs:element maxOccurs="1" minOccurs="0" name="isBuyerPreferenceOption" type="xs:boolean">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether this option is buyer preference
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>		
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="activityOptionSLA" type="tns:EBPActivityOptionAttributeType">
+			<xs:annotation>
+				<xs:documentation>
+					Specifies the specific attributes corresponding to this option
+				</xs:documentation>
+				<xs:appinfo>
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+			
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="EBPActivityOptionAttributeType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains the attributes of a single eBP Activity Option.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="attributeName" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="attributeValue" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getActivityOptions</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+	
+	
+<xs:complexType name="EBPMetaDataRequestInfoType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains the MetaData request info.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="type" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<requiredInput>No</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="entryId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					This can be the id or name of the metadata entry. If this element is not specified
+					in the request then it will return all entries associated to this metadata type.
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<requiredInput>No</requiredInput>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>		
+		<xs:element minOccurs="0" name="caseId" type="tns:CaseIdType">
+					<xs:annotation>
+						<xs:documentation>
+							The unique caseId for an EBP_INR or EBP_SNAD case. The caseId values are returned in the caseSummary container in the getUserCases output. 
+							This will be considered for specific meta data types where claim specific information is required.
+						</xs:documentation>
+						<xs:appinfo>
+							<maxLength>38</maxLength>
+							<callInfo>
+								<callName>getEBPMetadata</callName>
+								<requiredInput>No</requiredInput>
+							</callInfo>
+						</xs:appinfo>
+					</xs:annotation>
+					</xs:element>
+		
+	</xs:sequence>
+</xs:complexType>	
+
+<xs:complexType name="EBPMetaDataType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains the MetaData response info.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="type" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO: Documentation to mention the list of types that are supported.
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="entries" type="tns:EBPMetaDataEntryType">
+		<xs:annotation>
+				<xs:documentation>
+					Entries associated to the EBP MetaData type.
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		
+	</xs:sequence>
+</xs:complexType>	
+
+<xs:complexType name="EBPMetaDataEntryType">
+	<xs:annotation>
+		<xs:documentation>
+			Contains the MetaData entry information.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="entryId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<returned>Always</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="name" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					TODO
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<returned>Conditionally</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>		
+		<xs:element minOccurs="0" name="content" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					Reserved
+				</xs:documentation>
+				<xs:appinfo>					
+					<callInfo>
+						<callName>getEBPMetadata</callName>
+						<returned>No</returned>
+					</callInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element> 
+		
+	</xs:sequence>
+</xs:complexType>	
+
+	<!--  Type definitions for Phase 2 End -->
+	
+	<xs:element name="NotificationEvent" type="tns:NotificationEventType">
+            <xs:annotation>
+                  <xs:documentation>The Platform notification event sent to 3rd party.</xs:documentation>
+            </xs:annotation>
+      </xs:element>
+      <xs:complexType name="NotificationEventType">
+            <xs:annotation>
+                  <xs:documentation>The Platform notification event type.
+            </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                  <xs:element name="NotificationEventName" type="tns:NotificationEventNameType">
+                        <xs:annotation>
+                              <xs:documentation>One of the 8 possible EBP platform events. See also http://developer.ebay.com/devzone/xml/docs/reference/ebay/SetNotificationPreferences.html#Request.EventProperty.EventType</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="RecipientUserID" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>
+                              The Platform notification registered user who subscribed for the notification.
+                        </xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ExternalUserData" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>Echo back of user data. See also http://developer.ebay.com/devzone/xml/docs/reference/ebay/SetNotificationPreferences.html#Request.UserData.ExternalUserData</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="CaseId" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>The case identifier.  See also ResolutionCaseManagementService's getUserCasesResponse.cases[x]. caseSummary.caseId.id</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="CaseType" type="tns:CaseType">
+                        <xs:annotation>
+                              <xs:documentation>Case Type classifies cases in the eBay Resolution System.  See also ResolutionCaseManagementService's getUserCasesResponse.cases[x]. caseSummary.caseId.type</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ItemId" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>Ebay item number related to the case. See also ResolutionCaseManagementService's getUserCasesResponse.cases[x]. caseSummary.item.itemId</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="TransactionId" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>
+                              The checkout transaction reference related to  the item.
+ See also ResolutionCaseManagementService's getUserCasesResponse.cases[x]. caseSummary.item.transactionId      </xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="CreationDate" type="xs:dateTime">
+                        <xs:annotation>
+                              <xs:documentation>Date time when this notification was created in UTC</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="OtherPartyId" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>The eBay userId of Trading Partner.  See also ResolutionCaseManagementService's getUserCasesResponse.cases[x]. caseSummary.otherParty.userId</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="OtherPartyRole" type="tns:CaseUserRoleType">
+                        <xs:annotation>
+                              <xs:documentation>The other party's role in the case.</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="CaseStatus" type="xs:string">
+                        <xs:annotation>
+                              <xs:documentation>The status of the case specific per case type.  Only EBP_INR and EBP_SNAD statuses.</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+                  <xs:element name="CaseGlobalId" type="xs:token">
+                        <xs:annotation>
+                              <xs:documentation>eBay Site where case was filed. See also ResolutionCaseManagementService's getEBPCaseDetailResponse.caseDetail.globalId</xs:documentation>
+                        </xs:annotation>
+                  </xs:element>
+            </xs:sequence>
+      </xs:complexType>	
+	
+		<xs:simpleType name="NotificationEventNameType">
+		<xs:annotation>
+			<xs:documentation>Event Types associated for EBP platform.
+		</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="EBPMyResponseDue">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when user response is due.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPOtherPartyResponseDue">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when other party response is due.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPEscalatedCase">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when case gets escalated.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPAppealedCase">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when case gets appealed.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPMyPaymentDue">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when the user payment is due.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPPaymentDone">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when payment is done.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPClosedAppeal">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when appeal closed by CS.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EBPClosed">
+				<xs:annotation>
+					<xs:documentation>
+This is a notification type where a specified user or application is notified when case is closed by CS or buyer.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+		</xs:schema>
+	</types>
+
+	<message name="getVersionRequest">
+		<part element="tns:getVersionRequest" name="params"/>
+	</message>
+	<message name="getVersionResponse">
+		<part element="tns:getVersionResponse" name="params"/>
+	</message>
+	<message name="getUserCasesRequest">
+		<part element="tns:getUserCasesRequest" name="params"/>
+	</message>
+	<message name="getUserCasesResponse">
+		<part element="tns:getUserCasesResponse" name="params"/>
+	</message>
+	<message name="getEBPCaseDetailRequest">
+		<part element="tns:getEBPCaseDetailRequest" name="params"/>
+	</message>
+	<message name="getEBPCaseDetailResponse">
+		<part element="tns:getEBPCaseDetailResponse" name="params"/>
+	</message>
+	<message name="getActivityOptionsRequest">
+		<part element="tns:getActivityOptionsRequest" name="params"/>
+	</message>
+	<message name="getActivityOptionsResponse">
+		<part element="tns:getActivityOptionsResponse" name="params"/>
+	</message>
+	<message name="issueFullRefundRequest">
+		<part element="tns:issueFullRefundRequest" name="params"/>
+	</message>
+	<message name="issueFullRefundResponse">
+		<part element="tns:issueFullRefundResponse" name="params"/>
+	</message>
+	<message name="provideTrackingInfoRequest">
+		<part element="tns:provideTrackingInfoRequest" name="params"/>
+	</message>
+	<message name="provideTrackingInfoResponse">
+		<part element="tns:provideTrackingInfoResponse" name="params"/>
+	</message>	
+	<message name="sellerOfferAnotherSolutionRequest">
+		<part element="tns:sellerOfferAnotherSolutionRequest" name="params"/>
+	</message>
+		<message name="sellerOfferAnotherSolutionResponse">
+		<part element="tns:sellerOfferAnotherSolutionResponse" name="params"/>
+	</message>
+	<message name="escalateToCustomerSupportRequest">
+		<part element="tns:escalateToCustomerSupportRequest" name="params"/>
+	</message>
+	<message name="escalateToCustomerSupportResponse">
+		<part element="tns:escalateToCustomerSupportResponse" name="params"/>
+	</message>
+	<message name="appealToCustomerSupportRequest">
+		<part element="tns:appealToCustomerSupportRequest" name="params"/>
+	</message>
+	<message name="appealToCustomerSupportResponse">
+		<part element="tns:appealToCustomerSupportResponse" name="params"/>
+	</message>
+	<message name="getEBPMetadataRequest">
+		<part element="tns:getEBPMetadataRequest" name="params"/>
+	</message>
+	<message name="getEBPMetadataResponse">
+		<part element="tns:getEBPMetadataResponse" name="params"/>
+	</message>
+	
+	
+	<portType name="ResolutionCaseManagementServicePort">
+		<operation name="getVersion">
+			<xs:documentation>
+				Get current service version.
+			</xs:documentation>
+			<input message="tns:getVersionRequest"/>
+			<output message="tns:getVersionResponse"/>
+		</operation>
+		<operation name="getUserCases">
+			<xs:documentation>
+				Get list of resolution cases for an eBay member. This includes cases from both the
+				new eBay Buyer Protection(eBP) and the eBay and PayPal ODR systems.
+			</xs:documentation>
+			<input message="tns:getUserCasesRequest"/>
+			<output message="tns:getUserCasesResponse"/>
+		</operation>
+		<operation name="getEBPCaseDetail">
+			<xs:documentation>
+				Gets details on a specific eBay Buyer Protection (eBP) case.
+			</xs:documentation>
+			<input message="tns:getEBPCaseDetailRequest"/>
+			<output message="tns:getEBPCaseDetailResponse"/>
+		</operation>
+		<operation name="getActivityOptions">
+			<xs:documentation>
+				Get activity options for the current state of the eBay Buyer Protection (eBP) case.
+			</xs:documentation>
+			<input message="tns:getActivityOptionsRequest"/>
+			<output message="tns:getActivityOptionsResponse"/>
+		</operation>
+		<operation name="issueFullRefund">
+			<xs:documentation>
+				Issues full refund.
+			</xs:documentation>
+			<input message="tns:issueFullRefundRequest"/>
+			<output message="tns:issueFullRefundResponse"/>
+		</operation>
+		<operation name="provideTrackingInfo">
+			<xs:documentation>
+				Accepts the tracking info and associate the tracking info to the case.
+			</xs:documentation>
+			<input message="tns:provideTrackingInfoRequest"/>
+			<output message="tns:provideTrackingInfoResponse"/>
+		</operation>		
+		<operation name="sellerOfferAnotherSolution">
+			<xs:documentation>
+				Accepts the alternate solution from Seller and inform buyer.
+			</xs:documentation>
+			<input message="tns:sellerOfferAnotherSolutionRequest"/>
+			<output message="tns:sellerOfferAnotherSolutionResponse"/>
+		</operation>
+		<operation name="escalateToCustomerSupport">
+			<xs:documentation>
+				Esclate the case to customer support.
+			</xs:documentation>
+			<input message="tns:escalateToCustomerSupportRequest"/>
+			<output message="tns:escalateToCustomerSupportResponse"/>
+		</operation>
+		<operation name="appealToCustomerSupport">
+			<xs:documentation>
+				Appeal the case to customer support.
+			</xs:documentation>
+			<input message="tns:appealToCustomerSupportRequest"/>
+			<output message="tns:appealToCustomerSupportResponse"/>
+		</operation>
+		<operation name="getEBPMetadata">
+			<xs:documentation>
+				Fetches the meta data informations associated to different types.
+			</xs:documentation>
+			<input message="tns:getEBPMetadataRequest"/>
+			<output message="tns:getEBPMetadataResponse"/>
+		</operation>
+	</portType>
+
+	<binding name="ResolutionCaseManagementServiceSOAPBinding" type="tns:ResolutionCaseManagementServicePort">
+		<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="getVersion">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/getVersion"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getUserCases">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/getUserCases"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getEBPCaseDetail">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/getEBPCaseDetail"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getActivityOptions">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/getActivityOptions"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="issueFullRefund">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/refundBuyer"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="provideTrackingInfo">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/provideTrackingInfo"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>	
+		<operation name="sellerOfferAnotherSolution">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/sellerOfferAnotherSolution"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="escalateToCustomerSupport">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/escalateToCustomerSupport"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="appealToCustomerSupport">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/appealToCustomerSupport"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getEBPMetadata">
+			<soap12:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/getEBPMetadata"/>
+			<input>
+				<soap12:body use="literal"/>
+			</input>
+			<output>
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+
+	<binding name="ResolutionCaseManagementServiceHttpBinding" type="tns:ResolutionCaseManagementServicePort">
+		<http:binding verb="POST"/>
+		<operation name="getVersion">
+			<http:operation location="/getVersion"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getUserCases">
+			<http:operation location="/getUserCases"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getEBPCaseDetail">
+			<http:operation location="/getEBPCaseDetail"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getActivityOptions">
+			<http:operation location="/getActivityOptions"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="issueFullRefund">
+			<http:operation location="/issueFullRefund"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="provideTrackingInfo">
+			<http:operation location="/provideTrackingInfo"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		
+		<operation name="sellerOfferAnotherSolution">
+			<http:operation location="/sellerOfferAnotherSolution"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="escalateToCustomerSupport">
+			<http:operation location="/escalateToCustomerSupport"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="appealToCustomerSupport">
+			<http:operation location="/appealToCustomerSupport"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getEBPMetadata">
+			<http:operation location="/getEBPMetadata"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+	</binding>
+
+	<service name="ResolutionCaseManagementService">
+		<wsdl:documentation>
+			<version>1.2.0</version>
+			Service allows consumers to get Resolution case information, and its
+			details.
+		</wsdl:documentation>
+		<port binding="tns:ResolutionCaseManagementServiceHttpBinding" name="ResolutionCaseManagementServiceHttpPort">
+			<http:address location="https://svcs.ebay.com/services/resolution/v1/ResolutionCaseManagementService"/>
+		</port>
+		<port binding="tns:ResolutionCaseManagementServiceSOAPBinding" name="ResolutionCaseManagementServiceSOAPPort">
+			<soap12:address location="https://svcs.ebay.com/services/resolution/v1/ResolutionCaseManagementService"/>
+		</port>
+	</service>
+</definitions>

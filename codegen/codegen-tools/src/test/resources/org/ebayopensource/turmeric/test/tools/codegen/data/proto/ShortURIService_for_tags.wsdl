@@ -1,0 +1,1355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ShortURIService" targetNamespace="http://www.ebay.com/marketplace/services/shorturiservice" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.ebay.com/marketplace/services/shorturiservice" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services/shorturiservice">
+
+			<xsd:simpleType name="AckValue">
+				<xsd:annotation>
+					<xsd:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Success">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request was processed successfully.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Failure">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Warning">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="PartialFailure">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request that triggered the error was
+								processed successfully but with some partial Errors.(For Future use)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType abstract="true" name="BaseServiceRequest">
+				<xsd:annotation>
+					<xsd:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType abstract="true" name="BaseServiceResponse">
+				<xsd:annotation>
+					<xsd:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="ack" type="tns:AckValue">
+						<xsd:annotation>
+							<xsd:documentation>
+								Acknowledgement returned in the Response, which indicates whether the operation was Successful or not.
+							</xsd:documentation>
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xsd:annotation>
+							<xsd:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xsd:documentation>
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="version" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								version of the data. (for future use)
+							</xsd:documentation>
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="timestamp" type="xsd:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>
+								Timestamp of the operation.
+							</xsd:documentation>
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="ErrorCategory">
+				<xsd:annotation>
+					<xsd:documentation>
+						Indicates the Category of the Error.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:token">
+					<xsd:enumeration value="System"/>
+					<xsd:enumeration value="Application"/>
+					<xsd:enumeration value="Request"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="ErrorData">
+				<xsd:annotation>
+					<xsd:documentation>
+						The ErrorData which Contains information of the Error like ErrorID, Domain,Error Message etc.,.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="errorId" type="xsd:long"/>
+					<xsd:element name="domain" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="subdomain" type="xsd:string"/>
+					<xsd:element name="severity" type="tns:ErrorSeverity"/>
+					<xsd:element name="category" type="tns:ErrorCategory"/>
+					<xsd:element name="message" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="exceptionId" type="xsd:token"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ErrorMessage">
+				<xsd:annotation>
+					<xsd:documentation>
+						ErrorMessage contains a list of Error Data.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<!-- 
+					<xsd:sequence>
+					<xsd:any maxOccurs="unbounded" minOccurs="0"
+					processContents="lax" />
+					</xsd:sequence>
+				-->
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ErrorParameter">
+				<xsd:annotation>
+					<xsd:documentation>
+						ErrorParameters contains the Parameter which caused the error.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleContent>
+					<xsd:extension base="xsd:string">
+						<xsd:attribute name="name" type="xsd:string" use="optional"/>
+					</xsd:extension>
+				</xsd:simpleContent>
+			</xsd:complexType>
+			<xsd:simpleType name="ErrorSeverity">
+				<xsd:annotation>
+					<xsd:documentation>
+						Indicates the Severity of the Error
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:token">
+					<xsd:enumeration value="Error"/>
+					<xsd:enumeration value="Warning"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="BaseURIEntry">
+				<xsd:annotation>
+					<xsd:documentation>
+						Represents a Base URI Entry
+					</xsd:documentation>
+
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="longURI" type="xsd:anyURI">
+						<xsd:annotation>
+							<xsd:documentation>
+								LongURI is the actual URI which is
+								shortened
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element maxOccurs="1" minOccurs="0" name="shortURI" type="xsd:anyURI">
+							<xsd:annotation>
+								<xsd:documentation>
+									ShortURI is a combination of baseuri
+									and handle
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="handle" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Handle is a unique value for the
+									each shortURI
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:element maxOccurs="1" minOccurs="0" name="namespace" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Namespace is used for Categorize the
+								shortURI
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="tags" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Tags are used for identification of
+								shortURI(Max No. of Tags : 2)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element maxOccurs="1" minOccurs="0" name="expirationDate" type="xsd:dateTime">
+							<xsd:annotation>
+								<xsd:documentation>
+									Date till which the shorturi will be
+									active
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="durationInDays" type="xsd:unsignedInt">
+							<xsd:annotation>
+								<xsd:documentation>
+									No of days for which the ShortURI
+									should be active
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:element maxOccurs="1" minOccurs="0" name="isActive" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Indicates whether a shortURI is active
+								or not
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="CreateShortURIRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="longURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The LongURI for which shortURI
+										is created
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="0" name="namespace" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										Namespace to categorize the
+										shortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="tags" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										tags used for ease of
+										identifying or searching for an
+										shortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:choice>
+								<xsd:element maxOccurs="1" minOccurs="0" name="expirationDate" type="xsd:dateTime">
+									<xsd:annotation>
+										<xsd:documentation>
+											Date till which this
+											shortURI will be active
+										</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element maxOccurs="1" minOccurs="0" name="durationInDays" type="xsd:unsignedInt">
+									<xsd:annotation>
+										<xsd:documentation>
+											Number of days for which the
+											shortURI will be active
+										</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:choice>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="CreateShortURIResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The Generated ShortURI for the
+										given URI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="DeleteRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										ShortURI which needs to be
+										deactivated.
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="DeleteResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="ExtendedURIEntry">
+				<xsd:annotation>
+					<xsd:documentation>
+						Represents an ExtendedURI Entry
+					</xsd:documentation>
+
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseURIEntry">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="creator" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										The APPID which creates the
+										ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="0" name="creationDate" type="xsd:dateTime">
+								<xsd:annotation>
+									<xsd:documentation>
+										Date of Creation of ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="0" name="modificationDate" type="xsd:dateTime">
+								<xsd:annotation>
+									<xsd:documentation>
+										Last Date of Modification of
+										ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetInfoLongRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="longURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The LongURI for which
+										information is needed.
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetInfoLongResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="uriEntry" type="tns:ExtendedURIEntry">
+								<xsd:annotation>
+									<xsd:documentation>
+										Information about the given
+										LongURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetInfoShortRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The ShortURI for which
+										information is needed. example:
+										http://ebay.us/xyz123
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetInfoShortResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="uriEntry" type="tns:ExtendedURIEntry">
+								<xsd:annotation>
+									<xsd:documentation>
+										Information about the given
+										ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetStatsRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The ShortURI for which
+										Statistics is needed. example:
+										http://ebay.us/xyz123
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetStatsResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="uriStats" type="tns:URIStats">
+								<xsd:annotation>
+									<xsd:documentation>
+										Statistics for the which given
+										ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="URIStats">
+				<xsd:annotation>
+					<xsd:documentation>
+						Represents URI Statistics
+					</xsd:documentation>
+
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="shortURI" type="xsd:anyURI">
+						<xsd:annotation>
+							<xsd:documentation>
+								ShortURI for which statistics is given
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="totalClicks" type="xsd:unsignedLong">
+						<xsd:annotation>
+							<xsd:documentation>
+								Total number of times, the shortURI is
+								accessed
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="statsDetail" type="tns:URIStatsDetail">
+						<xsd:annotation>
+							<xsd:documentation>
+								Statistics Grouped by User-Agent,
+								Referrer and Location
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="URIStatsDetail">
+				<xsd:annotation>
+					<xsd:documentation>
+						Represents URI Statistics Detail
+					</xsd:documentation>
+
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="clicks" type="xsd:unsignedLong">
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element maxOccurs="1" minOccurs="1" name="referrer" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Website which referred this shortURI
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="useragent" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Browser used by the client
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="location" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Geographical Location of the Client
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="time" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Time of accessing the shortURI
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="LookupRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The ShortURI which has to
+										searched. example:
+										http://ebay.us/xyz123
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="LookupResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="longURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The LongURI corresponding to the
+										given ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="RegisterShortURIRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="longURI" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										The LongURI for which shortURI
+										is created
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="1" name="handle" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										user defined vanity handle. Max.
+										Length is 10
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="0" name="namespace" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										Namespace to categorize the
+										shortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="tags" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										tags used for ease of
+										identifying or searching for an
+										shortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:choice>
+								<xsd:element maxOccurs="1" minOccurs="0" name="expirationDate" type="xsd:dateTime">
+									<xsd:annotation>
+										<xsd:documentation>
+											Date till which this
+											shortURI will be active
+										</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element maxOccurs="1" minOccurs="0" name="durationInDays" type="xsd:unsignedInt">
+									<xsd:annotation>
+										<xsd:documentation>
+											Number of days for which the
+											shortURI will be active
+										</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:choice>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="RegisterShortURIResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										The Registered ShortURI for the
+										given URI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="SearchRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="0" name="baseURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										the baseURI of the shortURI.
+										Example : http://ebay.us/
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="0" name="namespace" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										the namespace of the shortURI.
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="tags" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										tags related to the shortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="SearchResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="entries" type="tns:ExtendedURIEntry">
+								<xsd:annotation>
+									<xsd:documentation>
+										Search Result for the Given
+										Criteria
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:simpleType name="TagModeValue">
+				<xsd:annotation>
+					<xsd:documentation>
+						Represents the tagUpdate Mode, whether it is ADD
+						or REPLACE
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="ADD">
+						<xsd:annotation>
+							<xsd:documentation>
+								Option for adding or appending tags to
+								the existing ones
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="REPLACE">
+						<xsd:annotation>
+							<xsd:documentation>
+								option for replacing existing tags with
+								new tags
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="UpdateRequest">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceRequest">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="shortURI" type="xsd:anyURI">
+								<xsd:annotation>
+									<xsd:documentation>
+										ShortURI which needs to be
+										updated. example:
+										http://ebay.us/xyz123
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="0" name="namespace" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										Namespace to be updated for the
+										given ShortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="tags" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										tags to be added or replaced for
+										the given shortURI
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="1" name="tagUpdateMode" type="tns:TagModeValue">
+								<xsd:annotation>
+									<xsd:documentation>
+										TagMode which describes whether
+										it is a ADD or REPLACE of tags
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="UpdateResponse">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<typeLibrarySource library="ShortURITypeLibrary" namespace="http://www.ebay.com/marketplace/services/shorturi">
+						</typeLibrarySource>
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:complexContent>
+					<xsd:extension base="tns:BaseServiceResponse">
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="output" type="xsd:string">
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:element name="createShortURIRequest" type="tns:CreateShortURIRequest"/>
+			<xsd:element name="createShortURIResponse" type="tns:CreateShortURIResponse"/>
+			<xsd:element name="registerShortURIRequest" type="tns:RegisterShortURIRequest"/>
+			<xsd:element name="registerShortURIResponse" type="tns:RegisterShortURIResponse"/>
+			<xsd:element name="lookupRequest" type="tns:LookupRequest"/>
+			<xsd:element name="lookupResponse" type="tns:LookupResponse"/>
+			<xsd:element name="getInfoShortRequest" type="tns:GetInfoShortRequest"/>
+			<xsd:element name="getInfoShortResponse" type="tns:GetInfoShortResponse"/>
+			<xsd:element name="getInfoLongRequest" type="tns:GetInfoLongRequest"/>
+			<xsd:element name="getInfoLongResponse" type="tns:GetInfoLongResponse"/>
+			<xsd:element name="getStatsRequest" type="tns:GetStatsRequest"/>
+			<xsd:element name="getStatsResponse" type="tns:GetStatsResponse"/>
+			<xsd:element name="searchRequest" type="tns:SearchRequest"/>
+			<xsd:element name="searchResponse" type="tns:SearchResponse"/>
+			<xsd:element name="updateRequest" type="tns:UpdateRequest"/>
+			<xsd:element name="updateResponse" type="tns:UpdateResponse"/>
+			<xsd:element name="deleteRequest" type="tns:DeleteRequest"/>
+			<xsd:element name="deleteResponse" type="tns:DeleteResponse"/>
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="searchResponse">
+    <wsdl:part name="parameters" element="tns:searchResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="searchRequest">
+    <wsdl:part name="parameters" element="tns:searchRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getInfoShortResponse">
+    <wsdl:part name="parameters" element="tns:getInfoShortResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteRequest">
+    <wsdl:part name="parameters" element="tns:deleteRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getInfoLongResponse">
+    <wsdl:part name="parameters" element="tns:getInfoLongResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStatsRequest">
+    <wsdl:part name="parameters" element="tns:getStatsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerShortURIRequest">
+    <wsdl:part name="parameters" element="tns:registerShortURIRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lookupRequest">
+    <wsdl:part name="parameters" element="tns:lookupRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createShortURIResponse">
+    <wsdl:part name="parameters" element="tns:createShortURIResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createShortURIRequest">
+    <wsdl:part name="parameters" element="tns:createShortURIRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getInfoShortRequest">
+    <wsdl:part name="parameters" element="tns:getInfoShortRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lookupResponse">
+    <wsdl:part name="parameters" element="tns:lookupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateResponse">
+    <wsdl:part name="parameters" element="tns:updateResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteResponse">
+    <wsdl:part name="parameters" element="tns:deleteResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerShortURIResponse">
+    <wsdl:part name="parameters" element="tns:registerShortURIResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getInfoLongRequest">
+    <wsdl:part name="parameters" element="tns:getInfoLongRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStatsResponse">
+    <wsdl:part name="parameters" element="tns:getStatsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateRequest">
+    <wsdl:part name="parameters" element="tns:updateRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ShortURIServicePort">
+    <wsdl:operation name="createShortURI">
+<wsdl:documentation>
+				Creates a New ShortURI for the given LongURI. The handle
+				is a autogenerated base62 value.
+			</wsdl:documentation>
+      <wsdl:input message="tns:createShortURIRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:createShortURIResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="registerShortURI">
+<wsdl:documentation>
+				Creates a New ShortURI for the given LongURI using the
+				user given vanity handle. Maximum number of tags allowed
+				per shortURI is Two.
+			</wsdl:documentation>
+      <wsdl:input message="tns:registerShortURIRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:registerShortURIResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="lookup">
+<wsdl:documentation>
+				The Lookup Operation performs a search using the given
+				shortURI and returns the longURI.
+			</wsdl:documentation>
+      <wsdl:input message="tns:lookupRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:lookupResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInfoShort">
+<wsdl:documentation>
+				The getInfoShort operations performs a search based on
+				the shortURI and returns all informations like longURI ,
+				creator,namespace, tags etc
+			</wsdl:documentation>
+      <wsdl:input message="tns:getInfoShortRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getInfoShortResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInfoLong">
+<wsdl:documentation>
+				The getInfoLong operation performs a search based on the
+				given LongURI and returns all the matched records with
+				details like shortURI, tags, namespace, creator etc.,
+			</wsdl:documentation>
+      <wsdl:input message="tns:getInfoLongRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getInfoLongResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStats">
+<wsdl:documentation>
+				The getStats operations returns the statistics for the
+				given shortURI. The statistics includes total number of
+				clicks, clicks grouped by browser, referrer, Time.
+			</wsdl:documentation>
+      <wsdl:input message="tns:getStatsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getStatsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="search">
+<wsdl:documentation>
+				The Search Operation performs a search based on baseURI,
+				namespace and Tags. It is a AND based search of all
+				three.
+			</wsdl:documentation>
+      <wsdl:input message="tns:searchRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:searchResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+<wsdl:documentation>
+				The update operation is used to update the namespace and
+				tags information for a given shortURI. Maximum number of
+				tags per shortURI is two.
+			</wsdl:documentation>
+      <wsdl:input message="tns:updateRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete">
+<wsdl:documentation>
+				delete operation is used to deactivate a given shortURI.
+			</wsdl:documentation>
+      <wsdl:input message="tns:deleteRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:deleteResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ShortURIServiceHttpBinding" type="tns:ShortURIServicePort">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="createShortURI">
+      <http:operation location="/createShortURI"/>
+      <wsdl:input>
+        <mime:content part="createShortURI" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="createShortURI" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="registerShortURI">
+      <http:operation location="/registerShortURI"/>
+      <wsdl:input>
+        <mime:content part="registerShortURI" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="registerShortURI" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="lookup">
+      <http:operation location="/lookup"/>
+      <wsdl:input>
+        <mime:content part="lookup" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="lookup" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInfoShort">
+      <http:operation location="/getInfoShort"/>
+      <wsdl:input>
+        <mime:content part="getInfoShort" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getInfoShort" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInfoLong">
+      <http:operation location="/getInfoLong"/>
+      <wsdl:input>
+        <mime:content part="getInfoLong" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getInfoLong" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStats">
+      <http:operation location="/getStats"/>
+      <wsdl:input>
+        <mime:content part="getStats" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getStats" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="search">
+      <http:operation location="/search"/>
+      <wsdl:input>
+        <mime:content part="search" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="search" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <http:operation location="/update"/>
+      <wsdl:input>
+        <mime:content part="update" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="update" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete">
+      <http:operation location="/delete"/>
+      <wsdl:input>
+        <mime:content part="delete" type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="delete" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ShortURIServiceSOAPBinding" type="tns:ShortURIServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createShortURI">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/createShortURI"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="registerShortURI">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/registerShortURI"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="lookup">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/lookup"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInfoShort">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getInfoShort"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInfoLong">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getInfoLong"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStats">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/getStats"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="search">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/search"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/update"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/delete"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ShortURIService">
+	<wsdl:documentation>
+		<Version>1.0.0</Version>
+		The Short URI Service allows clients to create short aliases for long URIs.
+When a short URI is accessed, the client is redirected to the original long URI.
+	</wsdl:documentation> 
+    <wsdl:port name="ShortURIServiceHttp" binding="tns:ShortURIServiceHttpBinding">
+      <http:address location="http://shorturiservice.vip/services/systems/ShortURIService/v1"/>
+    </wsdl:port>
+    <wsdl:port name="ShortURIServiceSOAP" binding="tns:ShortURIServiceSOAPBinding">
+      <soap12:address location="http://shorturiservice.vip/services/systems/ShortURIService/v1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

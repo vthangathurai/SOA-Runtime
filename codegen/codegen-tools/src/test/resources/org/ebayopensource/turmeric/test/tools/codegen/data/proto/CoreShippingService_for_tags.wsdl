@@ -1,0 +1,1905 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="CommonShippingService"
+	targetNamespace="http://www.ebay.com/marketplace/shipping/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://www.ebay.com/marketplace/shipping/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/shipping/v1/services">
+            <xs:simpleType name="OrderId">
+				<xs:annotation>
+					<xs:documentation>
+						A unique eBay orderId.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:long" />
+			</xs:simpleType>
+			<xs:simpleType name="TrackingNumber">
+				<xs:annotation>
+					<xs:documentation>
+						Tracking Number.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+			<xs:simpleType name="TransactionId">
+				<xs:annotation>
+					<xs:documentation>
+						eBay TransactionId.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:long" />
+			</xs:simpleType>
+			<xs:simpleType name="ShippingCarrier">
+				<xs:annotation>
+					<xs:documentation>
+						Name of the Shipping Carrier. Supported Types
+						are (UPS, USPS, Deutsche Post, DHL, Hermes, CPC,
+						Royal Mail, Parcelforce, FedEx)
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token" />
+			</xs:simpleType>
+			<xs:simpleType name="ItemId">
+				<xs:annotation>
+					<xs:documentation>
+						Describes the eBay Item id.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:long" />
+			</xs:simpleType>
+			<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+			<xs:simpleType name="Region">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token" />
+			</xs:simpleType>
+			<xs:simpleType name="ServiceCost">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:double" />
+			</xs:simpleType>
+			<xs:simpleType name="Site">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token" />
+			</xs:simpleType>
+			<xs:simpleType name="IsoCurrencyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Currency representation based on ISO 4217
+						Standard:
+						http://www.iso.org/iso/currency_codes_list-1
+						Every currency has the following attributs:
+						Numeric Code - 3 Digits Zero Padded Numeric
+						Code, which uniquely identifies a currency.
+						Alphabetic Code - 3 Letter Alphabetic Code,
+						which uniquely identifies a currency. Currency -
+						The name of the currency Antity - The
+						country/Entity, which uses this currency.
+
+						This type exposes only a sub-set of ISO 4217.
+						The enumeration represents the Alphabetic Code.
+						Comments are included for quick reference.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token"><!-- Currency,                         Entity                          ISO Currency Code -->
+					<xs:enumeration value="USD" /><!-- U.S. Dollar                       United States                   840               -->
+					<xs:enumeration value="CAD" /><!-- Canadian Dollar                   Canada                          124               -->
+					<xs:enumeration value="GBP" /><!-- Pound Sterling                    United Kingdom                  826               -->
+					<xs:enumeration value="DEM" /><!-- German Mark                       Germany                         276               -->
+					<xs:enumeration value="AUD" /><!-- Australian Dollar                 Australia                       036               -->
+					<xs:enumeration value="JPY" /><!-- Japanese Yen                      Japanese Yen                    392               -->
+					<xs:enumeration value="EUR" /><!-- Euro                              European Union                  978               -->
+					<xs:enumeration value="FRF" /><!-- French Franc                      France                          250               -->
+					<xs:enumeration value="ATS" /><!-- Austrian Schilling                Austria                         040               -->
+					<xs:enumeration value="BEF" /><!-- Belgian Franc                     Belgium                         056               -->
+					<xs:enumeration value="CHF" /><!-- Swiss Franc                       Switzerland                     756               -->
+					<xs:enumeration value="CNY" /><!-- Chinese Yuan Renminbi             China                           156               -->
+					<xs:enumeration value="CZK" /><!-- Czech Koruna                      Czech Republic                  203               -->
+					<xs:enumeration value="DKK" /><!-- Danish Krone                      Denmark                         208               -->
+					<xs:enumeration value="ESP" /><!-- Spanish Peseta                    Spain                           724               -->
+					<xs:enumeration value="FIM" /><!-- Finnish Markka                    Finland                         246               -->
+					<xs:enumeration value="GRD" /><!-- Greek Drachma                     Greece                          300               -->
+					<xs:enumeration value="HKD" /><!-- Hong Kong Dollar                  Hong Kong                       344               -->
+					<xs:enumeration value="HUF" /><!-- Hungarian Forint                  Hungary                         348               -->
+					<xs:enumeration value="IDR" /><!-- Indonesian Rupiah                 Indonesia                       360               -->
+					<xs:enumeration value="IEP" /><!-- Irish Pound                       Ireland                         372               -->
+					<xs:enumeration value="ILS" /><!-- Israeli new Shekel                Israel                          376               -->
+					<xs:enumeration value="ITL" /><!-- Italian Lira                      Italy                           380               -->
+					<xs:enumeration value="NLG" /><!-- Dutch Guilder                     Netherlands                     528               -->
+					<xs:enumeration value="NOK" /><!-- Norwegian Krone                   Norway                          578               -->
+					<xs:enumeration value="NZD" /><!-- New Zealand Dollar                New Zealand                     554               -->
+					<xs:enumeration value="PHP" /><!-- Philippine Peso                   Philippines                     608               -->
+					<xs:enumeration value="PLN" /><!-- Polish New Zloty                  Poland                          985               -->
+					<xs:enumeration value="PTE" /><!-- Portuguese Escudo                 Portugal                        620               -->
+					<xs:enumeration value="RUR" /><!-- Russian Ruble                     Russian Federation              810               -->
+					<xs:enumeration value="SEK" /><!-- Swedish Krona                     Sweden                          752               -->
+					<xs:enumeration value="SGD" /><!-- Singapore Dollar                  Singapore                       702               -->
+					<xs:enumeration value="THB" /><!-- Thai Baht                         Thailand                        764               -->
+					<xs:enumeration value="TWD" /><!-- New Taiwan dollar                 Taiwan                          901               -->
+					<xs:enumeration value="ZAR" /><!-- South African Rand                South Africa                    710               -->
+					<xs:enumeration value="INR" /><!-- Indian Rupee                      India                           356               -->
+					<xs:enumeration value="PEN" /><!-- Peruvian New Sol                  Peru                            604               -->
+					<xs:enumeration value="MYR" /><!-- Malaysian Ringgit                 Malaysia                        458               -->
+					<xs:enumeration value="VND" /><!-- Vietnamese New Dong               Vietnam                         704               -->
+					<xs:enumeration value="KRW" /><!-- South Korean Won                  South Korea                     410               -->
+					<xs:enumeration value="TRY" /><!-- New Turkish Lira                  Turkey                          949               -->
+					<xs:enumeration value="ANG" /><!-- Antillian Guilder                 Netherlands Antilles            532               -->
+					<xs:enumeration value="AWG" /><!-- Aruban Guilder                    Aruba                           533               -->
+					<xs:enumeration value="BMD" /><!-- Bermudan Dollar                   Bermudan Dollar                 060               -->
+					<xs:enumeration value="CRC" /><!-- Costa Rican Colon                 Costa Rica                      188               -->
+					<xs:enumeration value="RON" /><!-- Romanian New Leu                  Romania                         946               -->
+					<xs:enumeration value="VEF" /><!-- Venezuelan Bolivar Fuerte         Venezuela                       937               -->
+					<xs:enumeration value="BBD" /><!-- Barbados Dollar                   Barbados                        052               -->
+					<xs:enumeration value="BGN" /><!-- Bulgarian Lev                     Bulgaria                        975               -->
+					<xs:enumeration value="BND" /><!-- Brunei Dollar                     Brunei                          096               -->
+					<xs:enumeration value="BSD" /><!-- Bahamian Dollar                   Bahamas                         044               -->
+					<xs:enumeration value="COP" /><!-- Colombian Peso                    Columbia                        170               -->
+					<xs:enumeration value="DOP" /><!-- Dominican Peso                    Dominican Republic              214               -->
+					<xs:enumeration value="GTQ" /><!-- Guatemalan Quetzal                Guatemala                       320               -->
+					<xs:enumeration value="KYD" /><!-- Cayman Isles Dollar               Cayman Islands                  136               -->
+					<xs:enumeration value="MVR" /><!-- Maldivian Rufiyaa                 Maldives                        462               -->
+					<xs:enumeration value="QAR" /><!-- Qatari Rial                       Qatar                           634               -->
+					<xs:enumeration value="SAR" /><!-- Saudi Riyal                       Saudi Arabia                    682               -->
+					<xs:enumeration value="TTD" /><!-- Trinidadian and Tobagonian Dollar Trinidad and Tobago             780               -->
+					<xs:enumeration value="UAH" /><!-- Ukrainian hryvnia                 Ukraine                         980               -->
+					<xs:enumeration value="UYU" /><!-- Peso Uruguayo                     Uruguay                         858               -->
+					<xs:enumeration value="XCD" /><!-- East Caribbean Dollar             East Caribbean Currency Area    951               -->
+					<xs:enumeration value="XPF" /><!-- French Polynesian Franc           French Polynesia                953               -->
+					<xs:enumeration value="JMD" /><!-- Jamaican Dollar                   Jamaica                         388               -->
+				</xs:restriction>
+			</xs:simpleType>
+
+			<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+			<!--  End Imported Types -->
+			<!-- Basic complex types -->
+			<xs:complexType name="TransactionInformation">
+				<xs:annotation>
+					<xs:documentation>
+						Identifies an eBay Transaction information.
+						Should include both eBay Item id and eBay
+						Transaction Id.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="transactionId"
+						type="tns:TransactionId" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The transaction id associated with an
+								eBay purchase.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="itemId" type="tns:ItemId"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The eBay item id.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:complexType name="ShipmentTrackingResponseInfo">
+				<xs:annotation>
+					<xs:documentation>
+						A single response object.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="shipmentTrackingDetail"
+						type="tns:ShipmentTrackingDetail" minOccurs="0"
+						maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Provides the tracking details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="shipmentTrackingTransactionalInfo"
+						type="tns:ShipmentTrackingTransactionalInfo" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Transactional info for the shipment
+								tracking.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="correlationId" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								A unique id identifying the particular
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage"
+						type="tns:ErrorMessage" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Error Information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShipmentTrackingRequestInfo">
+				<xs:annotation>
+					<xs:documentation>
+						A single request object.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="shipmentTracking"
+						type="tns:ShipmentTracking" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The shipping carrier of the tracking
+								number.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="correlationId" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								A unique id identifying the particular
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="shipmentTrackingTransactionalInfo"
+						type="tns:ShipmentTrackingTransactionalInfo" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								A unique id identifying the particular
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShipmentTrackingRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element
+								name="shipmentTrackingRequestInfo"
+								type="tns:ShipmentTrackingRequestInfo" minOccurs="1"
+								maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Request for the shipment
+										tracking operations.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="sellerId"
+								type="xs:long">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ShipmentTrackingResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element
+								name="shipmentTrackingResponseInfo"
+								type="tns:ShipmentTrackingResponseInfo" minOccurs="1"
+								maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Response for the shipment
+										tracking operations.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<!--  Elements for Request / Response -->
+			<xs:element name="getVersionRequest" 
+				type="tns:GetVersionRequest" />
+			<xs:element name="getVersionResponse" 
+				type="tns:GetVersionResponse" />
+			<xs:element name="shipmentTrackingRequest"
+				type="tns:ShipmentTrackingRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request for the shipment tracking operations. A
+						request having one or more
+						ShipmentTrackingSingleRequest objects.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="shipmentTrackingResponse"
+				type="tns:ShipmentTrackingResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for the shipment tracking operations. A
+						response can have one or more
+						ShipmentTrackingSingleResponse objects.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+			<xs:element name="getShippingCostResponse"
+				type="tns:GetShippingCostResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for the GetShippingCost operations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getShippingCostRequest"
+				type="tns:GetShippingCostRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request for the GetShippingCost operations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+
+			<!--  End Elements -->
+			<!-- Types for Add Tracking -->
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest" />
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse" />
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="ShipmentTracking">
+				<xs:sequence>
+					<xs:element name="shippingCarrier"
+						type="tns:ShippingCarrier" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the Carrier for which tracking
+								number is being Added (UPS,USPS, FedEx
+								etc)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="notes" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Custom Notes that seller can add to
+								tracking number. (for eBay internal use
+								only)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="trackingNumber"
+						type="tns:TrackingNumber" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Shipment Tracking Number.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="shipmentId" type="xs:long"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShipmentTrackingDetail">
+				<xs:sequence>
+					<xs:element name="tracking"
+						type="tns:ShipmentTracking" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Details of the Shipment Tracking.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="trackingStatus" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The current status of the tracking
+								number. Valid values are
+								SHIPMENT_CREATED, DROPPED_OFF,
+								IN_TRANSIT, DELIVERED, RETURNED,
+								CANCELLED, LABEL_PRINTED, ERROR,
+								UNCONFIRMED, PICKUP_FAILED,
+								DELIVERY_DELAYED, DELIVERY_SCHEDULED,
+								DELIVERY_FAILED, INRETURN.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="history"
+						type="tns:ShipmentTrackingHistory" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Shipment Tracking History.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="eBayPrintedLabel"
+						type="xs:boolean">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShipmentTrackingHistory">
+				<xs:sequence>
+					<xs:element name="history" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								the tracking history associated with a
+								tracking number.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShipmentTrackingTransactionalInfo">
+				<xs:sequence>
+					<xs:element name="orderId" type="tns:OrderId"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								eBay OrderId.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="transactionInformation"
+						type="tns:TransactionInformation" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								the eBay tracking Info.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+			<xs:complexType name="DiscountInfo">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="intlDiscountProfileId"
+						type="xs:long" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="applyDiscountFlag"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="domesticDiscountProfileId"
+						type="xs:long" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlShippingDiscountVersionId"
+						type="xs:long" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="domesticPromoShipping"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="domesticShippingDiscountVersionId"
+						type="xs:long" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlPromoShipping"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="domesticAdditionalProfile"
+						type="xs:boolean" minOccurs="0" maxOccurs="1" />
+					<xs:element name="intlAdditionalProfile"
+						type="xs:boolean" minOccurs="0" maxOccurs="1" />
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FreightShipping">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="freightPackagingHelpRequired"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="freightPickUpLocationType"
+						type="xs:token">
+					</xs:element>
+					<xs:element name="freightEntryPermissionRequired"
+						type="xs:boolean">
+					</xs:element>
+					<xs:element name="freightCommodityType"
+						type="xs:token" />
+					<xs:element name="freightShippingClass"
+						type="xs:double" />
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemShipping">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="handlingTime" type="xs:token"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlShippingType" type="xs:token"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="domesticShippingType"
+						type="xs:token" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="irregular" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="upsRateType" type="xs:token"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="exclusionRegionList"
+						type="tns:Region" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="discountInfo"
+						type="tns:DiscountInfo" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="itemShippingCost"
+						type="tns:ItemShippingCost" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingPackageDetails"
+						type="tns:ShippingPackageDetails" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="freightShipping"
+						type="tns:FreightShipping" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shipToLocation" type="tns:Region"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="itemShippingService"
+						type="tns:ItemShippingService" minOccurs="0"
+						maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="fedexRateType" type="xs:token"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="insurance" type="tns:Insurance"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemShippingService">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="shippingRateType"
+						type="tns:ShippingRateType" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="promotionalShipping"
+						type="xs:boolean" minOccurs="0" maxOccurs="1" />
+					<xs:element name="serviceDefinition"
+						type="tns:ServiceDefinition" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingRegion" type="xs:token"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="eBayAPISoapServiceCode"
+						type="xs:string" minOccurs="1" maxOccurs="1" />
+					<xs:element name="codFee" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingType" type="xs:token"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="sortOrderId" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="freeShipping" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="fastShipping" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="surcharge" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlService" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingAddlCost" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingFeeWithOutSavings"
+						type="xs:double" minOccurs="0" maxOccurs="1" />
+					<xs:element name="carrierServiceCode" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlHandlingCost" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingFeeOverride"
+						type="xs:double" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingCost" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="surchargeFee" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shippingInsuranceOption"
+						type="xs:token" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="shipToLocation" type="tns:Region"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="taxAmount" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="expeditedService"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="commodityType" type="xs:token"
+						minOccurs="0" maxOccurs="1" />
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ListingType">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="sellerId" type="xs:long"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="quantityAvailable" type="xs:int"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="listingCurrency"
+						type="tns:IsoCurrencyCode" minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="listingAddress" type="tns:Address"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="listingSite" type="tns:Site"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="itemId" type="tns:ItemId"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="itemShipping"
+						type="tns:ItemShipping" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="salePrice" type="xs:double"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+
+						maxOccurs="unbounded">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ServiceDefinition">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="superscript" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="maxDeliveryTime" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="minDeliveryTime" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="name" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+
+						maxOccurs="unbounded">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingItemRequest">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="listingType"
+						type="tns:ListingType" minOccurs="1" maxOccurs="1">
+					</xs:element>
+
+					<xs:element name="correlationId" type="xs:long"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="zipCode" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="quantity" type="xs:int"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="country" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemShippingCostDetail">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="shippingFee" type="xs:double"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="insuranceCost" type="xs:double"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="xFeeInsuranceCost"
+						type="xs:double" minOccurs="0" maxOccurs="1" />
+					<xs:element name="shippingXFee" type="xs:double"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="packageHandlingCost"
+						type="xs:double" minOccurs="0" maxOccurs="1" />
+					<xs:element name="eachAdditionalCost"
+						type="xs:double" minOccurs="0" maxOccurs="1" />
+					<xs:element name="surchargeFee" type="xs:double"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="overrideFee" type="xs:double"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="additionalFee" type="xs:double"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="eBayAPISoapServiceCode"
+						type="xs:string" minOccurs="0" maxOccurs="1" />
+					<xs:element name="romoShipping" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="insuranceError" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="freightShipping" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="insuranceOption" type="xs:token"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="insuranceStatus" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="sortOrderId" type="xs:int"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="domestic" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingItemResponse">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="correlationId" type="xs:long"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="itemShippingCostDetail"
+						type="tns:ItemShippingCostDetail" minOccurs="0"
+						maxOccurs="unbounded" />
+					<xs:element name="errorMessage"
+						type="tns:ErrorMessage" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Error Information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetShippingCostRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="shippingItemRequest"
+								type="tns:ShippingItemRequest" minOccurs="1"
+								maxOccurs="unbounded">
+							</xs:element>
+							<xs:element name="zipCode" type="xs:string"
+								minOccurs="1" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="country" type="xs:string"
+								minOccurs="1" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetShippingCostResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="shippingItemResponse"
+								type="tns:ShippingItemResponse" minOccurs="1"
+								maxOccurs="unbounded">
+
+							</xs:element>
+							<xs:element name="serviceErrorMessage"
+								type="tns:ErrorMessage" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Error Information.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ItemShippingCost"><!-- ????? -->
+				<xs:annotation>
+					<xs:documentation>
+						ItemShippingCost:
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="serviceCost"
+						type="tns:ServiceCost" minOccurs="0" maxOccurs="1">
+					</xs:element>
+
+						minOccurs="0">
+
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+
+
+			<xs:complexType name="Insurance">
+				<xs:annotation>
+					<xs:documentation>Insurance:</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="domesticInsuranceFee"
+						type="xs:double" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="domesticInsuranceOption"
+						type="xs:token" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlInsuranceOption"
+						type="xs:token" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="intlInsuranceFee" type="xs:double"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+
+						maxOccurs="unbounded">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ShippingRateType">
+				<xs:annotation>
+					<xs:documentation>
+						Shipping Rate Type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="OnDemand"></xs:enumeration>
+					<xs:enumeration value="DailyPickup"></xs:enumeration>
+					<xs:enumeration value="FedexStandardList"></xs:enumeration>
+					<xs:enumeration value="FedexCounter"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string"
+							use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name="LinearMeasure">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="unit"
+							type="tns:LinearMeasurementUnit" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="LinearMeasurementUnit">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="cm"></xs:enumeration>
+
+					<xs:enumeration value="mm"></xs:enumeration>
+					<xs:enumeration value="inches"></xs:enumeration>
+					<xs:enumeration value="ft"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ShippingPackageDetails">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="ShippingLabelTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="weightMajor"
+						type="tns:WeightMeasure" minOccurs="1">
+					</xs:element>
+					<xs:element name="weightMinor"
+						type="tns:WeightMeasure" minOccurs="1">
+					</xs:element>
+					<xs:element name="packageType" type="xs:token"
+						minOccurs="1">
+					</xs:element>
+					<xs:element name="packageLength"
+						type="tns:LinearMeasure" minOccurs="0">
+					</xs:element>
+					<xs:element name="packageWidth"
+						type="tns:LinearMeasure" minOccurs="0">
+					</xs:element>
+					<xs:element name="packageDepth"
+						type="tns:LinearMeasure" minOccurs="0">
+					</xs:element>
+					<xs:element name="declaredValue" type="tns:Amount"
+						minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="WeightMeasure">
+
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="unit"
+							type="tns:WeightMeasurementUnit" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="WeightMeasurementUnit">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="kg"></xs:enumeration>
+					<xs:enumeration value="gm"></xs:enumeration>
+					<xs:enumeration value="lbs"></xs:enumeration>
+					<xs:enumeration value="oz"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+		<xs:simpleType name="AckValue">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+	
+			<xs:enumeration value="Success">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Failure">
+				<xs:annotation>
+	
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+	
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PartialFailure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+	
+		</xs:restriction>
+	</xs:simpleType><xs:complexType name="Address">
+        <xs:annotation><xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+        <xs:sequence>
+                    <xs:element minOccurs="0" name="name" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="street1" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="street2" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="city" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="county" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="stateOrProvince" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="country" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="postalCode" type="xs:string"></xs:element>
+
+                </xs:sequence>
+            </xs:complexType><xs:complexType abstract="true" name="BaseServiceRequest">
+		<xs:annotation>
+			<xs:documentation>
+				This is the base class for request container for all service operations.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType abstract="true" name="BaseServiceResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Base response container for all service operations.
+				Contains error information associated with the request.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="ack" type="tns:AckValue">
+				<xs:annotation>
+					<xs:documentation>
+
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information for an error or warning that
+						occurred when eBay processed the request.
+					</xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element minOccurs="0" name="version" type="xs:string">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+
+			</xs:element>
+			<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="System"></xs:enumeration>
+        <xs:enumeration value="Application"></xs:enumeration>
+        <xs:enumeration value="Request"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+	
+	  <xs:sequence>
+        	<xs:element name="errorId" type="xs:long"></xs:element>
+		  	<xs:element name="domain" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="subdomain" type="xs:string"></xs:element>
+			<xs:element name="severity" type="tns:ErrorSeverity"></xs:element>
+	  		<xs:element name="category" type="tns:ErrorCategory"></xs:element>
+	  		<xs:element name="message" type="xs:string"></xs:element>
+	  		<xs:element minOccurs="0" name="exceptionId" type="xs:token"></xs:element>
+	  		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"></xs:element>
+		</xs:sequence>
+	
+	
+	</xs:complexType><xs:complexType name="ErrorMessage">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		
+		<!-- 
+		<xs:sequence>
+
+				processContents="lax" />
+		</xs:sequence>
+		-->
+		
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+    		</xs:element>
+    	</xs:sequence>
+		
+	</xs:complexType><xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:simpleContent>
+		  <xs:extension base="xs:string">
+		    <xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
+		  </xs:extension>
+		</xs:simpleContent>
+	</xs:complexType><xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="Error"></xs:enumeration>
+        <xs:enumeration value="Warning"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="GetDeliveryEstimateRequest">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="DeliveryEstimateTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseServiceRequest">
+				<xs:sequence>
+
+					<xs:element maxOccurs="unbounded" name="getDeliveryEstimateSingleRequest" type="tns:GetDeliveryEstimateSingleRequest"></xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType><xs:complexType name="GetDeliveryEstimateResponse">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="DeliveryEstimateTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseServiceResponse">
+				<xs:sequence>
+
+					<xs:element maxOccurs="unbounded" name="getDeliveryEstimateSingleResponse" type="tns:GetDeliveryEstimateSingleResponse"></xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType><xs:complexType name="GetDeliveryEstimateSingleRequest">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="DeliveryEstimateTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseServiceRequest">
+				<xs:sequence>
+
+					<xs:element minOccurs="1" name="id" type="xs:integer">
+						<xs:annotation>
+							<xs:documentation>id</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="apiServiceNames" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								List of apiServiceName as defined by
+								eBay API. See appendix B for list of
+								service names. Id + apiService will
+								provide the primary key. Validation will
+								be done on service site id with country
+								input, all services of a single request
+								have to come from the same country
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="handlingTime" type="xs:integer">
+						<xs:annotation>
+							<xs:documentation>
+								Default - No.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="shipFromCountry" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Valid enum values - 3 digit country ISO
+								code. See Appendix - country list. These
+								are list of countries for which delivery
+								specifications are required. eBay will
+								support only site id countries. country
+								among this list should be unique.
+								Implementation should validate
+								uniqueness.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="shipAddress" type="tns:Address">
+						<xs:annotation>
+							<xs:documentation>
+								Based on this address and item location,
+								domestic or Intl type will be
+								determined. If shipping is intl, ship to
+								location filtering will be done. Only
+								country field is required.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType><xs:complexType name="GetDeliveryEstimateSingleResponse">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="DeliveryEstimateTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseServiceResponse">
+				<xs:sequence>
+
+					<xs:element minOccurs="1" name="id" type="xs:integer">
+						<xs:annotation>
+							<xs:documentation>
+								id, repeat for each service of the same
+								request
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="apiServiceName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								apiServiceName as defined by eBay API.
+								See appendix B for list of service
+								names. Id + apiService will provide the
+								primary key. Validation will be done on
+								service site id with country input, all
+								services of a single request have to
+								come from the same country
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="minEstimateDeliveryDays" type="xs:integer">
+						<xs:annotation>
+							<xs:documentation>
+								Computed value with buffer,
+								handlingTime, and service's
+								minTransitEstimateDays.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="maxEstimateDeliveryDays" type="xs:integer">
+						<xs:annotation>
+							<xs:documentation>
+								Computed value with buffer,
+								handlingTime, and service's
+								maxTransitEstimateDays.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="bufferTime" type="xs:integer">
+						<xs:annotation>
+							<xs:documentation>
+								Default value is 0.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetDeliveryEstimate
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType></xs:schema>
+	</types>
+	<message name="getVersionResponse">
+		<part name="params" element="tns:getVersionResponse"></part>
+	</message>
+	<message name="shipmentTrackingResponse">
+		<part name="params" element="tns:shipmentTrackingResponse">
+		</part>
+	</message>
+	<message name="shipmentTrackingRequest">
+		<part name="params" element="tns:shipmentTrackingRequest">
+		</part>
+	</message>
+	<message name="getVersionRequest">
+		<part name="params" element="tns:getVersionRequest"></part>
+	</message>
+	<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+	<message name="getShippingCostRequest">
+		<part name="params" element="tns:getShippingCostRequest"></part>
+	</message>
+	<message name="getShippingCostResponse">
+		<part name="params" element="tns:getShippingCostResponse"></part>
+	</message>
+	<portType name="CoreShippingServiceSOAPPort">
+		<operation name="getVersion">
+			<input name="getVersionRequest"
+				message="tns:getVersionRequest">
+			</input>
+			<output name="getVersionResponse"
+				message="tns:getVersionResponse">
+			</output>
+		</operation>
+		<operation name="addShipmentTracking">
+			<wsdl:documentation>
+				Add shipment tracking information to eBay transactions.
+			</wsdl:documentation>
+			<input message="tns:shipmentTrackingRequest"></input>
+			<output message="tns:shipmentTrackingResponse"></output>
+		</operation>
+		<operation name="removeShipmentTracking">
+			<wsdl:documentation>
+				Remove shipment tracking information from eBay
+				transactions.
+			</wsdl:documentation>
+			<input message="tns:shipmentTrackingRequest"></input>
+			<output message="tns:shipmentTrackingResponse"></output>
+		</operation>
+		<operation name="getShipmentTracking">
+			<wsdl:documentation>
+				Get shipment tracking information associated with eBay
+				transactions.
+			</wsdl:documentation>
+			<input message="tns:shipmentTrackingRequest"></input>
+			<output message="tns:shipmentTrackingResponse"></output>
+		</operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+		<operation name="getShippingCost">
+			<input message="tns:getShippingCostRequest"></input>
+			<output message="tns:getShippingCostResponse"></output>
+		</operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+	</portType>
+
+
+	<wsdl:portType name="CoreShippingServiceHttpPort">
+		<wsdl:operation name="addShipmentTracking">
+			<wsdl:documentation>
+				Add shipment tracking information to eBay transactions.
+			</wsdl:documentation>
+			<wsdl:input message="tns:shipmentTrackingRequest" />
+			<wsdl:output message="tns:shipmentTrackingResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="removeShipmentTracking">
+			<wsdl:documentation>
+				Remove shipment tracking information from eBay
+				transactions.
+			</wsdl:documentation>
+			<wsdl:input message="tns:shipmentTrackingRequest" />
+			<wsdl:output message="tns:shipmentTrackingResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="getShipmentTracking">
+			<wsdl:documentation>
+				Get shipment tracking information associated with eBay
+				transactions.
+			</wsdl:documentation>
+			<wsdl:input message="tns:shipmentTrackingRequest" />
+			<wsdl:output message="tns:shipmentTrackingResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Get shipment tracking information associated with eBay
+				transactions.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest"></wsdl:input>
+			<wsdl:output message="tns:getVersionResponse"></wsdl:output>
+		</wsdl:operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+		<wsdl:operation name="getShippingCost">
+			<wsdl:documentation>GetShippingCosts</wsdl:documentation>
+			<wsdl:input message="tns:getShippingCostRequest"></wsdl:input>
+			<wsdl:output message="tns:getShippingCostResponse"></wsdl:output>
+		</wsdl:operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+	
+	</wsdl:portType>
+
+
+	<binding name="CoreShippingServiceHttpBinding"
+		type="tns:CoreShippingServiceHttpPort">
+
+		<http:binding verb="POST" />
+
+
+		<wsdl:operation name="addShipmentTracking">
+
+			<http:operation location="/addShipmentTracking" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="removeShipmentTracking">
+			<http:operation location="/removeShipmentTracking" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getShipmentTracking">
+
+			<http:operation location="/getShipmentTracking" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+		<wsdl:operation name="getShippingCost">
+
+			<http:operation location="/getShippingCost" />
+			<wsdl:input>
+				<mime:content part="params"
+					type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+	</binding>
+
+	<binding name="CoreShippingServiceSOAPBinding"
+		type="tns:CoreShippingServiceSOAPPort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="getVersion">
+			<soap:operation soapAction="urn:getVersion"
+				style="document" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="addShipmentTracking">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/v1/services/addShipmentTracking" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="removeShipmentTracking">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/v1/services/removeShipmentTracking" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="getShipmentTracking">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/v1/services/getShipmentTracking" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************Start************-->
+		<operation name="getShippingCost">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/shipping/v1/services/getShippingCost" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<!-- Added as part of Critical API Enhancements_24858   ************End************-->
+	</binding>
+	<service name="CoreShippingService">
+		<port name="CoreShippingServiceSOAPPort"
+			binding="tns:CoreShippingServiceSOAPBinding">
+			<soap12:address
+				location="https://svcs.ebay.com/services/shipping/v1/CoreShippingService" />
+			<soap:address
+				location="https://svcs.ebay.com/services/shipping/v1/CoreShippingService" />
+		</port>
+
+		<port binding="tns:CoreShippingServiceHttpBinding"
+			name="CoreShippingServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/shipping/v1/CoreShippingService" />
+		</port>
+
+	</service>
+</definitions>

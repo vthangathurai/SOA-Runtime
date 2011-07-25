@@ -14,6 +14,7 @@ import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceNotFoundExce
 import org.ebayopensource.turmeric.runtime.spf.impl.internal.config.ServiceConfigManager;
 import org.ebayopensource.turmeric.runtime.tests.common.AbstractTurmericTestCase;
 import org.ebayopensource.turmeric.runtime.tests.common.util.ExceptionUtils;
+import org.junit.After;
 import org.junit.Test;
 
 
@@ -59,5 +60,8 @@ public class ServiceConfigNegativeTest  extends AbstractTurmericTestCase {
 		}
 
 	}
-
-}
+	@After
+	public void tearDown() throws Exception {
+		ServiceConfigManager.getInstance().setConfigTestCase("config");
+	}
+	}

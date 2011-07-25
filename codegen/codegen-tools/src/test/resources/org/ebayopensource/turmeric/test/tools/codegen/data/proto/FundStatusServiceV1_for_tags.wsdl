@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+	name="FundStatusService" 
+	targetNamespace="http://www.ebay.com/marketplace/fundstatus/v1/services" 
+	xmlns="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+	xmlns:tns="http://www.ebay.com/marketplace/fundstatus/v1/services" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
+    	targetNamespace="http://www.ebay.com/marketplace/fundstatus/v1/services" xmlns:tns="http://www.ebay.com/marketplace/fundstatus/v1/services">
+		<!-- addOrderDecisionRequest -->
+		<xs:element name="addOrderDecisionRequest" type="tns:AddOrderDecisionRequest"/>
+		<xs:complexType name="AddOrderDecisionRequest">
+			<xs:annotation>
+				<xs:documentation>
+					Contains information pertaining to the decision to hold or release fund of one or more orders. 
+				</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseRequest">
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="orderDecisionData" type="tns:OrderDecisionData"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="OrderDecisionData">
+			<xs:annotation>
+				<xs:documentation>
+					The element that contains information related to the hold/release decision of a single order.
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseDecision">
+					<xs:sequence>
+						<xs:element minOccurs="1" name="identityString" type="xs:string"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="BaseDecision">
+			<xs:annotation>
+				<xs:documentation>
+					The element that contains information related to the hold/release decision of a single order.
+    			</xs:documentation>
+			</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="sellerId" type="xs:long"/>
+					<xs:element minOccurs="1" name="buyerId" type="xs:long"/>
+					<xs:element minOccurs="0" name="decisionType" type="tns:DecisionType"/>
+					<xs:element minOccurs="0" name="decisionState" type="tns:DecisionState"/>
+					<xs:element minOccurs="1" name="externalReferenceId" type="xs:long"/>
+					<xs:element minOccurs="0" name="externalApplicationId" type="xs:int"/>
+					<xs:element minOccurs="0" name="estimatedReleaseTime" type="xs:dateTime"/>
+					<xs:element minOccurs="1" name="evaluationTimeStamp" type="xs:dateTime"/>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="decisionReason" type="tns:DecisionReason"/>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="releaseAction" type="tns:ReleaseAction"/>
+				</xs:sequence>
+		</xs:complexType>
+		
+		<xs:simpleType name="DecisionType">
+			<xs:restriction base="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						Possible values of DecisionType: HOLD, RELEASE
+     				</xs:documentation>
+				</xs:annotation>
+			</xs:restriction>
+		</xs:simpleType>
+		
+		<xs:simpleType name="DecisionState">
+			<xs:restriction base="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						Not used in this release. User EMPTY to indicate no data
+     				</xs:documentation>
+				</xs:annotation>
+			</xs:restriction>
+		</xs:simpleType>
+		
+		<xs:simpleType name="DecisionReason">
+			<xs:restriction base="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						Possible values of DecisionReason: 
+						NONE, NOT_IN_S2F_POLICY, SELLER_IS_ON_WHITE_LIST, NEW_SELLER,
+						BELOW_STANDARD_SELLER, SELLER_IS_IN_GOOD_STANDING, HIGH_RISK_SELLER,
+						EBP_CASE_OPEN, EBP_CASE_CLOSED, LOW_RISK_SELLER, S2F_POLICY, MAX_DAYS,
+						CS_MANUAL_RELEASE, NOT_ON_HOLD, DC, EDD, WAITING_AFTER_DC, WAITING_AFTER_EDD,
+						WAITING_FOR_DEFAULT_PERIOD, WAITING_FOR_DEFAULT_PERIOD_WITH_MAS.
+     				</xs:documentation>
+				</xs:annotation>
+			</xs:restriction>
+		</xs:simpleType>
+		
+		<xs:simpleType name="ReleaseAction">
+			<xs:restriction base="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						Possible values of ReleaseAction: NONE, RESOLVE_EBP_CASE, MARK_AS_SHIPPED
+     				</xs:documentation>
+				</xs:annotation>
+			</xs:restriction>
+		</xs:simpleType>
+		
+		<!-- AddOrderDecisionResponse -->
+		<xs:element name="addOrderDecisionResponse" type="tns:AddOrderDecisionResponse"/>
+		<xs:complexType name="AddOrderDecisionResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseResponse" />
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<!-- getLineItemDecisionRequest -->
+		<xs:element name="getLineItemDecisionRequest" type="tns:GetLineItemDecisionRequest"/>
+		<xs:complexType name="GetLineItemDecisionRequest">
+			<xs:annotation>
+				<xs:documentation>
+					One can get decision information pertaining to line items either by transacactionId and ItemId or by orderId and line itemId but not both. 
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseRequest">
+					<xs:sequence>
+						<xs:element minOccurs="1" name="sellerId" type="xs:long"/>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="transactionItemType" type="tns:TransactionItemType"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="TransactionItemType">
+			<xs:annotation>
+				<xs:documentation>
+					The element that contains a single transactionId and itemId. The estimateReleaseDate, if given, will
+					also be used as a search criteria.
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element minOccurs="1" name="itemId" type="xs:long"/>
+				<xs:element minOccurs="1" name="transactionId" type="xs:long"/>
+				<!-- <xs:element minOccurs="0" name="estimatedReleaseTime" type="xs:dateTime"/> -->
+			</xs:sequence>
+		</xs:complexType>
+		
+		<!-- getLineItemDecisionResponse -->
+		<xs:element name="getLineItemDecisionResponse" type="tns:GetLineItemDecisionResponse"/>
+		<xs:complexType name="GetLineItemDecisionResponse">
+			<xs:annotation>
+				<xs:documentation>
+					The response that contains decision information pertaining to one or more line items 
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseResponse">
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="lineItemDecision" type="tns:LineItemDecision"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="LineItemDecision">
+			<xs:annotation>
+				<xs:documentation>
+					The element that represents the decision to hold or release fund pertaining to a single lineItem.
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseDecision">
+					<xs:sequence>
+						<xs:element minOccurs="0" name="itemDecisionHistoryId" type="xs:long"/>
+						<xs:element minOccurs="1" name="itemId" type="xs:long"/>
+						<xs:element minOccurs="1" name="transactionId" type="xs:long"/>
+						<xs:element minOccurs="0" name="lineItemId" type="xs:long"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<!-- getOrderDecisionRequest -->
+		<xs:element name="getOrderDecisionRequest" type="tns:GetOrderDecisionRequest"/>
+		<xs:complexType name="GetOrderDecisionRequest">
+			<xs:annotation>
+				<xs:documentation>
+					The request used to get the fund decision information of one or more orders
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseRequest">
+					<xs:sequence>
+						<xs:element minOccurs="1" name="sellerId" type="xs:long"/>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="orderId" type="xs:long"/>
+						<!-- <xs:element minOccurs="0" name="estimatedReleaseTime" type="xs:dateTime"/> -->
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<!-- getOrderDecisionResponse -->
+		<xs:element name="getOrderDecisionResponse" type="tns:GetOrderDecisionResponse"/>
+		<xs:complexType name="GetOrderDecisionResponse">
+			<xs:annotation>
+				<xs:documentation>
+					The response that contains decision information pertaining to one or more orders
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseResponse">
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="orderDecision" type="tns:OrderDecision"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="OrderDecision">
+			<xs:annotation>
+				<xs:documentation>
+					The element that represents the decision to hold or release fund pertaining to a single order.
+    			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:BaseDecision">
+					<xs:sequence>
+						<xs:element minOccurs="0" name="orderDecisionHistoryId" type="xs:long"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<!--  getVersionRequest/Response -->
+		<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+		<xs:complexType name="GetVersionRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseRequest"/>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+		<xs:complexType name="GetVersionResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseResponse"/>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<!-- CORE TYPES -->
+		<xs:simpleType name="AckValue">
+			<xs:annotation>
+				<xs:documentation>
+					 Indicates whether the error is a severe error (causing the request to fail) or an
+					 informational error (a warning) that should be communicated to the user.
+				 </xs:documentation>
+				<xs:appinfo>
+					<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="Success">
+					<xs:annotation>
+						<xs:documentation>
+						   The request was processed successfully,  but something occurred that may affect your application or the user.
+						 </xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Failure">
+					<xs:annotation>
+						<xs:documentation>
+							The request that triggered the error was not processed successfully. When a serious application-level error occurs,
+							the error is returned instead of the business data.
+						 </xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Warning">
+					<xs:annotation>
+						<xs:documentation>
+							The request that triggered the error was processed successfully but with some warnings.
+						 </xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="PartialFailure">
+					<xs:annotation>
+						<xs:documentation>
+							The request that triggered the error was processed successfully but with some warnings.
+						 </xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+		</xs:simpleType>
+		
+		<xs:complexType abstract="true" name="BaseRequest">
+			<xs:annotation>
+				<xs:documentation>
+				   This is the base class for request container for all service operations.
+				</xs:documentation>
+				<xs:appinfo>
+					<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+			</xs:sequence>
+		</xs:complexType>
+			
+		<xs:complexType name="ExtensionType">
+			<xs:annotation>
+				<xs:documentation>
+					Documentation goes here
+				</xs:documentation>
+				<xs:appinfo>
+					<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="id" type="xs:positiveInteger"/>
+				<xs:element name="version" type="xs:string"/>
+				<xs:element name="contentType" type="xs:string"/>
+				<xs:element name="value" type="xs:string"/>
+
+			</xs:sequence>
+		</xs:complexType>
+		
+		<xs:complexType abstract="true" name="BaseResponse">
+			<xs:annotation>
+				<xs:documentation>
+					Base response container for all service operations. Contains error information associated with the request.
+				</xs:documentation>
+				<xs:appinfo>
+					<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="ack" type="tns:AckValue">
+					<xs:annotation>
+						<xs:documentation/>
+						<xs:appinfo>
+							<CallInfo>
+								<AllCalls/>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+					<xs:annotation>
+						<xs:documentation>
+						   Information for an error or warning that occurred when eBay processed the request.
+						 </xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<AllCalls/>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="version" type="xs:string">
+					<xs:annotation>
+						<xs:documentation/>
+						<xs:appinfo>
+							<CallInfo>
+								<AllCalls/>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+					<xs:annotation>
+						<xs:documentation/>
+						<xs:appinfo>
+							<CallInfo>
+								<AllCalls/>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+			</xs:sequence>
+		</xs:complexType>
+		
+		<xs:simpleType name="ErrorCategory">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="System"/>
+				<xs:enumeration value="Application"/>
+				<xs:enumeration value="Request"/>
+			</xs:restriction>
+		</xs:simpleType>
+		
+		<xs:complexType name="ErrorData">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="errorId" type="xs:long"/>
+				<xs:element name="domain" type="xs:string"/>
+				<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+				<xs:element name="severity" type="tns:ErrorSeverity"/>
+				<xs:element name="category" type="tns:ErrorCategory"/>
+				<xs:element name="message" type="xs:string"/>
+				<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+			</xs:sequence>
+		</xs:complexType>
+		
+		<xs:complexType name="ErrorMessage">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+			</xs:sequence>
+		</xs:complexType>
+		
+		<xs:complexType name="ErrorParameter">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+		
+		<xs:simpleType name="ErrorSeverity">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="Error"/>
+				<xs:enumeration value="Warning"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:schema>
+  </types>
+  
+  <message name="getVersionRequest">
+    <part name="messageParameters" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="getLineItemDecisionResponse">
+    <part name="params" element="tns:getLineItemDecisionResponse">
+    </part>
+  </message>
+  <message name="addOrderDecisionResponse">
+    <part name="params" element="tns:addOrderDecisionResponse">
+    </part>
+  </message>
+  <message name="getOrderDecisionRequest">
+    <part name="params" element="tns:getOrderDecisionRequest">
+    </part>
+  </message>
+  <message name="getOrderDecisionResponse">
+    <part name="params" element="tns:getOrderDecisionResponse">
+    </part>
+  </message>
+  <message name="getLineItemDecisionRequest">
+    <part name="params" element="tns:getLineItemDecisionRequest">
+    </part>
+  </message>
+  <message name="addOrderDecisionRequest">
+    <part name="params" element="tns:addOrderDecisionRequest">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="messageParameters" element="tns:getVersionResponse">
+    </part>
+  </message>
+  
+  <portType name="FundStatusServicePort">
+    <operation name="addOrderDecision">
+		<wsdl:documentation>Adds data pertaining to the hold or release decision of one or more orders.</wsdl:documentation>
+      		<input name="addOrderDecisionRequest" message="tns:addOrderDecisionRequest"/>
+      		<output name="addOrderDecisionResponse" message="tns:addOrderDecisionResponse"/>
+    </operation>
+    <operation name="getLineItemDecision">
+		<wsdl:documentation>
+			Retrieves data pertaining to the hold or release decision of one or more line items given
+			transaction ids, item ids and optionally estimated release dates
+		</wsdl:documentation>
+     	<input name="getLineItemDecisionRequest" message="tns:getLineItemDecisionRequest"/>
+     	<output name="getLineItemDecisionResponse" message="tns:getLineItemDecisionResponse"/>
+    </operation>
+    <operation name="getOrderDecision">
+		<wsdl:documentation>
+			Retrieves data pertaining to the hold or release decision of one or more orders given
+			order ids and optionally estimated release dates
+		</wsdl:documentation>
+      	<input name="getOrderDecisionRequest" message="tns:getOrderDecisionRequest"/>
+      	<output name="getOrderDecisionResponse" message="tns:getOrderDecisionResponse"/>
+    </operation>
+    <operation name="getVersion">
+		<wsdl:documentation>Returns the current version of the service.</wsdl:documentation>
+      	<input name="getVersionRequest" message="tns:getVersionRequest"/>
+      	<output name="getVersionResponse" message="tns:getVersionResponse"/>
+    </operation>
+  </portType>
+  
+  <binding name="FundStatusServiceSOAPBinding" type="tns:FundStatusServicePort">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="addOrderDecision">
+      <soap12:operation soapAction="urn:addOrderDecision" style="document"/>
+      <input>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </input>
+      <output>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </output>
+    </operation>
+    <operation name="getLineItemDecision">
+      <soap12:operation soapAction="urn:getLineItemDecision" style="document"/>
+      <input>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </input>
+      <output>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </output>
+    </operation>
+    <operation name="getOrderDecision">
+      <soap12:operation soapAction="urn:getOrderDecision" style="document"/>
+      <input>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </input>
+      <output>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </output>
+    </operation>
+    <operation name="getVersion">
+      <soap12:operation soapAction="urn:getVersion" style="document"/>
+      <input>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </input>
+      <output>
+        <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  
+  <binding name="FundStatusServiceHttpBinding" type="tns:FundStatusServicePort">
+    <http:binding verb="POST"/>
+    <operation name="addOrderDecision">
+      <http:operation location="/addOrderDecision"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getLineItemDecision">
+      <http:operation location="/getLineItemDecision"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getOrderDecision">
+      <http:operation location="/getOrderDecision"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  
+  <service name="FundStatusService">
+	<wsdl:documentation>
+		<Version>1.0.0</Version>
+		This service provides functionality to add and retrieve information pertaining to the decision to 
+		hold or release fund of given orders or line items.
+	</wsdl:documentation>
+    <port name="FundStatusServiceHttpPort" binding="tns:FundStatusServiceHttpBinding">
+      <http:address location="http://svcs.ebay.com/services/fundstatus/v1/FundStatusService"/>
+    </port>
+    <port name="FundStatusServiceSOAPPort" binding="tns:FundStatusServiceSOAPBinding">
+      <soap12:address location="http://svcs.ebay.com/services/fundstatus/v1/FundStatusService"/>
+    </port>
+  </service>
+</definitions>

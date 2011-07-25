@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="PageJudgmentService"
+	targetNamespace="http://www.ebay.com/marketplace/search/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/search/v1/services">
+
+			<xs:element name="getSessionTokenRequest"
+				type="tns:GetSessionTokenRequest" />
+			<xs:complexType name="GetSessionTokenRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation returns session token which is for given input parameters. 
+						This token will be used in subsequent HTTP requests to page judgment 
+						web commands.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="taskId" 		type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										A unique task id from client side.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="taskCategory" type="tns:TaskCategory">
+								<xs:annotation>
+									<xs:documentation>
+										To indicate task category, 1 values is allowed for now: JUDGMENT
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workerId"		type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Id of the worker from 3rd party vendor.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="scenarioId"	type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Id of the scenario for this request, 3rd party vendor get the scenario id list from eBay product manager.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="vendorId"		type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										To indicate vendor.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getSessionTokenResponse"
+				type="tns:GetSessionTokenResponse" />
+			<xs:complexType name="GetSessionTokenResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="sessionToken"
+								type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getTaskResultsRequest"
+				type="tns:GetTaskResultsRequest" />
+			<xs:complexType name="GetTaskResultsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation returns task result for the given task id. 
+						If taskCategory is JUDGMENT, JudgmentResult is being returned.
+						If taskCategory is REVIEW, ReviewResult is being returned.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="vendorId" type="xs:string" />
+							<xs:element name="workerId" type="xs:string" />
+							<xs:element name="taskId" type="xs:string" />
+							<xs:element name="taskCategory"	type="tns:TaskCategory" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getTaskResultsResponse"
+				type="tns:GetTaskResultsResponse" />
+			<xs:complexType name="GetTaskResultsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="taskCategory"
+								type="tns:TaskCategory" />
+							<xs:element name="judgmentResult"
+								type="tns:JudgmentResult" minOccurs="0" maxOccurs="1">
+							</xs:element>
+							<xs:element name="reviewResult"
+								type="tns:ReviewResult" minOccurs="0" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"
+				type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation returns current version of this service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:simpleType name="TaskCategory">
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="JUDGMENT">
+					<xs:annotation>
+						<xs:documentation>
+							To indicate task is for judgment
+						</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="REVIEW">
+					<xs:annotation>
+						<xs:documentation>
+							To indicate task is for review
+						</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="TaskStatus">
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="DONE"></xs:enumeration>
+					<xs:enumeration value="NOT_DONE"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="JudgmentResult">
+				<xs:sequence>
+					<xs:element name="taskStatus"
+						type="tns:TaskStatus">
+					</xs:element>
+					<xs:element name="workerId" type="xs:string"></xs:element>
+
+					<xs:element name="detailList"
+						type="tns:JudgmentDetailType" minOccurs="0"
+						maxOccurs="unbounded">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ReviewResult">
+				<xs:sequence>
+					<xs:element name="taskStatus"
+						type="tns:TaskStatus">
+					</xs:element>
+					<xs:element name="reviewResultDetailList"
+						type="tns:ReviewResultDetail" minOccurs="0"
+						maxOccurs="unbounded">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ReviewResultDetail">
+				<xs:sequence>
+					<xs:element name="workerId" type="xs:string"></xs:element>
+					<xs:element name="originalTaskId"
+						type="xs:string">
+					</xs:element>
+					<xs:element name="goodJudgmentCount"
+						type="xs:int">
+					</xs:element>
+					<xs:element name="badJudgmentCount" type="xs:int"></xs:element>
+					<xs:element name="reviewConclusion"
+						type="tns:ReviewConclusion">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"></xs:enumeration>
+					<xs:enumeration value="Application"></xs:enumeration>
+					<xs:enumeration value="Request"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"></xs:element>
+					<xs:element name="domain" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+					</xs:element>
+					<xs:element name="message" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter">
+					</xs:element>
+				</xs:sequence>
+
+
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData">
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"></xs:enumeration>
+					<xs:enumeration value="Warning"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+					<!-- 
+
+						processContents="lax">
+
+					-->
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="ReviewConclusion">
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="APPROVED"></xs:enumeration>
+					<xs:enumeration value="REJECTED"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		
+			<xs:complexType name="JudgmentDetailType">
+				<xs:sequence>
+					<xs:element name="judgmentId" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="rate" type="xs:double" minOccurs="1" maxOccurs="1"></xs:element>
+					<xs:element name="comments" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+
+	</wsdl:types>
+	<wsdl:message name="getSessionTokenRequest">
+		<wsdl:part element="tns:getSessionTokenRequest"
+			name="getSessionTokenRequest" />
+	</wsdl:message>
+	<wsdl:message name="getSessionTokenResponse">
+		<wsdl:part element="tns:getSessionTokenResponse"
+			name="getSessionTokenResponse" />
+	</wsdl:message>
+	<wsdl:message name="getTaskResultsRequest">
+		<wsdl:part element="tns:getTaskResultsRequest"
+			name="getTaskResultRequest" />
+	</wsdl:message>
+	<wsdl:message name="getTaskResultsResponse">
+		<wsdl:part element="tns:getTaskResultsResponse"
+			name="getTaskResultsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest"
+			name="getVersionRequest" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse"
+			name="getVersionResponse" />
+	</wsdl:message>
+	<wsdl:portType name="PageJudgmentServicePort">
+		<wsdl:operation name="getSessionToken">
+			<wsdl:documentation>
+				This operation returns session token which is for given input parameters. 
+				This token will be used in subsequent HTTP requests to page judgment 
+				web commands.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSessionTokenRequest" />
+			<wsdl:output message="tns:getSessionTokenResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getTaskResults">
+			<wsdl:documentation>
+				This operation returns task result for the given task id. 
+				If taskCategory is JUDGMENT, JudgmentResult is being returned.
+				If taskCategory is REVIEW, ReviewResult is being returned.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getTaskResultsRequest" />
+			<wsdl:output message="tns:getTaskResultsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				This operation returns current version of this service.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PageJudgmentServiceHttpBinding"
+		type="tns:PageJudgmentServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getSessionToken">
+			<http:operation location="/getSessionToken" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskResults">
+			<http:operation location="/getTaskResults" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="PageJudgmentServiceSOAPBinding"
+		type="tns:PageJudgmentServicePort">
+		<soap12:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getSessionToken">
+			<soap12:operation soapAction="urn:getSessionToken"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskResults">
+			<soap12:operation soapAction="urn:getTaskResults"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap12:operation soapAction="urn:getVersion"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PageJudgmentService">
+		<wsdl:documentation>
+			<version>1.0.0</version>
+			The PageJudgmentService API is to support whole page judgment flow. It provides 2 operations. getSessionToken will be called by 3rd party vendor to generate an unique token which will be used in subsequent WEB URL request. getTaskResults will be used to retrieve detail page judgment results. 
+		</wsdl:documentation>
+		<wsdl:port binding="tns:PageJudgmentServiceHttpBinding"
+			name="PageJudgmentServiceHttpPort">
+			<http:address
+				location="http://svcs.ebay.com/PageJudgmentService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:PageJudgmentServiceSOAPBinding"
+			name="PageJudgmentServiceSOAPPort">
+			<soap12:address
+				location="http://svcs.ebay.com/PageJudgmentService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

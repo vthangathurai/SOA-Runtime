@@ -1,0 +1,14 @@
+    public BaseBotServiceConsumer(String clientName, String environment, Class caller, boolean useDefaultClientConfig)
+        throws ServiceException
+    {
+        if (clientName == null) {
+            throw new ServiceException("clientName can not be null");
+        }
+        m_clientName = clientName;
+        if ((environment == null)||environment.isEmpty()) {
+            environment = s_envMapper.getDeploymentEnvironment();
+        }
+        m_environment = environment;
+        m_useDefaultClientConfig = useDefaultClientConfig;
+        ClassLoaderRegistry.instanceOf().registerServiceClient(m_clientName, m_environment, SVC_ADMIN_NAME, (BaseBotServiceConsumer.class), caller, m_useDefaultClientConfig);
+    }

@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/feedback/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="TransactionFeedbackService" targetNamespace="http://www.ebay.com/marketplace/feedback/v1/services">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/feedback/v1/services" xmlns:tns="http://www.ebay.com/marketplace/feedback/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage" type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element name="subdomain" type="xs:string" minOccurs="0"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element name="exceptionId" type="xs:token" minOccurs="0"/>
+					<xs:element name="parameter" type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="LeaveFeedbackInputDataType">
+				<xs:annotation>
+					<xs:documentation>
+						Type that holds all fields required to leave
+						feedback for a transaction via the transaction
+						feedback service.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="TransactionFeedbackServiceTypeLibrary" namespace="http://www.ebay.com/marketplace/feedback/v1/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="fbQuestion" type="tns:FbQuestionType" minOccurs="1" maxOccurs="unbounded"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="leaveFeedbackRequest" type="tns:LeaveFeedbackRequest"/>
+			<xs:complexType name="LeaveFeedbackRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="leaveFeedbackRequest" type="tns:LeaveFeedbackInputDataType" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="leaveFeedbackResponse" type="tns:LeaveFeedbackResponse"/>
+			<xs:complexType name="LeaveFeedbackResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="output" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SellerFeedbackProfileType">
+				<xs:annotation>
+					<xs:documentation>
+						Type that holds the Feedback question and the corresponding aggregated Feedback percentage for the seller.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="feedbackQuestionid" type="tns:FbQuestionEnum" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="positiveAnswerPercentage" type="xs:float" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getSellerFeedbackProfileRequest" type="tns:SellerFeedbackProfileRequest"/>
+			<xs:complexType name="SellerFeedbackProfileRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getSellerFeedbackProfileResponse" type="tns:SellerFeedbackProfileResponse"/>
+			<xs:complexType name="SellerFeedbackProfileResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="sellerFeedbackProfile" type="tns:SellerFeedbackProfileType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FbQuestionType">
+				<xs:annotation>
+					<xs:documentation>
+						Question type for transaction feedback service.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="TransactionFeedbackServiceTypeLibrary" namespace="http://www.ebay.com/marketplace/feedback/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="answer" type="tns:FbQuestionAnswersEnum" minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="questionId" type="tns:FbQuestionEnum" minOccurs="1" maxOccurs="1">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="FbQuestionAnswersEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Possible answers for transaction feedback
+						questions
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="TransactionFeedbackServiceTypeLibrary" namespace="http://www.ebay.com/marketplace/feedback/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:integer">
+					<xs:enumeration value="0">
+						<xs:annotation>
+							<xs:documentation>NO</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="1">
+						<xs:annotation>
+							<xs:documentation>YES</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="2">
+						<xs:annotation>
+							<xs:documentation>Other</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="FbQuestionEnum">
+				<xs:annotation>
+					<xs:documentation>
+						List of allowed feedback questions allowed on
+						the transaction feedback service.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="TransactionFeedbackServiceTypeLibrary" namespace="http://www.ebay.com/marketplace/feedback/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Q1">
+						<xs:annotation>
+							<xs:documentation>
+								Were you satisfied with the time it took
+								to receiver the item?
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Q2">
+						<xs:annotation>
+							<xs:documentation>
+								Was the item what you were expecting?
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Q3">
+						<xs:annotation>
+							<xs:documentation>
+								If you contacted the seller, were you
+								satisfied with quality and timeliness of
+								the response?
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Q4">
+						<xs:annotation>
+							<xs:documentation>
+								Was the cost of shipping reasonable?
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="xNPS">
+						<xs:annotation>
+							<xs:documentation>
+								How would you rate your experience with
+								this seller?
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType  name="PaginationInput">
+				<xs:annotation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="pageNumber" type="xs:int" minOccurs="0"/>
+					<xs:element name="entriesPerPage" type="xs:int" minOccurs="0"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PaginationOutput">
+				<xs:annotation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="totalPages" type="xs:int" minOccurs="0"/>
+					<xs:element  name="totalCount" type="xs:int" minOccurs="0"/>
+					<xs:element  name="pageNumber" type="xs:int" minOccurs="0"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getFeedbackDetailRequest" type="tns:FeedbackDetailRequest"/>
+			<xs:complexType name="FeedbackDetailRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="username" type="xs:string" minOccurs="1"/>
+							<xs:element name="userTransactionRole" type="tns:UserTransactionRoleEnum" minOccurs="1"/>
+							<xs:element name="feedbackRole" type="tns:FeedbackRoleEnum" minOccurs="1"/>
+							<xs:element name="paginationInput" type="tns:PaginationInput" minOccurs="1"/>
+							<xs:element name="feedbackFilter" type="tns:FeedbackFilterType" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element name="feedbackSort" type="tns:FeedbackSortType" minOccurs="0" maxOccurs="1"/>
+							
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getFeedbackDetailResponse" type="tns:FeedbackDetailResponse"/>
+			<xs:complexType name="FeedbackDetailResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="paginationOutput" type="tns:PaginationOutput" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="feedback" type="tns:FeedbackType" minOccurs="1" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FeedbackType">
+				<xs:annotation>
+					<xs:documentation>
+						Type that holds the Transaction details and the Feedback comments for the sold Items of the seller.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="transactionDetail" type="tns:TransactionDetailType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="receivedDate" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="comments" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TransactionDetailType">
+				<xs:annotation>
+					<xs:documentation>
+						Type that holds the Transaction details for the sold Items of the seller.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="soldPrice" type="xs:double" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="FeedbackFilterType">
+				<xs:annotation>
+					<xs:documentation>
+						Type that holds the filter criteria and value to be applied in order to retrieve Feedback comments.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="filterCriteria" type="tns:FilterCriteriaEnum" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="filterValue" type="tns:FilterValueEnum" minOccurs="0" maxOccurs="1"/>
+					
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="FeedbackSortType">
+				<xs:annotation>
+					<xs:documentation>
+						Type that holds the sort criteria and value to be applied in order to retrieve Feedback comments.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="sortBy" type="tns:SortByAttributeEnum" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="orderType" type="tns:OrderTypeEnum" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:simpleType name="UserTransactionRoleEnum">
+				<xs:annotation>
+					<xs:documentation>
+						List of allowed roles for retrieving feedback comments in
+						the transaction feedback service.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SELLER">
+						<xs:annotation>
+							<xs:documentation>
+								Retrieve Feedback comments as a Seller
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="FeedbackRoleEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Defines whether the comeents are being retrieved for a User as a receiver or User as a giver
+						in the transaction feedback service.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="RECEIVER">
+						<xs:annotation>
+							<xs:documentation>
+								Retrieve Feedback comments as a Receiver
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="FilterCriteriaEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Defines the filter criteria to be used while retrieving the Feedback comments
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="RATING_ANY">
+						<xs:annotation>
+							<xs:documentation>
+								Rating criteria for retrieving Feedback comments
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="FilterValueEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Defines the filter value to be used for the filter criteria while retrieving the Feedback comments
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="AT_LEAST_ONE_NEGATIVE">
+						<xs:annotation>
+							<xs:documentation>
+								Retrieve Feedback comments for only those transactions which have at least one negative feedback
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ALL_NEGATIVE">
+						<xs:annotation>
+							<xs:documentation>
+								Retrieve Feedback comments for only those transactions which has all negative feedback
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="SortByAttributeEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Defines the sort criteria to be used while retrieving the Feedback comments.If no sort order is specified,then default 
+						sort order(received date) will be applied.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PRICE">
+						<xs:annotation>
+							<xs:documentation>
+								Sort Feedback comments based on the descending Order of Sold Price
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					
+					<xs:enumeration value="RECEIVED_DATE">
+						<xs:annotation>
+							<xs:documentation>
+								Sort Feedback comments based on the most recent Feedback received date
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="OrderTypeEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Defines the sort value to be used for sorting while retrieving the Feedback comments.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="DESCENDING">
+						<xs:annotation>
+							<xs:documentation>
+								Sort Feedback comments based on the descending Order of SortByAttributeEnum criteria
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+					<xs:enumeration value="ASCENDING">
+						<xs:annotation>
+							<xs:documentation>
+								Sort Feedback comments based on the ascending Order of SortByAttributeEnum criteria
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="leaveFeedbackRequest">
+		<wsdl:part name="params" element="tns:leaveFeedbackRequest"/>
+	</wsdl:message>
+	<wsdl:message name="leaveFeedbackResponse">
+		<wsdl:part name="params" element="tns:leaveFeedbackResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="messageParameters" element="tns:getVersionRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="messageParameters" element="tns:getVersionResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getSellerFeedbackProfileRequest">
+		<wsdl:part name="params" element="tns:getSellerFeedbackProfileRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getSellerFeedbackProfileResponse">
+		<wsdl:part name="params" element="tns:getSellerFeedbackProfileResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getFeedbackDetailRequest">
+		<wsdl:part name="params" element="tns:getFeedbackDetailRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getFeedbackDetailResponse">
+		<wsdl:part name="params" element="tns:getFeedbackDetailResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="TransactionFeedbackServicePort">
+		<wsdl:operation name="leaveFeedback">
+			<wsdl:input message="tns:leaveFeedbackRequest"/>
+			<wsdl:output message="tns:leaveFeedbackResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:input name="getVersionRequest" message="tns:getVersionRequest"/>
+			<wsdl:output name="getVersionResponse" message="tns:getVersionResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getSellerFeedbackProfile">
+			<wsdl:input message="tns:getSellerFeedbackProfileRequest"/>
+			<wsdl:output message="tns:getSellerFeedbackProfileResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getFeedbackDetail">
+			<wsdl:input message="tns:getFeedbackDetailRequest"/>
+			<wsdl:output message="tns:getFeedbackDetailResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TransactionFeedbackServiceHttpBinding" type="tns:TransactionFeedbackServicePort">
+		<http:binding verb="POST"/>
+		<wsdl:operation name="leaveFeedback">
+			<http:operation location="/leaveFeedback"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<http:operation location="getVersion"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSellerFeedbackProfile">
+			<http:operation location="/getSellerFeedbackProfile"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getFeedbackDetail">
+			<http:operation location="/getFeedbackDetail"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="TransactionFeedbackServiceSOAPBinding" type="tns:TransactionFeedbackServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="leaveFeedback">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/feedback/v1/services/leaveFeedback"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/feedback/v1/services/getVersion"/>
+			<wsdl:input name="getVersionRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="getVersionResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSellerFeedbackProfile">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/feedback/v1/services/getSellerFeedbackProfile"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getFeedbackDetail">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/feedback/v1/services/getFeedbackDetail"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TransactionFeedbackService">
+		<wsdl:port name="TransactionFeedbackServiceHttpPort" binding="tns:TransactionFeedbackServiceHttpBinding">
+			<http:address location="https://svcs.ebay.com/services/feedback/TransactionFeedbackService/v1"/>
+		</wsdl:port>
+		<wsdl:port name="TransactionFeedbackServiceSOAPPort" binding="tns:TransactionFeedbackServiceSOAPBinding">
+			<soap12:address location="https://svcs.ebay.com/services/feedback/TransactionFeedbackService/v1"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

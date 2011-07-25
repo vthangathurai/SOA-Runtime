@@ -17,9 +17,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	CustomHttpHeadersTest.class
+	CustomHttpHeadersTest.class,
 //	WSDLEnhancementsTest.class,
 //	OperationNameMismatchTest.class
+	UTF8EncodingTests.class,
+	AsyncClientStreamingDownloadAttachmentTests.class,
+	AsyncClientStreamingUploadAttachmentTests.class,
+	AttachmentCacheTests.class,
+	MixedModeWithParamMappingTests.class,
+	ClientSideFailoverTests.class
 	})
 
 public class AllTests extends TestSuite {

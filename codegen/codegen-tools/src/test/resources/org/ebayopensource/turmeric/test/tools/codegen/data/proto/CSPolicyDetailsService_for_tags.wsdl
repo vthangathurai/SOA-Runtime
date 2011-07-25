@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="CSPolicyDetailsService"
+	targetNamespace="http://www.ebay.com/marketplace/cs/v1/services"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:tns="http://www.ebay.com/marketplace/cs/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/cs/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/cs/v1/services">
+
+			<xs:element name="getVersionRequest" 
+				type="tns:GetVersionRequest" />
+			<xs:element name="getVersionResponse" 
+				type="tns:GetVersionResponse" />
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="getPoliciesRequest" 
+				type="tns:GetPoliciesRequest" />
+			<xs:element name="getPoliciesResponse" 
+				type="tns:GetPoliciesResponse" />
+			<xs:element name="setPoliciesRequest" 
+				type="tns:SetPoliciesRequest" />
+			<xs:element name="setPoliciesResponse" 
+				type="tns:SetPoliciesResponse" />
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage"
+						type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning
+						occured as part of service call. Any run time
+						error will not be reported here, but will be
+						reported aspart of soap fault.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData"
+						minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain upon which the error
+								occurred. &lt;dl&gt; &lt;lh&gt;Domains
+								include:&lt;/lh&gt; &lt;dt&gt;
+								Marketplace &lt;/dt&gt; &lt;dd&gt; A
+								business or validation error occurred
+								for the Merchandising Service.
+								&lt;/dd&gt; &lt;dt&gt; SOA &lt;/dt&gt;
+								&lt;dd&gt; An exception occurred in the
+								Service Oriented Architecture (SOA)
+								framework. &lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error caused the
+								request to fail (Error) or not
+								(Warning). &lt;br&gt;&lt;br&gt; If the
+								request fails and the source of the
+								problem is within the application (such
+								as a missing required element), please
+								change the application before you retry
+								the request. If the problem is due to
+								end-user input data, please alert the
+								end-user to the problem and provide the
+								means for them to correct the data. Once
+								the problem in the application or data
+								is resolved, you can attempt to re- send
+								the request to eBay.
+								&lt;br&gt;&lt;br&gt; If the source of
+								the problem is on eBay's side, you can
+								retry the request as-is a reasonable
+								number of times (eBay recommends twice).
+								If the error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+								&lt;br&gt;&lt;br&gt; When a warning
+								occurs, the error is returned in
+								addition to the business data. In this
+								case, you do not need to retry the
+								request (as the original request was
+								successful). However, depending on the
+								cause or nature of the warning, you
+								might need to contact either the end
+								user or eBay to effect a long term
+								solution to the problem to prevent it
+								from reoccurring in the future.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors:
+								request errors, application errors, and
+								system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition
+								that resulted in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subdomain" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain upon which the
+								error occurred. &lt;dl&gt;
+								&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+								&lt;dt&gt; Merchandising &lt;/dt&gt;
+								&lt;dd&gt; The error is specific to the
+								Merchandising service. &lt;/dd&gt;
+								&lt;dt&gt; MarketplaceCommon &lt;/dt&gt;
+								&lt;dd&gt; The error is common to all
+								Marketplace services. &lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="exceptionId" type="xs:token"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception
+								associated with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="parameter"
+						type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Some warning and error messages return
+								one or more variables that contain
+								contextual information about the error.
+								This is often the field or value that
+								triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user. For
+								example, eBay may have changed a value
+								the user sent in. In this case, eBay
+								returns a normal, successful response
+								and also returns the warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of error: request
+						errors, application errors, and system errors.
+						Request and application errors are caused
+						primarily by invalid data passed in the request.
+						System errors are caused primarily by
+						application failures and cannot be corrected by
+						changing request values.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on
+								the eBay system side, such as a database
+								or server down. An application can retry
+								the request as-is a reasonable number of
+								times (eBay recommends twice). If the
+								error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as missing or invalid
+								fields. The problem must be corrected
+								before the request can be made again. If
+								the problem is due to something in the
+								application (such as a missing required
+								field), the application must be changed.
+								Once the problem in the application or
+								data is resolved, resend the corrected
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as invalid or missing
+								data. The problem must be corrected
+								before the request can be made again. If
+								the problem is a result of end-user
+								data, the application must alert the
+								end-user to the problem and provide the
+								means for the end-user to correct the
+								data. Once the problem in the data is
+								resolved, resend the request to eBay
+								with the corrected data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="Action">
+				<xs:annotation>
+					<xs:documentation>
+						Enumerates possible actions by the operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ADD" />
+					<xs:enumeration value="MODIFY" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="SitePolicyType">
+				<xs:annotation>
+					<xs:documentation>
+						Policy Type has as its elements all the
+						information necessary to describe a policy. The
+						type is used by all service operations that need
+						to add modify and retrieve the Policy Details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="policyType" type="tns:PolicyType"
+						minOccurs="1">
+					</xs:element>
+					<xs:element name="sitePolicyID" type="xs:long"
+						minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="PolicyType">
+				<xs:annotation>
+					<xs:documentation>
+						Policy Type has as its elements all the
+						information necessary to describe a policy. The
+						type is used by all service operations that need
+						to add modify and retrieve the Policy Details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="policyIdentifier"
+						type="tns:PolicyIdentifier" minOccurs="1">
+					</xs:element>
+					<xs:element name="policyDetails"
+						type="tns:PolicyDetailsType" minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PolicyDetailsType">
+				<xs:annotation>
+					<xs:documentation>
+						Policy Type has as its elements all the
+						information necessary to describe a policy. The
+						type is used by all service operations that need
+						to add modify and retrieve the Policy Details.
+						LastModifiedDate and Creation Date will be
+						ignored.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="policyName" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="policyLevel" type="xs:int"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="active" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="violationActiveInTimeFrame"
+						type="xs:long" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="ignoreViolationWindowInDays"
+						type="xs:long" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="offenseIntensity" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="modifiedBy" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="lastModifiedDate"
+						type="xs:dateTime" minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="creationDate" type="xs:dateTime"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="PolicyIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+						The PolicyIdentifier uniquely identifies the
+						policy with the Policy Id and the SiteId.
+						PolicyIdentifier is used in operation that
+						retrieve the Policy Detail. Both PolicyId and
+						SiteId element are mandatory to uniquely
+						identify a policy.Default value will be 0 for
+						the SiteId(Request with 'No SiteId tag'or Empty
+						SiteId).
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="policyId" type="xs:long"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="siteId" type="xs:int"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType name="SetPolicyAckType">
+				<xs:annotation>
+					<xs:documentation>
+						SetPolicyAckType is used to send back the status
+						of the each Policy Detail operation. Policy ID
+						and Site ID uniquely identifies the Policy
+						Detail entry . Status can be Success or
+						Failure. ErrorData is populated in case of
+						failure.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="status" type="tns:AckValue"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="policyIdentifier"
+						type="tns:PolicyIdentifier" minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetPoliciesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Get Policies Request is used in operation that
+						retrieves one or more Policy Details. The
+						request should have at least one
+						PolicyIdentifier. All distinct Policy
+						identifiers will have a corresponding Policy
+						Detail returned,If present.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="policyIdentifier"
+								type="tns:PolicyIdentifier" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetPoliciesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Get Policies Response is used in operation that
+						retrieve one or more Policy Details. The
+						Response will contain 'n' number of distinct
+						Policy Details that are requested. If the
+						Requested policy Detail is not present, then
+						response will have error.In case of Partial
+						Success- only were few policy Detail are
+						retrieved - a warning will be sent along with
+						the available Policy Detail.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="sitePolicyType"
+								type="tns:SitePolicyType" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="SetPoliciesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Set Policy Request is used in the operation that
+						adds/modify the given policy data to the Policy
+						Details Repository.In case of
+						Partial Success case - only were few policy data
+						are added/modified- a warning will be sent along
+						with Number of policy Details affected.
+						ReturnAddedOrModifiedPolicies - default Value
+						will be true
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="action" type="tns:Action"
+								minOccurs="1" />
+							<xs:element
+								name="returnAddedOrModifiedPolicies" type="xs:boolean"
+								minOccurs="0" />
+							<xs:element name="policyType"
+								type="tns:PolicyType" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetPoliciesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Add/Modify Policy Response returns the number of
+						policy Detail successfully added.In case of
+						Partial Success - only were few policy
+						details are added/modified- a warning will be
+						sent along with number of policy Details
+						affected.The individual status of each modify
+						operation is given in status detail.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element
+								name="numberOfPoliciesAffected" type="xs:int" minOccurs="1"
+								maxOccurs="1" />
+							<xs:element name="setPoliciesAck"
+								type="tns:SetPolicyAckType" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="sitePolicyType"
+								type="tns:SitePolicyType" minOccurs="0" maxOccurs="unbounded" />
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="getPoliciesRequest">
+		<wsdl:part name="parameters" element="tns:getPoliciesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPoliciesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getPoliciesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setPoliciesRequest">
+		<wsdl:part name="parameters" element="tns:setPoliciesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setPoliciesResponse">
+		<wsdl:part name="parameters"
+			element="tns:setPoliciesResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+
+
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="messageParameters" element="tns:getVersionRequest" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="messageParameters" element="tns:getVersionResponse" />
+	</wsdl:message>
+
+	<wsdl:portType name="CSPolicyDetailsServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>Version Details</wsdl:documentation>
+			<wsdl:input name="getVersionRequest" message="tns:getVersionRequest"></wsdl:input>
+			<wsdl:output name="getVersionResponse" message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getPolicies">
+			<wsdl:documentation>
+				Fetch the Policy data from the Policy Details
+				Repository
+			</wsdl:documentation>
+			<wsdl:input message="tns:getPoliciesRequest"></wsdl:input>
+			<wsdl:output message="tns:getPoliciesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setPolicies">
+			<wsdl:documentation>
+				Add/Modify the given Policy data to the Policy
+				Details Repository
+			</wsdl:documentation>
+			<wsdl:input message="tns:setPoliciesRequest"></wsdl:input>
+			<wsdl:output message="tns:setPoliciesResponse"></wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:portType>
+	<wsdl:binding name="CSPolicyDetailsServiceHttpBinding"
+		type="tns:CSPolicyDetailsServicePort">
+
+
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPolicies">
+
+			<http:operation location="/getPolicies" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setPolicies">
+
+			<http:operation location="/setPolicies" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+
+
+	</wsdl:binding>
+
+	<wsdl:binding name="CSPolicyDetailsServiceSOAPBinding"
+		type="tns:CSPolicyDetailsServicePort">
+
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getVersion" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPolicies">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getPolicies" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setPolicies">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/setPolicies" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:binding>
+	<wsdl:service name="CSPolicyDetailsService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			This Service will Fetch,Add/Modify the Policy data
+		</wsdl:documentation>
+		<wsdl:port name="CSPolicyDetailsServiceHttpPort"
+			binding="tns:CSPolicyDetailsServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/cs/v1/CSPolicyDetailsService" />
+		</wsdl:port>
+		<wsdl:port name="CSPolicyDetailsServiceSOAPPort"
+			binding="tns:CSPolicyDetailsServiceSOAPBinding">
+			<soap12:address
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				location="https://svcs.ebay.com/services/cs/v1/CSPolicyDetailsService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

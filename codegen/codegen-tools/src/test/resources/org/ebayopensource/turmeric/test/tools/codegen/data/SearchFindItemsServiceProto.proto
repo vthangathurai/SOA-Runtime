@@ -1,0 +1,147 @@
+package com.ebay.test.soaframework.tools.codegen.proto;
+
+option java_package = "com.ebay.test.soaframework.tools.codegen.proto";
+option java_outer_classname = "FindItemsServiceProto";
+
+message AckValueEnum{
+	enum AckValue {
+	SUCCESS = 1;
+	FAILURE = 1;
+	PARTIAL_FAILURE = 1;
+	WARNING = 1;
+	}
+}
+
+message BaseServiceRequest {
+}  
+
+message BaseServiceResponse {
+required AckValueEnum.AckValue ack = 1;
+repeated ErrorMessage error = 2;
+optional string version = 3;
+optional int64 dateInSec = 4; 
+}  
+
+message BooleanFieldValue {
+	optional bool value = 1;
+}
+
+message DateFieldValue {
+	optional int64 value = 1;
+}
+
+message DoubleFieldValue {
+	optional double value = 1;
+}
+
+message ErrorCategoryEnum{
+	enum ErrorCategory {
+		SYSTEM = 0;
+		APPLICATION = 1;
+		REQUEST = 2;
+	}
+}
+
+message ErrorData{
+optional sint64 errorId = 1;
+optional string domain = 2;
+optional string subdomain = 3;
+optional ErrorSeverityEnum.ErrorSeverity severity = 4;
+optional ErrorCategoryEnum.ErrorCategory category = 5;
+optional string message = 6;
+optional string exceptionId = 7;
+repeated ErrorParameter parameter = 8;
+    
+}
+
+message ErrorMessage{
+repeated ErrorData error = 1;    
+}
+
+message ErrorParameter{
+optional string name = 1;
+optional string value = 2;
+}
+
+message ErrorSeverityEnum{
+	enum ErrorSeverity {
+		ERROR = 0;
+		WARNING = 1;
+	}
+}
+
+message Field {
+}
+
+message FieldValue {
+	
+	optional ShippingCostFieldValue shippingCost = 1;
+	optional TraitFieldValue trait = 2;
+	optional SellerLogoFieldValue sellerLogo = 3;
+	optional BooleanFieldValue booleanVal = 4;
+	optional DateFieldValue dateVal = 5;
+	optional DoubleFieldValue doubleVal = 6;
+	optional LongFieldValue longVal = 7;
+	optional MoneyFieldValue money = 8;
+	optional StringFieldValue stringVal = 9;
+	optional FitmentFieldValue fitment = 10;
+}
+
+message FindItemsRequest {
+}
+
+message FindItemsResponse {
+	repeated SearchRecord searchResultSet = 1;
+	required AckValueEnum.AckValue ack = 2;
+	optional ErrorMessage error = 3;
+	optional string version = 4;
+	optional sint64 dateInSec = 5; 
+}
+
+message FitmentFieldValue {
+	optional BooleanFieldValue fitmentMatch = 1;
+}
+
+message LongFieldValue {
+	optional int64 value = 1;
+}
+
+message Member {
+	optional string namespace = 1;
+	optional string name = 2;
+}
+
+message MoneyFieldValue {
+	optional double value = 1;
+	optional string currency = 2;
+}
+
+message SearchRecord {
+	optional Member field = 1;
+	optional FieldValue fieldValue = 2;
+}
+
+message SellerLogoFieldValue {
+	optional string imageUrl = 1;
+	optional sint32 imageType = 2;
+}
+
+message ShippingCostFieldValue {
+	optional double shipCost = 1;
+	optional double insuranceCost = 2;
+	optional int32 mailClass = 3;
+	optional int32 errorCode = 4;
+	optional double shipCostWithInsurance = 5;
+	optional int32 shippingZone = 6;
+}
+
+message StringFieldValue {
+	optional string value = 1;
+}
+
+message TraitFieldValue {
+	optional string logicalName = 1;
+	optional string displayName = 2;
+	optional string nameSpace = 3;
+	optional int32 index = 4;
+}

@@ -1,0 +1,3544 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="CartService"
+	targetNamespace="http://www.ebay.com/marketplace/checkout/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://www.ebay.com/marketplace/checkout/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<documentation></documentation>
+	<types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/checkout/v1/services"
+			xmlns:Q1="http://www.ebay.com/marketplace/buying/v2/services/types">
+			<!--
+				may not be needed <xs:import
+				namespace="http://www.ebay.com/marketplace/services"></xs:import>
+				<xs:import
+				namespace="http://www.ebay.com/marketplace/services"></xs:import>
+			-->
+            <xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether an error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								eBay successfully processed the request, and the business data is returned
+								in the response. Note that it is possible for a response to return
+								Success, but still not contain the expected data in the result.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								eBay encountered a fatal error while processing the request,
+								causing the request to fail. When a serious application-level error
+								occurs, the error is returned instead of the business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was successfully processed, but eBay encountered a non-fatal
+								error during processing. For best results, requests should return
+								without warnings. Inspect the warning details and resolve the problem
+								before resubmitting the request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								eBay successfully processed the request, but one or more non-fatal errors
+								occurred during processing. For best results, requests should return
+								without warning messages. Inspect the message details and resolve any
+								problems before resubmitting the request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error is a severe error (causing the request to fail) 
+								or an informational error (a warning) that should be communicated to the user. 
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Description of an error or warning that occurred when eBay processed the
+								request. Not returned if the ack value is Success.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The released version of this service that eBay uses to process the request. 
+								The version in use is normally the latest release version, 
+								as specified in the service documentation.							
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time when eBay processed the request.
+								This value is returned in GMT, the ISO 8601 date and time format (YYYY-
+								MM- DDTHH:MM:SS.SSSZ). See the &quot;dateTime&quot; type for information about the
+								time format, and for details on converting to and from the GMT time zone.
+							</xs:documentation>  
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of errors: Request errors, application 
+						errors, and system errors.						
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						A container for error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the particular error condition that
+								occurred. Your application can use error codes as identifiers in your
+								customized error-handling algorithms.
+							</xs:documentation>
+							<xs:appinfo> 							
+							   	<default/>
+							   	<min/>
+							   	<max/>							   								
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain in which the error occurred.
+								&lt;dl&gt;
+								&lt;dt&gt;
+									&lt;strong&gt;domain values:&lt;/strong&gt;
+								&lt;/dt&gt;
+								&lt;dt&gt;
+									Marketplace
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									A business or validation error occurred in the service.
+								&lt;/dd&gt;
+								&lt;dt&gt;
+									SOA 
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									An exception occurred in the SOA (Service Oriented Architecture)
+									framework.
+								&lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain in which the error occurred:
+								&lt;dl&gt;
+								&lt;dt&gt;
+									&lt;strong&gt;subdomain values:&lt;/strong&gt;
+								&lt;/dt&gt;
+								&lt;dt&gt;
+									Finding
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									The error is specific to the Finding service.
+								&lt;/dd&gt;
+								&lt;dt&gt;
+									MarketplaceCommon
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									The error is common to all Marketplace services.
+								&lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the reported problem is fatal (an error) or is less-
+								severe (a warning). Review the error message details for information on
+								the cause.
+								&lt;br&gt;&lt;br&gt;
+								If the request fails and the application is the source of the error (for
+								example, a required element is missing), update the application before
+								you retry the request. If the problem is due to incorrect user data,
+								alert the end-user to the problem and provide the means for them to
+								correct the data. 
+								&lt;br&gt;&lt;br&gt;
+								If the source of the problem is in the service, you can retry the request
+								a reasonable number of times (try the request twice).
+								After the problem is resolved, you can resend the request in its original
+								form.
+								&lt;br&gt;&lt;br&gt;
+								If a warning occurs, warning information is returned in addition to the
+								business data. Normally, you do not need to resend the request (as the
+								original request was successful). 
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors: Request errors, application 
+								errors, and system errors.
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition that caused the error.
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception associated with an error.
+							</xs:documentation>
+							<xs:appinfo> 
+								<ListBasedOn/>
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+						type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Various warning and error messages that return one or more variables that 
+								contain contextual information about the error. This is often the 
+								field or value that triggered the error.
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<AllCalls/>
+									<Details>outputSelector: none</Details>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information regarding an error or warning that occurred when eBay processed
+						the request. Not returned when the ack value is Success. Run-time errors are
+						not reported here, but are instead reported as part of a SOAP fault.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								A container for error details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual data associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a fatal error (causing the request to fail)
+						or a less severe error (a warning) that should be communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for future use.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+							<xs:appinfo> 							
+							   	<default/>
+							   	<min/>
+							   	<max/>							   								
+								<CallInfo>
+									<NoCalls/>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<NoCalls/>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="contentType" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<NoCalls/>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+							<xs:appinfo> 
+								<CallInfo>
+									<NoCalls/>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<!--
+
+						processContents="lax"/>
+					-->
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseCartRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for the request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="clientContext" type="tns:ClientContextType"
+								maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Specifies context information for the service call.
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType abstract="true" name="BaseCartResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for the response container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="createCartRequest" type="tns:CreateCartRequest" />
+			<xs:complexType name="CreateCartRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Creates the cart with multiple items from different domains.
+						The input is a list of items and an optional address (which can be the shipping address).
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="lineItemInput" type="tns:LineItemInput">
+								<xs:annotation>
+									<xs:documentation>
+										The details of the line item.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="shippingAddress"
+								type="tns:Address">
+								<xs:annotation>
+									<xs:documentation>
+										Details of the shipping address.
+									</xs:documentation>									
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="createCartResponse" type="tns:CreateCartResponse" />
+
+			<xs:complexType name="CreateCartResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the cart items, and contains the entire Cart structure and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartResponse"
+								type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+
+			<xs:element name="getCartRequest" type="tns:GetCartRequest" />
+
+			<xs:complexType name="GetCartRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Obtains the cart and cart item details.
+						The input is a cart identifier.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:element name="getCartResponse" type="tns:GetCartResponse" />
+
+			<xs:complexType name="GetCartResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the cart and cart item details, and contains the entire Cart structure and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartResponse"
+								type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="updateCartRequest" type="tns:UpdateCartRequest" />
+
+			<xs:complexType name="UpdateCartRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Aggregates multiple user actions on cart pages into one service call and 
+						apply all actions to an existing cart. This request takes several sub-requests within itself.
+						The supported actions are:
+						(a) Remove an item
+						(b) Set the quantity for an item
+						(c) Set a shipping method for an item
+						(d) Set notes for an item
+						(e) Apply incentives
+						(f) Validate items and re-check cart line items against the primary data sources
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+
+
+							<xs:element maxOccurs="1" minOccurs="0" name="ItemToRemove"
+								type="tns:RemoveItemInput">
+								<xs:annotation>
+									<xs:documentation>
+										Details of the line item to remove.
+									</xs:documentation>									
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="Quantity"
+								type="tns:QuantityInput">
+								<xs:annotation>
+									<xs:documentation>
+										Details of the quantity.
+									</xs:documentation>									
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="ShippingService"
+								type="tns:ShippingServiceInput">
+								<xs:annotation>
+									<xs:documentation>
+										The shipping service details for an item.
+									</xs:documentation>									
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="NoteToSeller"
+								type="tns:NoteToSellerInput">
+								<xs:annotation>
+									<xs:documentation>
+										A note that the buyer can request a line item from the seller.
+									</xs:documentation>									
+								</xs:annotation>
+							</xs:element>
+
+
+							<xs:element maxOccurs="1" minOccurs="0" name="ApplyIncentive"
+								type="tns:ApplyIncentiveInput">
+								<xs:annotation>
+									<xs:documentation>
+										The incentive details to be applied or removed.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="0" name="ValidateItem"
+								type="tns:ValidateItemInput">
+								<xs:annotation>
+									<xs:documentation>
+										The details to validate an item.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="updateCartResponse" type="tns:UpdateCartResponse" />
+
+
+			<xs:complexType name="UpdateCartResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the updated cart items, and contains the entire Cart structure with updates applied and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="updateCartResponse" type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="AddItemInput">
+				<xs:annotation>
+					<xs:documentation>
+						The details to add to the line item.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="lineItemIdentifier"
+						type="tns:Identifier">
+						<xs:annotation>
+								<xs:documentation>
+									The ID of the line item.
+								</xs:documentation>							
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+
+			<xs:element name="setShippingAddressRequest" type="tns:SetShippingAddressRequest" />
+
+
+			<xs:complexType name="SetShippingAddressRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Specifies an address to which all items are to be shipped, and takes the cart identifier and the entire address which is broken down into component parts.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="address"
+								type="tns:Address">
+								<xs:annotation>
+									<xs:documentation>
+										Details of an address.
+									</xs:documentation>									
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:element name="setShippingAddressResponse" type="tns:SetShippingAddressResponse" />
+
+			<xs:complexType name="SetShippingAddressResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the updated shipping address for the cart, and contains the entire Cart structure and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="1" name="shippingResponse"
+								type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+
+			<xs:complexType name="RemoveItemInput">
+				<xs:annotation>
+					<xs:documentation>
+						The details to remove from the line item.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingAddressInput">
+				<xs:annotation>
+					<xs:documentation>
+						The details of the shipping address.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="address"
+						type="tns:Address">
+						<xs:annotation>
+							<xs:documentation>
+								Details of an address.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="QuantityInput">
+				<xs:annotation>
+					<xs:documentation>
+						Details of the quantity.
+					</xs:documentation>									
+				</xs:annotation>
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="itemQuantity" type="tns:ItemQuantity">
+						<xs:annotation>
+							<xs:documentation>
+								Details of the line item quantity.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Identifier">
+				<xs:annotation>
+					<xs:documentation>
+						The identifer details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="domain"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the owning Inventory system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="baseIdentifier"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the absolute minimum identifier for the Inventory service.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="extendedIdentifier"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Accommodates the various pieces needed by the owning Inventory service 
+								to identify this item in whatever format is understood by that particular domain.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingServiceInput">
+				<xs:annotation>
+					<xs:documentation>
+						The shipping service details for an item.
+					</xs:documentation>									
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="itemShippingService" type="tns:ItemShippingService">
+						<xs:annotation>
+							<xs:documentation>
+								The shipping service details for an item.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="NoteToSellerInput">
+				<xs:annotation>
+					<xs:documentation>
+						A note that the buyer can request a line item from a seller.
+					</xs:documentation>									
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="itemNote"
+						type="tns:ItemNote">
+						<xs:annotation>
+							<xs:documentation>
+								A note that a buyer can use to request a line item from a seller.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ApplyIncentiveInput">
+				<xs:annotation>
+					<xs:documentation>
+						The incentive details to be applied or removed.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="incentiveCodesToApply" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The incentive code to be applied.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="incentiveCodesToRemove" type="xs:string" >
+						<xs:annotation>
+							<xs:documentation>
+								The incentive code to be removed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RemoveIncentiveInput">
+				<xs:sequence>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="incentiveCode" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The incentive code to be removed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="initPaymentRequest" type="tns:InitPaymentRequest" />
+
+			<xs:complexType name="InitPaymentRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Starts a session with the Payment service. 
+						This request takes several input parameters.
+						The request parameters are: 
+						(a) Cart Identifier
+						(b) Billing address broken down into component parts
+						(c) Return URL to navigate back
+						(d) Error URL to redirect to in case of an error
+						(e) Payment method
+						(f) Optional Payment method parameters
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="billingAddress" type="tns:Address"
+								maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										The billing address of the cart.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="returnURL" type="xs:string">
+
+								<xs:annotation>
+									<xs:documentation>
+										The return redirect URL for the Payment.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="errorURL" type="xs:string">
+
+								<xs:annotation>
+									<xs:documentation>
+										The redirect URL in case an error occurs during request processing.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="paymentMethod"
+								type="xs:string">
+									<xs:annotation>
+										<xs:documentation>
+											Indicates the chosen payment method.
+										</xs:documentation>
+									</xs:annotation>
+							</xs:element>
+
+
+
+
+
+
+
+
+
+
+
+							<xs:element name="paymentMethodParameters" type="tns:PaymentMethodParameterList"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:element name="initPaymentResponse" type="tns:InitPaymentResponse" />			
+
+			<xs:complexType name="InitPaymentResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows payment details for the cart, and contains the return payment URL, payment token, or/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="0" name="returnURL" type="xs:string">
+
+								<xs:annotation>
+									<xs:documentation>
+										The return redirect URL to obtain the result of a user session on payments.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="paymentToken" type="xs:string"
+								maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										The generated token for the payment.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationErrors" type="tns:ErrorMessage"
+								minOccurs="0">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<xs:complexType name="AddItemOutput">
+				<xs:sequence>
+					<xs:element name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="status" type="xs:boolean" />
+					<xs:element name="errors" type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								A container for error details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RemoveItemOutput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult" />
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingAddressOutput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="operationStatus"
+						type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="QuantityOutput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Indicates the currency abbreviation associated with the amount.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+			<xs:element name="buyRequest" type="tns:BuyRequest">
+			</xs:element>
+
+
+			<xs:complexType name="BuyRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Purchases and pays for items in a cart.
+						The input is the cart identifier.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+
+						<xs:sequence>
+
+							<xs:element name="cartIdentifier" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="buyResponse" type="tns:BuyResponse">
+			</xs:element>
+
+			<xs:complexType name="BuyResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the purchased cart, and contains 
+						the entire Cart structure and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+
+						<xs:sequence>
+
+							<xs:element name="redirectRequired" type="xs:boolean"
+								maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Tells the application it is expected to redirect to another URL 
+										after successful checkout. For example, PayPal allows 
+										applications to redirect to a PayPal Success/Register page 
+										after PayPal guest-checkout for user acquisition.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartResponse"
+								type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="Incentive">
+				<xs:annotation>
+					<xs:documentation>
+						An incentive to be applied at individual item, item group, or cart level.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="BuyingCommonTypeLibraryV2"
+							namespace="http://www.ebay.com/marketplace/buying/v2/services/types" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="incentiveCode"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The Incentive Code.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="incentiveType"
+						type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the incentive.
+							</xs:documentation>
+							<xs:appinfo>
+								<ListBasedOn>
+									IncentiveTypeList
+								</ListBasedOn>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="redeemedAmount"
+						type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								The Amount redeemed in the Incentive.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="incentiveMessage"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The Message associated with the
+								Incentive.
+								Returned where ever it is
+								applicable.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ValidateItemInput">
+				<xs:annotation>
+					<xs:documentation>
+						The details to validate for an item.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ShippingServiceInfo">
+				<xs:annotation>
+					<xs:documentation>
+						Details of the shipping service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="shippingServiceIdentifier" type="xs:string"
+						maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								An identifier for the shipping service.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="shippingServiceCarrier" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The carrier name for the shipping service.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingServiceName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name to be displayed for this
+								shipping
+								service.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="shippingServiceToken" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The token for the shipping service.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="shippingCost"
+						type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								The shipping cost associated with
+								shipping a single item with this
+								shipping service.
+							</xs:documentation>							
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="handlingCost"
+						type="tns:Amount"> 
+						<xs:annotation>
+							<xs:documentation>
+								The handling cost associated with
+								shipping a single item with this
+								shipping service.
+							</xs:documentation>							
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="shippingInsuranceCost"
+						type="tns:CartServiceInsuranceCost">
+						<xs:annotation>
+							<xs:documentation>
+								The insurance cost associated with
+								shipping a
+								single item with this
+								shipping service. Exception: for
+								GetItemShipping, this is proportional to
+								QuantitySold. If the
+								item has not yet
+								been sold, insurance information cannot
+								be
+								calculated and the value is 0.00. For
+								calculating shipping only.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="deliveryDateMin" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>
+								The minimum guaranteed number of days 
+								that a
+								shipping carrier takes to ship an
+								item (not including the time it
+								takes
+								the seller to deliver the item to the
+								shipping carrier).
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="deliveryDateMax" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>
+								The maximum guaranteed number of days
+								that a 
+								shipping carrier takes to ship
+								an item (not including the
+								time it takes
+								the seller to deliver the item to the
+								shipping
+								carrier).
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="LineItem">
+				<xs:annotation>
+					<xs:documentation>
+						An entity or line item.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item
+								in the cart.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="lineItemIdentifier" type="tns:Identifier">
+						<xs:annotation>
+							<xs:documentation>
+								The ID of the line item.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0" name="title"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The entity's title on the eBay web site.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="quantity" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the quantity of the entity or
+								an item.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="price"
+						type="tns:CartServicePrice">
+						<xs:annotation>
+							<xs:documentation>
+								The price of the item. For Immediate
+								Payment listings, this is the price at
+								the time it was added to the cart (it is
+								possible for the item price to change in
+								the time it takes for the user to move
+								from initiating a &quot;buy&quot;
+								request, and to the start and end of the
+								checkout process).
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="fullPrice" type="tns:Amount"
+						maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Holds the entire price of the line item,
+								usually the item cost. In case of items
+								with a deposit, this element denotes the
+								price of the item, but not the price
+								that the buyer will pay during checking
+								out the item.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="availableShippingService" type="tns:ShippingServiceInfo">
+						<xs:annotation>
+							<xs:documentation>
+								A shipping service offered on the eBay
+								web site by the seller for this item.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="selectedShippingService" type="tns:ShippingServiceInfo">
+						<xs:annotation>
+							<xs:documentation>
+								Details of the shipping service.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lineItemPurchaseStatus" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The Status of the Purchase of the
+								LineItem in the eBay System.
+							</xs:documentation>
+							<xs:appinfo>
+								<ListBasedOn>
+									PurchaseStatusList
+								</ListBasedOn>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					
+					<xs:element maxOccurs="1" minOccurs="0" name="tax"
+						type="tns:SalesTax">
+						<xs:annotation>
+							<xs:documentation>
+								(US only) The amount of sales tax,
+								calculated for a transaction based on
+								the SalesTaxPercent and pricing
+								information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="fees" type="tns:Fee"
+						maxOccurs="unbounded" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The textual description of the fee
+								applicable on a line item (such as the
+								EcoRecycleFee on a computer monitor in
+								California, USA).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+                    <xs:element name="adjustments" type="tns:Adjustment" 
+                    	maxOccurs="unbounded" minOccurs="0">
+                    	<xs:annotation>
+							<xs:documentation>
+								The price adjustments for this line item
+								(e.g. seller-specified discounts).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0"
+						name="incentive" type="tns:Incentive">
+						<xs:annotation>
+							<xs:documentation>
+								An incentive to be applied on an
+								individual item, item group, or cart
+								level.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="availablePaymentMethod" type="tns:PaymentMethodInfo">
+						<xs:annotation>
+							<xs:documentation>
+								The payment method information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lineItemPaidStatus" type="xs:token">
+
+						<xs:annotation>
+							<xs:documentation>
+								The Payment status of the Package in the
+								eBay System.
+							</xs:documentation>
+							<xs:appinfo>
+								<ListBasedOn>
+									PaymentStatusList
+								</ListBasedOn>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="problemStatus" type="tns:ProblemStatus">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates a problem with the calculated
+								amounts (shipping, taxes, other fees, or
+								incentives) on a line item to the
+								application. For example, if the Cart
+								Service cannot get shipping costs for a
+								line item, this status will be set to a
+								ShippingNotCalculated.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="note" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								A note that the buyer can send to the
+								seller for a particular line item. The
+								note can contain special instructions
+								from the buyer to the item seller about
+								the item.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="purchaseId" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The identifier that denotes the key
+								created after the item inventory is
+								given to the buyer after checkout. For
+								uncommitted eBay items, this can be the
+								transaction id.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Group">
+				<xs:annotation>
+					<xs:documentation>
+						A collection of items.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartGroupIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A group identifier for the collection of items.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="lineItem"
+						type="tns:LineItem">
+						<xs:annotation>
+							<xs:documentation>
+								An item in the package.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="seller"
+						type="tns:User">
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="incentive"
+						type="tns:Incentive">
+						<xs:annotation>
+							<xs:documentation>
+								An incentive to be applied on an individual item, item group, or cart level.
+							</xs:documentation>
+						</xs:annotation>					
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0" name="totalSummary"
+						type="tns:TotalSummary">
+						<xs:annotation>
+							<xs:documentation>Total summary.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="problemStatus" type="tns:ProblemStatus">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates a problem with the calculated 
+								amounts (shipping, taxes, other fees, or incentives) 
+								on a line item to the application. For example, if the 
+								Cart Service cannot get shipping costs for a line item, this 
+								status is set to ShippingNotCalculated. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0" name="paymentStatus"
+						type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The Payment status of the Package in the
+								eBay
+								System.
+							</xs:documentation>
+							<xs:appinfo>
+								<ListBasedOn>
+									PaymentStatusList
+								</ListBasedOn>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element name="purchaseId" type="xs:string"
+						maxOccurs="1" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TotalSummary">
+				<xs:annotation>
+					<xs:documentation>Totals summary.</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="priceSubtotal"
+						type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								Subtotal of all the item prices in this
+								seller's order.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="shippingSubtotal"
+						type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								Subtotal of the shipping and handling
+								charges for this order.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="insuranceSubtotal"
+						type="tns:Amount" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Subtotal of insurance charges for this
+								order.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="taxSubtotal"
+						type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								Tax for this seller's order.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="otherFeesSubtotal"
+						type="tns:Amount" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The total of the amounts for the fees
+								that apply to the line items (for
+								example, fees such as the Eco Recycle
+								Fee in California, USA).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+                    <xs:element name="adjustmentsSubtotal" type="tns:Amount" 
+                    	maxOccurs="1" minOccurs="0">
+                    	<xs:annotation>
+							<xs:documentation>
+								The total of the adjustment amounts 
+								(such as seller-specified discounts) 
+								that apply to the line items.  
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+                    <xs:element maxOccurs="1" minOccurs="0"
+						name="handlingSubtotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								The total of the amounts for the
+								handling cost for a collection of items
+								as specified by the shipping engine
+								rules.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="incentiveTotal" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								The total of the amount for the all the
+								incentives applied on the line items.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element name="savingsAmount" type="tns:Amount"
+						maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The total of the amounts that the buyer
+								saved on a collection of items as
+								specified by the shipping engine rules.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="total" type="tns:Amount"
+						maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The total amount value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="User">
+				<xs:annotation>
+					<xs:documentation>
+						Representation of the User object.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="userIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The identifier for a user.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingServiceOutput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="NoteToSellerOutput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="AddIncentiveOutput">
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="incentiveCode"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RemoveIncentiveOuput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="incentiveCode"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ValidateItemOutput">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="commandResult"
+						type="tns:CommandResult" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Cart">
+				<xs:annotation>
+					<xs:documentation>A cart structure.</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The ID of the cart.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="buyer"
+						type="tns:User">
+						<xs:annotation>
+							<xs:documentation>
+								Details about the buyer.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element name="address" type="tns:Address" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Details of an address.
+							</xs:documentation>									
+						</xs:annotation>	
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="incentive"
+						type="tns:Incentive">
+						<xs:annotation>
+							<xs:documentation>
+								An incentive to be applied on an individual item, item group, or cart level.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="group"
+						type="tns:Group">
+						<xs:annotation>
+							<xs:documentation>
+								A collection of items.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="problemStatus" type="tns:ProblemStatus">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates a problem with the calculated 
+								amounts (shipping, taxes, other fees, or incentives) 
+								on a line item to the application. For example, if the 
+								Cart Service cannot get shipping costs for a line item, this 
+								status is set to ShippingNotCalculated. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="totalSummary"
+						type="tns:TotalSummary" />
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="PaymentMethodInfo">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="paymentMethodName"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The payment method information.
+							</xs:documentation>	
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="CommandResult">
+				<xs:sequence>
+					<xs:element name="status" type="xs:boolean" />
+					<xs:element name="errors" type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								A container for error details.
+							</xs:documentation>
+							<xs:appinfo>
+								<typeLibrarySource library="SOACommonTypeLibrary"
+									namespace="http://www.ebay.com/marketplace/services" />
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="TotalSummaryCollection">
+				<xs:sequence>
+					<xs:element name="currency" type="xs:string" />
+					<xs:element name="totalSummary" type="tns:TotalSummary" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="addItemsRequest" type="tns:AddItemsRequest" />
+
+			<xs:complexType name="AddItemsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Adds multiple items from different domains to an existing cart.
+						The input is a list of line items.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="lineItemInput" type="tns:LineItemInput">
+								<xs:annotation>
+									<xs:documentation>
+										The details of the line item.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="addItemsResponse" type="tns:AddItemsResponse" />
+
+			<xs:complexType name="AddItemsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the cart and cart item details, and contains the entire Cart structure and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="addItemResponse"
+								type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ItemQuantity">
+				<xs:annotation>
+					<xs:documentation>
+						Details of the line item quantity.
+					</xs:documentation>									
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="quantity"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The requested quantity for the item.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ItemShippingService">
+				<xs:annotation>
+					<xs:documentation>
+						The shipping service details for an item.
+					</xs:documentation>									
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingServiceIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The identifier for the shipping service.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ItemNote">
+				<xs:annotation>
+					<xs:documentation>
+						A note that the buyer can send to the seller for a particular line item.
+					</xs:documentation>									
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="cartLineItemIdentifier" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique identifier for the line item in the cart.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="note"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						 A note for an item.
+							</xs:documentation>									
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="CartServiceResponse">
+				<xs:annotation>
+					<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="cart"
+						type="tns:Cart">
+						<xs:annotation>
+							<xs:documentation>A cart.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="operationErrors"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information regarding an error or warning that occurred when eBay processed
+								the request. Not returned when the ack value is Success. Run-time errors are
+								not reported here, but are instead reported as part of a SOAP fault.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ReceiptSummary">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="receiptId"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="totalSummary"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="vendorName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="Date"
+						type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="vendorAddress"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:element name="initPaymentResultRequest" type="tns:InitPaymentResultRequest">
+			</xs:element>
+
+			<xs:complexType name="InitPaymentResultRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Obtains the results of a buyer session on payments after 
+						specifying the buyer login for a payment.
+						The input is a cart identifier.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="cartIdentifier"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The ID of the cart.
+									</xs:documentation>							
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="data" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="initPaymentResultResponse" type="tns:InitPaymentResultResponse">
+			</xs:element>
+
+			<xs:complexType name="InitPaymentResultResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the cart and cart item details, and contains the entire Cart structure and/or errors.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCartResponse">
+						<xs:sequence>
+							<xs:element name="cartResponse" type="tns:CartServiceResponse">
+								<xs:annotation>
+									<xs:documentation>An entire Cart structure and/or errors.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="ProblemStatus">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="status"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates a problem with the calculated 
+								amounts (shipping, taxes, other fees, or incentives) 
+								on a line item to the application. For example, if the 
+								Cart Service cannot get shipping costs for a line item, this 
+								status will be set to ShippingNotCalculated. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="summary"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="details"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="systemId"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="LineItemInput">
+				<xs:annotation>
+					<xs:documentation>
+						The details of the line item.
+					</xs:documentation>							
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="lineItemIdentifier"
+						 type="tns:Identifier">
+						<xs:annotation>
+								<xs:documentation>
+									The ID of the line item.
+								</xs:documentation>							
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="requestedQuantity"
+						 type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The quantity for the line item.
+							</xs:documentation>	
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+			<xs:simpleType name="PaymentStatusList">
+				<xs:annotation>
+					<xs:documentation>
+						The Payment status of the Group. 
+		</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="PaymentRefunded">
+						<xs:annotation>
+							<xs:documentation>
+								The Payment was refunded for the Package.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PaymentSuccessful">
+						<xs:annotation>
+							<xs:documentation>
+								The Payment was Successful for the Package.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NotPaid">
+						<xs:annotation>
+							<xs:documentation>
+								The Payment was not done for the Package.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PaymentPending">
+						<xs:annotation>
+							<xs:documentation>
+								The Payment is pending for the Package.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+
+
+
+
+
+
+			<xs:simpleType name="PurchaseStatusList">
+				<xs:annotation>
+					<xs:documentation>
+						The Status of the Purchase of the LineItem in the eBay System.
+						Returned only if Purchase has been initiated.
+		</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="LineItemPurchaseInitiated">
+						<xs:annotation>
+							<xs:documentation>
+								The Purchase of the LineItem has not been Initiated.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LineItemPurchasePending">
+						<xs:annotation>
+							<xs:documentation>
+								The Purchase of the LineItem is in a pending state.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LineItemPurchaseSuccessful">
+						<xs:annotation>
+							<xs:documentation>
+								The Purchase of the LineItem was Successful.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LineItemPurchaseFailed">
+						<xs:annotation>
+							<xs:documentation>
+								The Purchase of the LineItem failed.
+				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="getVersionRequest" 
+				type="tns:GetVersionRequest" />
+
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Returns the current version of the service. This simple call can be used to 
+						monitor the service for availability. This call has no input parameters and 
+						the response contains only the standard output fields.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="getVersionResponse" 
+				type="tns:GetVersionResponse" />
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response container for the getVersion call. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="Address">
+				<xs:annotation>
+					<xs:documentation>
+						Details of an address.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="BuyingCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/buying/v1/services/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name associated with address, if such
+								exists.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="street1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Street details, line 1.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="street2" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Street details, line 2, if any.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="city" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>City</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="county" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>County</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="stateOrProvince" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								State or province. Returned only if
+								applicable.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="country" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>Country</xs:documentation>
+							<xs:appinfo>
+								<ListBasedOn>
+									CountryCodeList
+						</ListBasedOn>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="postalCode" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Zip code or postal code.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="phone" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								User's primary phone number.
+								This may return a value of &quot;Invalid Request&quot; if you are
+								not authorized to see a user's phone number.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SalesTax">
+				<xs:annotation>
+					<xs:documentation>
+						(US only) The amount of sales tax, calculated
+						for a transaction based on the SalesTaxPercent
+						and pricing information.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="BuyingCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/buying/v1/services/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="salesTaxAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								The amount of sales tax, calculated for
+								a transaction based on the
+								SalesTaxPercent and pricing information.
+								(US only)
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="salesTaxPercent" type="xs:float">
+						<xs:annotation>
+							<xs:documentation>
+								Percent of an item's price to be charged
+								as the sales tax for the transaction.
+								The input value is stored with a
+								precision of 3 digits after the decimal
+								point (##.###).
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="salesTaxState" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								State or jurisdiction for which the
+								sales tax is being collected. Only
+								returned if the seller specified a
+								value.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="shippingIncludedInTax"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Whether shipping costs were part of the
+								base amount that was taxed. Flat or
+								calculated shipping. (US only)
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>getCheckoutCart</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="LandingPageType">
+				<xs:annotation>
+					<xs:documentation>Payment processor landing page for which the
+						service should return a redirection URL.</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Billing">
+						<xs:annotation>
+							<xs:documentation>Billing landing page.</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Login">
+						<xs:annotation>
+							<xs:documentation>Login landing page.</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="PaymentMethodParameterList">
+				<xs:annotation>
+					<xs:documentation>
+						The details of additional payment method parameters.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="parameter" type="tns:PaymentMethodParameter"
+						maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:complexType name="PaymentMethodParameter">
+				<xs:annotation>
+					<xs:documentation>
+						The details of additional payment method parameter.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" use="required"
+							type="tns:PaymentMethodParameterName">
+
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="PaymentMethodParameterName">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="landingPage"></xs:enumeration>
+					<xs:enumeration value="trackingURL"></xs:enumeration>
+					<xs:enumeration value="giropayCancelURL"></xs:enumeration>
+					<xs:enumeration value="giropaySuccessURL"></xs:enumeration>
+					<xs:enumeration value="bankTransactionPendingURL"></xs:enumeration>
+					<xs:enumeration value="logoImageURL"></xs:enumeration>
+					<xs:enumeration value="brandName"></xs:enumeration>
+					<xs:enumeration value="payflowColor"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="CartServicePrice">
+				<xs:annotation>
+					<xs:documentation>
+						The price of the item. For Immediate
+						Payment
+						listings, this is the price at
+						the time it was added to the cart
+						(it is
+						possible for the item price to change in
+						the time it takes
+						for the user to initiate a &quot;buy&quot;, to
+						beginning and completing the checkout
+						process).
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getCheckoutCart</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="tns:Amount">
+						<xs:attribute name="type" type="tns:CartServicePriceAttribute">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="CartServicePriceAttribute">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="deposit"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="CartServiceInsuranceCost">
+				<xs:annotation>
+					<xs:documentation>
+						The insurance cost associated with
+						shipping a
+						single item with this
+						shipping service. Exception: For
+						GetItemShipping, this is proportional to
+						QuantitySold. If the
+						item has not yet
+						been sold, insurance information cannot
+						be
+						calculated and the value is 0.00. For
+						calculated shipping only.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>getCheckoutCart</CallName>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="tns:Amount">
+						<xs:attribute name="type"
+							type="tns:CartServiceInsuranceCostTypeAttribute">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="CartServiceInsuranceCostTypeAttribute">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Optional"></xs:enumeration>
+					<xs:enumeration value="Required"></xs:enumeration>
+					<xs:enumeration value="NotOffered"></xs:enumeration>
+					<xs:enumeration value="IncludedInShippingHandling"></xs:enumeration>
+					<xs:enumeration value="NotOfferedOnSite"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Fee">
+				<xs:sequence>
+					<xs:element name="feeDescription" type="xs:string"
+						maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The textual description of the fee applicable on a 
+								line item (such as the EcoRecycleFee on a computer 
+								monitor in California, USA).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="feeAmount" type="tns:Amount"
+						maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The fee amount for the line item.
+							</xs:documentation>
+						</xs:annotation>	
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Adjustment">
+				<xs:sequence>
+					<xs:element name="adjustmentDescription" type="xs:string"
+						maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The textual description of the adjustment for a 
+								line item (such as a seller-specified discount).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="adjustmentAmount" type="tns:Amount"
+						maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The adjustment amount for the line item.
+							</xs:documentation>
+						</xs:annotation>	
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UserAgentOperatingContextType">
+				<xs:annotation>
+					<xs:documentation>
+						The list of HTTP request and response operating parameters sent as
+						HTTP
+						header fields.
+						The parameters define characteristics of:
+						&lt;br&gt;&lt;br&gt;
+						&lt;ul&gt;
+							&lt;li&gt;The content that a user agent is willing to accept in the HTTP
+								response, such as, acceptable language or character set.&lt;/li&gt;
+							&lt;li&gt;User agent, such as, vendor, version, or OS.&lt;/li&gt;
+							&lt;li&gt;HTTP request such as, length, or the date when the request was sent.&lt;/li&gt;
+						&lt;/ul&gt;
+						User agent is the actor that sends the HTTP request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="acceptContentType"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Content-Types that are acceptable for the response.
+								Example: text/plain;
+								Required element with userAgent element
+								(assumes that these two elements
+								are always expected from the HTTP
+								request).
+	        			</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="acceptCharset"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Character sets that are acceptable for the 
+								response. Example: utf-8
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="acceptEncoding"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Acceptable encodings for the response. Example:
+								compress | gzip | identity.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="acceptLanguage"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Acceptable languages for the response. Example:
+								en-US
+	        			</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="userAgent"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Vendor, version, or OS of the user agent
+								implementation. Example: Mozilla/5.0
+								(Linux; X11)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="host"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The domain name of the server. Example:
+								my.ebay.com
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="referrer"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The address of the previous web page from which
+								a link to the
+								currently requested page was followed. Example:
+								http://signin.ebay.com/ws/eBayISAPI.dll
+	        			</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ConnectionPropertiesType">
+				<xs:annotation>
+					<xs:documentation>
+						List of properties describing the connection used to
+						send a request.
+						Typically refers to an end user making an HTTP
+						request using an
+						user
+						agent (such as browser or standalone app) on a
+						device.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="IPAddress"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The IP address of an end user machine making the request.
+							</xs:documentation>
+						</xs:annotation>	
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="XFF" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The X-Forwarded-For (XFF) is an industry
+								standard for identifying
+								the
+								originating IP address of a device
+								connecting through an HTTP
+								proxy. The XFF is passed as part of the HTTP
+								header. The value is a
+								comma+space separated list of IP
+								addresses, the left-most being
+								the farthest downstream client.
+								Each successive proxy 
+								passed to the request adds the IP
+								address from which it received the
+								request. For example: client1,
+								proxy1, proxy2
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="carrierCode"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Vendor providing the connection � typically
+								provided for wireless
+								devices. For example: att, verizon
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="countryCode"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Country where the request was made from. 
+								Typically provided for
+								connection with wireless devices.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DeviceType">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						The device is a computer, mobile, or any computer
+						capable of
+						running a user agent like a browser or standalone
+						app. The device makes
+						requests to eBay marketplace applications typically
+						over HTTP(s)
+						connection. Unique device IDs generated by eBay and
+						associated with
+						the device are called device keys (previously known
+						as machine group
+						ids). A list of device properties (previously known
+						as machine tags)
+						can be used to uniquely identify the device.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="deviceKey" minOccurs="0" maxOccurs="1"
+						type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Unique device ID generated by eBay and
+						associated with
+						the device.
+					</xs:documentation>
+				</xs:annotation>
+					</xs:element>
+					<xs:element name="deviceKeyCreationTimestamp" minOccurs="0"
+						maxOccurs="1" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>
+						This value represents the creation date and time for the device key.
+					</xs:documentation>
+				</xs:annotation>
+					</xs:element>
+					<xs:element name="deviceProperty" minOccurs="0"
+						maxOccurs="unbounded" type="tns:DevicePropertyType">
+						<xs:annotation>
+							<xs:appinfo />
+							<xs:documentation>
+								The property describes the device where a request
+								was made from.
+								A device typically refers to a device that an end user uses to
+								run a user
+								agent like a browser or standalone app. The device accesses
+								capabilities
+								offered remotely by capability providers (like eBay
+								apps/services). A property can be generated by a capability provider
+								using a device tagging mechanism (machine tag) or can be a genuine
+								property of the device systems (like the CPU speed, MAC address, or
+								mobile UUID). The set of such properties can be used to uniquely
+								identify the device. Such unique identifiers are called device keys
+								(previously known as machine group ids).
+					    	</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DevicePropertyType">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						The property describes the device from which a request
+						was made.
+						A device typically refers to the device that an end user uses to
+						run a user agent like a browser or standalone app to access the
+						capabilities that are 
+						offered remotely by capability providers (like eBay
+						apps/services). A property can be generated by a capability provider
+						using a device tagging mechanism (machine tag) or can be a genuine
+						property of the device systems (like the CPU speed, MAC address, or
+						mobile UUID). The set of such properties can be used to uniquely
+						identify the device. Such unique identifiers are called device keys
+						(previously known as machine group ids).
+			    	</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="propertyName" maxOccurs="1" minOccurs="0"
+						type="tns:DevicePropertyNameType">
+						<xs:annotation>
+							<xs:documentation>
+								Device property generated by a tagging
+								mechanism and stored on the end
+								user's device using a flash cookie.
+								Previously known as a machine tag.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="propertyValue" maxOccurs="1"
+						minOccurs="0" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="DevicePropertyNameType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="FLASH">
+						<xs:annotation>
+							<xs:documentation>
+								Device property generated by a tagging
+								mechanism and stored on the end
+								user's device using a flash cookie.
+								Previously known as a machine tag.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="HTTP">
+						<xs:annotation>
+							<xs:documentation>
+								Device property generated by a tagging
+								mechanism and stored on the end
+								user's device using a flash cookie.
+								Previously known as a machine tag.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="EGUID">
+						<xs:annotation>
+							<xs:documentation>
+								Hashed device property representing
+								the manufacturer-supplied UUID
+								associated with the device. Typically
+								available for mobile
+								devices.
+			        		</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		
+			<xs:complexType name="ClientContextType">
+				<xs:annotation>
+					<xs:documentation>
+						Specify context information for the service call.
+					</xs:documentation>					
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="userAgentOperatingContext"
+						type="tns:UserAgentOperatingContextType" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The list of HTTP request and response operating parameters sent as
+								HTTP
+								header fields.
+								The parameters define characteristics of:
+								&lt;br&gt;&lt;br&gt;
+								&lt;ul&gt;
+									&lt;li&gt;The content that a user agent is willing to accept in the HTTP
+										response, such as the acceptable language or the character set.&lt;/li&gt;
+									&lt;li&gt;User agent, such as  a vendor, version, OS.&lt;/li&gt;
+									&lt;li&gt;HTTP request, such as the length, or the date when the request was sent.&lt;/li&gt;
+								&lt;/ul&gt;
+								User agent is an actor that sends the HTTP request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="connectionProperties" type="tns:ConnectionPropertiesType" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								A list of properties that describe the connection that is used to
+								send a request.
+								Typically refers to an end user making an HTTP
+								request using a
+								user
+								agent (such as a browser or standalone app) on a
+								device.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+        </xs:schema>
+	</types>
+	<message name="setShippingAddressRequest">
+		<part name="shippingAddress" element="tns:setShippingAddressRequest">
+		</part>
+	</message>
+	<message name="updateCartResponse">
+		<part name="cartResponse" element="tns:updateCartResponse">
+		</part>
+	</message>
+	<message name="buyRequest">
+		<part name="buyRequest" element="tns:buyRequest">
+		</part>
+	</message>
+	<message name="addItemsResponse">
+		<part name="addItemsResponse" element="tns:addItemsResponse">
+		</part>
+	</message>
+	<message name="buyResponse">
+		<part name="buyResponse" element="tns:buyResponse">
+		</part>
+	</message>
+	<message name="updateCartRequest">
+		<part name="updateRequest" element="tns:updateCartRequest">
+		</part>
+	</message>
+	<message name="setShippingAddressResponse">
+		<part name="shippingResponse" element="tns:setShippingAddressResponse">
+		</part>
+	</message>
+	<message name="initPaymentRequest">
+		<part name="initPaymentRequest" element="tns:initPaymentRequest">
+		</part>
+	</message>
+	<message name="getCartRequest">
+		<part name="cartRequest" element="tns:getCartRequest">
+		</part>
+	</message>
+	<message name="createCartResponse">
+		<part name="createResponse" element="tns:createCartResponse">
+		</part>
+	</message>
+	<message name="initPaymentResultRequest">
+		<part name="paymentResultRequest" element="tns:initPaymentResultRequest">
+		</part>
+	</message>
+	<message name="createCartRequest">
+		<part name="createRequest" element="tns:createCartRequest">
+		</part>
+	</message>
+	<message name="addItemsRequest">
+		<part name="addItemsRequest" element="tns:addItemsRequest">
+		</part>
+	</message>
+	<message name="initPaymentResponse">
+		<part name="initPaymentResponse" element="tns:initPaymentResponse">
+		</part>
+	</message>
+	<message name="getCartResponse">
+		<part name="cartResponse" element="tns:getCartResponse">
+		</part>
+	</message>
+	<message name="initPaymentResultResponse">
+		<part name="paymentResultResponse" element="tns:initPaymentResultResponse">
+		</part>
+	</message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="versionRequest" element="tns:getVersionRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="versionResponse" element="tns:getVersionResponse"></wsdl:part>
+	</wsdl:message>
+	<portType name="CartServicePort">
+
+		<operation name="createCart">
+			<documentation>Creates a cart with multiple items from different domains.</documentation>
+			<input message="tns:createCartRequest">
+			</input>
+			<output message="tns:createCartResponse">
+			</output>
+		</operation>
+		<operation name="getCart">
+			<documentation>Obtains a cart and cart item details in a single call.</documentation>
+			<input message="tns:getCartRequest">
+			</input>
+			<output message="tns:getCartResponse">
+			</output>
+		</operation>
+		<operation name="updateCart">
+			<documentation>Aggregates multiple user actions on cart pages into one service call and applies all actions to an existing cart.</documentation>
+			<input message="tns:updateCartRequest">
+			</input>
+			<output message="tns:updateCartResponse">
+			</output>
+		</operation>
+		<operation name="setShippingAddress">
+			<documentation>Specifies the address to which all items are shipped.</documentation>
+			<input message="tns:setShippingAddressRequest">
+			</input>
+			<output message="tns:setShippingAddressResponse">
+			</output>
+		</operation>
+		<operation name="initPayment">
+			<documentation>Starts a session with Payment service.</documentation>
+			<input message="tns:initPaymentRequest">
+			</input>
+			<output message="tns:initPaymentResponse">
+			</output>
+		</operation>
+		<operation name="buy">
+			<documentation>Purchases and pays for the items in a cart.</documentation>
+			<input message="tns:buyRequest">
+			</input>
+			<output message="tns:buyResponse">
+			</output>
+		</operation>
+		<operation name="addItems">
+			<documentation>Adds multiple items from different domains to an existing cart.</documentation>
+			<input message="tns:addItemsRequest">
+			</input>
+			<output message="tns:addItemsResponse">
+			</output>
+		</operation>
+		<operation name="initPaymentResult">
+			<documentation>Starts a session with a Payment service.</documentation>
+			<input message="tns:initPaymentResultRequest">
+			</input>
+			<output message="tns:initPaymentResultResponse">
+			</output>
+		</operation>
+		<operation name="getVersion">
+			<documentation>Gets the version of an existing cart.</documentation>
+			<input message="tns:getVersionRequest"></input>
+			<output message="tns:getVersionResponse"></output>
+		</operation>
+	</portType>
+	<binding name="CartServiceHttpBinding" type="tns:CartServicePort">
+		<http:binding verb="POST" />
+		<operation name="createCart">
+			<http:operation location="CartService/createCart" />
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml" />
+			</output>
+		</operation>
+	</binding>
+	<binding name="CartServiceSOAPBinding" type="tns:CartServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<operation name="createCart">
+			<soap:operation soapAction="urn:createCart" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="getCart">
+			<soap:operation soapAction="urn:getCart" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="updateCart">
+			<soap:operation soapAction="urn:updateCart" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="setShippingAddress">
+			<soap:operation soapAction="urn:setShippingAddress" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="initPayment">
+			<soap:operation soapAction="urn:setPaymentMethod" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="buy">
+			<soap:operation soapAction="urn:buy" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="addItems">
+			<soap:operation soapAction="urn:addItems" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="initPaymentResult">
+			<soap:operation soapAction="urn:initPaymentResult" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="getVersion">
+			<soap:operation soapAction="urn:getVersion" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+
+	</binding>
+	<service name="CartService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<port name="CartServiceSOAPPort" binding="tns:CartServiceSOAPBinding">
+
+			<soap:address
+				location="https://svcs.ebay.com/services/cartservice/v1/CartService" />
+		</port>
+		<port name="CartServiceHttpPort" binding="tns:CartServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/cartservice/v1/CartService" />
+		</port>
+	</service>
+</definitions>

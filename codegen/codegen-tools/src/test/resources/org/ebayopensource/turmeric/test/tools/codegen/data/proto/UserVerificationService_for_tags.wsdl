@@ -1,0 +1,2914 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 (http://www.altova.com) by Snezana Sahter (ebay) -->
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.ebay.com/marketplace/verification/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" name="UserVerificationService" targetNamespace="http://www.ebay.com/marketplace/verification/v1/services">
+	<wsdl:types>
+		<xs:schema xmlns:tns="http://www.ebay.com/marketplace/verification/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.ebay.com/marketplace/verification/v1/services" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BaseRequest" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BaseResponse" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage" type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning
+						occured as part of service call. Any run time
+						error will not be reported here, but will be
+						reported aspart of soap fault.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData"  minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the
+								particular error condition that
+								occurred. Your application can use error
+								codes as identifiers in your customized
+								error-handling algorithms.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain upon which the error
+								occurred. &lt;dl&gt; &lt;lh&gt;Domains
+								include:&lt;/lh&gt;
+
+								&lt;dt&gt; Marketplace &lt;/dt&gt;
+								&lt;dd&gt; A business or validation
+								error occurred for the Merchandising
+								Service. &lt;/dd&gt; &lt;dt&gt;
+
+								SOA &lt;/dt&gt; &lt;dd&gt; An exception
+								occurred in the Service Oriented
+								Architecture (SOA) framework.
+								&lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error caused the
+								request to fail (Error) or not
+								(Warning). &lt;br&gt;&lt;br&gt; If the
+								request fails and the source of the
+								problem is within the application (such
+								as a missing required element), please
+								change the application before you retry
+								the request. If the problem is due to
+								end-user input data, please alert the
+								end-user to the problem and provide the
+								means for them to correct the data. Once
+								the problem in the application or data
+								is resolved, you can attempt to re- send
+								the request to eBay.
+								&lt;br&gt;&lt;br&gt; If the source of
+								the problem is on eBay's side, you can
+								retry the request as-is a reasonable
+								number of times (eBay recommends twice).
+								If the error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+								&lt;br&gt;&lt;br&gt;
+
+								When a warning occurs, the error is
+								returned in addition to the business
+								data. In this case, you do not need to
+								retry the request (as the original
+								request was successful). However,
+								depending on the cause or nature of the
+								warning, you might need to contact
+								either the end user or eBay to effect a
+								long term solution to the problem to
+								prevent it from reoccurring in the
+								future.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors:
+								request errors, application errors, and
+								system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition
+								that resulted in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subdomain" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain upon which the
+								error occurred. &lt;dl&gt;
+								&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+
+								&lt;dt&gt; Verification &lt;/dt&gt;
+								&lt;dd&gt; The error is specific to the
+								Verification service. &lt;/dd&gt;
+								&lt;dt&gt;
+
+								MarketplaceCommon &lt;/dt&gt; &lt;dd&gt;
+								The error is common to all Marketplace
+								services. &lt;/dd&gt; &lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="exceptionId" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception
+								associated with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="parameter" type="tns:ErrorParameter"  minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Some warning and error messages return
+								one or more variables that contain
+								contextual information about the error.
+								This is often the field or value that
+								triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The name of the parameter in the
+									list of parameter types returned
+									within the error type.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>
+											Conditionally
+										</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user. For
+								example, eBay may have changed a value
+								the user sent in. In this case, eBay
+								returns a normal, successful response
+								and also returns the warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of error: request
+						errors, application errors, and system errors.
+						Request and application errors are caused
+						primarily by invalid data passed in the request.
+						System errors are caused primarily by
+						application failures and cannot be corrected by
+						changing request values.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on
+								the eBay system side, such as a database
+								or server down. An application can retry
+								the request as-is a reasonable number of
+								times (eBay recommends twice). If the
+								error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as missing or invalid
+								fields. The problem must be corrected
+								before the request can be made again. If
+								the problem is due to something in the
+								application (such as a missing required
+								field), the application must be changed.
+								Once the problem in the application or
+								data is resolved, resend the corrected
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, such as invalid or missing
+								data. The problem must be corrected
+								before the request can be made again. If
+								the problem is a result of end-user
+								data, the application must alert the
+								end-user to the problem and provide the
+								means for the end-user to correct the
+								data. Once the problem in the data is
+								resolved, resend the request to eBay
+								with the corrected data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="BaseVerificationDataRequest" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						Base request type with common request elements
+						extended by other concrete request types.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="principalID" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Specifies the unique Id used in
+										the eBay system to identify a
+										single user based data. This
+										represents the eBay User Login
+										Id, when the principal realm is
+										'eBay'
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="principalRealm" type="tns:PrincipalRealmType">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the realm for which
+										the verification data is stored.
+										Default would be 'eBay'. When
+										this value is eBay, then the
+										principal Id passed should be
+										the User Login Id.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="BaseVerificationDataResponse" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						Base class for response container for all
+						operations in the UserVerificationService.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MethodCase">
+				<xs:annotation>
+					<xs:documentation>
+						Contains details of the given verification
+						method the user has gone through
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="methodCaseId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique id that identifies the
+								verification method instances that are
+								invoked.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The type of the verification method
+								instance that is invoked. &lt;br&gt;The
+								methods include email verification,
+								credit card verification, bank account,
+								etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="currentMethodCaseState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								State of the method instance that the
+								user is currently at. The state is
+								dependent on the verification method
+								type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodCaseCreationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time when this method
+								verification case is created in the
+								verification system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was last
+								modified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodSpecificData" type="tns:VerificationData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								A list of user data that has been used
+								during the verification by this method.
+								Data are represented as name-value
+								pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodCaseTransitionRequest" type="tns:MethodCaseTransitionRequest" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Represents all requests to perform an
+								action on a verification method instance
+								potentially resulting in the method
+								state transition
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="VerificationData">
+				<xs:annotation>
+					<xs:documentation>
+						Contains details for a single user datum.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the data element
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Value of the data element
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="dataType" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the data provided in the Value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getMetadataRequest" type="tns:GetMetadataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetMetadataRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getMetadataResponse" type="tns:GetMetadataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetMetadataResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:complexType name="MethodCaseTransition">
+				<xs:annotation>
+					<xs:documentation>
+						Contains details on the transitions of the
+						verification method execution from the source to
+						the target method state.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="methodCaseTransitionID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Unique Id denoting each method state
+								transitions.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="sourceMethodCaseState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								State of the method, the method instance
+								is transitioning from.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="targetMethodCaseState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								State of the method, the method instance
+								is transitioning to.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="transitionTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time when the state transition
+								happened in the verification system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodTransitionData" type="tns:VerificationData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of the user data involved in the
+								method state transitions.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MethodCaseTransitionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Contains the details of the user/client actions
+						that has been performaed on the verification
+						method instance, resulting in the transition in
+						method state.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="methodCaseTransitionRequestID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Unique Id indicating the request on the
+								verification method instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="siteID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The Id referring to on of the eBay
+								global sites, in which the request has
+								been made.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="coBrandID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								eBay coBrandId related to the site.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="clientIP" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								IP address of the client from where the
+								request has been made. Represented in
+								the string format 'xxx.xxx.xxx.xxx'.
+								e.g., 210.163.48.1
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="XFFIP" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								List of the forwarding IP addresses
+								represented in a comma delimited string.
+								Can have a maximum of 6 IPs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="resultingMethodCaseTransition" type="tns:MethodCaseTransition" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Represents a history of all method state
+								transitions that happened for this
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProcessCase">
+				<xs:annotation>
+					<xs:documentation>
+						Contains details of the verification process
+						execution data fro a user .&lt;br&gt;&lt;br&gt;
+						A verification process is a logical expression
+						of verification methods required for a user's
+						intent, i.e., the activity he wants to perform
+						on the eBay site e.g., buying, selling, etc..
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="processCaseId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Unique Id representing the verification
+								process instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="processType" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the verification process
+								instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="currentProcessCaseState" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								State of the process instance that the
+								user is currently at. The state is
+								dependent on the type of the
+								verification process.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RUVToken" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Required User Verification token Id,
+								that was used to ensure the user went
+								through the verification process
+								required.
+								&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;The
+								Privilege Authority cannot grant without
+								a valid RUV token, and the token can
+								only be used once.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="caseCreationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time when the verification
+								process instance is created for the user
+								in the system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was last
+								modified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="processSpecificData" type="tns:VerificationData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								A list of user data that has been used
+								during the verification by this process.
+								Data are represented as name-value
+								pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="referencedMethodCase" type="tns:MethodCaseReference" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+							A list of method cases initiated as part of the process case (for example Cece process which is new buyer high risk verification process in US will typically reference an email method case and credit card method case)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MethodCaseReference">
+				<xs:annotation>
+					<xs:documentation>
+						A verification process can invoke one or more
+						verification methods the user must pass in order
+						to obtain a certain privilege on the site. The
+						entity contains the details on what verification
+						method instances were created as part of a
+						verification process instance for the user. This
+						will be maintained by the process itself.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="methodCaseId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Identifies the verification method
+								instances that has been created by the
+								verification process.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodCaseState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the progress of the method,
+								invoked by the process.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="methodType" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the method instance that has
+								been invoked.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="referenceCreationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was last
+								modified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="referenceSpecificData" type="tns:VerificationData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								A list of user data that has been used
+								for maintaining the relation. Data are
+								represented as name-value pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AppCase">
+				<xs:annotation>
+					<xs:documentation>
+						Contains the details of the application layer
+						user verification cases. There can be only one
+						active application case per application type.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="appCaseId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the unique verification
+								application case number.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="processCaseId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								ID of the verification process instance
+								that has been invoked by this
+								application instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="appType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The number that represents the type of
+								the application instance
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="currentAppCaseState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates the current application state,
+								defined as per the application type.
+								&lt;br&gt;&lt;br&gt; The concept of app
+								modules has been introduced to support
+								the reuse of common functionality like
+								credit card or authentify flows across
+								verification applications. The new
+								columns represent what module and module
+								specific state user currently is at.
+								When this information is available, the
+								current_app_state becomes more generic
+								in terms like 'in_progress', 'passed',
+								'failed'
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="caseCreationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time
+								when the application case has been
+								created in the verification system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RUVToken" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Unique token ID of the required
+								verification processes for a user, that
+								has to be completed for the remedy.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="currentModuleType" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the application module, the user
+								is currently in.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="currentModuleState" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The application module specific state
+								the user currently is at.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:dateTime"/>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time when the details related
+								to this application case has been last
+								modified .
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="appSpecificData" type="tns:VerificationData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								A list of user data that has been used
+								during the verification by this
+								application. Data are represented as
+								name-value pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="InitiatedVerification">
+				<xs:annotation>
+					<xs:documentation>
+						When the user wants to perform a certain action
+						on the site and Privilege Authority response
+						indicates the user is not allowed to continue,
+						Unified Remedy will determine what verification
+						processes user is required to complete before
+						continuing. A part of the Unified Remedy outcome
+						is creation of Required User Verification (RUV)
+						token. After the user completes the verification
+						process Px, PA is supposed to grant certain
+						privileges associated with Px. Because
+						completion of different v. processes can result
+						in granting the same set of privileges, PA has
+						to ensure that the user was required to complete
+						Px. This means PA will only grant the privileges
+						if it receives a valid RUV token for this user
+						for Px process type.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="RUVToken" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Unique Token Id identifying the required
+								user verification instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="processType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the verification process the
+								user is required to complete to have the
+								privilege.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="currentRUVState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								State indicating the current progress of
+								the RUV instance. Can be in-progress,
+								completed, expired, abondoned, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="intent" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Activity, which the user wanted to
+								perform on the eBay site, like buying,
+								selling, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="riskLevel" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The risk level of the user. Along with
+								the intent and the site/cobrand on which
+								the user wants to perform the activity,
+								the unified remedy determines the
+								required verification. Can be high, low,
+								medium, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="siteID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Site id of the eBay global sites.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="coBrandID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								CoBrand id assosciated with the site id.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="machineGroupID" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								User's known good machine Id, used for
+								the client trust.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="expirationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time after which the RUV
+								instance becomes invalid. Even if the
+								user completes the verification process
+								on or after this date, the privilege
+								will not be granted.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="initiationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was last
+								modified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RUVTransition" type="tns:RUVTransition" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Represents all RUV state transitions
+								captured for tracking purpose. The first
+								transition captured is from in-progress
+								state.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="privilegeAuthorityLog" type="tns:PrivilegeAuthorityLog" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								When user completes verification, privilege authority attempts to grant a privilege; this represents the status of attempts (there can be multiple if first attempt fails but next attempt succeeds)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RUVTransition">
+				<xs:annotation>
+					<xs:documentation/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="RUVTransitionID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								ID which uniquely identifies the
+								transition.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="sourceRUVState" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								State from which the required user
+								verification instance is transitioning
+								from.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="targetRUVState" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								State, which the required user
+								verification instance is transitioning
+								to.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="transitionTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time when the state transition
+								is recorded in the verification system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TUVLevel">
+				<xs:annotation>
+					<xs:documentation>
+						Tiered User Verification Level feature is
+						intended to limit eBay buyers’ exposure to fraud
+						by classifying sellers into selling tiers, and
+						limiting each seller’s privilege to list new
+						items on eBay based on the tier that seller
+						qualifies for. This type represents user’s
+						current level and related information, with a
+						reference to the reason for this level.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="TUVTransactionID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								User Level Reason ID
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="levelTypeCode" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the user level that the user
+								verification is intented for. Can be
+								buy, sell, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userLevel" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Granted privilege level of the user,
+								after the completion of the verification
+								process.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="numberAttempted" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Number of attempts at next level.
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ANPTransactionID" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Auth transaction ID that verified user’s
+								contact info (Address Name Phone)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="latestTuvTransactionID" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								last attempted authentication ID above
+								current user_level.
+
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="overrideLevel" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								CS overrided user privilege level for
+								the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="overrideExpireTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time after which the CS
+								overrided privilege level will be
+								invalid.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CSTUVTransactionID" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								TUV Transaction id, used to track the
+								verification status, when the CS needs
+								to override the user privilege level.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="forceVerifyLevel" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Prvilege level the user is forced to get
+								verified. Used by CS.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="forcePassLevel" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Privilege level the user is force
+								granted by the CS for a user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastListingDeniedTime" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Date and time when the user was last
+								denied of an item listing in site, due
+								to insufficient privilege.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time, this instance was last
+								modified
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TUVTransaction">
+				<xs:annotation>
+					<xs:documentation>
+						Represents basic information about each user
+						identity verification transaction. Verification
+						transactions can be of the following types:1)An
+						attempt to go through an identity verification
+						procedure 2)Record of default assignment of user
+						level (e.g. through grandfather clause)
+						3)Customer Support action to temporarily change
+						a user’s level 4)Customer Support action to
+						force user to go through identity verification
+						next time the user attempts to list.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="TUVTransactionID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Unique Id to identify each transaction
+								instance.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="levelTypeCode" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the user level that the user
+								verification is intented for. Can be
+								buy, sell, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userLevel" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Granted privilege level of the user,
+								after the completion of the verification
+								process.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="verifyTypeCode" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the verification procedure of
+								this transaction instance. Can be CS
+								forced authentication, sms, anonymous
+								mail, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="serviceID" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Identifies the service that has been
+								used for this transaction instance. Can
+								be schufa service, KBA verification
+								service, etc.
+								This is equivalent to verification method in the verification platform.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="eBayVerifyStatusCode" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Current status of the verification
+								procedure of this transaction instance.
+								Can be attempted, processing ,
+								abondoned, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="prevEffectiveTUVTransactionID" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								In case of the CS overrided/ forced
+								verifications, refers the previous
+								transaction instance that has been
+								created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="retryCount" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Count of the number of the retries
+								allowed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userAttempts" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Count of the number of attempts the user
+								has made for completing the verification
+								procedure.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cellPhone" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Cell phone number of the user being
+								verified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cellPhonePrimaryPhone" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Flag to indicate whether the cellphone
+								provided alongside the tuv transaction
+								instance is also the primary cell phone
+								for the user bering verified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="siteID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Site id of the eBay global sites.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="coPartnerID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Cobrand id of the assosciated site.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="remedyType" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the remedy flow the user has to
+								be in.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was last
+								modified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="VerificationEntityEnum">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the verfication data definitions that
+						represents the various data types used across
+						the service. The definitions aplies to all
+						layers of the verification system.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MethodCase"/>
+					<xs:enumeration value="ProcessCase"/>
+					<xs:enumeration value="AppCase"/>
+					<xs:enumeration value="Intent"/>
+					<xs:enumeration value="PrivilegeAuthorityAction"/>
+					<xs:enumeration value="Module"/>
+					<xs:enumeration value="VerificationData"/>
+					<xs:enumeration value="RUV"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="VerificationEntityMetadata">
+				<xs:annotation>
+					<xs:documentation>
+						Represents a set of possible types and states for each type when lifecycle has been defined. For example, MethodCase metadata will return: (type=Email, state=Initial,Pending,Successful,Failed), (type=CreditCard, state=Initial, Successful,Failed)
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="entityType" type="tns:Code" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Represents a code which includes the
+								numeric ID &amp; the token name for the
+								given &quot;type&quot;
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="entityState" type="tns:Code" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Represents a code which includes the
+								numeric ID &amp; the token name for the
+								given &quot;state&quot;
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="entity" type="tns:VerificationEntityEnum">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates the primary type of the data
+							element that is being defined. Can take the
+							code type values method, process, method
+							state, etc.For e.g to define a verification
+							method states, say for email verification
+							method, then the 'type' of the verification
+							code is 'MethodState', the categoryType
+							would be 'Method' and the category Id would
+							be '2' say for email verification method.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:complexType>
+			<xs:simpleType name="PrincipalRealmType">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates the realm for which the verification
+						data is stored.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="eBay"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Code">
+				<xs:annotation>
+					<xs:documentation>
+						Generic type that represents the ID &amp; name
+						of a numeric code that is used in Verification
+						Domain. For e.g., for Email Verification Method,
+						ID will be 1 and name will be EMAIL; For a
+						passed verification state of Authentify, ID will
+						be 104 name will be VerificationPassed. All
+						these codes in verification domain can be
+						obtained by calling operation
+						getMetadata
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ID" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Unique id of the data type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="name" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the data type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PrivilegeAuthorityLog">
+				<xs:annotation>
+					<xs:documentation>
+						Contains details of the privileges that has been
+						granted to a user, given when the user completes
+						a verification process. &lt;br&gt;&lt;br&gt;The
+						entity provides complete details on how the
+						grant was decided, on what verification process
+						user was supposed to complete, how the user
+						completed and what priveleges are granted as a
+						result. This will also contain logs on failed
+						atempts.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="privilegeAuthorityLogID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Unique Id to identify each of the log.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RUVToken" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Required User Verification token Id,
+								that was used to ensure the user went
+								through the verification process
+								required. &lt;br&gt;&lt;br&gt;The
+								Privilege Authority cannot grant without
+								a valid RUV token, and the token can
+								only be used once.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="intent" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Activity, which the user wanted to
+								perform on the eBay site, like buying,
+								selling, etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="processType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the verification process that
+								the user has to complete to grant the
+								privilege for the user's intent.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="siteID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Id of the eBay global site on which the
+								user intented for the activity.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="coBrandID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								eBay coBrand id related to the site id.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="actionState" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Privilege authority grant state,
+								determined as a result of completion of
+								the required verification process. e.g.,
+								passed or failed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="actionStateReason" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								The reason why the given privilege
+								authority state has resulted. Could be
+								RUV token missing, RUV token
+								expired,etc.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="actionSpecificData" type="tns:VerificationData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Further details of PA action - for example, TUV transaction ID will be returned here;
+								Data are represented as name-value
+								pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was created.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Date-Time this instance was last
+								modified.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetMetadataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getMetadata operation.
+						Verification codes for all specified
+						&quot;codeType&quot; will be retrieved. If no
+						&quot;codeType&quot; is specified verification
+						codes for all code types will be retrieved.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="entity" type="tns:VerificationEntityEnum" minOccurs="1" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										the entity for which the
+										metadata is to be
+										returned.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetMetadataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getMetadata
+						operation. Represents all Verification Code data
+						that was requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="verificationEntityMetadata" type="tns:VerificationEntityMetadata" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetMethodCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getMethodCase operation. All
+						method layer related verification data will be
+						returned for the given principalID and
+						principalRealm. Optionally if one or more
+						methodType is specified, then data only for the
+						given methodType(s), principalID and
+						principalRealm will be returned.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest">
+						<xs:sequence>
+							<xs:element name="methodType" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										methodType for which the Method
+										data have to be fetched.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetMethodCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getMethodCase operation.
+						Represents all method data that was requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="method" type="tns:MethodCase" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all verification
+										method data for the requested
+										user.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProcessCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getProcessCase operation. All
+						Process layer related verification data will be
+						returned for the given principalID and
+						principalRealm. Optionally if one or more
+						processType is specified, then data only for the
+						given processType(s), principalID and
+						principalRealm will be returned.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest">
+						<xs:sequence>
+							<xs:element name="processType" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProcessCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getProcessCase operation.
+						Represents all Process data that was requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="process" type="tns:ProcessCase" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all process layer
+										data returned for the requested
+										user.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProcessMethodRelationDataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getProcessMethodRelationData
+						operation. All Process Method Relation data will
+						be returned for the given principalID and
+						principalRealm. Optionally if one or more
+						processCaseID is specified, then data only for
+						the given processCaseID(s), principalID and
+						principalRealm will be returned.Optionally if
+						one or more methodCaseID is specified, then data
+						only for the given methodCaseID(s), principalID
+						and principalRealm will be returned. Note only
+						either processCaseID or methodCaseID can be
+						specified in the request. Both the elements
+						cannot be specified together in the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest">
+						<xs:sequence>
+							<xs:choice >
+								<xs:element name="processCaseID" type="xs:long" minOccurs="0" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>
+											processCaseID for which the
+											Process Method Relation data
+											have to be fetched.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="methodCaseID" type="xs:long" minOccurs="0" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>
+											methodCaseID for which the
+											Process Method Relation data
+											have to be fetched.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAppCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getAppCase operation. All
+						application layer related verification data will
+						be returned for the given principalID and
+						principalRealm. Optionally if one or more
+						appType is specified, then data only for the
+						given appType(s), principalID and principalRealm
+						will be returned.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest">
+						<xs:sequence>
+							<xs:element name="appType" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										appType for which the
+										Application data have to be
+										fetched.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAppCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getAppCase operation.
+						Represents all application layer data that was
+						requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="app" type="tns:AppCase" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all Application level
+										data returned for the requested
+										user.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetInitiatedVerificationRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getInitiatedVerification operation. All RUV
+						data will be returned for the given principalID
+						and principalRealm. Optionally if one or more
+						processType is specified, then data only for the
+						given processType(s), principalID and
+						principalRealm will be returned.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest">
+						<xs:sequence>
+							<xs:element name="processType" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										processType for which RUV have
+										to be fetched.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetInitiatedVerificationResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getInitiatedVerification operation.
+						Represents all RUV data that was requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="ruv" type="tns:InitiatedVerification" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all RUV data for the
+										requested user.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetTUVLevelRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getPrivilege operation. All
+						TUV level data will be returned for the given
+						principalID and principalRealm.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetTUVLevelResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getPrivilege operation.
+						Represents all TUV Level data that was
+						requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="TUVLevel" type="tns:TUVLevel" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all TUV levels and
+										related information associated
+										with a user.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetTUVTransactionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getTUVTransaction
+						operation. All TUV transaction data will be
+						returned for the given principalID and
+						principalRealm.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetTUVTransactionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getTUVTransaction
+						operation. Represents all TUV Transaction data
+						that was requested.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="TUVTransaction" type="tns:TUVTransaction" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents information about
+										each user identity verification
+										transaction.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getMethodCaseRequest" type="tns:GetMethodCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetMethodCaseRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getMethodCaseResponse" type="tns:GetMethodCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetMethodCaseResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getProcessCaseRequest" type="tns:GetProcessCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetProcessCaseRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getProcessCaseResponse" type="tns:GetProcessCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetProcessCaseResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getAppCaseRequest" type="tns:GetAppCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetAppCaseRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getAppCaseResponse" type="tns:GetAppCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetAppCaseResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getInitiatedVerificationRequest" type="tns:GetInitiatedVerificationRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetInitiatedVerificationRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getInitiatedVerificationResponse" type="tns:GetInitiatedVerificationResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetInitiatedVerificationResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getTUVLevelRequest" type="tns:GetTUVLevelRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetTUVLevelRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getTUVLevelResponse" type="tns:GetTUVLevelResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetTUVLevelResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getTUVTransactionRequest" type="tns:GetTUVTransactionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetTUVTransactionRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getTUVTransactionResponse" type="tns:GetTUVTransactionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type GetTUVTransactionResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:element name="getAuthentifyMethodCaseRequest" type="tns:GetAuthentifyMethodCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type
+						GetAuthentifyMethodCaseRequest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="getAuthentifyMethodCaseResponse" type="tns:GetAuthentifyMethodCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Element of type
+						GetAuthentifyMethodCaseResponse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:complexType name="GetAuthentifyMethodCaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request type for getAuthentifyMethodCase
+						operation. All Authentify Transaction log data
+						will be returned for the given principalID and
+						principalRealm. Optionally if one or more
+						phoneNumber is specified, then data only for the
+						given phoneNumber(s), principalID and
+						principalRealm will be returned.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataRequest">
+						<xs:sequence>
+							<xs:element name="phoneNumber" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										phoneNumber for which the
+										Authentify Transaction Log data
+										have to be fetched.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAuthentifyMethodCaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response Type for getAuthentifyMethodCase
+						operation. Represents all Authentify Transaction
+						Log data that was requested.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseVerificationDataResponse">
+						<xs:sequence>
+							<xs:element name="authentifyMethodCase" type="tns:MethodCase" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all Authentify
+										Transaction log data for the
+										request
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="authentifyLegacyTransaction" type="tns:AuthentifyLegacyTransaction" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Represents all Authentify
+										Transaction log data for the
+										request
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AuthentifyLegacyTransaction">
+				<xs:annotation>
+					<xs:documentation>
+						A log of all requests and responses to the 3rd
+						party Authentify to track and control.
+						Authentify provides the ability to authenticate
+						a user via phone. Company will compare postal
+						code phone number relationship within X miles.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="authentifyTransactionID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								An ID to uniquely identify this
+								transaction
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="phoneNumber" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The number the user has provided to be
+								used for authorization purposes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="authentifyTransactionType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Represents which event the row is
+								logging. Phone Verification (1)PIN
+								Delivery(2)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="IPAddress" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								IP of the authentify transaction
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PIN" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								ebay generated PIN associated with the
+								given phone number.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="providerTransactionID" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								transaction id from 3rd party auth
+								service provider - Authentify
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="status" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Represents current state of transaction
+								- failed(1)/successful(0)/initiated(2)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="failedPinVerificationCount" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								How many time a user has entered
+								incorrect PIN
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="authentifyServerURL" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The URL where requests should be sent
+								for poll.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="callingAppID" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								APP_ID identifies which application/flow
+								is using Authentify PIN delivery
+								service. Since the existing
+								implementation doesn't have the concept
+								of &quot;Application&quot;, all the
+								transaction will be inserted without the
+								knowledge of which application created
+								them. We want to identify the calling
+								application by adding this column. So,
+								if this column is null, we consider that
+								the transaction is created by existing
+								application. If it is a number defined
+								in separate application enum class, we
+								will know that they are created by
+								defined applications. Arthitects and Biz
+								are expecting to re-use this
+								table/service for future application. So
+								the enum count will grow.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="callingAppFlow" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								APP_FLOW will be used to track &quot;how
+								Authentify transaction was created&quot;
+								to re-direct user when Authentify user
+								verification is completed. Due to the
+								possibility of modem based internet
+								connection, there is a pretty good
+								chance that a user may terminate a the
+								verification session when they need to
+								get PIN via phone line. APP_ID only
+								tracks &quot;which application created
+								transaction&quot;. But it can't tell how
+								user reached it. Was it reached via My
+								eBay? Was it invoked from SYI? New
+								requirement specifies that based on how
+								the user verification is completed, it
+								must re-direct user to appropriate page.
+								Since there is a possibility of user
+								terminating a session in the middle of
+								Authentify based user verification flow,
+								we have to record not only which
+								application created (SCR or User
+								Registration), but also how it reached
+								the application (SYI, My eBay).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="firstName" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								First name used in the transaction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastName" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								Last name used in the transaction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="streetAddress" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Street address used in the transaction.
+								Format follows vendor's.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="postalCode" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								Postal code used in the transaction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="firstNameMatch" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								Indicate if the match is successful.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="lastNameMatch" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								Indicate if the match is successful.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="streetAddressMatch" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								Indicate if the match is successful.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="postalCodeMatch" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+
+								Indicate if the match is successful.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="phoneLookupResult" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Result of phone lookup verification.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="siteID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								This is Site ID from where the user
+								registerd.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="phoneNumberNew" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								This column will be used to identify
+								whether the user entered a new phone
+								number or an existing phone number from
+								his profile for authentification.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="thirdPartyStatusInitial" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								status return from the authentify in
+								case of immediate response
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="thirdPartyStatusFinal" type="xs:long" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								status return from the authentify in
+								case of delayed response
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="thirdPartyPollTimeInitial" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Time when the THIRDPARTY_STATUS_INITIAL
+								was updated
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="thirdPartyPollTimeFinal" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Time when the THIRDPARTY_STATUS_FINAL
+								was updated
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="callType" type="xs:token" minOccurs="0"/>
+					<xs:element name="creationTime" type="xs:dateTime"/>
+					<xs:element name="lastModifiedTime" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="VerificationCodeTypeCategory">
+				<xs:restriction base="xs:token"/>
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getMetadataRequest">
+		<wsdl:part name="params" element="tns:getMetadataRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getMetadataResponse">
+		<wsdl:part name="params" element="tns:getMetadataResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getMethodCaseRequest">
+		<wsdl:part name="params" element="tns:getMethodCaseRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getMethodCaseResponse">
+		<wsdl:part name="params" element="tns:getMethodCaseResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProcessCaseRequest">
+		<wsdl:part name="params" element="tns:getProcessCaseRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProcessCaseResponse">
+		<wsdl:part name="params" element="tns:getProcessCaseResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAppCaseRequest">
+		<wsdl:part name="params" element="tns:getAppCaseRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getAppCaseResponse">
+		<wsdl:part name="params" element="tns:getAppCaseResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getInitiatedVerificationRequest">
+		<wsdl:part name="params" element="tns:getInitiatedVerificationRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getInitiatedVerificationResponse">
+		<wsdl:part name="params" element="tns:getInitiatedVerificationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getTUVLevelRequest">
+		<wsdl:part name="params" element="tns:getTUVLevelRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTUVLevelResponse">
+		<wsdl:part name="params" element="tns:getTUVLevelResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTUVTransactionRequest">
+		<wsdl:part name="params" element="tns:getTUVTransactionRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTUVTransactionResponse">
+		<wsdl:part name="params" element="tns:getTUVTransactionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="params" element="tns:getVersionRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="params" element="tns:getVersionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAuthentifyMethodCaseRequest">
+		<wsdl:part name="params" element="tns:getAuthentifyMethodCaseRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAuthentifyMethodCaseResponse">
+		<wsdl:part name="params" element="tns:getAuthentifyMethodCaseResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="UserVerificationServicePort">
+		<wsdl:operation name="getMetadata">
+			<wsdl:documentation>
+				Retrieves names of the various codes like Method Type,
+				Process Type etc used across verification domain. Codes
+				for all types eumerated by
+				&quot;VerificationCodeType&quot; enum will be returned.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getMetadataRequest"/>
+			<wsdl:output message="tns:getMetadataResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getMethodCase">
+			<wsdl:documentation>
+				Retrieves information about the verification methods
+				such as Email, SMS, Snail Mail etc... the given user has
+				gone through.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getMethodCaseRequest"/>
+			<wsdl:output message="tns:getMethodCaseResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getProcessCase">
+			<wsdl:documentation>
+				Retrieves information about the verification processes
+				the given user has gone through. A verification process
+				includes one or more verification methods. A
+				verification process is triggered based on the user
+				intent, site ID and the risk level of the user.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getProcessCaseRequest"/>
+			<wsdl:output message="tns:getProcessCaseResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getAppCase">
+			<wsdl:documentation>
+				Retrieves information about the Application state and
+				other details that triggered a particular verification
+				process for the given user.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getAppCaseRequest"/>
+			<wsdl:output message="tns:getAppCaseResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getInitiatedVerification">
+			<wsdl:documentation>
+				Retrieves all the required user verification data for a
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getInitiatedVerificationRequest"/>
+			<wsdl:output message="tns:getInitiatedVerificationResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTUVLevel">
+			<wsdl:documentation>
+				Retrieves TUV (Tiered User Verification) Data for the
+				given user. TUV assigns one of a set of predefined tiers
+				or &quot;seller levels&quot; to each seller. Each tier
+				has associated with it a periodic limit on selling
+				activity, and an identity verification procedure. Tiers
+				are ordered, with higher tier levels providing
+				increasing privileges, and requiring stricter
+				verification.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getTUVLevelRequest"/>
+			<wsdl:output message="tns:getTUVLevelResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTUVTransaction">
+			<wsdl:documentation>
+				Retrievies basic information about each user identity
+				verification transaction. Verification transactions can
+				be of the following types: 1)An attempt to go through an
+				identity verification procedure 2)Record of default
+				assignment of user level (e.g. through grandfather
+				clause) 3)Customer Support action to temporarily change
+				a user’s level 4)Customer Support action to force user
+				to go through identity verification next time the user
+				attempts to list.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getTUVTransactionRequest"/>
+			<wsdl:output message="tns:getTUVTransactionResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Gets the current version of the service.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest"/>
+			<wsdl:output message="tns:getVersionResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getAuthentifyMethodCase">
+			<wsdl:documentation>
+				Retrieves log of all requests and responses to the 3rd
+				party Authentify to track and control. Authentify
+				provides the ability to authenticate a user via phone.
+				Company will compare postal code phone number
+				relationship within X miles.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getAuthentifyMethodCaseRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getAuthentifyMethodCaseResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="UserVerificationServiceSOAPBinding" type="tns:UserVerificationServicePort">
+		<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getMetadata">
+			<soap12:operation soapAction="urn:getMetadata"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getMethodCase">
+			<soap12:operation soapAction="urn:getMethodCase"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProcessCase">
+			<soap12:operation soapAction="urn:getProcessCase"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAppCase">
+			<soap12:operation soapAction="urn:getAppCase"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getInitiatedVerification">
+			<soap12:operation soapAction="urn:getInitiatedVerification"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTUVLevel">
+			<soap12:operation soapAction="urn:getTUVLevel"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTUVTransaction">
+			<soap12:operation soapAction="urn:getTUVTransaction"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap12:operation soapAction="urn:getVersion"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAuthentifyMethodCase">
+			<soap12:operation soapAction="urn:getAuthentifyMethodCase"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="UserVerificationServiceHttpBinding" type="tns:UserVerificationServicePort">
+		<http:binding verb="POST"/>
+		<wsdl:operation name="getMetadata">
+			<http:operation location="UserVerificationService/getMetadata"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getMethodCase">
+			<http:operation location="UserVerificationService/getMethodCase"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProcessCase">
+			<http:operation location="UserVerificationService/getProcessCase"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAppCase">
+			<http:operation location="UserVerificationService/getAppCase"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getInitiatedVerification">
+			<http:operation location="UserVerificationService/getInitiatedVerification"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTUVLevel">
+			<http:operation location="UserVerificationService/getPrivilege"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTUVTransaction">
+			<http:operation location="UserVerificationService/getTUVTransaction"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<http:operation location="UserVerificationService/getVersion"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAuthentifyMethodCase">
+			<http:operation location="UserVerificationService/getAuthentifyMethodCase"/>
+			<wsdl:input>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="UserVerificationService">
+		<wsdl:documentation>
+			&lt;Version&gt;1.0.0&lt;/Version&gt;
+			UserVerificationService provides data maintained by
+			different layers of eBay Verification platform of the given
+			user.
+		</wsdl:documentation>
+		<wsdl:port name="UserVerificationServiceSOAPPort" binding="tns:UserVerificationServiceSOAPBinding">
+			<soap12:address location="http://svcs.ebay.com/services/verification/v1/UserVerificationService"/>
+		</wsdl:port>
+		<wsdl:port name="UserVerificationServiceHttpPort" binding="tns:UserVerificationServiceHttpBinding">
+			<http:address location="http://svcs.ebay.com/services/verification/v1/UserVerificationService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

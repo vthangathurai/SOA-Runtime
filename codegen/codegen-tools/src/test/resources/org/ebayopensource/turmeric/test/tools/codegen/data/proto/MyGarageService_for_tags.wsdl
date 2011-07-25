@@ -1,0 +1,1768 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MyGarageService" targetNamespace="http://www.ebay.com/marketplace/motors/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/motors/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/motors/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="addVehiclesToGarageResponse" type="tns:AddVehiclesToGarageResponse">
+			</xs:element>
+			<xs:element name="addVehiclesToGarageRequest" type="tns:AddVehiclesToGarageRequest">
+			</xs:element>
+			<xs:element name="getSharedVehicleDetailsResponse"
+            	type="tns:GetSharedVehiclesResponse">
+
+            </xs:element>
+			<xs:complexType name="AddVehiclesToGarageRequest">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="addVehicleToGarageRequest" type="tns:AddVehicleToGarageRequest"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="AddVehicleToGarageRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="userVehicleDetail" type="tns:UserVehicleDetail">
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="invocationId" type="xs:string">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="UserVehicleDetail">
+				<xs:sequence>
+
+					<xs:element name="vehicleId" type="xs:long"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="vehicleName" type="xs:string">
+					</xs:element>
+					<xs:element name="make" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="model" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="year" type="xs:int"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="vehicleType" type="xs:token"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="vin" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="trim" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+
+					<xs:element name="allowComments" type="xs:boolean"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="public" type="xs:boolean"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="ownedByMe" type="xs:boolean"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="ratingSum" type="xs:long"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="ratingCount" type="xs:long"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="vehicleStatus" type="xs:token"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="ownerName" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="vehicleAttribute"
+						type="tns:VehicleAttributeValue" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+					<xs:element name="userDefinedAttribute"
+						type="tns:UserDefinedAttribute" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+					<xs:element name="vehicleTodo"
+						type="tns:VehicleTodo" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+					<xs:element name="vehicleNote"
+						type="tns:VehicleNote" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+
+
+					<xs:element name="vehicleMedia"
+						type="tns:VehicleMedia" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+
+					<xs:element name="savedSearch"
+						type="tns:SavedSearch" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="VehicleNote">
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="note" type="xs:string" />
+					<xs:element name="noteStatus" type="xs:int"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+
+
+					<xs:element name="orderNum" type="xs:int"   maxOccurs="1" minOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="VehicleTodo">
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="toDo" type="xs:string" />
+					<xs:element name="todoStatus" type="xs:int"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+
+
+					<xs:element name="dueDate" type="xs:dateTime"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+
+					<xs:element name="completionDate" type="xs:dateTime" maxOccurs="1" minOccurs="0"></xs:element>
+					<xs:element name="orderNum" type="xs:int"  maxOccurs="1"
+						minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="AddVehiclesToGarageResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="addVehicleToGarageResponse" type="tns:AddVehicleToGarageResponse"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="AddVehicleToGarageResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="invocationId" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="vehicleId" type="xs:long">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="removeVehiclesFromGarageResponse" type="tns:RemoveVehiclesFromGarageResponse">
+			</xs:element>
+			<xs:element name="removeVehiclesFromGarageRequest" type="tns:RemoveVehiclesFromGarage">
+			</xs:element>
+	
+			<xs:element name="getVehiclesForMyGarageResponse" type="tns:GetAllVehiclesFromGarageResponse">
+			</xs:element>
+			<xs:element name="getVehiclesForMyGarageRequest" type="tns:GetVehiclesFromGarageRequest">
+			</xs:element>
+			
+			<xs:element name="updateVehiclesInGarageResponse" type="tns:UpdateVehiclesDetailsResponse">
+			</xs:element>
+			<xs:element name="updateVehiclesInGarageRequest" type="tns:UpdateVehiclesDetailsRequest">
+			</xs:element>
+			
+			<xs:complexType name="RemoveVehiclesFromGarage">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="removeVehicleFromGarageRequest" type="tns:RemoveVehicleFromGarageRequest"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="RemoveVehicleFromGarageRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="vehicleId" type="xs:long">
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="0" name="invocationId" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="RemoveVehiclesFromGarageResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="removeVehicleFromGarageResponse" type="tns:RemoveVehicleFromGarageResponse"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="RemoveVehicleFromGarageResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="invocationId"
+								type="xs:string" maxOccurs="1" minOccurs="0">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetVehiclesFromGarageRequest">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="getAllVehicleFromGarageRequest" type="tns:GetVehicleFromGarageRequest"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="GetVehicleFromGarageRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="invocationId" type="xs:string">
+							</xs:element>
+
+
+							<xs:element name="vehicleType"
+								type="xs:token" maxOccurs="1" minOccurs="0">
+							</xs:element>
+
+
+
+
+							<xs:element name="paginationFilter"
+								type="tns:PaginationFilter" maxOccurs="1" minOccurs="0">
+							</xs:element>
+
+							<xs:element name="vehicleId"
+								type="xs:long" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="GetAllVehiclesFromGarageResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="getAllVehicleFromGarageResponse" type="tns:GetAllVehicleFromGarageResponse"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="GetAllVehicleFromGarageResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="0" name="invocationId" type="xs:string">
+							</xs:element>
+                            <xs:element maxOccurs="unbounded"
+								minOccurs="0" name="userVehicleDetail"
+								type="tns:UserVehicleDetail">
+							</xs:element>
+
+							<xs:element name="paginationOutput"
+								type="tns:PaginationOutput" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			
+			<xs:complexType name="UpdateVehiclesDetailsRequest">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="updateVehicleDetailRequest" type="tns:UpdateVehicleDetailRequest"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="UpdateVehicleDetailRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="invocationId" type="xs:string">
+							</xs:element>
+
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="userVehicleDetail" type="tns:UserVehicleDetail">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="UpdateVehiclesDetailsResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="updateVehiclesDetailResponse" type="tns:UpdateVehicleDetailsResponse"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="UpdateVehicleDetailsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element maxOccurs="1" minOccurs="0" name="invocationId" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="Picture">
+				<xs:sequence>
+
+					<xs:element name="md5PictureCheckSum" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="VehicleAttributeValue">
+				<xs:sequence>
+					<xs:element name="vehAttr" type="tns:NameValueList"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+    
+			<xs:complexType name="VehicleDetails">
+				<xs:sequence>
+					<xs:element name="vehicleId" type="xs:string"
+						maxOccurs="1" minOccurs="1">
+					</xs:element>
+					<xs:element name="vehicleAttribute"
+						type="tns:VehicleAttributeValue" maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="savedSearch" type="xs:string" maxOccurs="unbounded" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+    
+			<xs:simpleType name="VehicleTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="value"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="UserDefinedAttribute">
+				<xs:sequence>
+					<xs:element name="userDefinedAttr" type="tns:NameValueList"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="VehicleComment">
+				<xs:sequence>
+
+					<xs:element name="commentText" type="xs:string"
+						maxOccurs="1" minOccurs="1">
+					</xs:element>
+					<xs:element name="commentId" type="xs:long"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="userName" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="creationDate" type="xs:dateTime"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+            <xs:complexType name="FavoriteVehicle">
+            	<xs:sequence>
+            		<xs:element name="vehicleId" type="xs:int" 
+            			maxOccurs="1" minOccurs="1">
+            		</xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="VehicleMedia">
+            	<xs:sequence>
+
+            		<xs:element name="mediaUrl" type="xs:string"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="md5CheckSum" type="xs:string"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="mediaStatus" type="xs:int"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="caption" type="xs:string"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="mediaType" type="xs:token" maxOccurs="1" minOccurs="0"></xs:element>
+
+
+            	</xs:sequence>
+            </xs:complexType>
+                       
+            <xs:complexType name="VehicleTypes">
+            	<xs:sequence>
+            		<xs:element name="Vehicle_type" type="xs:string"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="SavedSearch">
+            	<xs:sequence>
+
+            		<xs:element name="searchId" type="xs:long"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            	</xs:sequence>
+            </xs:complexType>            
+    
+            <xs:complexType name="Rating">
+            	<xs:sequence>
+            		<xs:element name="vehicleId" type="xs:int"
+            			maxOccurs="1" minOccurs="1">
+            		</xs:element>
+            		<xs:element name="rating" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="NameValueList">
+            	<xs:sequence>
+            		<xs:element name="attrname" type="xs:token"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="attrValue" type="xs:string" maxOccurs="unbounded" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+
+                      
+            <xs:complexType name="AddFavoriteVehicleRequest"></xs:complexType>
+            <xs:complexType
+            	name="AddFavoriteVehicleResponse">
+            	<xs:sequence>
+            		<xs:element name="out" type="xs:string"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            <xs:element name="addCommentsResponse"
+            	type="tns:AddCommentsResponse">
+
+            </xs:element>            
+            <xs:element name="removeCommentsResponse"
+            	type="tns:RemoveCommentsResponse">
+
+            </xs:element>
+
+            <xs:element name="getCommentsResponse"
+            	type="tns:GetCommentsResponse">
+
+            </xs:element>
+            
+            <xs:element name="getSharedVehicleDetailsRequest"
+            	type="tns:GetSharedVehicleDetailsRequest">
+            </xs:element>
+            <xs:element name="getCommentsRequest"
+            	type="tns:GetCommentsRequest">
+            </xs:element>
+            <xs:element name="removeCommentsRequest"
+            	type="tns:RemoveCommentsRequest">
+            </xs:element>            
+            <xs:element name="removeFromMyFavoriteVehiclesResponse"
+            	type="tns:RemoveFromMyFavoriteVehiclesResponse">
+            </xs:element>
+            <xs:element name="removeFromMyFavoriteVehiclesRequest"
+            	type="tns:RemoveFromMyFavoriteVehiclesRequest">
+            </xs:element>
+            <xs:element name="addToMyFavoriteVehiclesRequest"
+            	type="tns:AddToMyFavoriteVehiclesRequest">
+            </xs:element>
+            <xs:element name="addToMyFavoriteVehiclesResponse"
+            	type="tns:AddMyFavoriteVehicleResponse">
+            </xs:element>
+            
+    
+    
+            <xs:complexType name="AddMyFavoriteVehicleResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="RemoveMyFavoriteVehicleRequest">
+            	<xs:sequence>
+            		<xs:element name="invocationId" type="xs:string"
+            			maxOccurs="unbounded" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="favVehicleId" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveMyFavoriteVehicleResponse">
+            	<xs:sequence>
+            		<xs:element name="invocationId" type="xs:string"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="ack" type="xs:string" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            <xs:element name="addCommentsRequest"
+            	type="tns:AddCommentsRequest">
+            </xs:element>
+
+            <xs:complexType name="AddCommentRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId" type="xs:long"
+            					 maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="comments"
+            					type="tns:VehicleComment" maxOccurs="1" minOccurs="1">
+            				</xs:element>
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="AddCommentResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="commentId"
+            					type="xs:long" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="RemoveCommentRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId" type="xs:long"
+            					 maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="commentId" type="xs:long"
+            					maxOccurs="unbounded" minOccurs="1">
+            				</xs:element>
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="RemoveCommentsResponse">
+            			<xs:sequence>
+            				<xs:element name="removeCommentResponse"
+            					type="tns:RemoveCommentResponse" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="GetCommentsRequest">
+            	<xs:sequence>
+            		<xs:element name="getCommentRequest" type="tns:GetCommentRequest" maxOccurs="1" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+
+            <xs:complexType name="FindingRequest">
+            	<xs:sequence>
+            		<xs:element name="findingRequest" type="xs:string"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="GetVehicleResponse">
+            	<xs:sequence>
+            		<xs:element name="invocationId" type="xs:string"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="userVehicleDetail" type="tns:UserVehicleDetail" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            <xs:element name="findingVehiclesRequest"
+            	type="tns:FindingVehiclesRequest">
+
+            </xs:element>
+            <xs:element name="findingVehiclesResponse"
+            	type="tns:FindingVehiclesResponse">
+
+            </xs:element>
+
+            <xs:complexType name="FindingVehiclesRequest">
+            	<xs:sequence>
+            		<xs:element name="findingVehicleRequest" type="tns:FindingVehicleRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="PaginationFilter">
+            	<xs:sequence>
+            		<xs:element name="pageNo" type="xs:int"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="pageSize" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="FindingKeysFilter">
+            	<xs:sequence>
+            		<xs:element name="attribute" type="xs:string" maxOccurs="1" minOccurs="0"></xs:element>
+            		<xs:element name="value" type="xs:string" maxOccurs="unbounded" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="OutputDataSetFilter">
+            	<xs:sequence>
+            		<xs:element name="outputField" type="xs:token" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+   
+            <xs:complexType name="AddToMyFavoriteVehicleRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId"
+            					type="xs:long"  maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+           
+
+            <xs:complexType name="RemoveFromMyFavoriteVehiclesRequest">
+            	<xs:sequence>
+            		<xs:element name="removeFromMyFavoriteVehicle" type="tns:RemoveFromMyFavoriteVehicleRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveFromMyFavoriteVehicleRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId"
+            					type="xs:long"  maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType
+            	name="RemoveFromMyFavoriteVehiclesResponse">
+            	<xs:sequence>
+            		<xs:element name="removeFromMyFavoriteVehicle" type="tns:RemoveFromMyFavoriteVehicleResponse" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveFromMyFavoriteVehicle"></xs:complexType>
+        
+            <xs:complexType
+            	name="RemoveFromMyFavoriteVehicleResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="AddToMyFavoriteVehiclesRequest">
+            	<xs:sequence>
+            		<xs:element name="addToMyFavoriteVehicleRequest" type="tns:AddToMyFavoriteVehicleRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            <xs:element name="getRatingForUsersRequest"
+            	type="tns:GetRatingForUsersRequest">
+
+            </xs:element>
+            <xs:element name="getRatingForUsersResponse"
+            	type="tns:GetRatingForUsersResponse">
+
+            </xs:element>
+            
+            <xs:complexType name="GetRatingForUsersRequest">
+            	<xs:sequence>
+            		<xs:element name="getRatingForUserRequest" type="tns:GetRatingForUserRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="GetRatingForUserRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId"
+            					type="xs:long"  maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="GetRatingForUsersResponse">
+            	<xs:sequence>
+            		<xs:element name="getRatingForUserResponse" type="tns:GetRatingForUserResponse" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="GetRatingForUserResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="rating" type="xs:int"
+            					maxOccurs="1" minOccurs="0">
+            				</xs:element>
+
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="GetSharedVehicleDetailsRequest">
+            	<xs:sequence>
+            		<xs:element name="getSharedVehicleRequest" type="tns:GetSharedVehicleDetailRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="GetSharedVehicleDetailRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId"
+            					type="xs:long"  maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="GetSharedVehiclesResponse">
+            	<xs:sequence>
+            		<xs:element name="getSharedVehicleResponse" type="tns:GetSharedVehicleResponse" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="GetSharedVehicleResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="userVehicleDetail"
+            					type="tns:UserVehicleDetail" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="AddCommentsRequest">
+            	<xs:sequence>
+            		<xs:element name="addCommentRequest" type="tns:AddCommentRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="FindingVehiclesResponse">
+            	<xs:sequence>
+            		<xs:element name="findingVehicleResponse" type="tns:FindingVehicleResponse" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="FindingVehicleResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="userVehiclesDetail"
+            					type="tns:UserVehicleDetail" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="PaginationOutput">
+            	<xs:sequence>
+            		<xs:element name="pageNo" type="xs:int"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="pageSize" type="xs:int"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="noOfRecords" type="xs:int"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="NoOfPages" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>           
+            <xs:element name="rateVehiclesResponse"
+            	type="tns:RateVehiclesResponse">
+
+            </xs:element>
+            <xs:element name="rateVehiclesRequest"
+            	type="tns:RateVehiclesRequest">
+            </xs:element>
+            
+            <xs:complexType name="RateVehiclesRequest">
+            	<xs:sequence>
+            		<xs:element name="rateVehicleRequest" type="tns:RateVehicleRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RateVehicleRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId" type="xs:long" 
+            					maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="rating"
+            					type="xs:int"  maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="RateVehiclesResponse">
+            	<xs:sequence>
+            		<xs:element name="rateVehicleResponse" type="tns:RateVehicleResponse" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RateVehicleResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="ratingSum" type="xs:long"
+            					maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="ratingCount"
+            					type="xs:long" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="GetCommentRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId"
+            					type="xs:long"  maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="paginationFilter"
+            					type="tns:PaginationFilter" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="FindingVehicleRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="paginationFilter"
+            					type="tns:PaginationFilter" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="findingKeysFilter"
+            					type="tns:FindingKeysFilter" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>                    
+            <xs:element name="removeAllCommentsRequest"
+            	type="tns:RemoveAllCommentsRequest">
+            </xs:element>
+            <xs:element name="removeAllCommentsResponse"
+            	type="tns:RemoveAllCommentsResponse">
+            </xs:element>
+            
+            <xs:complexType name="RemoveAllCommentsRequest">
+            	<xs:sequence>
+            		<xs:element name="removeAllCommentRequest" type="tns:RemoveAllCommentRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveAllCommentRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="vehicleId"
+            					type="xs:long" maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveAllCommentsResponse">
+            	<xs:sequence>
+            		<xs:element name="removeAllCommentResponse" type="tns:RemoveAllCommentResponse" maxOccurs="unbounded" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveAllCommentResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveCommentResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>           
+    
+            <xs:complexType name="GetCommentResponse">
+            	<xs:complexContent>
+				<xs:extension base="tns:BaseResponse">
+            	<xs:sequence>
+            		<xs:element name="invocationId" type="xs:string"
+            			maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="comment"
+            			type="tns:VehicleComment" maxOccurs="unbounded" minOccurs="1">
+            		</xs:element>
+            		<xs:element name="paginationOutput" type="tns:PaginationOutput" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            	</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="AddCommentsResponse">
+            	<xs:sequence>
+            		<xs:element name="addCommentResponse" type="tns:AddCommentResponse" maxOccurs="unbounded" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="GetCommentsResponse">
+            	<xs:sequence>
+            		<xs:element name="getCommentResponse" type="tns:GetCommentResponse" maxOccurs="1" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="RemoveCommentsRequest">
+            	<xs:sequence>
+            		<xs:element name="removeCommentRequest" type="tns:RemoveCommentRequest" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+    </xs:schema>
+  </types>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="addVehiclesToGarageRequest">
+    <part name="params" element="tns:addVehiclesToGarageRequest">
+    </part>
+  </message>
+  <message name="getVehiclesForMyGarageResponse">
+    <part name="params" element="tns:getVehiclesForMyGarageResponse">
+    </part>
+  </message>
+  <message name="addVehiclesToGarageResponse">
+    <part name="params" element="tns:addVehiclesToGarageResponse">
+    </part>
+  </message>
+
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="getVehiclesForMyGarageRequest">
+    <part name="params" element="tns:getVehiclesForMyGarageRequest">
+    </part>
+  </message>
+  <message name="updateVehiclesInGarageResponse">
+    <part name="params" element="tns:updateVehiclesInGarageResponse">
+    </part>
+  </message>
+  <message name="removeVehiclesFromGarageRequest">
+    <part name="params" element="tns:removeVehiclesFromGarageRequest">
+    </part>
+  </message>
+  <message name="updateVehiclesInGarageRequest">
+    <part name="params" element="tns:updateVehiclesInGarageRequest">
+    </part>
+  </message>
+  <message name="removeVehiclesFromGarageResponse">
+    <part name="params" element="tns:removeVehiclesFromGarageResponse">
+    </part>
+  </message>
+  <wsdl:message name="addToMyFavoriteVehiclesRequest">
+  	<wsdl:part name="params" element="tns:addToMyFavoriteVehiclesRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addToMyFavoriteVehiclesResponse">
+  	<wsdl:part name="params" element="tns:addToMyFavoriteVehiclesResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeFromMyFavoriteVehiclesRequest">
+  	<wsdl:part name="params" element="tns:removeFromMyFavoriteVehiclesRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeFromMyFavoriteVehiclesResponse">
+  	<wsdl:part name="params" element="tns:removeFromMyFavoriteVehiclesResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addCommentsRequest">
+  	<wsdl:part name="params" element="tns:addCommentsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addCommentsResponse">
+  	<wsdl:part name="params" element="tns:addCommentsResponse"></wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="removeCommentsRequest">
+  	<wsdl:part name="params" element="tns:removeCommentsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeCommentsResponse">
+  	<wsdl:part name="params" element="tns:removeCommentsResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCommentsRequest">
+  	<wsdl:part name="params" element="tns:getCommentsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCommentsResponse">
+  	<wsdl:part name="params" element="tns:getCommentsResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findingVehiclesRequest">
+  	<wsdl:part name="params" element="tns:findingVehiclesRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findingVehiclesResponse">
+  	<wsdl:part name="params" element="tns:findingVehiclesResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRatingForUsersRequest">
+  	<wsdl:part name="params" element="tns:getRatingForUsersRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRatingForUsersResponse">
+  	<wsdl:part name="params" element="tns:getRatingForUsersResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="rateVehiclesRequest">
+  	<wsdl:part name="params" element="tns:rateVehiclesRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="rateVehiclesResponse">
+  	<wsdl:part name="params" element="tns:rateVehiclesResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeAllCommentsRequest">
+  	<wsdl:part name="params" element="tns:removeAllCommentsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeAllCommentsResponse">
+  	<wsdl:part name="params" element="tns:removeAllCommentsResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSharedVehicleDetailsRequest">
+  	<wsdl:part name="params" element="tns:getSharedVehicleDetailsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSharedVehicleDetailsResponse">
+  	<wsdl:part name="params" element="tns:getSharedVehicleDetailsResponse"></wsdl:part>
+  </wsdl:message>
+  <portType name="MyGarageServicePort">
+    <operation name="getVersion">
+<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="addVehiclesToGarage">
+      <documentation>add vehicles to garage. We can add notes/dotos/pictures/saved searches when adding vehicle</documentation>
+      <input message="tns:addVehiclesToGarageRequest">
+    </input>
+      <output message="tns:addVehiclesToGarageResponse">
+    </output>
+    </operation>
+    <operation name="removeVehiclesFromGarage">
+      <documentation>removes vehicle from garage. We will make a soft delete</documentation>
+      <input message="tns:removeVehiclesFromGarageRequest">
+    </input>
+      <output message="tns:removeVehiclesFromGarageResponse">
+    </output>
+    </operation>
+    <operation name="getVehiclesForMyGarage">
+      <documentation>it will get all vehicles for my garage. The output fields can be selected by setting outputFilter elemen</documentation>
+      <input message="tns:getVehiclesForMyGarageRequest">
+    </input>
+      <output message="tns:getVehiclesForMyGarageResponse">
+    </output>
+    </operation>
+    <operation name="updateVehiclesInGarage">
+      <documentation>update vehicles in garag</documentation>
+      <input message="tns:updateVehiclesInGarageRequest">
+    </input>
+      <output message="tns:updateVehiclesInGarageResponse">
+    </output>
+    </operation>
+
+
+
+    <wsdl:operation name="addToMyFavoriteVehicles">
+    	<wsdl:documentation>adds vehicle</wsdl:documentation>
+    	<wsdl:input message="tns:addToMyFavoriteVehiclesRequest"></wsdl:input>
+    	<wsdl:output message="tns:addToMyFavoriteVehiclesResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeFromMyFavoriteVehicles">
+    	<wsdl:documentation></wsdl:documentation>
+    	<wsdl:input message="tns:removeFromMyFavoriteVehiclesRequest"></wsdl:input>
+    	<wsdl:output message="tns:removeFromMyFavoriteVehiclesResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addComments">
+    	<wsdl:documentation></wsdl:documentation>
+    	<wsdl:input message="tns:addCommentsRequest"></wsdl:input>
+    	<wsdl:output message="tns:addCommentsResponse"></wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="removeComments">
+    	<wsdl:documentation></wsdl:documentation>
+    	<wsdl:input message="tns:removeCommentsRequest"></wsdl:input>
+    	<wsdl:output message="tns:removeCommentsResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getComments">
+    	<wsdl:documentation>get vehicle comments </wsdl:documentation>
+    	<wsdl:input message="tns:getCommentsRequest"></wsdl:input>
+    	<wsdl:output message="tns:getCommentsResponse"></wsdl:output>
+    </wsdl:operation>
+
+   <wsdl:operation name="findingVehicles">
+    	<wsdl:input message="tns:findingVehiclesRequest"></wsdl:input>
+    	<wsdl:output message="tns:findingVehiclesResponse"></wsdl:output>
+    </wsdl:operation>
+
+    
+        <wsdl:operation name="getRatingForUsers">
+    	<wsdl:documentation>get rating for user when user is signed in and the view is non-owner view</wsdl:documentation>
+    	<wsdl:input message="tns:getRatingForUsersRequest"></wsdl:input>
+    	<wsdl:output message="tns:getRatingForUsersResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rateVehicles">
+    	<wsdl:documentation>rate vehicle when user rates a vehicle. The count and sum is return in response to calculate the updated  avg rating of the vehicle</wsdl:documentation>
+    	<wsdl:input message="tns:rateVehiclesRequest"></wsdl:input>
+    	<wsdl:output message="tns:rateVehiclesResponse"></wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="removeAllComments">
+    	<wsdl:input message="tns:removeAllCommentsRequest"></wsdl:input>
+    	<wsdl:output message="tns:removeAllCommentsResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSharedVehicleDetails">
+    	<wsdl:input message="tns:getSharedVehicleDetailsRequest"></wsdl:input>
+    	<wsdl:output message="tns:getSharedVehicleDetailsResponse"></wsdl:output>
+    </wsdl:operation>
+  </portType>
+  <binding name="MyGarageServiceHttpBinding" type="tns:MyGarageServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addVehiclesToGarage">
+      <http:operation location="/addVehiclesToGarage"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="removeVehiclesFromGarage">
+      <http:operation location="/removeVehiclesFromGarage"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getVehiclesForMyGarage">
+      <http:operation location="/getVehiclesForMyGarage"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="updateVehiclesInGarage">
+      <http:operation location="/updateVehiclesInGarage"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addToMyFavoriteVehicles">
+      <http:operation location="/addToMyFavoriteVehicles"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="removeFromMyFavoriteVehicles">
+      <http:operation location="/removeFromMyFavoriteVehicles"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addComments">
+      <http:operation location="/addComments"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="removeComments">
+      <http:operation location="/removeComments"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+     <operation name="removeAllComments">
+      <http:operation location="/removeAllComments"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getComments">
+      <http:operation location="/getComments"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="findingVehicles">
+      <http:operation location="/findingVehicles"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getRatingForUsers">
+      <http:operation location="/getRatingForUsers"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="rateVehicles">
+      <http:operation location="/rateVehicles"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getSharedVehicleDetails">
+      <http:operation location="/getSharedVehicleDetails"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="MyGarageServiceSOAPBinding" type="tns:MyGarageServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  	<operation name="addVehiclesToGarage">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/addVehiclesToGarage"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="removeVehiclesFromGarage">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/removeVehiclesFromGarage"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getVehiclesForMyGarage">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/getVehiclesForMyGarage"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="updateVehiclesInGarage">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/updateVehiclesInGarage"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addToMyFavoriteVehicles">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/addToMyFavoriteVehicles"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="removeFromMyFavoriteVehicles">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/removeFromMyFavoriteVehicles"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addComments">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/addComments"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="removeComments">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/removeComments"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>   
+     <operation name="removeAllComments">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/removeAllComments"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>   
+    <operation name="getComments">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/getComments"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>    
+    <operation name="findingVehicles">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/findingVehicles"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>  
+    <operation name="getRatingForUsers">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/getRatingForUsers"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>      
+    <operation name="rateVehicles">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/rateVehicles"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>     
+    <operation name="getSharedVehicleDetails">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/motors/v1/services/getSharedVehicleDetails"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="MyGarageService">
+<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+    <port name="MyGarageServiceHttpPort" binding="tns:MyGarageServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/motors/v1/MyGarageService"/>
+    </port>
+    <port name="MyGarageServiceSOAPPort" binding="tns:MyGarageServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/motors/v1/MyGarageService"/>
+    </port>
+  </service>
+</definitions>

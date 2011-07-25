@@ -42,6 +42,41 @@ public class AsyncPollNonBlockingTest extends AbstractWithServerTest {
 
 		Assert.assertThat("ReponseList.size", responseList.size(), is(1));
 	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void servicePollNonBlocking_timeout() throws Exception {
+		Service service = ServiceFactory.create("test1", "remote", null);
+		service.createDispatch("echoString").invokeAsync(
+				ECHO_STRING + "service1");
+		List<Response<?>> responseList = service.poll(false, true, 0);
+
+		for (Response element : responseList) {
+			System.out.println("element.get()=" + element.get());
+		}
+
+		Assert.assertTrue(responseList.size() == 0);
+	}
+	
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void servicePoll_NonBlocking_different_Operations_timeout()
+			throws Exception {
+		MyMessage msg = TestUtils.createTestMessage();
+		Service service = ServiceFactory.create("test1", "remote", null);
+		service.createDispatch("echoString").invokeAsync(ECHO_STRING);
+		msg.setBody(msg.getBody());
+		service.createDispatch("myTestOperation").invokeAsync(msg);
+
+		List<Response<?>> responseList = service.poll(false, true, 0);
+
+		for (Response element : responseList) {
+			System.out.println("element.get()=" + element.get());
+		}
+
+		Assert.assertTrue(responseList.size() < 2);
+	}
 
 	@Test
 	@SuppressWarnings("unchecked")
@@ -64,6 +99,22 @@ public class AsyncPollNonBlockingTest extends AbstractWithServerTest {
 
 		Assert.assertThat("ReponseList.size", responseList.size(), is(2));
 	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void servicePoll_local_NonBlocking_timeout() throws Exception {
+		Service service = ServiceFactory.create("Test1Service", "localAsync", null);
+		service.createDispatch("echoString").invokeAsync(ECHO_STRING);
+
+		List<Response<?>> responseList = service.poll(false, true, 0);
+
+		for (Response element : responseList) {
+			System.out.println("element.get()=" + element.get());
+		}
+
+		Assert.assertTrue(responseList.size() <= 1);
+	}
+	
 
 	@Test
 	@SuppressWarnings("unchecked")
@@ -102,6 +153,26 @@ public class AsyncPollNonBlockingTest extends AbstractWithServerTest {
 		debug(responseList);
 
 		Assert.assertThat("ReponseList.size", responseList.size(), is(2));
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void servicePoll_NonBlocking_local_different_Operations_timeout()
+			throws Exception {
+		MyMessage msg = TestUtils.createTestMessage();
+
+		Service service = ServiceFactory.create("Test1Service", "localAsync", null);
+		service.createDispatch("echoString").invokeAsync(ECHO_STRING);
+		msg.setBody(msg.getBody());
+		service.createDispatch("myTestOperation").invokeAsync(msg);
+
+		List<Response<?>> responseList = service.poll(false, true, 0);
+
+		while (responseList.size() < 2) {
+			responseList.addAll(service.poll(false, true, 0));
+		}
+
+		Assert.assertTrue(responseList.size() <= 2);
 	}
 	
 	private void debug(List<Response<?>> responseList) throws Exception {

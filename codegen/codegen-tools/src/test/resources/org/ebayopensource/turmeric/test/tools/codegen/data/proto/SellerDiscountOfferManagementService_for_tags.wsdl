@@ -1,0 +1,1009 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="SellerDiscountOfferManagementService" targetNamespace="http://www.ebay.com/marketplace/incentives/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/incentives/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/incentives/v1/services">
+			<xs:complexType  name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType  name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AckValue">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType  name="CampaignStatus">
+				<xs:annotation>
+					<xs:documentation>
+						Campaign response container for all campaign related service operations.
+						Contains error information	associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="campaignId" type="xs:long"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that occurred 
+								when eBay processed the	request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="createCampaignsRequest" type="tns:CreateCampaignsRequest"/>
+			<xs:complexType name="CreateCampaignsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="campaign" type="tns:Campaign"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createCampaignsResponse" type="tns:CreateCampaignsResponse"/>
+			<xs:complexType name="CreateCampaignsResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="campaignStatus" type="tns:CampaignStatus"/>										
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="updateCampaignsRequest" type="tns:UpdateCampaignsRequest"/>
+			<xs:complexType name="UpdateCampaignsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="campaign" type="tns:Campaign"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="updateCampaignsResponse" type="tns:UpdateCampaignsResponse"/>
+			<xs:complexType name="UpdateCampaignsResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="campaignStatus" type="tns:CampaignStatus"/>										
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getCampaignRequest" type="tns:GetCampaignRequest"/>
+			<xs:complexType name="GetCampaignRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="campaignId" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getCampaignResponse" type="tns:GetCampaignResponse"/>
+			<xs:complexType name="GetCampaignResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="campaign" type="tns:Campaign"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getCampaignsRequest" type="tns:GetCampaignsRequest"/>
+			<xs:complexType name="GetCampaignsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="campaignId" type="xs:long"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="siteId" type="xs:int"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="campaignStatus" type="tns:CampaignStatusEnum"/>										
+							<xs:element maxOccurs="1" minOccurs="0" name="campaignType" type="tns:CampaignTypeEnum"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="startDate" type="xs:dateTime"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="endDate" type="xs:dateTime"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="sellerId" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getCampaignsResponse" type="tns:GetCampaignsResponse"/>
+			<xs:complexType name="GetCampaignsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="campaign" type="tns:Campaign"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="setCampaignStatusRequest" type="tns:SetCampaignStatusRequest"/>
+			<xs:complexType name="SetCampaignStatusRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="campaignId" type="xs:long"/>										
+							<xs:element maxOccurs="1" minOccurs="1" name="campaigStatus" type="tns:CampaignStatusEnum"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="setCampaignStatusResponse" type="tns:SetCampaignStatusResponse"/>
+			<xs:complexType name="SetCampaignStatusResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="campaignStatus" type="tns:CampaignStatus"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="addOffersRequest" type="tns:AddOffersRequest"/>
+			<xs:complexType name="AddOffersRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="campaignId" type="xs:long"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="offer" type="tns:Offer"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addOffersResponse" type="tns:AddOffersResponse"/>
+			<xs:complexType name="AddOffersResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="updateOffersRequest" type="tns:UpdateOffersRequest"/>
+			<xs:complexType name="UpdateOffersRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="campaignId" type="xs:long"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="offer" type="tns:Offer"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="updateOffersResponse" type="tns:UpdateOffersResponse"/>
+			<xs:complexType name="UpdateOffersResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="deleteOffersRequest" type="tns:DeleteOffersRequest"/>
+			<xs:complexType name="DeleteOffersRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="campaignId" type="xs:long"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="offerId" type="xs:long"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="deleteOffersResponse" type="tns:DeleteOffersResponse"/>
+			<xs:complexType name="DeleteOffersResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getOfferRequest" type="tns:GetOfferRequest"/>
+			<xs:complexType name="GetOfferRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="offerId" type="xs:long"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getOfferResponse" type="tns:GetOfferResponse"/>
+			<xs:complexType name="GetOfferResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="campaignId" type="xs:long"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="offer" type="tns:Offer"/>										
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Campaign">
+				<xs:sequence>
+					<xs:element name="offer" type="tns:Offer" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="campaignId" type="xs:long" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="siteId" type="xs:int" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="campaignType" type="tns:CampaignTypeEnum" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="budgetAmount" type="tns:Amount" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="currencyCode" type="tns:IsoCurrencyCode" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="campaignStatus" type="tns:CampaignStatusEnum" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="marketingPriority" type="xs:int" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="startDate" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="endDate" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="stackSetId" type="xs:long" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="restriction" type="tns:Restriction" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="CampaignStatusEnum">				
+				<xs:restriction base="xs:string">					
+					<xs:enumeration value="ACTIVE"/>					
+					<xs:enumeration value="INACTIVE"/>					
+					<xs:enumeration value="DELETED"/>					
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="CampaignTypeEnum">				
+				<xs:restriction base="xs:string">					
+					<xs:enumeration value="RELATIONAL"/>					
+					<xs:enumeration value="GENERIC"/>					
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Offer">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="offerId" type="xs:long"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="status" type="tns:OfferStatusEnum"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="buyerCondition" type="tns:BuyerCondition"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="sellerOffer" type="tns:SellerOffer"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="restriction" type="tns:Restriction"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="OfferStatusEnum">				
+				<xs:restriction base="xs:string">					
+					<xs:enumeration value="ACTIVE"/>					
+					<xs:enumeration value="DELETED"/>					
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Restriction">
+				<xs:sequence>
+					<xs:element name="restrictionType" type="tns:ResrtrictionTypeEnum"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="categoryId" type="xs:long"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="SKU" type="xs:string"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="aspect" type="tns:Aspect"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ResrtrictionTypeEnum">				
+				<xs:restriction base="xs:string">					
+					<xs:enumeration value="INCLUDE"/>					
+					<xs:enumeration value="EXCLUDE"/>					
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Aspect">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="value" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SellerOffer">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="discountOffer" type="tns:DiscountOffer"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="fixedAmountOffer" type="tns:FixedAmountOffer"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="freeGiftSKUId" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FixedAmountOffer">
+				<xs:sequence>
+					<xs:element name="subTotalOrderAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>Buy 3 for $100. Specify $100 here.</xs:documentation>
+						</xs:annotation>		
+					</xs:element>
+					<xs:element name="shippingTotalOffer" type="tns:ShippingTotalOffer"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DiscountOffer">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="discountAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>Buy $100 Get $20. Specify $20 here.</xs:documentation>
+						</xs:annotation>		
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="discountPercent" type="xs:float">
+						<xs:annotation>
+							<xs:documentation>Buy $100 Get 20%. Specify 20 here.</xs:documentation>
+						</xs:annotation>		
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="discountQuantity" type="tns:DiscountQuantity"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="shippingDiscountPercent" type="xs:float"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DiscountQuantity">
+				<xs:annotation>
+					<xs:documentation>Buy 2 Get 1 free. Specify 1 here.</xs:documentation>
+					<xs:documentation>Buy 1 Get 1 for 50%. Specify 1 here.</xs:documentation>
+				</xs:annotation>		
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="discountQuantity" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>Buy 2 Get 1 free. Specify 1 here.</xs:documentation>
+							<xs:documentation>Buy 1 Get 1 for 50%. Specify 1 here.</xs:documentation>
+						</xs:annotation>		
+					</xs:element>
+					<xs:element name="discountPercent" type="xs:float">
+						<xs:annotation>
+							<xs:documentation>Buy 1 Get 1 for 50%. Specify 50 here.</xs:documentation>
+						</xs:annotation>		
+					</xs:element>
+					<xs:element name="applyToMaxPricedItems" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingTotalOffer">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="shippingTotalCost" type="tns:Amount"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="shippingService" type="tns:ShippingServiceEnum"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ShippingServiceEnum">				
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="PromotionalEconomyShippingService">
+						<xs:annotation>
+							<xs:documentation> 
+								Economy Shipping
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PromotionalStandardShippingService">
+						<xs:annotation>
+							<xs:documentation>
+								Standard Shipping
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PromotionaExpeditedShippingService">
+						<xs:annotation>
+							<xs:documentation>
+								Expedited Shipping
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PromotionalOneDayShippingService">
+						<xs:annotation>
+							<xs:documentation>
+								One Day Shipping
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="BuyerCondition">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="orderTotal" type="tns:AmountRange"/>
+					<xs:element minOccurs="0" name="orderSize" type="tns:SizeRange"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SizeRange">
+				<xs:sequence>					
+					<xs:element minOccurs="1" name="fromSize" type="xs:int"/>
+					<xs:element minOccurs="1" name="toSize" type="xs:int"/>
+				</xs:sequence>			
+			</xs:complexType>
+			<xs:complexType name="AmountRange">
+				<xs:sequence>					
+					<xs:element minOccurs="1" name="fromAmount" type="tns:Amount"/>
+					<xs:element minOccurs="1" name="toAmount" type="tns:Amount"/>
+				</xs:sequence>			
+			</xs:complexType>
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="IsoCurrencyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Currency representation based on ISO 4217
+						Standard:
+						http://www.iso.org/iso/currency_codes_list-1
+						Every currency has the following attributs:
+						Numeric Code - 3 Digits Zero Padded Numeric
+						Code, which uniquely identifies a currency.
+						Alphabetic Code - 3 Letter Alphabetic Code,
+						which uniquely identifies a currency. Currency -
+						The name of the currency Antity - The
+						country/Entity, which uses this currency.
+
+						This type exposes only a sub-set of ISO 4217.
+						The enumeration represents the Alphabetic Code.
+						Comments are included for quick reference.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<!-- Currency,                         Entity                          ISO Currency Code -->
+					<xs:enumeration value="USD"/>
+					<!-- U.S. Dollar                       United States                   840               -->
+					<xs:enumeration value="CAD"/>
+					<!-- Canadian Dollar                   Canada                          124               -->
+					<xs:enumeration value="GBP"/>
+					<!-- Pound Sterling                    United Kingdom                  826               -->
+					<xs:enumeration value="DEM"/>
+					<!-- German Mark                       Germany                         276               -->
+					<xs:enumeration value="AUD"/>
+					<!-- Australian Dollar                 Australia                       036               -->
+					<xs:enumeration value="JPY"/>
+					<!-- Japanese Yen                      Japanese Yen                    392               -->
+					<xs:enumeration value="EUR"/>
+					<!-- Euro                              European Union                  978               -->
+					<xs:enumeration value="FRF"/>
+					<!-- French Franc                      France                          250               -->
+					<xs:enumeration value="ATS"/>
+					<!-- Austrian Schilling                Austria                         040               -->
+					<xs:enumeration value="BEF"/>
+					<!-- Belgian Franc                     Belgium                         056               -->
+					<xs:enumeration value="CHF"/>
+					<!-- Swiss Franc                       Switzerland                     756               -->
+					<xs:enumeration value="CNY"/>
+					<!-- Chinese Yuan Renminbi             China                           156               -->
+					<xs:enumeration value="CZK"/>
+					<!-- Czech Koruna                      Czech Republic                  203               -->
+					<xs:enumeration value="DKK"/>
+					<!-- Danish Krone                      Denmark                         208               -->
+					<xs:enumeration value="ESP"/>
+					<!-- Spanish Peseta                    Spain                           724               -->
+					<xs:enumeration value="FIM"/>
+					<!-- Finnish Markka                    Finland                         246               -->
+					<xs:enumeration value="GRD"/>
+					<!-- Greek Drachma                     Greece                          300               -->
+					<xs:enumeration value="HKD"/>
+					<!-- Hong Kong Dollar                  Hong Kong                       344               -->
+					<xs:enumeration value="HUF"/>
+					<!-- Hungarian Forint                  Hungary                         348               -->
+					<xs:enumeration value="IDR"/>
+					<!-- Indonesian Rupiah                 Indonesia                       360               -->
+					<xs:enumeration value="IEP"/>
+					<!-- Irish Pound                       Ireland                         372               -->
+					<xs:enumeration value="ILS"/>
+					<!-- Israeli new Shekel                Israel                          376               -->
+					<xs:enumeration value="ITL"/>
+					<!-- Italian Lira                      Italy                           380               -->
+					<xs:enumeration value="NLG"/>
+					<!-- Dutch Guilder                     Netherlands                     528               -->
+					<xs:enumeration value="NOK"/>
+					<!-- Norwegian Krone                   Norway                          578               -->
+					<xs:enumeration value="NZD"/>
+					<!-- New Zealand Dollar                New Zealand                     554               -->
+					<xs:enumeration value="PHP"/>
+					<!-- Philippine Peso                   Philippines                     608               -->
+					<xs:enumeration value="PLN"/>
+					<!-- Polish New Zloty                  Poland                          985               -->
+					<xs:enumeration value="PTE"/>
+					<!-- Portuguese Escudo                 Portugal                        620               -->
+					<xs:enumeration value="RUR"/>
+					<!-- Russian Ruble                     Russian Federation              810               -->
+					<xs:enumeration value="SEK"/>
+					<!-- Swedish Krona                     Sweden                          752               -->
+					<xs:enumeration value="SGD"/>
+					<!-- Singapore Dollar                  Singapore                       702               -->
+					<xs:enumeration value="THB"/>
+					<!-- Thai Baht                         Thailand                        764               -->
+					<xs:enumeration value="TWD"/>
+					<!-- New Taiwan dollar                 Taiwan                          901               -->
+					<xs:enumeration value="ZAR"/>
+					<!-- South African Rand                South Africa                    710               -->
+					<xs:enumeration value="INR"/>
+					<!-- Indian Rupee                      India                           356               -->
+					<xs:enumeration value="PEN"/>
+					<!-- Peruvian New Sol                  Peru                            604               -->
+					<xs:enumeration value="MYR"/>
+					<!-- Malaysian Ringgit                 Malaysia                        458               -->
+					<xs:enumeration value="VND"/>
+					<!-- Vietnamese New Dong               Vietnam                         704               -->
+					<xs:enumeration value="KRW"/>
+					<!-- South Korean Won                  South Korea                     410               -->
+					<xs:enumeration value="TRY"/>
+					<!-- New Turkish Lira                  Turkey                          949               -->
+					<xs:enumeration value="ANG"/>
+					<!-- Antillian Guilder                 Netherlands Antilles            532               -->
+					<xs:enumeration value="AWG"/>
+					<!-- Aruban Guilder                    Aruba                           533               -->
+					<xs:enumeration value="BMD"/>
+					<!-- Bermudan Dollar                   Bermudan Dollar                 060               -->
+					<xs:enumeration value="CRC"/>
+					<!-- Costa Rican Colon                 Costa Rica                      188               -->
+					<xs:enumeration value="RON"/>
+					<!-- Romanian New Leu                  Romania                         946               -->
+					<xs:enumeration value="VEF"/>
+					<!-- Venezuelan Bolivar Fuerte         Venezuela                       937               -->
+					<xs:enumeration value="BBD"/>
+					<!-- Barbados Dollar                   Barbados                        052               -->
+					<xs:enumeration value="BGN"/>
+					<!-- Bulgarian Lev                     Bulgaria                        975               -->
+					<xs:enumeration value="BND"/>
+					<!-- Brunei Dollar                     Brunei                          096               -->
+					<xs:enumeration value="BSD"/>
+					<!-- Bahamian Dollar                   Bahamas                         044               -->
+					<xs:enumeration value="COP"/>
+					<!-- Colombian Peso                    Columbia                        170               -->
+					<xs:enumeration value="DOP"/>
+					<!-- Dominican Peso                    Dominican Republic              214               -->
+					<xs:enumeration value="GTQ"/>
+					<!-- Guatemalan Quetzal                Guatemala                       320               -->
+					<xs:enumeration value="KYD"/>
+					<!-- Cayman Isles Dollar               Cayman Islands                  136               -->
+					<xs:enumeration value="MVR"/>
+					<!-- Maldivian Rufiyaa                 Maldives                        462               -->
+					<xs:enumeration value="QAR"/>
+					<!-- Qatari Rial                       Qatar                           634               -->
+					<xs:enumeration value="SAR"/>
+					<!-- Saudi Riyal                       Saudi Arabia                    682               -->
+					<xs:enumeration value="TTD"/>
+					<!-- Trinidadian and Tobagonian Dollar Trinidad and Tobago             780               -->
+					<xs:enumeration value="UAH"/>
+					<!-- Ukrainian hryvnia                 Ukraine                         980               -->
+					<xs:enumeration value="UYU"/>
+					<!-- Peso Uruguayo                     Uruguay                         858               -->
+					<xs:enumeration value="XCD"/>
+					<!-- East Caribbean Dollar             East Caribbean Currency Area    951               -->
+					<xs:enumeration value="XPF"/>
+					<!-- French Polynesian Franc           French Polynesia                953               -->
+					<xs:enumeration value="JMD"/>
+					<!-- Jamaican Dollar                   Jamaica                         388               -->
+				</xs:restriction>
+			</xs:simpleType>
+    </xs:schema>
+  </types>
+  <message name="deleteOffersRequest">
+    <part name="deleteOffersRequest" element="tns:deleteOffersRequest">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="messageParameters" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="updateOffersRequest">
+    <part name="updateOffersRequest" element="tns:updateOffersRequest">
+    </part>
+  </message>
+  <message name="getCampaignsResponse">
+    <part name="getCampaignsResponse" element="tns:getCampaignsResponse">
+    </part>
+  </message>
+  <message name="getOfferRequest">
+    <part name="getOfferRequest" element="tns:getOfferRequest">
+    </part>
+  </message>
+  <message name="getCampaignRequest">
+    <part name="getCampaignRequest" element="tns:getCampaignRequest">
+    </part>
+  </message>
+  <message name="createCampaignsRequest">
+    <part name="createCampaignsRequest" element="tns:createCampaignsRequest">
+    </part>
+  </message>
+  <message name="createCampaignsResponse">
+    <part name="createCampaignsResponse" element="tns:createCampaignsResponse">
+    </part>
+  </message>
+  <message name="setCampaignStatusRequest">
+    <part name="setCampaignStatusRequest" element="tns:setCampaignStatusRequest">
+    </part>
+  </message>
+  <message name="setCampaignStatusResponse">
+    <part name="setCampaignStatusResponse" element="tns:setCampaignStatusResponse">
+    </part>
+  </message>
+  <message name="getOfferResponse">
+    <part name="getOfferResponse" element="tns:getOfferResponse">
+    </part>
+  </message>
+  <message name="getCampaignResponse">
+    <part name="getCampaignResponse" element="tns:getCampaignResponse">
+    </part>
+  </message>
+  <message name="updateOffersResponse">
+    <part name="updateOffersResponse" element="tns:updateOffersResponse">
+    </part>
+  </message>
+  <message name="deleteOffersResponse">
+    <part name="deleteOffersResponse" element="tns:deleteOffersResponse">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="messageParameters" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="getCampaignsRequest">
+    <part name="getCampaignResponse" element="tns:getCampaignsRequest">
+    </part>
+  </message>
+  <message name="addOffersResponse">
+    <part name="addOffersResponse" element="tns:addOffersResponse">
+    </part>
+  </message>
+  <message name="updateCampaignsResponse">
+    <part name="updateCampaignsResponse" element="tns:updateCampaignsResponse">
+    </part>
+  </message>
+  <message name="updateCampaignsRequest">
+    <part name="updateCampaignsRequest" element="tns:updateCampaignsRequest">
+    </part>
+  </message>
+  <message name="addOffersRequest">
+    <part name="addOffersRequest" element="tns:addOffersRequest">
+    </part>
+  </message>
+  <portType name="SellerDiscountOfferManagementServicePort">
+    <operation name="createCampaigns">
+      <input message="tns:createCampaignsRequest">
+    </input>
+      <output message="tns:createCampaignsResponse">
+    </output>
+    </operation>
+    <operation name="updateCampaigns">
+      <input message="tns:updateCampaignsRequest">
+    </input>
+      <output message="tns:updateCampaignsResponse">
+    </output>
+    </operation>
+    <operation name="getCampaign">
+      <input message="tns:getCampaignRequest">
+    </input>
+      <output message="tns:getCampaignResponse">
+    </output>
+    </operation>
+    <operation name="getCampaigns">
+      <input message="tns:getCampaignsRequest">
+    </input>
+      <output message="tns:getCampaignsResponse">
+    </output>
+    </operation>
+    <operation name="setCampaignStatus">
+      <input message="tns:setCampaignStatusRequest">
+    </input>
+      <output message="tns:setCampaignStatusResponse">
+    </output>
+    </operation>
+    <operation name="addOffers">
+      <input message="tns:addOffersRequest">
+    </input>
+      <output message="tns:addOffersResponse">
+    </output>
+    </operation>
+    <operation name="updateOffers">
+      <input message="tns:updateOffersRequest">
+    </input>
+      <output message="tns:updateOffersResponse">
+    </output>
+    </operation>
+    <operation name="deleteOffers">
+      <input message="tns:deleteOffersRequest">
+    </input>
+      <output message="tns:deleteOffersResponse">
+    </output>
+    </operation>
+    <operation name="getOffer">
+      <input message="tns:getOfferRequest">
+    </input>
+      <output message="tns:getOfferResponse">
+    </output>
+    </operation>
+    <operation name="getVersion">
+      <input name="getVersionRequest" message="tns:getVersionRequest">
+    </input>
+      <output name="getVersionResponse" message="tns:getVersionResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="SellerDiscountOfferManagementServiceSOAPBinding" type="tns:SellerDiscountOfferManagementServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createCampaigns">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/createCampaigns"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="updateCampaigns">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/updateCampaigns"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCampaign">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/getCampaign"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCampaigns">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/getCampaigns"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="setCampaignStatus">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/setCampaigStatus"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addOffers">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/addOffers"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="updateOffers">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/updateOffers"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteOffers">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/deleteOffers"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getOffer">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/incentives/v1/services/getOffer"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getVersion">
+      <soap:operation soapAction="urn:getVersion" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="SellerDiscountOfferManagementServiceHttpBinding" type="tns:SellerDiscountOfferManagementServicePort">
+    <http:binding verb="POST"/>
+    <operation name="createCampaigns">
+      <http:operation location="createCampaigns"/>
+      <input>
+        <mime:content part="createCampaignsRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="createCampaignsResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="updateCampaigns">
+      <http:operation location="updateCampaigns"/>
+      <input>
+        <mime:content part="updateCampaignsRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="updateCampaignsResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getCampaign">
+      <http:operation location="getCampaign"/>
+      <input>
+        <mime:content part="getCampaignRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="getCampaignResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getCampaigns">
+      <http:operation location="getCampaigns"/>
+      <input>
+        <mime:content part="getCampaignsRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="getCampaignsResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="setCampaignStatus">
+      <http:operation location="setCampaignStatus"/>
+      <input>
+        <mime:content part="setCampaignStatusRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="setCampaignStatusResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addOffers">
+      <http:operation location="addOffers"/>
+      <input>
+        <mime:content part="addOffersRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="addOffersResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="updateOffers">
+      <http:operation location="updateOffers"/>
+      <input>
+        <mime:content part="updateOffersRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="updateOffersResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="deleteOffers">
+      <http:operation location="deleteOffers"/>
+      <input>
+        <mime:content part="deleteOffersRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="deleteOffersResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getOffer">
+      <http:operation location="getOffer"/>
+      <input>
+        <mime:content part="getOfferRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="getOfferResponse" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getVersion">
+      <http:operation location="getVersion"/>
+      <input>
+        <mime:content part="getVersionRequest" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="getVersionResponse" type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="SellerDiscountOfferManagementService">
+<wsdl:documentation>
+		<Version>1.0.0</Version>
+	</wsdl:documentation>
+    <port name="SellerDiscountOfferManagementServiceSOAPPort" binding="tns:SellerDiscountOfferManagementServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/incentives/v1/SellerDiscountOfferManagementService"/>
+    </port>
+    <port name="SellerDiscountOfferManagementServiceHttpPort" binding="tns:SellerDiscountOfferManagementServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/incentives/v1/SellerDiscountOfferManagementService"/>
+    </port>
+  </service>
+</definitions>

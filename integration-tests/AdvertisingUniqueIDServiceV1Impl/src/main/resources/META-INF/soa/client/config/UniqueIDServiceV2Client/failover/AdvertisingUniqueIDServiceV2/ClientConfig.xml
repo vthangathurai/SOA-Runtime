@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client-config-list xmlns="http://www.ebay.com/soaframework/common/config">
+	<client-config>
+		<service-interface-class-name>com.ebay.marketplace.services.advertisinguniqueidservicev2.AdvertisingUniqueIDServiceV2
+		</service-interface-class-name>
+		<service-location>http://localhost:9090/services/advertise/UniqueIDService/v2</service-location>
+     
+		<service-location>http://localhost:8080/services/advertise/UniqueIDService/v2</service-location>
+		<service-location>http://localhost:8080/foo</service-location>
+		<client-instance-config>
+			<invocation-options>
+				<preferred-transport name="LOCAL" />
+				<request-data-binding>XML</request-data-binding>
+				<response-data-binding>XML</response-data-binding>
+				<consumer-id>UniqueIDServiceV2Client</consumer-id>
+				
+				<retry-options>
+				<app-level-num-retries>10</app-level-num-retries>
+				<app-level-retry-handler>com.ebay.soaframework.sif.impl.pipeline.DefaultApplicationRetryHandler
+				</app-level-retry-handler>
+				<retry-transport-status-code>404</retry-transport-status-code>
+			</retry-options>
+			</invocation-options>
+			<transport name="LOCAL">
+				<class-name>com.ebay.soaframework.spf.impl.transport.local.LocalTransport
+				</class-name>
+				<default-options>
+					<use-detached-local-binding>false</use-detached-local-binding>
+					<other-options>
+						<option name="request-uri">/services/advertise/UniqueIDService/v2/*</option>
+					</other-options>
+				</default-options>
+			</transport>
+			<pipeline-config>
+				<request-handlers>
+					<handler name="MessageContextHandler">
+						<class-name>com.ebay.soaframework.sif.impl.handlers.MessageContextHandler
+						</class-name>
+
+					</handler>
+				</request-handlers>
+			</pipeline-config>
+		</client-instance-config>
+	</client-config>
+</client-config-list>
+

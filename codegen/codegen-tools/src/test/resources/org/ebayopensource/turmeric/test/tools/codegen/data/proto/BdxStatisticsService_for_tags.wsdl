@@ -1,0 +1,1500 @@
+<?xml version="1.0" encoding="UTF-8"?><!--- B''H -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ns1="http://org.apache.axis2/xsd"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.ebay.com/marketplace/services/BdxStatistics"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/"
+	targetNamespace="http://www.ebay.com/marketplace/services/BdxStatistics">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/services/BdxStatistics">
+			<xs:complexType name="Metric">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="XCalCubeId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="XValue"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="YValue"
+						type="xs:long" />					
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MetricInfo">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="metricName"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="metrics"
+						type="tns:MetricList" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MetricList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfMetric"  type="tns:Metric" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MetricInfoList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfMetricInfo"  type="tns:MetricInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AppJobInfoMetric">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="metricsList"
+						type="tns:MetricInfoList" />
+					<xs:element minOccurs="0" name="XAxisName"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="StringList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfString"  type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Category">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="dimensionName"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="dimensionValues"
+						type="tns:StringList" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getAppJobInfoRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="jobType"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobPriority"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobState"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="userId"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="applicationId"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="metrics"
+						type="tns:StringList" />					
+					<xs:element minOccurs="0" name="application" type="tns:StringList"/>	
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorInfo">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="errorData"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="errorDesc"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getAppJobInfoResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:AppJobInfoMetric" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getAppJobInfo"
+				type="tns:getAppJobInfoRequest" />
+			<xs:element name="getAppJobInfoResponse" 
+				type="tns:getAppJobInfoResponse" />
+
+			<xs:complexType name="AppJobParameter">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="jobPriorities"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobStates"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobTypes"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="appDim2"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="appDim1"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="users"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="calSgfJobStateId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfPriorityId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="applications"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobTypeId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getAppJobParametersByTimeRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getAppJobParametersByTimeResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:AppJobParameter" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getAppJobParametersByTime"
+				type="tns:getAppJobParametersByTimeRequest" />
+			<xs:element name="getAppJobParametersByTimeResponse"
+				 type="tns:getAppJobParametersByTimeResponse" />
+			<xs:complexType name="Application">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="calSgfApplicationId"
+						type="xs:long" />
+					<xs:element minOccurs="0"
+						name="calSgfApplicationName" type="xs:string" />
+					<xs:element minOccurs="0"
+						name="applicationIdsFilterSQL" type="xs:string" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ApplicationList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfApplication" 
+						type="tns:Application" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getApplicationsRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getApplicationsResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:ApplicationList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getApplications"
+				type="tns:getApplicationsRequest" />
+			<xs:element name="getApplicationsResponse" 
+				type="tns:getApplicationsResponse" />
+			<xs:complexType name="JobPriority">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="calSgfPriorityId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfPriorityName"
+						type="xs:string" />
+					<xs:element minOccurs="0"
+						name="priorityIdsFilterSQL" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="JobInfoMetric">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="metricsList"
+						type="tns:MetricInfoList" />
+					<xs:element minOccurs="0" name="XAxisName"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobInfoRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="jobType"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobPriority"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobState"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="metrics"
+						type="tns:StringList" />
+					
+					<xs:element minOccurs="0" name="application" type="tns:StringList"/>	
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobInfoResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:JobInfoMetric" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getJobInfo" type="tns:getJobInfoRequest" />
+			<xs:element name="getJobInfoResponse" 
+				type="tns:getJobInfoResponse" />
+
+			<xs:complexType name="JobParameter">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="jobPriorities"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobStates"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobTypes"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="calSgfJobStateId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfPriorityId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="jobTypeId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobParametersByTimeRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobParametersByTimeResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:JobParameter" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getJobParametersByTime"
+				type="tns:getJobParametersByTimeRequest" />
+			<xs:element name="getJobParametersByTimeResponse"
+				 type="tns:getJobParametersByTimeResponse" />
+
+			<xs:complexType name="JobPriorityList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfJobPriority" 
+						type="tns:JobPriority" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobPrioritiesRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobPrioritiesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:JobPriorityList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getJobPriorities"
+				type="tns:getJobPrioritiesRequest" />
+			<xs:element name="getJobPrioritiesResponse" 
+				type="tns:getJobPrioritiesResponse" />
+
+			<xs:complexType name="JobState">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="calSgfJobStateName"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="calSgfJobStateId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="JobStateList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfJobState"  type="tns:JobState" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobStatesRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobStatesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:JobStateList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getJobStates"
+				type="tns:getJobStatesRequest" />
+			<xs:element name="getJobStatesResponse" 
+				type="tns:getJobStatesResponse" />
+			<xs:complexType name="JobType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0"
+						name="calBdxSoaJobTypeName" type="xs:string" />
+					<xs:element minOccurs="0" name="calBdxSoaJobTypeId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="JobTypeList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfJobType"  type="tns:JobType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobTypesRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getJobTypesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:JobTypeList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getJobTypes"
+				type="tns:getJobTypesRequest" />
+			<xs:element name="getJobTypesResponse" 
+				type="tns:getJobTypesResponse" />
+			<xs:complexType name="Resource">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="calSgfResourceId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfResourceName"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0"
+						name="resourceIdsFilterSQL" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ResourceList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfResource"  type="tns:Resource" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResourcesRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResourcesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:ResourceList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getResources"
+				type="tns:getResourcesRequest" />
+			<xs:element name="getResourcesResponse" 
+				type="tns:getResourcesResponse" />
+			<xs:complexType name="ResourceInfoMetric">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="metricsList"
+						type="tns:MetricInfoList" />
+					<xs:element minOccurs="0" name="XAxisName"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResourceInfoRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="resourceName"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="jobPriority"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="metrics"
+						type="tns:StringList" />					
+					<xs:element minOccurs="0" name="application" type="tns:StringList"/>	
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResourceInfoResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:ResourceInfoMetric" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getResourceInfo"
+				type="tns:getResourceInfoRequest" />
+			<xs:element name="getResourceInfoResponse" 
+				type="tns:getResourceInfoResponse" />
+			<xs:complexType name="ResourceParameter">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="jobPriorities"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="calSgfResourceId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfPriorityId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="resourceNames"
+						type="tns:StringList" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getResourceParametersByTimeRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType
+				name="getResourceParametersByTimeResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:ResourceParameter" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getResourceParametersByTime"
+				type="tns:getResourceParametersByTimeRequest" />
+			<xs:element name="getResourceParametersByTimeResponse"
+				 type="tns:getResourceParametersByTimeResponse" />
+			<xs:complexType name="TaskInfoMetric">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="metricsList"
+						type="tns:MetricInfoList" />
+					<xs:element minOccurs="0" name="XAxisName"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskInfoRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="taskActionName"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="resourceName"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="taskReasonCode"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="taskState"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="metrics"
+						type="tns:StringList" />					
+					<xs:element minOccurs="0" name="application" type="tns:StringList"/>	
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskInfoResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:TaskInfoMetric" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getTaskInfo"
+				type="tns:getTaskInfoRequest" />
+			<xs:element name="getTaskInfoResponse" 
+				type="tns:getTaskInfoResponse" />
+			<xs:complexType name="TaskParameter">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="taskReasonCodes"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="taskActionNames"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="calSgfResourceId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="resourceNames"
+						type="tns:StringList" />
+					<xs:element minOccurs="0" name="calSgfTaskActionId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="taskStates"
+						type="tns:StringList" />
+					<xs:element minOccurs="0"
+						name="calSgfTaskReasonCodeId" type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfTaskStateId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskParametersByTimeRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="startDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="endDate"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="step"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskParametersByTimeResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:TaskParameter" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getTaskParametersByTime"
+				type="tns:getTaskParametersByTimeRequest" />
+			<xs:element name="getTaskParametersByTimeResponse"
+				 type="tns:getTaskParametersByTimeResponse" />
+			<xs:complexType name="TaskAction">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0"
+						name="calSgfTaskActionName" type="xs:string" />
+					<xs:element minOccurs="0" name="calSgfTaskActionId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TaskActionList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfTaskAction"  type="tns:TaskAction" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskActionsRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskActionsResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:TaskActionList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getTaskActions"
+				type="tns:getTaskActionsRequest" />
+			<xs:element name="getTaskActionsResponse" 
+				type="tns:getTaskActionsResponse" />
+			<xs:complexType name="TaskReasonCodeList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfTaskReasonCode" 
+						type="tns:TaskReasonCode" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TaskReasonCode">
+				<xs:sequence>
+					<xs:element minOccurs="0"
+						name="calSgfTaskReasonCodeId" type="xs:long" />
+					<xs:element minOccurs="0"
+						name="calSgfTaskReasonCodeName" type="xs:string" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0"
+						name="taskReasonCodeIdsFilterSQL" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskReasonCodesRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskReasonCodesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:TaskReasonCodeList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getTaskReasonCodes"
+				type="tns:getTaskReasonCodesRequest" />
+			<xs:element name="getTaskReasonCodesResponse"
+				 type="tns:getTaskReasonCodesResponse" />
+
+			<xs:complexType name="TaskStateList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfTaskState"  type="tns:TaskState" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TaskState">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="calSgfTaskStateId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="calSgfTaskStateName"
+						type="xs:string" />
+					<xs:element minOccurs="0"
+						name="taskStateIdsFilterSQL" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskStatesRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTaskStatesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:TaskStateList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getTaskStates"
+				type="tns:getTaskStatesRequest" />
+			<xs:element name="getTaskStatesResponse" 
+				type="tns:getTaskStatesResponse" />
+
+			<xs:complexType name="User">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="userName"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="dimUserId"
+						type="xs:long" />
+					<xs:element minOccurs="0" name="creationDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="lastModifiedDate"
+						type="xs:dateTime" />
+					<xs:element minOccurs="0" name="userGroup"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UserList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="elementsOfUser"  type="tns:User" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getUsersRequest">
+				<xs:sequence></xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getUsersResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData"
+						type="tns:UserList" />
+					<xs:element minOccurs="0" name="errorInfo"
+						type="tns:ErrorInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getUsers" type="tns:getUsersRequest" />
+			<xs:element name="getUsersResponse" 
+				type="tns:getUsersResponse" />
+			<xs:complexType name="void">
+				<xs:sequence>
+				</xs:sequence>
+			</xs:complexType>									
+			<xs:complexType name="setDateFormatRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="format" type="xs:string"/>
+					<xs:element minOccurs="0" name="step" type="xs:string"/>					
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="setDateFormatResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData" type="tns:void"/>
+				</xs:sequence>
+			</xs:complexType>						
+			<xs:element name="setDateFormat" type="tns:setDateFormatRequest"/>
+			<xs:element name="setDateFormatResponse"  type="tns:setDateFormatResponse"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getAppJobInfoRequest">
+		<wsdl:part name="parameters" element="tns:getAppJobInfo" />
+	</wsdl:message>
+	<wsdl:message name="getAppJobInfoResponse">
+		<wsdl:part name="parameters"
+			element="tns:getAppJobInfoResponse" />
+	</wsdl:message>
+	<wsdl:message name="getAppJobParametersByTimeRequest">
+		<wsdl:part name="parameters"
+			element="tns:getAppJobParametersByTime" />
+	</wsdl:message>
+	<wsdl:message name="getAppJobParametersByTimeResponse">
+		<wsdl:part name="parameters"
+			element="tns:getAppJobParametersByTimeResponse" />
+	</wsdl:message>
+	<wsdl:message name="getJobInfoRequest">
+		<wsdl:part name="parameters" element="tns:getJobInfo" />
+	</wsdl:message>
+	<wsdl:message name="getJobInfoResponse">
+		<wsdl:part name="parameters" element="tns:getJobInfoResponse" />
+	</wsdl:message>
+	<wsdl:message name="getJobParametersByTimeRequest">
+		<wsdl:part name="parameters"
+			element="tns:getJobParametersByTime" />
+	</wsdl:message>
+	<wsdl:message name="getJobParametersByTimeResponse">
+		<wsdl:part name="parameters"
+			element="tns:getJobParametersByTimeResponse" />
+	</wsdl:message>
+	<wsdl:message name="getResourceInfoRequest">
+		<wsdl:part name="parameters" element="tns:getResourceInfo" />
+	</wsdl:message>
+	<wsdl:message name="getResourceInfoResponse">
+		<wsdl:part name="parameters"
+			element="tns:getResourceInfoResponse" />
+	</wsdl:message>
+	<wsdl:message name="getResourceParametersByTimeRequest">
+		<wsdl:part name="parameters"
+			element="tns:getResourceParametersByTime" />
+	</wsdl:message>
+	<wsdl:message name="getResourceParametersByTimeResponse">
+		<wsdl:part name="parameters"
+			element="tns:getResourceParametersByTimeResponse" />
+	</wsdl:message>
+	<wsdl:message name="getTaskInfoRequest">
+		<wsdl:part name="parameters" element="tns:getTaskInfo" />
+	</wsdl:message>
+	<wsdl:message name="getTaskInfoResponse">
+		<wsdl:part name="parameters" element="tns:getTaskInfoResponse" />
+	</wsdl:message>
+	<wsdl:message name="getTaskParametersByTimeRequest">
+		<wsdl:part name="parameters"
+			element="tns:getTaskParametersByTime" />
+	</wsdl:message>
+	<wsdl:message name="getTaskParametersByTimeResponse">
+		<wsdl:part name="parameters"
+			element="tns:getTaskParametersByTimeResponse" />
+	</wsdl:message>
+	<wsdl:message name="getApplicationsRequest">
+		<wsdl:part name="parameters" element="tns:getApplications" />
+	</wsdl:message>
+	<wsdl:message name="getApplicationsResponse">
+		<wsdl:part name="parameters"
+			element="tns:getApplicationsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getJobPrioritiesRequest">
+		<wsdl:part name="parameters" element="tns:getJobPriorities" />
+	</wsdl:message>
+	<wsdl:message name="getJobPrioritiesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getJobPrioritiesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getJobStatesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getJobStatesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getJobStatesRequest">
+		<wsdl:part name="parameters" element="tns:getJobStates">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getJobTypesRequest">
+		<wsdl:part name="parameters" element="tns:getJobTypes">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getJobTypesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getJobTypesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getResourcesRequest">
+		<wsdl:part name="parameters" element="tns:getResources" />
+	</wsdl:message>
+	<wsdl:message name="getResourcesResponse">
+		<wsdl:part name="parameters" element="tns:getResourcesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getUsersRequest">
+		<wsdl:part name="parameters" element="tns:getUsers"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUsersResponse">
+		<wsdl:part name="parameters" element="tns:getUsersResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTaskStatesRequest">
+		<wsdl:part name="parameters" element="tns:getTaskStates" />
+	</wsdl:message>
+	<wsdl:message name="getTaskStatesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getTaskStatesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getTaskReasonCodesRequest">
+		<wsdl:part name="parameters" element="tns:getTaskReasonCodes" />
+	</wsdl:message>
+	<wsdl:message name="getTaskReasonCodesResponse">
+		<wsdl:part name="parameters"
+			element="tns:getTaskReasonCodesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getTaskActionsRequest">
+		<wsdl:part name="parameters" element="tns:getTaskActions">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTaskActionsResponse">
+		<wsdl:part name="parameters"
+			element="tns:getTaskActionsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setDateFormatRequest">
+		<wsdl:part name="parameters" element="tns:setDateFormat"/>
+	</wsdl:message>
+	<wsdl:message name="setDateFormatResponse">
+		<wsdl:part name="parameters" element="tns:setDateFormatResponse"/>
+	</wsdl:message>	
+	<wsdl:portType name="BdxStatisticsServicePortType">
+		<wsdl:operation name="getAppJobInfo">
+			<wsdl:input message="tns:getAppJobInfoRequest" />
+			<wsdl:output message="tns:getAppJobInfoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getAppJobParametersByTime">
+			<wsdl:input message="tns:getAppJobParametersByTimeRequest" />
+			<wsdl:output
+				message="tns:getAppJobParametersByTimeResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getJobInfo">
+			<wsdl:input message="tns:getJobInfoRequest" />
+			<wsdl:output message="tns:getJobInfoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getJobParametersByTime">
+			<wsdl:input message="tns:getJobParametersByTimeRequest" />
+			<wsdl:output message="tns:getJobParametersByTimeResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getResourceInfo">
+			<wsdl:input message="tns:getResourceInfoRequest" />
+			<wsdl:output message="tns:getResourceInfoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getResourceParametersByTime">
+			<wsdl:input
+				message="tns:getResourceParametersByTimeRequest" />
+			<wsdl:output
+				message="tns:getResourceParametersByTimeResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getTaskInfo">
+			<wsdl:input message="tns:getTaskInfoRequest" />
+			<wsdl:output message="tns:getTaskInfoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getTaskParametersByTime">
+			<wsdl:input message="tns:getTaskParametersByTimeRequest" />
+			<wsdl:output message="tns:getTaskParametersByTimeResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getApplications">
+			<wsdl:input message="tns:getApplicationsRequest" />
+			<wsdl:output message="tns:getApplicationsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getJobPriorities">
+			<wsdl:input message="tns:getJobPrioritiesRequest" />
+			<wsdl:output message="tns:getJobPrioritiesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getJobStates">
+			<wsdl:input message="tns:getJobStatesRequest"></wsdl:input>
+			<wsdl:output message="tns:getJobStatesResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobTypes">
+			<wsdl:input message="tns:getJobTypesRequest"></wsdl:input>
+			<wsdl:output message="tns:getJobTypesResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResources">
+			<wsdl:input message="tns:getResourcesRequest" />
+			<wsdl:output message="tns:getResourcesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getTaskActions">
+			<wsdl:input message="tns:getTaskActionsRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getTaskActionsResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setDateFormat">
+			<wsdl:input message="tns:setDateFormatRequest"/>
+			<wsdl:output message="tns:setDateFormatResponse"/>
+		</wsdl:operation>	
+		<wsdl:operation name="getTaskReasonCodes">
+			<wsdl:input message="tns:getTaskReasonCodesRequest" />
+			<wsdl:output message="tns:getTaskReasonCodesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getTaskStates">
+			<wsdl:input message="tns:getTaskStatesRequest" />
+			<wsdl:output message="tns:getTaskStatesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getUsers">
+			<wsdl:input message="tns:getUsersRequest"></wsdl:input>
+			<wsdl:output message="tns:getUsersResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BdxStatisticsServiceSoap11Binding"
+		type="tns:BdxStatisticsServicePortType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getAppJobInfo">
+			<soap:operation soapAction="urn:getAppJobInfo"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAppJobParametersByTime">
+			<soap:operation soapAction="urn:getAppJobParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobInfo">
+			<soap:operation soapAction="urn:getJobInfo"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobParametersByTime">
+			<soap:operation soapAction="urn:getJobParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResourceInfo">
+			<soap:operation soapAction="urn:getResourceInfo"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResourceParametersByTime">
+			<soap:operation soapAction="urn:getResourceParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskInfo">
+			<soap:operation soapAction="urn:getTaskInfo"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskParametersByTime">
+			<soap:operation soapAction="urn:getTaskParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getApplications">
+			<soap:operation soapAction="urn:getApplications"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobPriorities">
+			<soap:operation soapAction="urn:getJobPriorities"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobStates">
+			<soap:operation soapAction="urn:getJobStates"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobTypes">
+			<soap:operation soapAction="urn:getJobTypes"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResources">
+			<soap:operation soapAction="urn:getResources"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskActions">
+			<soap:operation soapAction="urn:getTaskActions"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setDateFormat">
+			<soap:operation soapAction="urn:setDateFormat"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskReasonCodes">
+			<soap:operation soapAction="urn:getTaskReasonCodes"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskStates">
+			<soap:operation soapAction="urn:getTaskStates"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUsers">
+			<soap:operation soapAction="urn:getUsers" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="BdxStatisticsServiceSoap12Binding"
+		type="tns:BdxStatisticsServicePortType">
+		<soap12:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getAppJobInfo">
+			<soap12:operation soapAction="urn:getAppJobInfo"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAppJobParametersByTime">
+			<soap12:operation soapAction="urn:getAppJobParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobInfo">
+			<soap12:operation soapAction="urn:getJobInfo"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobParametersByTime">
+			<soap12:operation soapAction="urn:getJobParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResourceInfo">
+			<soap12:operation soapAction="urn:getResourceInfo"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResourceParametersByTime">
+			<soap12:operation
+				soapAction="urn:getResourceParametersByTime" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskInfo">
+			<soap12:operation soapAction="urn:getTaskInfo"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskParametersByTime">
+			<soap12:operation soapAction="urn:getTaskParametersByTime"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getApplications">
+			<soap12:operation soapAction="urn:getApplications"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobPriorities">
+			<soap12:operation soapAction="urn:getJobPriorities"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobStates">
+			<soap12:operation soapAction="urn:getJobStates"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobTypes">
+			<soap12:operation soapAction="urn:getJobTypes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResources">
+			<soap12:operation soapAction="urn:getResources"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskActions">
+			<soap12:operation soapAction="urn:getTaskActions"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setDateFormat">
+			<soap12:operation soapAction="urn:setDateFormat"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskReasonCodes">
+			<soap12:operation soapAction="urn:getTaskReasonCodes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskStates">
+			<soap12:operation soapAction="urn:getTaskStates"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUsers">
+			<soap12:operation soapAction="urn:getUsers"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="BdxStatisticsServiceHTTPBinding"
+		type="tns:BdxStatisticsServicePortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getAppJobInfo">
+			<http:operation
+				location="BdxStatisticsService/getAppJobInfo" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAppJobParametersByTime">
+			<http:operation
+				location="AppJobParameterDAO/getAppJobParametersByTime" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobInfo">
+			<http:operation location="BdxStatisticsService/getJobInfo" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobParametersByTime">
+			<http:operation
+				location="JobParameterDAO/getJobParametersByTime" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResourceInfo">
+			<http:operation
+				location="BdxStatisticsService/getResourceInfo" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResourceParametersByTime">
+			<http:operation
+				location="ResourceParameterDAO/getResourceParametersByTime" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskInfo">
+			<http:operation location="BdxStatisticsService/getTaskInfo" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskParametersByTime">
+			<http:operation
+				location="TaskParameterDAO/getTaskParametersByTime" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getApplications">
+			<http:operation location="ApplicationDAO/getApplications" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobPriorities">
+			<http:operation location="JobPriorityDAO/getJobPriorities" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobStates">
+			<http:operation location="JobStateDAO/getJobStates" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getJobTypes">
+			<http:operation location="JobTypeDAO/getJobTypes" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getResources">
+			<http:operation location="ResourceDAO/getResources" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getUsers">
+			<http:operation location="UserDAO/getUsers" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskStates">
+			<http:operation location="TaskStateDAO/getTaskStates" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getTaskReasonCodes">
+			<http:operation
+				location="TaskReasonCodeDAO/getTaskReasonCodes" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTaskActions">
+			<http:operation location="TaskActionDAO/getTaskActions" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setDateFormat">
+			<http:operation location="BdxStatisticsService/setDateFormat" />
+			<wsdl:input>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BdxStatisticsService">
+		<wsdl:port name="BdxStatisticsServiceHttpSoap11Endpoint"
+			binding="tns:BdxStatisticsServiceSoap11Binding">
+			<soap:address
+				location="http://localhost:8080/BdxStatisticsService" />
+		</wsdl:port>
+		<wsdl:port name="BdxStatisticsServiceHttpSoap12Endpoint"
+			binding="tns:BdxStatisticsServiceSoap12Binding">
+			<soap12:address
+				location="http://localhost:8080/BdxStatisticsService" />
+		</wsdl:port>
+		<wsdl:port name="BdxStatisticsServiceHttpEndpoint"
+			binding="tns:BdxStatisticsServiceHTTPBinding">
+			<http:address
+				location="http://localhost:8080/BdxStatisticsService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

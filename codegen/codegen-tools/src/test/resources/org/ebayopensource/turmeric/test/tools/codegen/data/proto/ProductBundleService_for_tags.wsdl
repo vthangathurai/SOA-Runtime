@@ -1,0 +1,1025 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ProductBundleService" targetNamespace="http://www.ebay.com/marketplace/selling/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/selling/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/selling/v1/services">
+			<!-- Start New Types -->
+			<xs:element name="createProductBundlesRequest" type="tns:CreateProductBundlesRequest"/>
+			<xs:complexType name="CreateProductBundlesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Enables a seller to create bundles of SKU to SKU
+						mapping, for Cross Sell and Bundle the order.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Enables a seller to create bundles of SKU to SKU mapping,
+							for Cross Sell and Bundle the order.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="productBundles" type="tns:ProductBundleList">
+								<xs:annotation>
+									<xs:documentation>
+										Contains a list of Seller Bundle objects.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createProductBundlesResponse" type="tns:CreateProductBundlesResponse"/>
+			<xs:complexType name="CreateProductBundlesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Create Seller Bundle response.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Create Seller Bundle response.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="productBundleStatuses" type="tns:ProductBundleStatusList">
+								<xs:annotation>
+									<xs:documentation>
+										Bundle response array, with bundle id if
+										successful.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ProductBundleStatusList">
+				<xs:annotation>
+					<xs:documentation>
+						Bundle response array, with bundle id if
+						successful.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="productBundleStatus" type="tns:ProductBundleStatus">
+						<xs:annotation>
+							<xs:documentation>
+								Contains a list of Seller Bundle response
+								objects. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductBundleStatus">
+				<xs:annotation>
+					<xs:documentation>
+						Bundle response array, with bundle id if
+						successful.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="primarySKU" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A SKU (stock keeping unit) is an identifier
+								defined by a seller.
+								This is primary SKU defines, on which item
+								the configurator should
+								be enabled.
+								All the items which matches
+								this SKU field, will be
+								eligible for bundling, when item ids are
+								not part of bundle
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="bundleID" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Bundle id, for primary SKU, if bundle creation
+								is successful.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Response status for bundle creation.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage" type="tns:ErrorMessage"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- Update Bundle request & response -->
+			<xs:element name="updateProductBundlesRequest" type="tns:UpdateProductBundlesRequest"/>
+			<xs:complexType name="UpdateProductBundlesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Enables a seller to update bundles of SKU to SKU
+						mapping, for Cross Sell and Bundle the order.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Enables a seller to update bundles of SKU to SKU mapping,
+							for Cross Sell and Bundle the order.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="productBundles" type="tns:ProductBundleList">
+								<xs:annotation>
+									<xs:documentation>
+										Contains a list of Product Bundle objects.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="updateProductBundlesResponse" type="tns:UpdateProductBundlesResponse"/>
+			<xs:complexType name="UpdateProductBundlesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Update Seller Bundle response.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Update Seller Bundle response.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="productBundleStatuses" type="tns:ProductBundleStatusList">
+								<xs:annotation>
+									<xs:documentation>
+										Bundle response array, with bundle id if
+										successful.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="deleteProductBundlesRequest" type="tns:DeleteProductBundlesRequest">
+			</xs:element>
+			<xs:element name="deleteProductBundlesResponse" type="tns:DeleteProductBundlesResponse">
+			</xs:element>
+			<xs:complexType name="DeleteProductBundlesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Enables a seller to delete bundles of SKU to SKU
+						mapping created through createSellerBundles.
+						It takes BundleId as the input parameters. BundleId is mandatory.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="bundleID" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteProductBundlesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Delete Product Bundle response.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Delete Seller Bundle response.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="productBundleStatuses" type="tns:ProductBundleStatusList"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- End New Types -->
+			<xs:element name="getProductBundlesRequest" type="tns:GetProductBundlesRequest">
+			</xs:element>
+			<xs:element name="getProductBundlesResponse" type="tns:GetProductBundlesResponse">
+			</xs:element>
+			<xs:complexType name="GetProductBundlesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Enables a seller to fetch bundles of SKU to SKU
+						mapping created through createSellerBundles.
+						&lt;p&gt;It takes the following parameters:&lt;/p&gt;
+						&lt;ul&gt;
+							&lt;li&gt;1) BundleDetailSelector : This parameter is of BundleDetailEnum type and accepts the following&lt;/li&gt;
+								&lt;ul&gt;
+									&lt;li&gt; Details: If this is set then the operation will return the list of all bundles with 
+									their groups and related skus for the seller.&lt;/li&gt;
+									&lt;li&gt; Summary: If this is set then the operation will return the list of all bundles (only summary
+									without any groups or related skus details) for the seller.&lt;/li&gt;
+								&lt;/ul&gt;
+							&lt;li&gt;2) GetAllByStatus : This parameter is of BundleStatusEnum type and can be used 
+							to retrieve the bundles with matching Status for the seller.&lt;/li&gt;
+							&lt;ul&gt;&lt;/ul&gt;
+							&lt;li&gt;3) BundleFilter : This parameter is a list of PrimarySKU and BundleId group. &lt;/li&gt;
+								&lt;ul&gt;
+									&lt;li&gt; PrimarySKU: If this is set then the operation will return the list of all bundles with 
+									matching PrimarySKU .&lt;/li&gt;
+									&lt;li&gt; BundleID: If this is set then the operation will return the bundles details 
+									matching the BundleID.&lt;/li&gt;
+								&lt;/ul&gt;
+						&lt;/ul&gt;
+						&lt;p&gt;&lt;b&gt;NOTE:&lt;/b&gt; Please take a note of the following facts of the operation:
+						&lt;ul&gt;
+							&lt;li&gt;If BundleDetailSelector is passed then rest all parameters will be ignored.&lt;/li&gt;
+							&lt;li&gt;If GetAllByStatus is passed along with the BundleFilter list then bundles 
+							matching the passed status will only be returned or else bundles matching the status will be returned.&lt;/li&gt;
+							&lt;li&gt;It also throws ACCESS DENIED exception if the BundeId does not match with the seller (SellerId) 
+							trying to retrieve it.&lt;/li&gt;
+						&lt;/ul&gt;&lt;/p&gt;
+	
+			</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="bundleDetailSelector" type="tns:BundleDetailEnum"/>
+							<xs:element minOccurs="0" name="getAllByStatus" type="tns:BundleStatusEnum"/>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="bundleFilter" type="tns:BundleFilter"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="BundleFilter">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="primarySKU" type="xs:string"/>
+					<xs:element minOccurs="0" name="bundleID" type="xs:long"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetProductBundlesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="productBundles" type="tns:ProductBundleList">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string" use="required"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+				This is the base class for request container for all
+				service operations.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+				Base response container for all service operations.
+				Contains error information associated with the request.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+						Information for an error or warning that
+						occurred when eBay processed the request.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductBundleList">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="productBundle" type="tns:ProductBundle">
+						<xs:annotation>
+							<xs:documentation>
+						List of Product Bundles. 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="BundleStatusEnum">
+				<xs:annotation>
+					<xs:documentation>Product Bundle Status</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Scheduled">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies that the bundle is ready to be changed to 
+						active
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Active">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies that the bundle is active.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Ended">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies that the bundle is no more active.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="BundleDetailEnum">
+				<xs:annotation>
+					<xs:documentation>Product Bundle Details enum</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Details">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies that the full bundle details should be returned in the getProductBundles response.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Summary">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies that the bundle summary should be returned in the getProductBundles response.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="DiscountTypeEnum">
+				<xs:annotation>
+					<xs:documentation> 
+				Specifies which discount type to use.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Percentage">
+						<xs:annotation>
+							<xs:documentation> 
+						Specifies discount type as percentage.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Amount">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies discount type as a fixed amount. Discount will be in the currency of the original listing. 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Discount">
+				<xs:annotation>
+					<xs:documentation> Bundling SKU Discounts. </xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="discountAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation> Seller SKU
+						discount, for bundling with primary.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="discountType" type="tns:DiscountTypeEnum">
+						<xs:annotation>
+							<xs:documentation> Specifies which type of discount
+						needs to be applied on the bundling. 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="discountPercent" type="xs:double">
+						<xs:annotation>
+							<xs:documentation> Discount as percent . </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+		<xs:sequence>
+
+				processContents="lax" />
+		</xs:sequence>
+		-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+    		</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductGroup">
+				<xs:annotation>
+					<xs:documentation>
+				Grouping of related SKUs for a primary SKU for
+				bundling.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="relatedSKUs" type="tns:RelatedSKUList">
+						<xs:annotation>
+							<xs:documentation>
+						Bundle name to display in UI, maximum 50
+						characters.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="productGroupName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies the Group Name as provided by the Seller
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="productGroupDescription" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies a short description from the Group as provided by the Seller
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="rank" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies the order in which the group needs to be displayed 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="singleRelatedSKUPurchaseOnly" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies whether the buyer can select multiple options from the Group. 
+						Displays realted SKU item as radio button (single select) instead of check box (multi select).  
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RelatedSKU">
+				<xs:annotation>
+					<xs:documentation>
+				Grouping of related SKUs for a primary SKU for
+				bundling.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="SKU" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						Seller SKU, for bundling with primary.
+					</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>50</MaxLength>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="discount" type="tns:Discount">
+						<xs:annotation>
+							<xs:documentation>
+						Discounts on the specified SKU, for the
+						bundling.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="rank" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+						Specifies the order in which the sku needs to be displayed 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="skuTitle" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						SKU title. 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductBundle">
+				<xs:annotation>
+					<xs:documentation>
+				Enables a seller to create bundles of SKU to SKU
+				mapping, for Cross Sell and Bundle the order.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="bundleID" type="xs:long">
+			</xs:element>
+					<xs:element minOccurs="1" name="bundleName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						Bundle name to display in UI, maximum 50
+						characters.
+					</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>50</MaxLength>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="bundleDescription" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						Bundle short description, maximum of 200
+						characters.
+					</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>200</MaxLength>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="primarySKU" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+						A SKU (stock keeping unit) is an identifier
+						defined by a seller. This is primary SKU
+						defines, on which item the
+						configurator should
+						be enabled. All the items which matches this
+						SKU
+						field, will be eligible for bundling, when item
+						ids are not part
+						of bundle request.
+					</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="scheduledStartTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+						Allows the user to specify the time that the
+						bundling will becomes active on eBay. To
+						schedule the start time,
+						specify a time in the
+						future in YYYY-mm-DDTHH:MM:SS format
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="scheduledEndTime" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+						Allows the user to specify the time that the
+						bundling will becomes de-activated on eBay. To
+						schedule the
+						expiration time, specify a time in
+						the future in YYYY-mm-DDTHH:MM:SS format.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1" name="productGroups" type="tns:ProductGroupList"/>
+					<xs:element minOccurs="0" name="bundleStatus" type="tns:BundleStatusEnum"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductGroupList">
+				<xs:annotation>
+					<xs:documentation>
+				List of ProductGroup.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="productGroup" type="tns:ProductGroup">
+						<xs:annotation>
+							<xs:documentation>
+						Contains the seller bundle group information,
+						seller have the ability to group their listing
+						while bundling the
+						items. For example, sellers
+						can have all the accessories of an
+						item, grouped
+						in Accessory Group.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RelatedSKUList">
+				<xs:annotation>
+					<xs:documentation>
+				List of RelatedSKU.
+			</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="relatedSKU" type="tns:RelatedSKU">
+						<xs:annotation>
+							<xs:documentation>
+						Contains the seller bundle group information,
+						seller have the ability to group their listing
+						while bundling the
+						items. For example, sellers
+						can have all the accessories of an
+						item, grouped
+						in Accessory Group.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+	</types>
+	<message name="createProductBundlesRequest">
+		<part name="params" element="tns:createProductBundlesRequest">
+    </part>
+	</message>
+	<message name="createProductBundlesResponse">
+		<part name="params" element="tns:createProductBundlesResponse">
+    </part>
+	</message>
+	<message name="updateProductBundlesRequest">
+		<part name="params" element="tns:updateProductBundlesRequest">
+    </part>
+	</message>
+	<message name="updateProductBundlesResponse">
+		<part name="params" element="tns:updateProductBundlesResponse">
+    </part>
+	</message>
+	<message name="getProductBundlesRequest">
+		<part name="params" element="tns:getProductBundlesRequest">
+    </part>
+	</message>
+	<message name="getProductBundlesResponse">
+		<part name="params" element="tns:getProductBundlesResponse">
+    </part>
+	</message>
+	<message name="deleteProductBundlesRequest">
+		<part name="params" element="tns:deleteProductBundlesRequest">
+    </part>
+	</message>
+	<message name="deleteProductBundlesResponse">
+		<part name="params" element="tns:deleteProductBundlesResponse">
+    </part>
+	</message>
+	<message name="getVersionRequest">
+		<part name="messageParameters" element="tns:getVersionRequest"/>
+	</message>
+	<message name="getVersionResponse">
+		<part name="messageParameters" element="tns:getVersionResponse"/>
+	</message>
+	<portType name="ProductBundleServicePort">
+		<operation name="createProductBundles">
+			<input message="tns:createProductBundlesRequest">
+    </input>
+			<output message="tns:createProductBundlesResponse">
+    </output>
+		</operation>
+		<operation name="getProductBundles">
+			<input message="tns:getProductBundlesRequest">
+    </input>
+			<output message="tns:getProductBundlesResponse">
+    </output>
+		</operation>
+		<operation name="updateProductBundles">
+			<input message="tns:updateProductBundlesRequest">
+    </input>
+			<output message="tns:updateProductBundlesResponse">
+    </output>
+		</operation>
+		<operation name="deleteProductBundles">
+			<input message="tns:deleteProductBundlesRequest">
+    </input>
+			<output message="tns:deleteProductBundlesResponse">
+    </output>
+		</operation>
+		<operation name="getVersion">
+			<input name="getVersionRequest" message="tns:getVersionRequest"/>
+			<output name="getVersionResponse" message="tns:getVersionResponse"/>
+		</operation>
+	</portType>
+	<binding name="ProductBundleServiceSOAPBinding" type="tns:ProductBundleServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="createProductBundles">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/selling/v1/services/createProductBundles"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getProductBundles">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/selling/v1/services/getProductBundles"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="updateProductBundles">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/selling/v1/services/updateProductBundles"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="deleteProductBundles">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/selling/v1/services/deleteProductBundles"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getVersion">
+			<soap:operation soapAction="urn:getVersion" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="ProductBundleServiceHttpBinding" type="tns:ProductBundleServicePort">
+		<http:binding verb="POST"/>
+		<operation name="createProductBundles">
+			<http:operation location="/createProductBundles"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getProductBundles">
+			<http:operation location="/getProductBundles"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="updateProductBundles">
+			<http:operation location="/updateProductBundles"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="deleteProductBundles">
+			<http:operation location="/deleteProductBundles"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getVersion">
+			<http:operation location="getVersion"/>
+			<input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content type="text/xml"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="ProductBundleService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<port name="ProductBundleServiceSOAPPort" binding="tns:ProductBundleServiceSOAPBinding">
+			<soap12:address location="https://svcs.ebay.com/services/selling/v1/ProductBundleService"/>
+		</port>
+		<port name="ProductBundleServiceHttpPort" binding="tns:ProductBundleServiceHttpBinding">
+			<http:address location="https://svcs.ebay.com/services/selling/v1/ProductBundleService"/>
+		</port>
+	</service>
+</definitions>

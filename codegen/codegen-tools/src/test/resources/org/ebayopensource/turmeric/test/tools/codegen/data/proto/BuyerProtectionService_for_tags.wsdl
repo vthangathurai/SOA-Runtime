@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BuyerProtectionService" targetNamespace="http://www.ebay.com/marketplace/resolution/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/resolution/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/resolution/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="closeClaimRequest" type="tns:CloseClaimRequest"/>
+			<xs:complexType name="CloseClaimRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="transactionReference" type="tns:ReferenceType">
+						</xs:element>
+						<xs:element name="claimReference"
+							type="tns:ReferenceType" maxOccurs="1" minOccurs="0">
+						</xs:element>
+                            <xs:element name="ODRClaimId" type="xs:string" maxOccurs="1" minOccurs="0">
+						</xs:element>
+                            <xs:element maxOccurs="1" minOccurs="0"
+							name="activity" type="tns:Activity">
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0"
+							name="moneyMovementNotification"
+							type="tns:MoneyMovementNotificationType">
+						</xs:element>
+
+					</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="ReferenceType">
+			<xs:annotation>
+			  <xs:documentation>Reference to a claim</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+			  <xs:element maxOccurs="unbounded" minOccurs="1" name="referenceId" type="tns:ReferenceId">
+			  </xs:element>
+			  <xs:element maxOccurs="1" minOccurs="1" name="referenceSystem" type="tns:ReferenceSystemEnum">
+			  </xs:element>      
+			</xs:sequence>
+		  </xs:complexType>
+		  <xs:complexType name="ReferenceId">
+			<xs:annotation>
+			  <xs:documentation>Reference identifier; for example, can be claim ID in which case it is a unique reference but can also be a PayPal payment transaction ID or eBay Item ID/Transaction ID</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+			  <xs:element maxOccurs="1" minOccurs="1" name="id" type="xs:string">
+			  </xs:element>
+			  <xs:element maxOccurs="1" minOccurs="1" name="idType" type="tns:ReferenceIdTypeEnum">
+				<xs:annotation>
+				  <xs:documentation>type of a reference</xs:documentation>
+				</xs:annotation>
+			  </xs:element>     
+			</xs:sequence>
+		  </xs:complexType>
+
+			<xs:simpleType name="ReferenceSystemEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PAYPAL"/>
+					<xs:enumeration value="EBAY"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ReferenceIdTypeEnum">
+		<xs:annotation>
+			<xs:documentation>[PD]Currently only paypal or eBay can call this internal service
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+		  <xs:enumeration value="ClaimId">
+		    <xs:annotation>
+			  <xs:documentation>[PD]purchasing transaction identifier</xs:documentation>
+			</xs:annotation>
+		  </xs:enumeration>
+		  <xs:enumeration value="PaymentSellerTransactionId">
+		    <xs:annotation>
+			  <xs:documentation>[PD]PayPal Transaction ID from seller's view</xs:documentation>
+			</xs:annotation>
+		  </xs:enumeration>
+		  <xs:enumeration value="PaymentBuyerTransactionId">
+		    <xs:annotation>
+			  <xs:documentation>[PD]PayPal Transaction ID from seller's view</xs:documentation>
+			</xs:annotation>
+		  </xs:enumeration>
+		  <xs:enumeration value="ItemId">
+		    <xs:annotation>
+			  <xs:documentation>[PD]purchased item id</xs:documentation>
+			</xs:annotation>
+		  </xs:enumeration>
+		  <xs:enumeration value="TransactionId">
+		    <xs:annotation>
+			  <xs:documentation>[PD]purchasing transaction identifier</xs:documentation>
+			</xs:annotation>
+		  </xs:enumeration>
+		</xs:restriction>
+      </xs:simpleType>
+			<xs:element name="closeClaimResponse" type="tns:CloseClaimResponse"/>
+			<xs:complexType name="CloseClaimResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+					<xs:sequence>
+
+						<xs:element maxOccurs="1" minOccurs="1" name="responseCode" type="tns:ResponseCode">
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="closedClaims" type="tns:ClaimType">
+						</xs:element>
+					</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoneyMovementNotificationType">
+            	<xs:sequence>
+            		<xs:element name="payout"
+            			type="tns:PayoutInfoType">
+            		</xs:element>
+
+
+
+            		<xs:element name="paymentSystem"
+            			type="tns:PaymentSystemEnum" />
+
+            		<xs:element name="sellerProtectionProgram"
+            			type="tns:SellerProtectionProgramEnum" />
+            		<xs:element name="paymentType"
+            			type="tns:PaymentTypeEnum" />
+            		<xs:element name="paymentFailureReason" type="xs:string"></xs:element>
+            	</xs:sequence>
+			</xs:complexType>
+            <xs:simpleType name="PaymentTypeEnum">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="Reversal"/>
+            		<xs:enumeration value="SellerProtection"/>
+            		<xs:enumeration value="NoPayment"/>
+            		<xs:enumeration value="Paymentfailure"/>
+            	</xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="SellerProtectionProgramEnum">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="SellerProtectionProgram"/>
+            	</xs:restriction>
+            </xs:simpleType>
+             <xs:simpleType name="PaymentSystemEnum">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="PAYPAL"/>
+            	</xs:restriction>
+            </xs:simpleType>
+      
+			<xs:complexType name="PayoutInfoType">
+				<xs:sequence>
+					<xs:element name="amount" type="xs:double"/>
+					<xs:element name="currencyId" type="xs:token"/>
+					<xs:element name="date" type="xs:dateTime"/>
+					
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="Category">
+				<xs:sequence>
+					<xs:element name="categoryID" type="xs:int"/>
+					<xs:element name="categoryName" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ShippingInfoType">
+				<xs:sequence>
+					<xs:element name="carrierName" type="xs:string"/>
+					<xs:element name="trackingNumber" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ClaimInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="userInTargetSegment" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="itemClaim" type="tns:ItemClaimDetailType">
+
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0" name="handlingDays" type="xs:int"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ItemClaimDetailType">
+		        <xs:annotation>
+		          <xs:documentation>[PD]Contains resolution case status of each item</xs:documentation>
+		        </xs:annotation>
+		        <xs:sequence>
+		          <xs:element name="itemId" type="xs:long">
+		            <xs:annotation>
+		              <xs:documentation>[PD]The item Id</xs:documentation>
+		            </xs:annotation>
+		          </xs:element>
+		          <xs:element name="claimStatus" type="tns:ClaimStatusEnum">
+		            <xs:annotation>
+		              <xs:documentation>[PD]claim status</xs:documentation>
+		            </xs:annotation>
+		          </xs:element>          
+
+		        </xs:sequence>
+		    </xs:complexType>
+		    
+		    <xs:simpleType name="ClaimStatusEnum">
+				<xs:annotation>
+				  <xs:documentation>[PD]Resolution claim status enumerations</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+				  <xs:enumeration value="Open">
+				    <xs:annotation>
+					  <xs:documentation>[PD]Case open</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="NoCase">
+					<xs:annotation>
+					  <xs:documentation>[PD]No case</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="ClosedInBuyerFavor">
+					<xs:annotation>
+					  <xs:documentation>[PD]Case closed in buyer favor</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+		          <xs:enumeration value="ClosedInSellerFavor">
+					<xs:annotation>
+					  <xs:documentation>[PD]Case closed in seller favor</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="ClosedOther">
+					<xs:annotation>
+					  <xs:documentation>[PD]Case closed other scenarios</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				</xs:restriction>
+			  </xs:simpleType>
+
+			<xs:simpleType name="ResponseCode">
+				<xs:annotation>
+				  <xs:documentation>[PD]Response code enumerations</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+				  <xs:enumeration value="Success">
+					<xs:annotation>
+					  <xs:documentation>[PD]Processing success, resolution case information retrieved successfully</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="Failure">
+					<xs:annotation>
+					  <xs:documentation>[PD]Processing success, resolution case information retrieved successfully</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="paymentDataError">
+					<xs:annotation>
+					  <xs:documentation>[PD]For money movement, if there's no proper data found in our payment table, this error will be returned</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="ppTranIdClaimIdMisMatch">
+					<xs:annotation>
+					  <xs:documentation>[PD]ClaimId is not included in the PPTransaction</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidActivityId">
+					<xs:annotation>
+					  <xs:documentation>[PD]Invalid activity id</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="ServiceDisabled">
+					<xs:annotation>
+					  <xs:documentation>[PD]Service is not enabled</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidClaimState">
+					<xs:annotation>
+					  <xs:documentation>[PD]Service is not enabled</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidPaymentType">
+					<xs:annotation>
+					  <xs:documentation>[PD]Invalid payment type</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidPaymentSystem">
+					<xs:annotation>
+					  <xs:documentation>[PD]Invalid payment system</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidCurrencyId">
+					<xs:annotation>
+					  <xs:documentation>[PD]Currency id is invalid</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidCPSClaimId">
+					<xs:annotation>
+					  <xs:documentation>[PD]No claim is found based on input parameter claimId</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="InvalidCPSClaimReferenceSystem">
+					<xs:annotation>
+					  <xs:documentation>[PD]claim id reference system error</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="CPSClaimIdPPTransIdMisMatch">
+					<xs:annotation>
+					  <xs:documentation>[PD]claimId is not included in the transactions related to that PP TransId</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="UnknownActivityType">
+					<xs:annotation>
+					  <xs:documentation>[PD]Unknown Activity Type</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>				
+				  <xs:enumeration value="InvalidDate">
+					<xs:annotation>
+					  <xs:documentation>[PD]Date format is incorrect or date in not in reasonable range</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration> 
+				  <xs:enumeration value="NoDataFound">
+					<xs:annotation>
+					  <xs:documentation>[PD]Processing success, but no data found based on request information, maybe reference Id in request is invalid</xs:documentation>
+					  </xs:annotation>
+				  </xs:enumeration>		  
+				  <xs:enumeration value="RuntimeError">
+					<xs:annotation>
+					  <xs:documentation>[PD]Processing fail, because some internal error, client may have a retry</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="YesOnEbay">
+					<xs:annotation>
+					  <xs:documentation>[PD]New claim case is allowed to create, because there is no any claim for this transaction in ebay side and all rule checks are passed</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="YesOnPaypal">
+					<xs:annotation>
+					  <xs:documentation>[PD]New claim case is allowed to create, because there is no any claim for this transaction in ebay side and all rule checks are passed</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="OldCaseExisted">
+					<xs:annotation>
+					  <xs:documentation>[PD]New claim case is forbidden to create, because the claim has been created for this transaction in ebay side</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				  <xs:enumeration value="RuleCheckFailed">
+					<xs:annotation>
+					  <xs:documentation>[PD]New claim case is forbidden to create, because some rule checks are not passed</xs:documentation>
+					</xs:annotation>
+				  </xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+            
+            
+
+
+			<xs:complexType name="UserInfo">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string"/>
+					<xs:element name="emailAddress" type="xs:string"/>
+					<xs:element name="phoneNumber" type="xs:string"/>
+					<xs:element name="address" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Activity">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="type" type="tns:ActivityTypeEnum">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="amount" type="xs:double">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="currencyId" type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="openDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="reverseDate" type="xs:dateTime">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ActivityTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ELV"/>
+					<xs:enumeration value="CB"/>
+					<xs:enumeration value="AFR"/>
+					<xs:enumeration value="UNAUTH"/>
+					<xs:enumeration value="ACH"/>
+					<xs:enumeration value="PPCASEEXISTS"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="FailedCheckDetailType">
+				<xs:sequence>
+					<xs:element name="checkId" type="xs:token">
+					</xs:element>
+					<xs:element name="checkDescription" type="xs:string">
+					</xs:element>
+					<xs:element name="overridable" type="xs:boolean">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+	
+			
+			<xs:element name="isClaimAllowedRequest" type="tns:IsClaimAllowedRequest"/>
+			<xs:complexType name="IsClaimAllowedRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="reference" type="tns:ReferenceType">
+						</xs:element>
+					</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:simpleType name="CheckTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PRECLAIMCHECKINR"/>
+					<xs:enumeration value="PRECLAIMCHECKSNAD"/>
+					<xs:enumeration value="CLAIMCASEINFO"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="isClaimAllowedResponse" type="tns:IsClaimAllowedResponse"/>
+			<xs:complexType name="IsClaimAllowedResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="responseCode" type="tns:ResponseCode">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="firstFailedCheckID" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="failedCheck"
+								type="tns:FailedCheckDetailType">
+							</xs:element>
+							<xs:element name="userInTargetSegment"
+								type="xs:boolean" minOccurs="0" maxOccurs="1">
+							</xs:element>
+							<xs:element name="earliestClaimFileDate"
+								type="xs:string" minOccurs="0" maxOccurs="1">
+							</xs:element>
+							<xs:element name="imageURL" type="xs:string">
+							</xs:element>
+							<xs:element name="itemClaim" 
+								type="tns:ItemClaimDetailType" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						<!--<xs:element maxOccurs="1" minOccurs="0"
+								name="claimInfo" type="tns:ClaimInfoType">
+							</xs:element>-->
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+    
+            <xs:complexType name="ClaimType">
+            	<xs:sequence>
+					<xs:element name="claimId" type="xs:long"/>
+					<xs:element name="statusBeforeClose" type="xs:string"/>
+					<xs:element name="closeDate" type="xs:dateTime"/>
+					<xs:element name="claimType" type="xs:string"/>
+				</xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+  </types>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+
+  <message name="closeClaimResponse">
+    <part name="params" element="tns:closeClaimResponse">
+    </part>
+  </message>
+  <message name="isClaimAllowedResponse">
+    <part name="params" element="tns:isClaimAllowedResponse">
+    </part>
+  </message>
+  <message name="isClaimAllowedRequest">
+    <part name="params" element="tns:isClaimAllowedRequest">
+    </part>
+  </message>
+  <message name="closeClaimRequest">
+    <part name="params" element="tns:closeClaimRequest">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+
+  <portType name="BuyerProtectionServicePort">
+    <operation name="getVersion">
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="closeClaim">
+      <input message="tns:closeClaimRequest">
+    </input>
+      <output message="tns:closeClaimResponse">
+    </output>
+    </operation>
+
+    <operation name="isClaimAllowed">
+      <input message="tns:isClaimAllowedRequest">
+    </input>
+      <output message="tns:isClaimAllowedResponse">
+    </output>
+    </operation>
+
+  </portType>
+  <binding name="BuyerProtectionServiceSOAPBinding" type="tns:BuyerProtectionServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="closeClaim">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/closeClaim"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="isClaimAllowed">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/resolution/v1/services/isClaimAllowed"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+
+  </binding>
+  <binding name="BuyerProtectionServiceHttpBinding" type="tns:BuyerProtectionServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="closeClaim">
+      <http:operation location="/closeClaim"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+ 
+    <operation name="isClaimAllowed">
+      <http:operation location="/isClaimAllowed"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+
+  </binding>
+  <service name="BuyerProtectionService">
+<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+    <port name="BuyerProtectionServiceHttpPort" binding="tns:BuyerProtectionServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/resolution/v1/BuyerProtectionService"/>
+    </port>
+    <port name="BuyerProtectionServiceSOAPPort" binding="tns:BuyerProtectionServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/resolution/v1/BuyerProtectionService"/>
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,1209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="HalfRentalManagementService" targetNamespace="http://www.ebay.com/marketplace/half/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/half/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+		<types>
+			<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/half/v1/services" xmlns:tns="http://www.ebay.com/marketplace/half/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+				<xs:element name="getVersionRequest"  type="tns:GetVersionRequest" /> 
+				<xs:element name="getVersionResponse"  type="tns:GetVersionResponse" /> 
+				<xs:element name="fileRentalDisputeRequest" type="tns:FileRentalDisputeRequest" /> 
+				<xs:element name="fileRentalDisputeResponse" type="tns:FileRentalDisputeResponse" />
+				<xs:element name="updateRentalStatusRequest" type="tns:UpdateRentalStatusRequest" /> 
+				<xs:element name="updateRentalStatusResponse" type="tns:UpdateRentalStatusResponse" />
+
+				
+				<xs:complexType name="GetVersionRequest">
+					<xs:annotation>
+						<xs:documentation>
+							Returns the current version of the service. This simple call can be used to monitor
+							the service for availability. This call has no input parameters and the response
+							contains only the standard output fields.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseRequest"/>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="GetVersionResponse">
+					<xs:annotation>
+						<xs:documentation>
+							Response to getVersion.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseResponse"/>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="FileRentalDisputeRequest">
+					<xs:annotation>
+						<xs:documentation>
+							Thisservice will be used by seller to file a calim in case the rental item is not received in the expected condition.
+						</xs:documentation>						
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseRequest">
+							<xs:sequence>
+								<xs:element name="listingType" type="tns:ListingTypeCodeType" minOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											documentation goes here
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+
+								<xs:element name="itemID" type="tns:ItemIDType" minOccurs="0" >
+									<xs:annotation>
+										<xs:documentation>
+											Use this to raise seller claim for the item
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>No</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="transactionID" type="xs:string" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											Refers to the transaction id for which the seller intends to file a claim
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+
+								<xs:element name="claimReason" type="tns:ClaimReasonCodeType" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											Valid reason for filing a claim viz. INR, Damaged, LateFee, DamagedAndLate and Other
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="claimAmount" type="tns:AmountType" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											The amount which the seller will receive once the claim is settled
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="actualReturnDate" type="xs:dateTime" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>
+											The date when the rental item return was due
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>No</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="message" type="xs:string" minOccurs="0" >
+									<xs:annotation>
+										<xs:documentation>
+											A valide message to be provided by seller while filing a claim
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<RequiredInput>No</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="FileRentalDisputeResponse">
+					<xs:annotation>
+						<xs:documentation>
+							Response to fileRentalDispute.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseResponse">
+							<xs:sequence>
+								<xs:element name="claimID" type="xs:string" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											This is the id returned when a sller files a claim. This id will be used by the seller for all future correspondence
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>fileRentalDispute</CallName>
+												<Returned>Always</Returned>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+				<xs:complexType name="UpdateRentalStatusRequest">
+					<xs:annotation>
+						<xs:documentation>
+							Allows a seller to inform Half.com CS that a rental transaction is complete and the seller has received back the rental item
+						</xs:documentation>						
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseRequest">
+							<xs:sequence>
+								<xs:element name="listingType" type="tns:ListingTypeCodeType" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											The format of the listing the seller wants to use, such as Chinese auction
+											or fixed price.&lt;br&gt;
+											&lt;br&gt;
+											Optional for eBay.com listings (defaults to Chinese auction) in AddItem and
+											VerifyAddItem. Do not specify ListingType for eBay.com listings in
+											ReviseItem. (You can't modify the listing type of an active eBay
+											listing.&lt;br&gt;
+											&lt;br&gt;
+											Required for Half.com listings (and the value must be Half) in AddItem,
+											VerifyAddItem, and ReviseItem. If you don't specify Half when revising
+											Half.com listings, ReviseItem won't use the correct logic and you may
+											get strange errors (or unwanted side effects in the listing, even if no
+											errors are returned).
+											&lt;br&gt;&lt;br&gt;
+											The FixedPriceItem listing format has replaced the StoresFixedPrice listing
+											format, and the StoresFixedPrice format will be deprecated in early 2011.
+											Currently, AddItem and AddFixedPriceItem accept either FixedPriceItem or StoresFixedPrice as
+											listing formats, but the item will be displayed as FixedPriceItem on the site
+											and in search results. GetItem and other 'Get' calls will return the format
+											you originally used in the request. Therefore, the preferred format is
+											FixedPriceItem.
+											&lt;br&gt;&lt;br&gt;
+											As part of the merge of the StoresFixedPrice and FixedPriceItem formats, the
+											start price of all new FixedPriceItems must be 99 cents or greater.
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>updateRentalStatus</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="transactionArray" type="tns:TransactionArrayType" minOccurs="1" maxOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											List of Transaction objects representing the transactions resulting
+											from the rental listing. Each Transaction object contains the data for one purchase
+											(of one or more items in the same listing). 
+										</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>updateRentalStatus</CallName>
+												<RequiredInput>yes</RequiredInput>
+											</CallInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+				
+				<xs:complexType name="UpdateRentalStatusResponse">
+					<xs:annotation>
+						<xs:documentation>
+							Response to UpdateRentalStatus.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseResponse">
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			 
+				<xs:complexType abstract="true" name="BaseRequest">
+					<xs:annotation>
+						<xs:documentation>
+							The base request container for all service operations.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>	
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType" />
+					</xs:sequence>				
+				</xs:complexType>				
+				
+				<xs:complexType abstract="true" name="BaseResponse">
+					<xs:annotation>
+						<xs:documentation>
+							The base response container for all service operations.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="ack" type="tns:AckValue">
+							<xs:annotation>
+								<xs:documentation>
+									Acknowledgement of the operation's success or failure.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+							<xs:annotation>
+								<xs:documentation>
+									An error or warning that occurred when eBay processed the request.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="version" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The version of the schema that your WSDL is based on.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>
+									The date and time of the response.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>	
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType" />					
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:complexType name="ExtensionType">
+					<xs:annotation>
+						<xs:documentation>
+							Documentation goes here
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="id" type="xs:positiveInteger"/>
+						<xs:element name="version" type="xs:string"/>
+						<xs:element name="contentType" type="xs:string"/>
+						<xs:element name="value" type="xs:string"/>
+
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:complexType name="ErrorData">
+					<xs:annotation>
+						<xs:documentation>
+							This represents error details.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="errorId" type="xs:long">
+							<xs:annotation>
+								<xs:documentation>
+									A unique code that identifies the particular error condition that
+									occurred. Your application can use error codes as identifiers in your
+									customized error-handling algorithms.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="domain" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the domain upon which the error occurred.
+									&lt;dl&gt;
+									&lt;lh&gt;Domains include:&lt;/lh&gt;
+									&lt;dt&gt;
+										Marketplace
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										A business or validation error occurred for the Merchandising Service.
+									&lt;/dd&gt;
+									&lt;dt&gt;
+										SOA
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										An exception occurred in the Service Oriented Architecture (SOA)
+										framework.
+									&lt;/dd&gt;
+									&lt;/dl&gt;
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="subdomain" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the subdomain upon which the error occurred.
+									&lt;dl&gt;
+									&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+									&lt;dt&gt;
+										Merchandising
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										The error is specific to the Merchandising service.
+									&lt;/dd&gt;
+									&lt;dt&gt;
+										MarketplaceCommon
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										The error is common to all Marketplace services.
+									&lt;/dd&gt;
+									&lt;/dl&gt;
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="severity" type="tns:ErrorSeverity">
+							<xs:annotation>
+								<xs:documentation>
+									Indicates whether the error caused the request to fail (Error) or not
+									(Warning).
+									&lt;br&gt;&lt;br&gt;
+									If the request fails and the source of the problem is within the
+									application (such as a missing required element), please change the
+									application before you retry the request. If the problem is due to end-
+									user input data, please alert the end-user to the problem and provide the
+									means for them to correct the data. Once the problem in the application
+									or data is resolved, you can attempt to re- send the request to eBay.
+									&lt;br&gt;&lt;br&gt;
+									If the source of the problem is on eBay's side, you can retry the request
+									as-is a reasonable number of times (eBay recommends twice). If the error
+									persists, contact Developer Technical Support. Once the problem has been
+									resolved, the request may be resent in its original form.
+									&lt;br&gt;&lt;br&gt;
+									When a warning occurs, the error is returned in addition to the business
+									data. In this case, you do not need to retry the request (as the original
+									request was successful). However, depending on the cause or nature of the
+									warning, you might need to contact either the end user or eBay to effect
+									a long term solution to the problem to prevent it from reoccurring in the
+									future.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="category" type="tns:ErrorCategory">
+							<xs:annotation>
+								<xs:documentation>
+									There are three categories of errors: request errors, application errors,
+									and system errors.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="message" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									A detailed description of the condition that resulted in the error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+							<xs:annotation>
+								<xs:documentation>
+									Unique identifier for an exception associated with an error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter">
+							<xs:annotation>
+								<xs:documentation>
+									Some warning and error messages return one or more variables that contain
+									contextual information about the error. This is often the field or value
+									that triggered the error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>				
+				
+				<xs:complexType name="ErrorMessage">
+					<xs:annotation>
+						<xs:documentation>
+							ErrorMessage to indicate any Error/Warning that occured as part of service
+							call. Any run time error will not be reported here, but will be reported as
+							part of a SOAP fault.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									Details about a single error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:complexType name="ErrorParameter">
+					<xs:annotation>
+						<xs:documentation>
+							Contextual information associated with an error.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The name of the parameter in the get of parameter types returned within the
+										error type.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<AllCalls/>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+				
+				<xs:simpleType name="ErrorCategory">
+					<xs:annotation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+						<xs:documentation>
+							The source of the error.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="System">
+							<xs:annotation>
+								<xs:documentation>
+									System error
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Application">
+							<xs:annotation>
+								<xs:documentation>
+									Application error
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Request">
+							<xs:annotation>
+								<xs:documentation>
+									Problems in the request
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+             
+				<xs:simpleType name="ErrorSeverity">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates whether the error is a severe error (causing the request to fail) or an
+							informational error (a warning) that should be communicated to the user.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Error">
+							<xs:annotation>
+								<xs:documentation>
+									The request that triggered the error was not processed successfully.
+									When a serious application-level error occurs, the error is returned
+									instead of the business data.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Warning">
+							<xs:annotation>
+								<xs:documentation>
+									The request was processed successfully, but something occurred that may
+									affect your application or the user. For example, eBay may have changed a
+									value the user sent in. In this case, eBay returns a normal, successful
+									response and also returns the warning.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+				
+				<xs:simpleType name="ListingTypeCodeType">
+					<xs:annotation>
+						<xs:documentation>
+							Specifies the selling format used for a listing.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="Unknown">
+							<xs:annotation>
+								<xs:documentation>
+									Unknown or undefined auction type. Applicable to
+									user preferences and other informational use cases.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Chinese">
+							<xs:annotation>
+								<xs:documentation>
+									Single-quantity online auction format.
+									A Chinese auction has a Quantity of 1. Buyers engage in competitive bidding,
+									although Buy It Now may be offered as long as no bids have been placed.
+									Online auctions are listed on eBay.com, and they are also listed in
+									the seller's eBay Store if the seller is a Store owner.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Dutch">
+							<xs:annotation>
+								<xs:documentation>
+									Multiple-quantity online auction format. A Dutch auction has a Quantity greater than 1.
+									Buyers engage in competitive bidding. Some sites also offer Buy It Now for Dutch
+									auctions. Online auctions are listed on eBay.com, and they are also listed in the
+									seller's eBay Store if the seller is a Store owner.
+									&lt;br&gt;&lt;br&gt;
+									&lt;span class="tablenote"&gt;&lt;strong&gt;Note:&lt;/strong&gt;
+										As of version 619, Dutch-style (multi-item) competitive-bid auctions are deprecated.
+										eBay throws an error if you submit a Dutch item listing with AddItem
+										or VerifyAddItem. If you use RelistItem to update a Dutch auction listing,
+										eBay generates a warning and resets the Quantity value to 1.
+									&lt;/span&gt;
+									&lt;br&gt;
+								</xs:documentation>
+								<xs:appinfo>
+								<DeprecationVersion>611</DeprecationVersion>
+								<!-- PRIVATE -->
+								<EndOfLifeVersion>681</EndOfLifeVersion>
+								<!-- PRIVATE -->
+								<DeprecationDetails>NoOp</DeprecationDetails>
+								<UseInstead/>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Live">
+							<xs:annotation>
+								<xs:documentation>
+									Live auction, on-site auction that can include non-eBay bidders.
+									(Use AddLiveAuctionItem to list live auctions.)
+									Live auctions are listed on the eBay Live Auctions site, in live auction categories.
+									They can also appear on eBay if the seller lists the lot in a secondary category
+									that is an eBay category.
+								</xs:documentation>
+								<xs:appinfo>
+									<DeprecationVersion>601</DeprecationVersion>
+									<!-- PRIVATE -->
+									<EndOfLifeVersion>681</EndOfLifeVersion>
+									<!-- PRIVATE -->
+									<DeprecationDetails>NoOp</DeprecationDetails>
+									<UseInstead/>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Auction">
+							<xs:annotation>
+								<xs:documentation>
+									An optional input parameter used with GetMyeBaySelling. When used in
+									the request, returns items of competitive-bid auctions (Chinese).
+								</xs:documentation>
+								<!-- PRIVATE -->
+								<!-- Lisa TODO: Fixed appinfo. Modify text when enum docs release. -->
+								<!-- PRIVATE -->
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="AdType">
+							<xs:annotation>
+								<xs:documentation>
+									Advertisement to solicit inquiries on listings such as real estate. Permits
+									no bidding on that item, service, or property. To express interest, a buyer
+									fills out a contact form that eBay forwards to the the seller as a lead. This
+									format does not enable buyers and sellers to transact online through eBay,
+									and eBay Feedback is not available for ad format listings.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="StoresFixedPrice">
+							<xs:annotation>
+								<xs:documentation>
+				    Formerly, this was a fixed-price format for eBay Store sellers.
+				    &lt;br&gt;&lt;br&gt;
+				    As of March 30, 2010, the FixedPriceItem listing type has replaced the
+				    StoresFixedPrice listing type on all eBay sites.
+				    The StoresFixedPrice listing type will be deprecated in early 2011.
+				    Currently, AddItem
+				    and AddFixedPriceItem accept either FixedPriceItem or StoresFixedPrice as listing
+				    types, but the item is displayed as FixedPriceItem on the site and in search
+				    results. GetItem and other 'Get' calls will return the listing type you originally
+				    used in the request. Therefore, the preferred format is FixedPriceItem.
+				    &lt;br&gt;&lt;br&gt;
+									In additon to the changes mentioned above, items added as StoresFixedPrice listing
+									type are treated as FixedPriceItem listing type on the site. Items will immediately
+									get the higher FixedPriceItem exposure, and will renew or relist at the FixedPriceItem
+									price.
+				    &lt;br&gt;&lt;br&gt;
+									Any listing enhancements (e.g., bold, subtitle, etc.) will also renew or relist at
+									FixedPriceItem (higher) rates.
+				    &lt;br&gt;&lt;br&gt;
+				    To list a product for a store, you can simply substitute FixedPriceItem as the listing
+				    type where the StoresFixedPrice listing type used to be within your AddItem call. Like
+				    StoresFixedPrice, the FixedPriceItem listing type has permitted durations of 30 days
+				    and GTC for store and non-store subscribers (in addition to the previously permitted
+				    durations of 3, 5, 7, and 10 days).
+				  </xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="PersonalOffer">
+							<xs:annotation>
+								<xs:documentation>
+									Second chance offer made to a non-winning bidder on an ended listing.
+									A seller can make an offer to a non-winning bidder when either the winning bidder
+									has failed to pay for an item or the seller has a duplicate of the item.
+									A seller can create a Second Chance Offer immediately after a listing ends and up to
+									60 days after the end of the listing. eBay does not charge an Insertion Fee,
+									but if the bidder accepts the offer, the regular Final Value Fee is charged.
+									In the case of an Unpaid Item, the seller should ensure that everything has
+									been done to resolve the issue with the winning bidder before sending a
+									Second Chance Offer to another bidder. See the Unpaid Items Process for details.
+									Make sure you're aware of other rules and restrictions surrounding Second Chance Offers.
+									Use AddSecondChanceItem to submit Second Chance Offers.
+									Listed on eBay, but does not appear when browsing or searching listings.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="FixedPriceItem">
+							<xs:annotation>
+								<xs:documentation>
+				    A basic fixed-price item format. Bids do not occur.
+				    The quantity of items is one or more.
+				    &lt;br&gt;&lt;br&gt;
+				    Also known as Buy It Now Only on some sites (not to be confused with the BuyItNow option that
+				    is available for Chinese auctions).
+				    &lt;br&gt;&lt;br&gt;
+				    Sellers must meet certain feedback requirements and/or be ID Verified to use this format.
+				    See Minimum Feedback Requirements for Various Features in the Trading Web Services guide.
+				    &lt;br&gt;&lt;br&gt;
+				    Fixed-price listings are listed on eBay.com, and they are listed in
+				    the seller's eBay Store if the seller is a Store owner.
+				    Stores fixed price items will be treated as basic
+				    fixed-price items. Permitted durations of 30 days
+				    and GTC are now available for store and non-store subscribers (in addition
+				    to the existing durations of 3, 5, 7, and 10 days).
+				  </xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Half">
+							<xs:annotation>
+								<xs:documentation>
+								Half.com listing (item is listed on Half.com, not on eBay).
+								You must be a registered Half.com seller to use this format.
+								</xs:documentation>
+								<xs:appinfo>
+									<SeeLink>
+										<Title>HalfOverview</Title>
+										<URL>UseTopicAlias</URL>
+									</SeeLink>
+									<!-- PRIVATE -->
+									<!-- [DocInternal] Not returned for GST/GIT, GSR.)
+									GSL never returns this for eBay requests, only for Half.com
+									requests (and only for internal). -->
+									<!-- PRIVATE -->
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="LeadGeneration">
+							<xs:annotation>
+								<xs:documentation>
+									Lead Generation format (advertisement-style listing to solicit
+									inquiries or offers, no bidding or fixed price, listed on eBay).
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Express">
+							<xs:annotation>
+								<xs:documentation>
+									For Germany Express site only, which is no longer in service.
+								</xs:documentation>
+								<xs:appinfo>
+									<DeprecationVersion>561</DeprecationVersion>
+									<!-- PRIVATE -->
+									<EndOfLifeVersion>655</EndOfLifeVersion>
+									<!-- PRIVATE -->
+									<DeprecationDetails>NoOp</DeprecationDetails>
+									<UseInstead/>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Shopping">
+							<xs:annotation>
+								<xs:documentation>
+									Reserved for internal or future use. You can ignore Shopping.com items in your results.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="CustomCode">
+							<xs:annotation>
+								<xs:documentation>
+									Reserved for internal or future use.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+
+				<xs:simpleType name="ItemIDType">
+					<xs:annotation>
+						<xs:documentation>
+							Type that represents the unique identifier for a single item listing.
+						</xs:documentation>
+						<!-- PRIVATE -->
+						<!-- This is just a string wrapper, so don't insert CallInfo here.
+								Put the CallInfo on the elements that reference this type. -->
+						<!-- PRIVATE -->
+					</xs:annotation>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+
+				<xs:complexType name="TransactionArrayType">
+					<xs:annotation>
+						<xs:documentation>
+							Defines an array of transactions.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="transaction" type="tns:TransactionType" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									Information about one transaction.
+									Also applicable to Half.com (for GetOrders).
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>updateRentalStatus</CallName>
+										<Returned>Always</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+				<xs:complexType name="TransactionType">
+					<xs:annotation>
+						<xs:documentation>
+							Defines a single transaction 
+						</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="transactionID" type="xs:string" minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Transaction ID
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>updateRentalStatus</CallName>
+										<RequiredInput>Always</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="itemID" type="xs:string" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Item ID
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>updateRentalStatus</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="actualReturnDate" type="xs:dateTime" minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Actual Return Date
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>updateRentalStatus</CallName>
+										<RequiredInput>Always</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+				
+				<xs:simpleType name="AckValue">
+					<xs:annotation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+						</xs:appinfo>
+						<xs:documentation>
+							The nature of the response.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Success">
+							<xs:annotation>
+								<xs:documentation>
+									eBay successfully processed the request and the business data is returned
+									in the response. Note that it is possible for a response to return
+									Success, but still not contain the expected data in the result.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Failure">
+							<xs:annotation>
+								<xs:documentation>
+									eBay encountered a fatal error during the processing of the request,
+									causing the request to fail. When a serious application-level error
+									occurs, the error is returned instead of the business data.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Warning">
+							<xs:annotation>
+								<xs:documentation>
+									The request was successfully processed, but eBay encountered a non-fatal
+									error during the processing. For best results, requests should return
+									without warnings. Inspect the warning details and resolve the problem
+									before resubmitting the request.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="PartialFailure">
+							<xs:annotation>
+								<xs:documentation>
+									eBay successfully processed the request, but one or more non-fatal errors
+									occurred during the processing. For best results, requests should return
+									without warning messages. Inspect the message details and resolve any
+									problems before resubmitting the request.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+
+				<xs:simpleType name="ClaimReasonCodeType">
+					<xs:annotation>
+						<xs:documentation>
+							Specifies the reason format used for a filing a claim.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="INR">
+							<xs:annotation>
+								<xs:documentation>
+									Claim reason for Item not reveived
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Damaged">
+							<xs:annotation>
+								<xs:documentation>
+									Claim reason for damaged
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="LateFee">
+							<xs:annotation>
+								<xs:documentation>
+									Claim reason for Late Fee
+								</xs:documentation>
+								<xs:appinfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="DamagedAndLate">
+							<xs:annotation>
+								<xs:documentation>
+									Claim reason for Item Damaged and received Late
+								</xs:documentation>
+								<xs:appinfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="Other">
+							<xs:annotation>
+								<xs:documentation>
+									other reason for filing claim
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="CustomCode">
+							<xs:annotation>
+								<xs:documentation>
+									Reserved for internal or future use.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+				
+		<xs:complexType name="AmountType">
+			<xs:annotation>
+				<xs:documentation>
+					Basic type for specifying monetary amounts. A double value (e.g.,
+					1.00 or 1.0) is meaningful as a monetary amount when accompanied by a
+					specification of the currency, in which case the value specifies
+					the amount in that currency. An AmountType expresses both the value
+					(a double) and the currency. Details such as prices, fees, costs,
+					and payments are specified as amount types.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:simpleContent>
+				<xs:extension base="xs:double">
+					<xs:attribute name="currencyID" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Currency in which the monetary amount is specified
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>updateRentalStatus</CallName>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+				
+				</xs:schema>
+				</types>
+		<message name="getVersionRequest">
+			<part name="messageParameters" element="tns:getVersionRequest"/>
+		</message>
+		<message name="getVersionResponse">
+			<part name="messageParameters" element="tns:getVersionResponse"/>
+		</message>
+		<message name="fileRentalDisputeRequest">
+			<part name="params" element="tns:fileRentalDisputeRequest"/>
+		</message>
+		<message name="fileRentalDisputeResponse">
+			<part name="params" element="tns:fileRentalDisputeResponse"/>
+		</message>
+		<message name="updateRentalStatusRequest">
+			<part name="params" element="tns:updateRentalStatusRequest"/>
+		</message>
+		<message name="updateRentalStatusResponse">
+			<part name="params" element="tns:updateRentalStatusResponse"/>
+		</message>
+		
+		<portType name="HalfRentalManagementServicePort">
+			<operation name="getVersion">
+				<documentation>
+					Operation to test the health ot status of the service endpoint.
+				</documentation>
+				<input name="getVersionRequest" message="tns:getVersionRequest"/>
+				<output name="getVersionResponse" message="tns:getVersionResponse"/>
+			</operation>
+			<operation name="fileRentalDispute">
+				<documentation>
+					Allows seller to file a claim for rental items
+				</documentation>
+				<input name="fileRentalDisputeRequest" message="tns:fileRentalDisputeRequest"/>
+				<output name="fileRentalDisputeResponse" message="tns:fileRentalDisputeResponse"/>
+			</operation>
+			<operation name="updateRentalStatus">
+				<documentation>
+					Specifies that a rental transaction is complete
+				</documentation>
+				<input name="updateRentalStatusRequest" message="tns:updateRentalStatusRequest"/>
+				<output name="updateRentalStatusResponse" message="tns:updateRentalStatusResponse"/>
+			</operation>
+			
+		</portType>
+		
+		<binding name="HalfRentalManagementServiceSOAPBinding" type="tns:HalfRentalManagementServicePort">
+			<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>				
+			<operation name="getVersion">
+				<soap12:operation soapAction="urn:getVersion" style="document"/>
+				<input>
+					<soap12:body use="literal"/>
+				</input>
+				<output>
+					<soap12:body use="literal"/>
+				</output>
+			</operation>
+			<operation name="fileRentalDispute">
+				<soap12:operation soapAction="urn:fileRentalDispute" style="document"/>
+				<input>
+					<soap12:body use="literal"/>
+				</input>
+				<output>
+					<soap12:body use="literal"/>
+				</output>
+			</operation>
+			<operation name="updateRentalStatus">
+				<soap12:operation soapAction="urn:updateRentalStatus" style="document"/>
+				<input>
+					<soap12:body use="literal"/>
+				</input>
+				<output>
+					<soap12:body use="literal"/>
+				</output>
+			</operation>					
+			
+		</binding>
+		
+		<binding name="HalfRentalManagementServiceHttpBinding" type="tns:HalfRentalManagementServicePort">
+			<http:binding verb="POST"/>				
+			<operation name="getVersion">
+				<http:operation location="HalfRentalManagementService/getVersion"/>
+				<input>
+					<mime:content type="application/x-www-form-urlencoded"/>
+				</input>
+				<output>
+					<mime:content type="text/xml"/>
+				</output>
+			</operation>	
+			<operation name="fileRentalDispute">
+				<http:operation location="HalfRentalManagementService/fileRentalDispute"/>
+				<input>
+					<mime:content part="fileRentalDispute" type="text/xml"/>
+				</input>
+				<output>
+					<mime:content part="fileRentalDispute" type="text/xml"/>
+				</output>
+			</operation>		
+			<operation name="updateRentalStatus">
+				<http:operation location="HalfRentalManagementService/updateRentalStatus"/>
+				<input>
+					<mime:content part="updateRentalStatus" type="text/xml"/>
+				</input>
+				<output>
+					<mime:content part="updateRentalStatus" type="text/xml"/>
+				</output>
+			</operation>		
+			
+		</binding>
+		
+		<service name="HalfRentalManagementService">
+			<documentation>
+				<Version>1.0.0</Version> 
+				This service provides the operations to update rental status and to file a seller claim  
+			</documentation>
+			<port name="HalfRentalManagementServiceHttpPort" binding="tns:HalfRentalManagementServiceHttpBinding">
+				<http:address location="https://svcs.ebay.com/services/half/v1/HalfRentalManagementService" /> 
+			</port>
+			<port name="HalfRentalManagementServiceSOAPPort" binding="tns:HalfRentalManagementServiceSOAPBinding">
+				<soap12:address location="https://svcs.ebay.com/services/half/v1/HalfRentalManagementService" /> 
+			</port>
+		</service>
+	</definitions>

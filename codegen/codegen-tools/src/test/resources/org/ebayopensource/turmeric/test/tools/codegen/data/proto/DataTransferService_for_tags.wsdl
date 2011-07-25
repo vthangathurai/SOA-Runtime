@@ -1,0 +1,1322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="DataTransferService" targetNamespace="http://www.ebay.com/marketplace/experimentation/v1/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.ebay.com/marketplace/experimentation/v1/services" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/experimentation/v1/services" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.ebay.com/marketplace/experimentation/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+
+	<xs:element name="updateExperimentDataRequest" type="tns:UpdateExperimentDataRequest">
+	</xs:element>
+            
+   <xs:element name="updateExperimentMetadataRequest" type="tns:UpdateExperimentMetadataRequest">
+   </xs:element>
+            
+   <xs:element name="updateExperimentStatusDataRequest" type="tns:UpdateExperimentStatusDataRequest">
+   </xs:element>
+   
+   <xs:element name="updateExperimentEventsDataRequest" type="tns:UpdateExperimentEventsDataRequest">
+   </xs:element>            
+
+   <xs:element name="encryptRequest" type="tns:EncryptRequest">
+   </xs:element>            
+
+	<xs:complexType name="ExperimentBaseDataSet">	
+			<xs:sequence>
+    				<xs:element name="experimentRecord" type="tns:ExperimentRecord"/>
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="treatmentRecord" type="tns:TreatmentRecord"/>    				  
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="factorRecord" type="tns:FactorRecord"/>
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="sampleRecord" type="tns:SampleRecord"/>
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="trafficSampleRecord" type="tns:TrafficSampleRecord"/>
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="treatmentUserRecord" type="tns:TreatmentUserRecord"/>
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="treatmentUrlMapRecord" type="tns:TreatmentUrlMapRecord"/>
+			</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ExperimentMetadataBaseDataSet">	
+			<xs:sequence>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="validationRecord" type="tns:ValidationRecord"/>    		
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="trackingROIDefnRecord" type="tns:TrackingROIDefnRecord"/>		  
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="trackingMetadataRecord" type="tns:TrackingMetadataRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="trackingCntDefnMtrcsRecord" type="tns:TrackingCntDefnMtrcsRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="trackingCntDefnRecord" type="tns:TrackingCntDefnRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="tagsRecord" type="tns:TagsRecord"/>    				    
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="siteTrafficDataRecord" type="tns:SiteTrafficDataRecord"/>    				  
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="requestRecord" type="tns:RequestRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="postLaunchDataRecord" type="tns:PostLaunchDataRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="insightsArchiveRecord" type="tns:InsightsArchiveRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="insightsRecord" type="tns:InsightsRecord"/>    				    
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="experimentTagsMapRecord" type="tns:ExperimentTagsMapRecord"/>    				  
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="experimentFilesRecord" type="tns:ExperimentFilesRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="dwMetadataRecord" type="tns:DwMetadataRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="collisionRecord" type="tns:CollisionRecord"/>    				    
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="sharedControlSampleRecord" type="tns:SharedControlSampleRecord"/>    				    
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="analyticsMetadataRecord" type="tns:AnalyticsMetadataRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="analyticsMdBtstrpCnfgRecord" type="tns:AnalyticsMdBtstrpCnfgRecord"/>
+	    				   <xs:element maxOccurs="unbounded" minOccurs="0" name="actionDetailsRecord" type="tns:ActionDetailsRecord"/>	    				   
+				</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="UpdateExperimentDataRequest">
+			<xs:annotation>
+				<xs:documentation>
+					This is the  request container for the service operations to update experiment in LookupHost.
+				</xs:documentation>
+			</xs:annotation>
+				
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentCreateDataSet" type="tns:ExperimentBaseDataSet"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentUpdateDataSet" type="tns:ExperimentBaseDataSet"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentDeleteDataSet" type="tns:ExperimentBaseDataSet"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentUpsertDataSet" type="tns:ExperimentBaseDataSet"/>
+					</xs:sequence>	
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="UpdateExperimentMetadataRequest">
+		<xs:annotation>
+				<xs:documentation>
+					This is the  request container for the service operations to update experiment  in EPHost.
+				</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentMetadataCreateDataSet" type="tns:ExperimentMetadataBaseDataSet"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentMetadataUpdateDataSet" type="tns:ExperimentMetadataBaseDataSet"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentMetadataDeleteDataSet" type="tns:ExperimentMetadataBaseDataSet"/>
+					   <xs:element maxOccurs="1" minOccurs="0" name="experimentMetadataUpsertDataSet" type="tns:ExperimentMetadataBaseDataSet"/>
+					</xs:sequence>	
+			</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="UpdateExperimentStatusDataRequest">
+			<xs:annotation>
+				<xs:documentation>
+					This is the  request container for the service operations to update experiment status in LookupHost.
+				</xs:documentation>
+			</xs:annotation>
+				
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+					  <xs:element name="experimentId"  type="xs:long"/>
+    				  <xs:element name="experimentStatus" type="tns:ExperimentStatusEnum"/>
+    				  <xs:element name="experimentPhase" type="tns:ExperimentPhaseEnum"/>
+					</xs:sequence>	
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="UpdateExperimentEventsDataRequest">
+			<xs:annotation>
+				<xs:documentation>
+					This is the  request container for the service operations to update BES events in EPHost
+				</xs:documentation>
+			</xs:annotation>
+				
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+					   <xs:element name="experimentId"  type="xs:long"/>
+    				   <xs:element name="eventName" type="xs:string"/>    				  
+    				   <xs:element name="existingDate" type="xs:dateTime"/>
+    				   <xs:element name="revisedDate" type="xs:dateTime"/>
+					</xs:sequence>	
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="EncryptRequest">
+			<xs:annotation>
+				<xs:documentation>
+					This is the  request container for the service operations to return encrypted URL using eSAMS
+				</xs:documentation>
+			</xs:annotation>
+				
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+    				   <xs:element name="url" type="xs:string"/>    				  
+					</xs:sequence>	
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+  
+  <xs:element name="updateExperimentDataResponse" type="tns:UpdateExperimentDataResponse">
+  </xs:element>
+
+  <xs:element name="encryptResponse" type="tns:EncryptResponse">
+  </xs:element>
+            
+	<xs:complexType name="UpdateExperimentDataResponse">			
+            <xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">					
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="EncryptResponse">			
+            <xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+				<xs:sequence>
+    				   <xs:element name="encryptedUrl" type="xs:string"/>    				  
+					</xs:sequence>						
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ExperimentRecord">	
+			<xs:sequence>
+    				<xs:element name="experimentId"  type="xs:long"/>
+    				<xs:element name="experimentName" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentDesc" type="xs:string"/>
+    				<xs:element name="experimentType" type="tns:ExperimentTypeEnum"/>
+    				<xs:element name="startDate" type="xs:dateTime"/>
+    				<xs:element name="endDate" type="xs:dateTime"/>
+    				<xs:element name="experimentVersion"  type="xs:long"/>
+    				<xs:element name="experimentStatus" type="tns:ExperimentStatusEnum"/>
+    				<xs:element name="experimentScopeId"  type="xs:int"/>
+    				<xs:element name="siteId" type="xs:string"/>
+    				<xs:element name="cobrandId"  type="xs:int"/>
+    				<xs:element name="creationUser" type="xs:string"/>
+    				<xs:element name="lastModifiedUser" type="xs:string"/>
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="changeHistory" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentContact1" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentContact2" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentContact3" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentContact4" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentContact5" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentPhase" type="tns:ExperimentPhaseEnum"/>
+    				<xs:element minOccurs="0" name="userImpact" type="tns:UserImpactEnum"/>
+    				<xs:element minOccurs="0" name="experimentDisplayId" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentExternalId" type="xs:string"/>
+    				<xs:element name="allowExperimentCollision"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="experimentComments" type="xs:string"/>
+    				<xs:element name="frameworkId"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="collisionReason" type="xs:string"/>
+    				<xs:element minOccurs="0" name="otherFrameWork" type="xs:string"/>
+    				<xs:element minOccurs="0" name="edaResource" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentHypothesis" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentAssumption" type="xs:string"/>
+    				<xs:element name="trackingInstApproachFlag"  type="xs:long"/>
+    				<xs:element minOccurs="0" name="otherTrackingInstApproach" type="xs:string"/>
+    				<xs:element minOccurs="0" name="testDimensionFlag" type="xs:long"/>
+    				<xs:element minOccurs="0" name="otherTestDimension" type="xs:string"/>
+    				<xs:element name="poolType"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="experimentDesignDetail" type="xs:string"/>
+    				<xs:element minOccurs="0" name="isStatusOverridden" type="tns:ExptOverrideStatusEnum"/>
+    				<xs:element name="rpwInsightsFlags"  type="xs:long"/>
+    				<xs:element minOccurs="0" name="rpwInsightsComment" type="xs:string"/>
+    				<xs:element minOccurs="0" name="otherMetricsComments" type="xs:string"/>
+    				<xs:element minOccurs="0" name="isSaRequired" type="xs:boolean"/>    				
+    				<xs:element minOccurs="0" name="isUerRequired" type="xs:boolean"/>
+    				<xs:element minOccurs="0" name="liveTestComments" type="xs:string"/>
+    				<xs:element minOccurs="0" name="ppwComments" type="xs:string"/>
+    				<xs:element minOccurs="0" name="gmbComments" type="xs:string"/>
+    				<xs:element minOccurs="0" name="saAnalysisComments" type="xs:string"/>
+    				<xs:element minOccurs="0" name="saReqForAnalysis" type="xs:string"/>
+    				<xs:element minOccurs="0" name="uerResearchComments" type="xs:string"/>
+    				<xs:element minOccurs="0" name="uerReqForResearch" type="xs:string"/>
+    				<xs:element name="isCapacityTicketFiled"  type="xs:boolean"/>
+    				<xs:element minOccurs="0" name="capacityTckts" type="xs:string"/>    				
+    				<xs:element name="isExlEdlConfirmed"  type="xs:boolean"/>
+    				<xs:element minOccurs="0" name="exlEdlDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="rampStartDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="rampEndDate" type="xs:dateTime"/>
+    				<xs:element maxOccurs="unbounded" minOccurs="0" name="spectrumConfiguration" type="xs:long"/>
+    				<xs:element name="pldmThresholdLow"  type="xs:int"/>
+    				<xs:element name="pldmThresholdHigh"  type="xs:int"/>
+    				<xs:element name="pldmThresholdCheckWaitDays"  type="xs:int"/>
+    				<xs:element name="isTrafficValidated"  type="xs:boolean"/>
+    				<xs:element name="flag"  type="xs:long"/>
+    				<xs:element name="isActive"  type="xs:boolean"/>
+    				<xs:element name="isConfirmedExlEdlDates"  type="xs:int"/>
+    				<xs:element name="frameworkType"  type="xs:int"/>
+    				<xs:element name="pldmThresholdCheckDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TreatmentRecord">	
+			<xs:sequence>
+    				<xs:element name="treatmentId"  type="xs:long"/>
+    				<xs:element name="experimentId"  type="xs:long"/>
+    				<xs:element name="treatmentName" type="xs:string"/>
+    				<xs:element minOccurs="0" name="treatmentDesc" type="xs:string"/>
+    				<xs:element name="treatmentType"  type="xs:int"/>
+    				<xs:element name="treatmentStatus"  type="xs:int"/>		
+    				<xs:element name="creationUser" type="xs:string"/>
+    				<xs:element name="lastModifiedUser" type="xs:string"/>
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>    				
+    				<xs:element minOccurs="0" name="treatmentDisplayId" type="xs:string"/>
+    				<xs:element minOccurs="0" name="treatmentExternalId" type="xs:string"/>
+    				<xs:element minOccurs="0" name="qualifiedPageIds" type="xs:string"/>
+    				<xs:element name="spectrumPercentage"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="spectrumConfiguration" type="xs:string"/>
+    				<xs:element minOccurs="0" name="userSegmentName" type="xs:string"/>
+    				<xs:element name="isWinningTreatment"  type="xs:boolean"/>
+ 				<xs:element name="treatmentFlags"  type="xs:long"/>
+    				<xs:element minOccurs="0" name="optInSucessRedirectUrl" type="xs:string"/>
+    				<xs:element minOccurs="0" name="optInFailureRedirectUrl" type="xs:string"/>
+    				<xs:element minOccurs="0" name="optOutRedirectUrl" type="xs:string"/>
+    				<xs:element minOccurs="0" name="optInUrlParam" type="xs:string"/>
+    				<xs:element minOccurs="0" name="optOutUrlParam" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="FactorRecord">	
+			<xs:sequence>
+    				<xs:element name="factorId"  type="xs:long"/>
+    				<xs:element name="treatmentId"  type="xs:long"/>
+    				<xs:element name="sampleId"  type="xs:long"/>
+    				<xs:element name="factorName" type="xs:string"/>
+    				<xs:element name="factorValue" type="xs:string"/>
+    				<xs:element name="creationUser" type="xs:string"/>
+    				<xs:element name="lastModifiedUser" type="xs:string"/>
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="factorDisplayId" type="xs:string"/>
+    				<xs:element name="factorStatus"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="factorExternalId" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SampleRecord">	
+			<xs:sequence>
+    				<xs:element name="sampleId"  type="xs:long"/>
+    				<xs:element name="sampleType"  type="xs:int"/>
+    				<xs:element name="siteId"  type="xs:int"/>
+    				<xs:element name="cobrandId"  type="xs:int"/>
+    				<xs:element name="guidModDivisor"  type="xs:long"/>
+    				<xs:element name="guidModRemainStart"  type="xs:long"/>		
+    				<xs:element name="guidModRemainEnd"  type="xs:long"/>
+    				<xs:element name="subGuidModDivisor"  type="xs:long"/>
+    				<xs:element name="subGuidModRemainStart"  type="xs:long"/>
+				   <xs:element name="subGuidModRemainEnd"  type="xs:long"/>
+    				<xs:element name="experimentSampleStatus"  type="xs:int"/>
+				   <xs:element name="creationUser" type="xs:string"/>
+    				<xs:element name="userSegmentName" type="xs:string"/>
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+    				<xs:element name="treatmentId"  type="xs:long"/>
+    				<xs:element name="experimentId"  type="xs:long"/>    				
+    				<xs:element name="lastModifiedUser" type="xs:string"/>
+    				<xs:element minOccurs="0" name="experimentName" type="xs:string"/>
+    				<xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>    				
+    				<xs:element minOccurs="0" name="experimentStatus" type="tns:ExperimentStatusEnum"/>
+    				<xs:element name="experimentTableExperimentId"  type="xs:long"/>
+    				<xs:element minOccurs="0" name="experimentHypothesis" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TrafficSampleRecord">	
+			<xs:sequence>
+    				<xs:element name="exptTrafficSampleId"  type="xs:long"/>
+    				<xs:element name="guidModStart"  type="xs:int"/>
+    				<xs:element name="guidModEnd"  type="xs:int"/>
+    				<xs:element name="subGuidModStart"  type="xs:int"/>
+    				<xs:element name="subGuidModEnd"  type="xs:int"/>		
+    				<xs:element name="status"  type="xs:int"/>
+    				<xs:element name="creationUser" type="xs:string"/>
+    				<xs:element name="lastModifiedUser" type="xs:string"/>    	
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+    				<xs:element name="experimentId"  type="xs:long"/>   
+    				<xs:element name="experimentStatus"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>    	    				
+    				<xs:element minOccurs="0" name="experimentName" type="xs:string"/>  				
+    				<xs:element name="siteId"  type="xs:int"/>
+    				<xs:element name="experimentType"  type="xs:int"/>
+    				<xs:element minOccurs="0" name="experimentHypothesis" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TreatmentUserRecord">	
+			<xs:sequence>
+    				<xs:element name="exptTreatmentUserId"  type="xs:long"/>
+    				<xs:element name="treatmentId"  type="xs:long"/>
+    				<xs:element name="userId"  type="xs:long"/>
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="TreatmentUrlMapRecord">	
+			<xs:sequence>
+    				<xs:element name="exptTreatmentUrlMapId"  type="xs:long"/>
+				<xs:element name="treatmentId"  type="xs:long"/>
+				<xs:element name="sourceHost" type="xs:string"/>
+				<xs:element name="destinationHost" type="xs:string"/>
+				<xs:element name="creationDate" type="xs:dateTime"/>
+				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+    				<xs:element minOccurs="0" name="sourceCommand" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="ValidationRecord">
+			<xs:sequence>
+					<xs:element name="exptValidationId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="isValidationComplete"  type="xs:boolean"/>
+					<xs:element name="validationTabPage"  type="xs:int"/>
+					<xs:element name="validationType"  type="xs:int"/>
+					<xs:element name="validationNotes" type="xs:string"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="treatmentId"  type="xs:long"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrackingROIDefnRecord">
+			<xs:sequence>
+					<xs:element name="trackingROIDefinitionId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="roiType"  type="xs:int"/>
+					<xs:element minOccurs="0" name="roiPageId" type="xs:string"/>
+					<xs:element minOccurs="0" name="roiName" type="xs:string"/>
+					<xs:element minOccurs="0" name="roiValue" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SharedControlSampleRecord">
+			<xs:sequence>
+				<xs:element name="exptSharedControlSampleId"  type="xs:long"/>
+				<xs:element name="sitetId"  type="xs:int"/>
+				<xs:element name="guidModStart"  type="xs:int"/>
+				<xs:element name="guidModEnd"  type="xs:int"/>
+				<xs:element name="subGuidModStart"  type="xs:int"/>
+				<xs:element name="subGuidModEnd"  type="xs:int"/>
+				<xs:element name="status"  type="xs:int"/>
+				<xs:element minOccurs="0" name="creationUser" type="xs:string"/>
+				<xs:element minOccurs="0" name="lastModifiedUser" type="xs:string"/>
+				<xs:element name="creationDate" type="xs:dateTime"/>
+				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrackingMetadataRecord">
+			<xs:sequence>
+					<xs:element name="trackingMetadataId"  type="xs:long"/>
+					<xs:element name="partner" type="xs:string"/>
+					<xs:element name="burninBisFeedRequired"  type="xs:boolean"/>
+					<xs:element name="burninAnalysisTimeprdReqd"  type="xs:boolean"/>
+					<xs:element name="testMsrmntAnlysTimeprdReqd"  type="xs:boolean"/>
+					<xs:element name="predataAnalysis"  type="xs:boolean"/>
+					<xs:element name="auctionCloseBisFeedReqd"  type="xs:boolean"/>
+					<xs:element name="auctionCloseAnlysTmprdReqd"  type="xs:boolean"/>
+					<xs:element name="postDataAnlysTimeprdReqd"  type="xs:boolean"/>
+					<xs:element name="variantNamingConvention" type="xs:string"/>	
+					<xs:element name="adImpressionRetention"  type="xs:boolean"/>				
+					<xs:element name="specialTreatmentBySite" type="xs:string"/>
+					<xs:element name="splTagsFlagsOnPages" type="xs:string"/>
+					<xs:element name="linkToDmlStructure" type="xs:string"/>		
+					<xs:element name="trackingComments" type="xs:string"/>
+					<xs:element name="pdWireonDate" type="xs:dateTime"/>
+					<xs:element name="predataStartDate" type="xs:dateTime"/>
+					<xs:element name="predataEndDate" type="xs:dateTime"/>
+					<xs:element name="predataBisFeedRequired"  type="xs:boolean"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="burninStartDate" type="xs:dateTime"/>
+					<xs:element name="burninEndDate" type="xs:dateTime"/>
+					<xs:element name="testMsrmntStartDate" type="xs:dateTime"/>
+					<xs:element name="testMsrmntEndDate" type="xs:dateTime"/>
+					<xs:element name="testMsrmntBisFeedReqd"  type="xs:boolean"/>
+					<xs:element name="auctionCloseStartDate" type="xs:dateTime"/>
+					<xs:element name="auctionCloseEndDate" type="xs:dateTime"/>
+					<xs:element name="postDataStartDate" type="xs:dateTime"/>
+					<xs:element name="postDataEndDate" type="xs:dateTime"/>
+					<xs:element name="postDataBisFeedReqd"  type="xs:boolean"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+					<xs:element name="liveTestUpdateComments" type="xs:string"/>
+					<xs:element name="linkToFrmwkBasedInfo" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrackingCntDefnMtrcsRecord">
+			<xs:sequence>
+					<xs:element name="countingDefinitionMetricsId"  type="xs:long"/>
+					<xs:element name="countingDefinitionId"  type="xs:long"/>
+					<xs:element name="metricType"  type="xs:int"/>
+					<xs:element name="pageTypeId" type="xs:string"/>
+					<xs:element name="description" type="xs:string"/>					
+					<xs:element minOccurs="0" name="tagValue" type="xs:string"/>
+					<xs:element minOccurs="0" name="tagPresent" type="xs:string"/>
+					<xs:element minOccurs="0" name="tagNotPresent" type="xs:string"/>
+					<xs:element minOccurs="0" name="flagOn" type="xs:string"/>
+					<xs:element minOccurs="0" name="flagOff" type="xs:string"/>					
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrackingCntDefnRecord">
+			<xs:sequence>
+					<xs:element name="countingDefinitionId"  type="xs:long"/>
+					<xs:element name="trackingMetadataId"  type="xs:long"/>
+					<xs:element name="countName" type="xs:string"/>
+					<xs:element name="description" type="xs:string"/>
+					<xs:element name="countingLevel"  type="xs:int"/>
+					<xs:element name="specialBreakingPages" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="countingMechanism"  type="xs:int"/>
+					<xs:element name="bootstrappingRequired"  type="xs:int"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TagsRecord">
+			<xs:sequence>
+					<xs:element name="exptTagsId"  type="xs:long"/>
+					<xs:element name="tagName" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SiteTrafficDataRecord">
+			<xs:sequence>
+					<xs:element name="exptSiteTrafficDataId"  type="xs:long"/>
+					<xs:element name="recordedDate" type="xs:dateTime"/>
+					<xs:element name="siteId"  type="xs:int"/>
+					<xs:element name="totalGuidCountWithSps"  type="xs:long"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="frequencyType"  type="xs:int"/>
+					<xs:element name="totalGuidCountWithoutSps"  type="xs:long"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RequestRecord">
+			<xs:sequence>
+					<xs:element name="exptRequestId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="scopeId"  type="xs:long"/>
+					<xs:element name="experimentName" type="xs:string"/>
+					<xs:element name="experimentDescription" type="xs:string"/>
+					<xs:element name="gxtContact" type="xs:string"/>
+					<xs:element name="businessContact" type="xs:string"/>
+					<xs:element name="otherContact1" type="xs:string"/>
+					<xs:element name="otherContact2" type="xs:string"/>
+					<xs:element name="siteId"  type="xs:int"/>
+					<xs:element name="userImpact"  type="xs:int"/>
+					<xs:element name="comments" type="xs:string"/>
+					<xs:element name="trackerType"  type="xs:int"/>
+					<xs:element name="trackerId"  type="xs:long"/>
+					<xs:element name="prdUrl" type="xs:string"/>
+					<xs:element name="erdUrl" type="xs:string"/>
+					<xs:element name="thirdPartyPartnerDtls" type="xs:string"/>
+					<xs:element name="desiredTimeForTest" type="xs:dateTime"/>
+					<xs:element name="desiredResultsByTime" type="xs:dateTime"/>
+					<xs:element name="rpwInsightsFlag01"  type="xs:long"/>
+					<xs:element name="rpwInsightsComment" type="xs:string"/>
+					<xs:element name="otherMetricsComments" type="xs:string"/>
+					<xs:element name="ppwComments" type="xs:string"/>
+					<xs:element name="gmbComments" type="xs:string"/>
+					<xs:element name="liveTestComments" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+					<xs:element name="rpwInsightsFlag"  type="xs:long"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PostLaunchDataRecord">		
+			<xs:sequence>
+					<xs:element name="exptPostLaunchDataId"  type="xs:long"/>
+					<xs:element name="recordedDate" type="xs:dateTime"/>
+					<xs:element name="frequencyType"  type="xs:int"/>
+					<xs:element name="dataLevel"  type="xs:int"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="treatmentId"  type="xs:long"/>
+					<xs:element name="guidCount"  type="xs:long"/>
+					<xs:element name="uidCount"  type="xs:long"/>
+					<xs:element name="sessionCount"  type="xs:long"/>
+					<xs:element name="bidCount"  type="xs:long"/>
+					<xs:element name="binCount"  type="xs:long"/>
+					<xs:element name="viCount"  type="xs:long"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="experimentStatusType"  type="xs:int"/>
+					<xs:element name="isSpsIncluded"  type="xs:boolean"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InsightsArchiveRecord">
+			<xs:sequence>
+					<xs:element name="exptInsightsArchiveId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="documentType"  type="xs:int"/>
+					<xs:element name="documentName" type="xs:string"/>
+					<xs:element name="documentUrl" type="xs:string"/>
+					<xs:element name="emailMessageName" type="xs:string"/>
+					<xs:element name="emailMessageUrl" type="xs:string"/>
+					<xs:element name="comments" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InsightsRecord">
+			<xs:sequence>
+					<xs:element name="exptInsightsId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="successfulTreatmentId"  type="xs:long"/>
+					<xs:element name="busConclRecomm" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExperimentTagsMapRecord">
+			<xs:sequence>
+					<xs:element name="exptExperimentTagsMapId"  type="xs:long"/>
+					<xs:element name="exptTagId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExperimentFilesRecord">
+			<xs:sequence>
+					<xs:element name="exptExperimentFilesId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="fileExtension"  type="xs:int"/>
+					<xs:element name="fileDocumentType"  type="xs:int"/>
+					<xs:element name="fileName" type="xs:string"/>
+					<xs:element name="fileLocationUrl" type="xs:string"/>
+					<xs:element name="fileComments" type="xs:string"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DwMetadataRecord">
+			<xs:sequence>
+					<xs:element name="dwMetadataId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="bisFeedPrepostDataReqd"  type="xs:boolean"/>				
+					<xs:element name="productRatioMetricsReqd"  type="xs:boolean"/>
+					<xs:element name="bidTransactionFeedReqd"  type="xs:boolean"/>
+					<xs:element name="afsFeedPrepostDataReqd"  type="xs:boolean"/>
+					<xs:element name="afsStdPrdtRatioMtrcReqd"  type="xs:boolean"/>
+					<xs:element name="afsBidTransactionMtrcReqd"  type="xs:boolean"/>
+					<xs:element name="impressionFeedReqd"  type="xs:boolean"/>
+					<xs:element name="watchFeedReqd"  type="xs:boolean"/>
+					<xs:element name="viewItemFeedReqd"  type="xs:boolean"/>
+					<xs:element name="keywordFeedReqd"  type="xs:boolean"/>
+					<xs:element name="bidBinByKeywordFeedReqd"  type="xs:boolean"/>
+					<xs:element name="cnstrSrchBrwsActvtFeedReqd"  type="xs:boolean"/>
+					<xs:element name="adMetricsReqd"  type="xs:boolean"/>
+					<xs:element name="watchMetricsReqd"  type="xs:boolean"/>
+					<xs:element name="sessionMetricsReqd"  type="xs:boolean"/>
+					<xs:element name="addlTransRevenueMetricReqd"  type="xs:boolean"/>
+					<xs:element name="viewItemMetricsReqd"  type="xs:boolean"/>
+					<xs:element name="keywordMetricsReqd"  type="xs:boolean"/>
+					<xs:element name="bidBinByKeywordMetricReqd"  type="xs:boolean"/>
+					<xs:element name="cnstrSrchBrwdActvtMtrReqd"  type="xs:boolean"/>
+					<xs:element name="comments" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+					<xs:element name="rulesMetadataReqd"  type="xs:boolean"/>
+					<xs:element name="flag"  type="xs:long"/>
+					<xs:element name="viewItemAggrReqd"  type="xs:boolean"/>
+					<xs:element name="adMetricsComments" type="xs:string"/>
+					<xs:element name="sessionMetricsComments" type="xs:string"/>
+					<xs:element name="addTxnRevMetricsComments" type="xs:string"/>
+					<xs:element name="otherDataRollupDim" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="CollisionRecord">	
+			<xs:sequence>
+    				<xs:element name="exptCollisionId"  type="xs:long"/>
+    				<xs:element name="experimentId"  type="xs:long"/>
+    				<xs:element name="collidingExperimentId"  type="xs:long"/>
+    				<xs:element name="sharedGuidCollisionOnly"  type="xs:int"/>
+    				<xs:element name="creationDate" type="xs:dateTime"/>
+    				<xs:element name="creationUser" type="xs:string"/>
+    				<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AnalyticsMetadataRecord">
+			<xs:sequence>
+					<xs:element name="analyticsMetadataId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="isValidationComplete"  type="xs:boolean"/>
+					<xs:element name="rpwCtgryChkPreBtstrStatus"  type="xs:int"/>
+					<xs:element name="isRpwCheckPostBootstrapping"  type="xs:boolean"/>
+					<xs:element name="rpwCtgryChkPstBtstrStatus"  type="xs:int"/>
+					<xs:element name="isBisFeedPrePostData"  type="xs:boolean"/>
+					<xs:element name="isUserSegmentationRequired"  type="xs:boolean"/>
+					<xs:element name="isKeywordAnalysisRequired"  type="xs:boolean"/>
+					<xs:element name="analyticsComments" type="xs:string"/>
+					<xs:element name="xmlMetadata" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="creationUser" type="xs:string"/>
+					<xs:element name="lastModifiedUser" type="xs:string"/>
+					<xs:element name="isMotorCheckRequired"  type="xs:boolean"/>
+					
+			</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AnalyticsMdBtstrpCnfgRecord">
+			<xs:sequence>
+					<xs:element name="analyticsMetadataId"  type="xs:long"/>
+					<xs:element name="analyticsMdBtstrpCnfgId"  type="xs:long"/>
+					<xs:element name="countingDefinitionId"  type="xs:long"/>
+					<xs:element name="levelType"  type="xs:int"/>
+					<xs:element name="isSiteDim"  type="xs:boolean"/>
+					<xs:element name="bucketsCount"  type="xs:int"/>
+					<xs:element name="bucketSize"  type="xs:int"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+					<xs:element name="preDataStartDate" type="xs:dateTime"/>
+					<xs:element name="preDataEndDate" type="xs:dateTime"/>
+					<xs:element name="testDataStartDate" type="xs:dateTime"/>
+					<xs:element name="testDataEndDate" type="xs:dateTime"/>
+					<xs:element name="postDataStartDate" type="xs:dateTime"/>
+					<xs:element name="postDataEndDate" type="xs:dateTime"/>
+					<xs:element name="priorityId"  type="xs:int"/>
+					<xs:element name="isVBSegment"  type="xs:boolean"/>
+					<xs:element name="weekBeginDate" type="xs:dateTime"/>
+					<xs:element minOccurs="0" name="site" type="xs:string"/>
+					<xs:element minOccurs="0" name="sapCategory" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ActionDetailsRecord">
+			<xs:annotation>
+				<xs:documentation>
+					Possible values for actionType attribute are :
+					Default,Save,SignOff, Reject_SignOff,Approve, Reject_Approval,Request_Approval, Request_SignOff, Old_Approval,Launch_Expt,
+					Stop_Expt, Cancel_Expt,Override_Expt_Completion,Override_Expt_Run, Revert_Override, Allow_Collisions,
+					Upload_Files, Delete_Files,Edited_User, Assigned_User, Ramp_Expt, Ramp_Stop, Exl_Readiness_SignOff,Pre_Launch_SignOff.
+					
+					Possible values for pageType attribute are:
+					Default, ExptRequest,ExptDetails,ExptDesign,ExptTreatmentSpectrum,ExptSiteAnalytics,ExptResearch,ExptMetadata,ExptTracking,ExptDW,ExptAnalytics,
+					ExptValidation,ExptTestSetup,ExptOperationCheck,ExptDataIntegrity,ExptPostTestLaunch,ExptInsights,ExptControlPanel,ExptHistory,ExptRamping,
+					ExptRampingTreatmentSpectrum,ExptRampingDataMonitor,ExptElmoOnly,ExptLifecycleCheck,ExptDataMonitor,ExptPldm,ExptTreatmentSpectrumTab.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+					<xs:element name="exptActionDetailsId"  type="xs:long"/>
+					<xs:element name="experimentId"  type="xs:long"/>
+					<xs:element name="pageSection"  type="xs:int"/>
+					<xs:element name="pageType" type="xs:string"/>
+					<xs:element name="actionType" type="xs:string"/>
+					<xs:element name="actionGroup"  type="xs:int"/>
+					<xs:element name="actionUser" type="xs:string"/>
+					<xs:element name="actionComments" type="xs:string"/>
+					<xs:element name="creationDate" type="xs:dateTime"/>
+					<xs:element name="lastModifiedDate" type="xs:dateTime"/>
+			</xs:sequence>
+	</xs:complexType>
+	
+	 <xs:simpleType name="ExperimentTypeEnum">    
+	   <xs:restriction base="xs:string">
+	      <xs:enumeration value="Regular"/>
+	      <xs:enumeration value="Orthogonal"/>
+	      <xs:enumeration value="Beta"/>
+	      <xs:enumeration value="UID"/>
+	    </xs:restriction>
+	  </xs:simpleType>
+  
+	  <xs:simpleType name="ExperimentStatusEnum">    
+	   <xs:restriction base="xs:string">
+	      <xs:enumeration value="Pending"/>
+	      <xs:enumeration value="Planned"/>
+	      <xs:enumeration value="Active"/>
+	      <xs:enumeration value="Complete"/>
+	      <xs:enumeration value="Cancelled"/>
+	      <xs:enumeration value="Stopped"/>
+	      <xs:enumeration value="Deleted"/>
+	      <xs:enumeration value="Ramp Pending"/>
+	      <xs:enumeration value="Ramp Planned"/>
+	      <xs:enumeration value="Ramp Active"/>      
+	      <xs:enumeration value="Ramp Stopped"/>
+	      <xs:enumeration value="Ramp Completed"/>
+	      <xs:enumeration value="Default"/>
+	      <xs:enumeration value="BlackOutExperiments"/>
+	    </xs:restriction>
+	  </xs:simpleType>
+	  
+	  <xs:simpleType name="ExperimentPhaseEnum">    
+	   <xs:restriction base="xs:string">
+	      <xs:enumeration value="Request In Review"/>
+	      <xs:enumeration value="Design"/>
+	      <xs:enumeration value="Development"/>
+	      <xs:enumeration value="Run"/>
+	      <xs:enumeration value="Data Extract"/>
+	      <xs:enumeration value="Analysis"/>
+	      <xs:enumeration value="Business Results Review"/>
+	      <xs:enumeration value="Completed"/>
+	      <xs:enumeration value="Ramp"/>
+	      <xs:enumeration value="Not Specified"/>      
+	    </xs:restriction>
+	  </xs:simpleType>
+	  
+	  <xs:simpleType name="UserImpactEnum">    
+	   <xs:restriction base="xs:string">
+	      <xs:enumeration value="High"/>
+	      <xs:enumeration value="Medium"/>
+	      <xs:enumeration value="Low"/>
+	      <xs:enumeration value="Not Specified"/>      
+	    </xs:restriction>
+	  </xs:simpleType>
+	  
+	   <xs:simpleType name="ExptOverrideStatusEnum">    
+	   <xs:restriction base="xs:string">
+	      <xs:enumeration value="Default"/>
+	      <xs:enumeration value="JumpToRunPhase"/>
+	      <xs:enumeration value="CompleteExperiment"/>
+	      <xs:enumeration value="revert"/>      
+	    </xs:restriction>
+	  </xs:simpleType>
+
+	
+	<xs:complexType abstract="true" name="BaseServiceRequest">
+		<xs:annotation>
+			<xs:documentation>
+				This is the base class for request container for all service operations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType abstract="true" name="BaseServiceResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Base response container for all service operations. Contains error information
+				associated with the request.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ack" type="tns:AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information for an error or warning that occurred when eBay processed the
+						request.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="ErrorMessage">
+		<xs:annotation>
+			<xs:documentation>
+				ErrorMessage to indicate any Error/Warning occured as part of service call.
+				Any run time error will not be reported here, but will be reported aspart of
+				soap fault.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="error"  type="tns:ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Details about a single error.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	
+	<xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>
+				This represents error details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="errorId" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>
+						A unique code that identifies the particular error condition that occurred.
+						Your application can use error codes as identifiers in your customized
+						error-handling algorithms.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="domain" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Name of the domain upon which the error occurred. 
+						&lt;dl&gt;
+						&lt;lh&gt;Domains include:&lt;/lh&gt;
+						&lt;dt&gt;
+							Marketplace
+						&lt;/dt&gt;
+						&lt;dd&gt;
+							A business or validation error occurred for the Merchandising Service.
+						&lt;/dd&gt;
+						&lt;dt&gt;
+							SOA
+						&lt;/dt&gt;
+						&lt;dd&gt;
+							An exception occurred in the Service Oriented Architecture (SOA) framework.
+						&lt;/dd&gt;
+						&lt;/dl&gt;
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="severity" type="tns:ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error caused the request to fail (Error) or not
+						(Warning).
+						&lt;br&gt;&lt;br&gt;
+						If the request fails and the source of the problem is within the application
+						(such as a missing required element), please change the application before you
+						retry the request. If the problem is due to end-user input data, please alert
+						the end-user to the problem and provide the means for them to correct the data.
+						Once the problem in the application or data is resolved, you can attempt to re-
+						send the request to eBay.
+						&lt;br&gt;&lt;br&gt;
+						If the source of the problem is on eBay's side, you can retry the request as-is
+						a reasonable number of times (eBay recommends twice). If the error persists,
+						contact Developer Technical Support. Once the problem has been resolved, the
+						request may be resent in its original form.
+						&lt;br&gt;&lt;br&gt;
+						When a warning occurs, the error is returned in addition to the business data.
+						In this case, you do not need to retry the request (as the original request was
+						successful). However, depending on the cause or nature of the warning, you
+						might need to contact either the end user or eBay to effect a long term
+						solution to the problem to prevent it from reoccurring in the future.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="category" type="tns:ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of errors: request errors, application errors, and
+						system errors.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="message" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						A detailed description of the condition that resulted in the error.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="subdomain" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Name of the subdomain upon which the error occurred. 
+						&lt;dl&gt;
+						&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+						&lt;dt&gt;
+							Merchandising
+						&lt;/dt&gt;
+						&lt;dd&gt;
+							The error is specific to the Merchandising service.
+						&lt;/dd&gt;
+						&lt;dt&gt;
+							MarketplaceCommon
+						&lt;/dt&gt;
+						&lt;dd&gt;
+							The error is common to all Marketplace services.
+						&lt;/dd&gt;
+						&lt;/dl&gt;
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						Unique identifier for an exception associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"  type="tns:ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Some warning and error messages return one or more variables that contain
+						contextual information about the error. This is often the field or value that
+						triggered the error.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>
+				Contextual information associated with an error.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the parameter in the list of parameter types returned
+							within the error type.
+						</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	
+	
+	<xs:simpleType name="AckValue">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Success">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Failure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PartialFailure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Error">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user. For example, eBay may have changed a
+						value the user sent in. In this case, eBay returns a normal, successful
+						response and also returns the warning.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				There are three categories of error: request errors, application errors,
+				and system errors. Request and application errors are caused primarily by
+				invalid data passed in the request. System errors are caused primarily by
+				application failures and cannot be corrected by changing request values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="System">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates that an error has occurred on the eBay system side, such as a
+						database or server down. An application can retry the request as-is a
+						reasonable number of times (eBay recommends twice). If the error
+						persists, contact Developer Technical Support. Once the problem has been
+						resolved, the request may be resent in its original form.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Application">
+				<xs:annotation>
+					<xs:documentation>
+						An error occurred due to a problem with the request, such as missing or
+						invalid fields. The problem must be corrected before the request can be
+						made again. If the problem is due to something in the application (such
+						as a missing required field), the application must be changed. Once the
+						problem in the application or data is resolved, resend the corrected
+						request to eBay.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Request">
+				<xs:annotation>
+					<xs:documentation>
+						An error occurred due to a problem with the request, such as invalid or
+						missing data. The problem must be corrected before the request can be
+						made again. If the problem is a result of end-user data, the application
+						must alert the end-user to the problem and provide the means for the
+						end-user to correct the data. Once the problem in the data is resolved,
+						resend the request to eBay with the corrected data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+         
+           
+  </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="updateExperimentDataRequest">
+    <wsdl:part name="parameters" element="tns:updateExperimentDataRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateExperimentMetadataRequest">
+    <wsdl:part name="parameters" element="tns:updateExperimentMetadataRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateExperimentStatusDataRequest">
+    <wsdl:part name="parameters" element="tns:updateExperimentStatusDataRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateExperimentEventsDataRequest">
+    <wsdl:part name="parameters" element="tns:updateExperimentEventsDataRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="encryptRequest">
+    <wsdl:part name="parameters" element="tns:encryptRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateExperimentDataResponse">
+    <wsdl:part name="parameters" element="tns:updateExperimentDataResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="encryptResponse">
+    <wsdl:part name="parameters" element="tns:encryptResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DataTransferServicePort">
+    <wsdl:operation name="updateExperimentData">
+<wsdl:documentation>
+    	  	Updates an Experiment in LookupHost.
+    	 </wsdl:documentation>
+      <wsdl:input message="tns:updateExperimentDataRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateExperimentDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateExperimentMetadata">
+<wsdl:documentation>
+    	  	Updates  Experiment Metadata details  in EPHost.
+    	 </wsdl:documentation>
+      <wsdl:input message="tns:updateExperimentMetadataRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateExperimentDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateExperimentStatusData">
+<wsdl:documentation>
+    	  	Updates  Experiment status  in LookupHost.
+    	  </wsdl:documentation>
+      <wsdl:input message="tns:updateExperimentStatusDataRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateExperimentDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateExperimentEventsData">
+<wsdl:documentation>
+    	  	Updates BES events  in EPHost.
+    	  </wsdl:documentation>
+      <wsdl:input message="tns:updateExperimentEventsDataRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateExperimentDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="encrypt">
+<wsdl:documentation>
+    	  	Encrypts given URL.
+    	  </wsdl:documentation>
+      <wsdl:input message="tns:encryptRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:encryptResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DataTransferServiceSOAPBinding" type="tns:DataTransferServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="updateExperimentData">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/experimentation/v1/services/updateExperimentData"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateExperimentMetadata">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/experimentation/v1/services/updateExperimentMetadata"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateExperimentStatusData">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/experimentation/v1/services/updateExperimentStatusData"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateExperimentEventsData">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/experimentation/v1/services/updateExperimentEventsData"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="encrypt">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/experimentation/v1/services/encrypt"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DataTransferService">
+<wsdl:documentation>
+		The DataTransferService  provides operations to update Experiment and Experiment status in the CORE environment.
+	</wsdl:documentation>
+    <wsdl:port name="DataTransferServiceSOAP" binding="tns:DataTransferServiceSOAPBinding">
+      <soap12:address location="http://svcs.ebay.com/services/experimentation/DataTransferService/v1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

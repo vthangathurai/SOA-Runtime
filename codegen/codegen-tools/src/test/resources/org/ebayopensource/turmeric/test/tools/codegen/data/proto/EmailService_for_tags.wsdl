@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.ebay.com/marketplace/services" 
+    xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://www.ebay.com/marketplace/services" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+    name="EmailService">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
+            targetNamespace="http://www.ebay.com/marketplace/services" 
+            xmlns:tns="http://www.ebay.com/marketplace/services" 
+            xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:complexType abstract="true" name="BaseServiceRequest">
+                <xs:annotation>
+                    <xs:documentation>
+                        This is the base class for the request container for all service operations.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="BaseServiceResponse">
+                <xs:annotation>
+                    <xs:documentation>
+                        Base response container for all service operations. Contains error information
+                        associated with the request.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="ack" type="ns0:AckValue">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="errorMessage" type="ns0:ErrorMessage">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Information for an error or warning that occurred when eBay processed the
+                                request.
+                            </xs:documentation>
+                        <xs:appinfo>
+                            <CallInfo>
+                                <AllCalls/>
+                                <Returned>Conditionally</Returned>
+                            </CallInfo>
+                        </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="version" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:documentation>
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Always</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="AckValue">
+                <xs:annotation>
+                    <xs:documentation>
+                        Indicates whether the error is a severe error (causing the request to fail)
+                        or an informational error (a warning) that should be communicated to the
+                        user.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Success">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The request was processed successfully, but something occurred that may
+                                affect your application or the user.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Failure">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The request that triggered the error was not processed successfully.
+                                When a serious application-level error occurs, the error is returned
+                                instead of the business data.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Warning">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The request that triggered the error was processed successfully but with some warnings.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="PartialFailure">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The request that triggered the error was processed successfully but there is some error
+                                in the application or data.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="ErrorMessage">
+                <xs:annotation>
+                    <xs:documentation>
+                        ErrorMessage to indicate any Error/Warning that occured as part of the service call.
+                        Runtime errors will not be reported here, but will be reported as SOAP errors.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error"  type="ns0:ErrorData">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Details about a single error.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorData">
+                <xs:annotation>
+                    <xs:documentation>
+                Error details.
+                </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element name="errorId" type="xs:long">
+                        <xs:annotation>
+                            <xs:documentation>
+                                A unique code that identifies the particular error condition that occurred.
+                                Your application can use error codes as identifiers in your customized
+                                error-handling algorithms.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="domain" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Name of the domain upon which the error occurred.
+                                &lt;dl&gt;
+                                &lt;lh&gt;Domains include:&lt;/lh&gt;
+                                &lt;dt&gt;
+                                    Marketplace
+                                &lt;/dt&gt;
+                                &lt;dd&gt;
+                                    A business or validation error occurred for the Merchandising Service.
+                                &lt;/dd&gt;
+                                &lt;dt&gt;
+                                    SOA
+                                &lt;/dt&gt;
+                                &lt;dd&gt;
+                                    An exception occurred in the Service Oriented Architecture (SOA) framework.
+                                &lt;/dd&gt;
+                                &lt;/dl&gt;
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="severity" type="ns0:ErrorSeverity">
+                        <xs:annotation>
+                            <xs:documentation>
+                            Indicates whether the error caused the request to fail (Error) or not
+                            (Warning).
+                            &lt;br&gt;&lt;br&gt;
+                            If the request fails and the source of the problem is within the application
+                            (such as a missing required element), please change the application before you
+                            retry the request. If the problem is due to end-user input data, please alert
+                            the end-user to the problem and provide the means for them to correct the data.
+                            Once the problem in the application or data is resolved, you can attempt to re-
+                            send the request to eBay.
+                            &lt;br&gt;&lt;br&gt;
+                            If the source of the problem is on eBay's side, you can retry the request as-is
+                            a reasonable number of times (eBay recommends twice). If the error persists,
+                            contact Developer Technical Support. Once the problem has been resolved, the
+                            request may be resent in its original form.
+                            &lt;br&gt;&lt;br&gt;
+                            When a warning occurs, the error is returned in addition to the business data.
+                            In this case, you do not need to retry the request (as the original request was
+                            successful). However, depending on the cause or nature of the warning, you
+                            might need to contact either the end user or eBay to effect a long term
+                            solution to the problem to prevent it from reoccurring in the future.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="category" type="ns0:ErrorCategory">
+                        <xs:annotation>
+                            <xs:documentation>
+                                There are three categories of errors: request errors, application errors, and
+                                system errors.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="message" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                                A detailed description of the condition that resulted in the error.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="subdomain" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                            Name of the subdomain upon which the error occurred.
+                            &lt;dl&gt;
+                            &lt;lh&gt;Subdomains include:&lt;/lh&gt;
+                            &lt;dt&gt;
+                                Merchandising
+                            &lt;/dt&gt;
+                            &lt;dd&gt;
+                                The error is specific to the Merchandising service.
+                            &lt;/dd&gt;
+                            &lt;dt&gt;
+                                MarketplaceCommon
+                            &lt;/dt&gt;
+                            &lt;dd&gt;
+                                The error is common to all Marketplace services.
+                            &lt;/dd&gt;
+                            &lt;/dl&gt;
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="exceptionId" type="xs:token">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Unique identifier for an exception associated with an error.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"  type="ns0:ErrorParameter">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Some warning and error messages return one or more variables that contain
+                                contextual information about the error. This is often the field or value that
+                                triggered the error.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <CallInfo>
+                                    <AllCalls/>
+                                    <Returned>Conditionally</Returned>
+                                </CallInfo>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorParameter">
+                <xs:annotation>
+                    <xs:documentation>
+                        Contextual information associated with an error.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                        <xs:attribute name="name" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    The name of the parameter in the list of parameter types returned
+                                    within the error type.
+                                </xs:documentation>
+                                <xs:appinfo>
+                                    <CallInfo>
+                                        <AllCalls/>
+                                        <Returned>Conditionally</Returned>
+                                    </CallInfo>
+                                </xs:appinfo>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:extension>
+                </xs:simpleContent>
+            </xs:complexType>
+            <xs:simpleType name="ErrorSeverity">
+                <xs:annotation>
+                    <xs:documentation>
+                        Indicates whether the error is a severe error (causing the request to fail)
+                        or an informational error (a warning) that should be communicated to the
+                        user.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The request that triggered the error was not processed successfully.
+                                When a serious application-level error occurs, the error is returned
+                                instead of the business data.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Warning">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The request was processed successfully, but something occurred that may
+                                affect your application or the user. For example, eBay may have changed a
+                                value the user sent in. In this case, eBay returns a normal, successful
+                                response and also returns the warning.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:annotation>
+                    <xs:documentation>
+                        There are three categories of error: request errors, application errors,
+                        and system errors. Request and application errors are caused primarily by
+                        invalid data passed in the request. System errors are caused by
+                        application failures and cannot be corrected by changing request values.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="System">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Indicates that an error has occurred on the eBay system side, such as a
+                                database or server outage. An application can retry the request a
+                                reasonable number of times (eBay recommends twice). If the error
+                                persists, contact Developer Technical Support. Once the problem has been
+                                resolved, the request may be resent in its original form.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Application">
+                        <xs:annotation>
+                            <xs:documentation>
+                                An error occurred due to a problem with the request, such as missing or
+                                invalid fields. The problem must be corrected before the request can be
+                                made again. If the problem is due to something in the application (such
+                                as a missing required field), the application must be changed. Once the
+                                problem in the application or data is resolved, resend the corrected
+                                request to eBay.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Request">
+                        <xs:annotation>
+                            <xs:documentation>
+                                An error occurred due to a problem with the request, such as invalid or
+                                missing data. The problem must be corrected before the request can be
+                                made again. If the problem is a result of end-user data, the application
+                                must alert the end-user to the problem and provide the means for the
+                                end-user to correct the data. Once the problem in the data is resolved,
+                                resend the request to eBay with the corrected data.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            
+            <xs:element name="getVersionReq" type="ns0:GetVersionRequest"/>
+            <xs:complexType name="GetVersionRequest">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceRequest"/>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="getVersionResp" type="ns0:GetVersionResponse"/>
+            <xs:complexType name="GetVersionResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceResponse"/>
+                </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="MessageTypeFormat">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Type of the message. The values can be Email, MyMessage, SMS, etc.
+                                This field can contain comma separated types for cases that multiple 
+                                types share the same formats.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="formats" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Format of a message. The values can be Html, Text, etc. A message type
+                                can have multiple formats.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="renderReq" type="ns0:RenderRequest"/>
+            <xs:complexType name="RenderRequest">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceRequest">
+                        <xs:sequence>
+                            <xs:element name="segmentId" type="xs:int" />
+                            <xs:element name="emailId" type="xs:int" />
+                            <xs:element name="messageType" type="ns0:MessageTypeFormat" />
+                            <xs:element name="dataModelXml" type="xs:string" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="renderResp" type="ns0:RenderResponse"/>
+            <xs:complexType name="RenderResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceResponse">
+                        <xs:sequence>
+                            <xs:element name="renderedMessage" type="xs:string" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:element name="renderAndDeliverReq" type="ns0:RenderAndDeliverRequest"/>
+            <xs:complexType name="RenderAndDeliverRequest">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceRequest">
+                        <xs:sequence>
+                            <xs:element name="segmentId" type="xs:int" />
+                            <xs:element name="emailId" type="xs:int" />
+                            <xs:element name="messageTypes" type="ns0:MessageTypeFormat" minOccurs="1" maxOccurs="unbounded" />
+                            <xs:element name="dataModelXml" type="xs:string" />
+                            <xs:element name="envelopeXml" type="xs:string" />
+                            <xs:element name="deliveryDate" type="xs:dateTime" minOccurs="0" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="renderAndDeliverResp" type="ns0:RenderAndDeliverResponse"/>
+            <xs:complexType name="RenderAndDeliverResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceResponse">
+                        <xs:sequence>
+                            <xs:element name="trackingId" type="xs:string" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:element name="getDataModelXmlSchemaReq" type="ns0:GetDataModelXmlSchemaRequest"/>
+            <xs:complexType name="GetDataModelXmlSchemaRequest">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceRequest">
+                        <xs:sequence>
+                            <xs:element name="segmentId" type="xs:int" />
+                            <xs:element name="emailId" type="xs:int" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="getDataModelXmlSchemaResp" type="ns0:GetDataModelXmlSchemaResponse"/>
+            <xs:complexType name="GetDataModelXmlSchemaResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceResponse">
+                        <xs:sequence>
+                            <xs:element name="dataModelXmlSchema" type="xs:string" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+
+            <xs:element name="getEnvelopeXmlSchemaReq" type="ns0:GetEnvelopeXmlSchemaRequest"/>
+            <xs:complexType name="GetEnvelopeXmlSchemaRequest">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceRequest">
+                        <xs:sequence>
+                            <xs:element name="segmentId" type="xs:int" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="getEnvelopeXmlSchemaResp" type="ns0:GetEnvelopeXmlSchemaResponse"/>
+            <xs:complexType name="GetEnvelopeXmlSchemaResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns0:BaseServiceResponse">
+                        <xs:sequence>
+                            <xs:element name="envelopeXmlSchema" type="xs:string" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            
+        </xs:schema>
+    </wsdl:types>
+    
+    <wsdl:message name="getVersionRequest">
+        <wsdl:part name="parameters" element="ns0:getVersionReq" />
+    </wsdl:message>
+    <wsdl:message name="getVersionResponse">
+        <wsdl:part name="parameters" element="ns0:getVersionResp" />
+    </wsdl:message>
+    <wsdl:message name="renderRequest">
+        <wsdl:part name="parameters" element="ns0:renderReq" />
+    </wsdl:message>
+    <wsdl:message name="renderResponse">
+        <wsdl:part name="parameters" element="ns0:renderResp" />
+    </wsdl:message>
+    <wsdl:message name="renderAndDeliverRequest">
+        <wsdl:part name="parameters" element="ns0:renderAndDeliverReq" />
+    </wsdl:message>
+    <wsdl:message name="renderAndDeliverResponse">
+        <wsdl:part name="parameters" element="ns0:renderAndDeliverResp" />
+    </wsdl:message>
+    <wsdl:message name="getDataModelXmlSchemaRequest">
+        <wsdl:part name="parameters" element="ns0:getDataModelXmlSchemaReq" />
+    </wsdl:message>
+    <wsdl:message name="getDataModelXmlSchemaResponse">
+        <wsdl:part name="parameters" element="ns0:getDataModelXmlSchemaResp" />
+    </wsdl:message>
+    <wsdl:message name="getEnvelopeXmlSchemaRequest">
+        <wsdl:part name="parameters" element="ns0:getEnvelopeXmlSchemaReq" />
+    </wsdl:message>
+    <wsdl:message name="getEnvelopeXmlSchemaResponse">
+        <wsdl:part name="parameters" element="ns0:getEnvelopeXmlSchemaResp" />
+    </wsdl:message>
+    
+    <wsdl:portType name="EmailServicePort">
+        <wsdl:operation name="getVersion">
+            <wsdl:documentation>
+                Get the version of the service.
+            </wsdl:documentation>
+            <wsdl:input message="ns0:getVersionRequest">
+            </wsdl:input>
+            <wsdl:output message="ns0:getVersionResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="render">
+            <wsdl:documentation>
+                Render an email/MyMessage/SMS for certain email id and segment id based on the data model passed in.
+            </wsdl:documentation>
+            <wsdl:input message="ns0:renderRequest">
+            </wsdl:input>
+            <wsdl:output message="ns0:renderResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="renderAndDeliver">
+            <wsdl:documentation>
+                Render and send an email/MyMessage/SMS for certain email id and segment id based on the data model passed in.
+            </wsdl:documentation>
+            <wsdl:input message="ns0:renderAndDeliverRequest">
+            </wsdl:input>
+            <wsdl:output message="ns0:renderAndDeliverResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getDataModelXmlSchema">
+            <wsdl:documentation>
+                Get the XML schema of a data model for certain segment id and email id.
+            </wsdl:documentation>
+            <wsdl:input message="ns0:getDataModelXmlSchemaRequest">
+            </wsdl:input>
+            <wsdl:output message="ns0:getDataModelXmlSchemaResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getEnvelopeXmlSchema">
+            <wsdl:documentation>
+                Get the XML schema of an envelope for certain segment id.
+            </wsdl:documentation>
+            <wsdl:input message="ns0:getEnvelopeXmlSchemaRequest">
+            </wsdl:input>
+            <wsdl:output message="ns0:getEnvelopeXmlSchemaResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:binding name="EmailServiceSOAPBinding" type="ns0:EmailServicePort">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getVersion">
+            <soap12:operation soapAction="urn:getVersion" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="render">
+            <soap12:operation soapAction="urn:render" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="renderAndDeliver">
+            <soap12:operation soapAction="urn:renderAndDeliver" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getDataModelXmlSchema">
+            <soap12:operation soapAction="urn:getDataModelXmlSchema" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getEnvelopeXmlSchema">
+            <soap12:operation soapAction="urn:getEnvelopeXmlSchema" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:binding name="EmailServiceHttpBinding" type="ns0:EmailServicePort">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getVersion">
+            <http:operation location="/getVersion"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="render">
+            <http:operation location="/render"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="renderAndDeliver">
+            <http:operation location="/renderAndDeliver"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getDataModelXmlSchema">
+            <http:operation location="/getDataModelXmlSchema"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getEnvelopeXmlSchema">
+            <http:operation location="/getEnvelopeXmlSchema"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="EmailService">
+        <wsdl:documentation>
+            <Version>1.0.0</Version>
+            Email Service API provides a mechanism to render and send emails, MyMessages, SMS, etc. It composes emails based on templates and components
+            for different email segments and email types. It also provides API's to retrieve the email envelope and data model schemas.
+        </wsdl:documentation>
+        <wsdl:port name="EmailServiceSOAP" binding="ns0:EmailServiceSOAPBinding">
+            <soap12:address location="http://svcs.ebay.com/EmailService"/>
+        </wsdl:port>
+        <wsdl:port name="EmailServiceHttp" binding="ns0:EmailServiceHttpBinding">
+            <http:address location="http://svcs.ebay.com/EmailService"/>
+        </wsdl:port>
+    </wsdl:service>
+    
+</wsdl:definitions>

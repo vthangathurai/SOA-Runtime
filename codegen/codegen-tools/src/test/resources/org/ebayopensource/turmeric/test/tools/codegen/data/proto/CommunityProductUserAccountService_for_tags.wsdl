@@ -1,0 +1,1978 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:ns0="http://www.ebay.com/marketplace/catalog/v1/services"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/catalog/v1/services"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CommunityProductUserAccountService"
+	targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/catalog/v1/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:element name="getUserAccountSummaryRequest" type="tns:GetUserAccountSummaryRequest" />
+			<xs:element name="getUserAccountSummaryResponse" type="tns:GetUserAccountSummaryResponse" />
+			<xs:element name="getUserAccountDetailsForProductsRequest"
+				type="tns:GetUserAccountDetailsForProductsRequest" />
+			<xs:element name="getUserAccountDetailsForProductsResponse"
+				type="tns:GetUserAccountDetailsForProductsResponse" />
+			<xs:element name="uploadMultipleMediaByUserRequest" type="tns:UploadMediaByUserRequest" />
+			<xs:element name="uploadMultipleMediaByUserResponse" type="tns:UploadMediaByUserResponse" />
+			<xs:element name="deleteMediaByUserRequest" type="tns:DeleteMediaByUserRequest" />
+			<xs:element name="deleteMediaByUserResponse" type="tns:DeleteMediaByUserResponse" />
+			<xs:element name="getPaymentDetailsForMediaRequest" type="tns:GetPaymentDetailsForMediaRequest" />
+			<xs:element name="getPaymentDetailsForMediaResponse" type="tns:GetPaymentDetailsForMediaResponse" />
+			<xs:element name="requestPaymentForMediaRequest" type="tns:RequestPaymentForMediaRequest" />
+			<xs:element name="requestPaymentForMediaResponse" type="tns:RequestPaymentForMediaResponse" />
+
+			<xs:complexType name="GetUserAccountSummaryRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The request object for
+						getUserAccountSummary
+						operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>
+								GetUserAccountSummaryRequest
+							</CallName>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"></xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--
+				<xs:complexType name="GetUserAccountDetailsForProductsRequest">
+				<xs:annotation> <xs:documentation> The request object for
+				getUserAccountDetailsForProducts operation. </xs:documentation>
+				<xs:appinfo> <CallInfo> <CallName> GetUserAccountDetailsForProducts
+				</CallName> <RequiredInput>Always</RequiredInput> </CallInfo>
+				</xs:appinfo> </xs:annotation> <xs:complexContent> <xs:extension
+				base="tns:BaseRequest"> <xs:sequence> <xs:element
+				maxOccurs="unbounded" minOccurs="0" name="productIdentifier"
+				type="tns:ProductIdentifier"> <xs:annotation> <xs:documentation> The
+				product identifier type and value. The service accepts ePID and CPID
+				. If product identifier is not specified service returns the user
+				account details for all the products. </xs:documentation>
+				<xs:appinfo> <CallInfo> <CallName> GetUserAccountSummary </CallName>
+				<RequiredInput> Always </RequiredInput> </CallInfo> </xs:appinfo>
+				</xs:annotation> </xs:element> </xs:sequence> </xs:extension>
+				</xs:complexContent> </xs:complexType>
+			-->
+			<xs:complexType name="GetPaymentDetailsForMediaRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The request object for
+						getPaymentDetailsForMedia
+						operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>
+								GetPaymentDetailsForMediaRequest
+							</CallName>
+							<RequiredInput>Always</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="mediaIdentifier" type="tns:MediaIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										This is the media identifier for the media for which payment
+										details is required.
+										Media Id should be specified as a part of the request
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												GetPaymentDetailsForMediaRequest
+							</CallName>
+											<RequiredInput>Always</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RequestPaymentForMediaRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The request object for
+						requestPaymentForMedia
+						operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>
+								RequestPaymentForMedia
+							</CallName>
+							<RequiredInput>Always</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="mediaIdentifier" type="tns:MediaIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										This is the media identifier for the media for which the payment
+										has to be retried.
+										Media Id should be specified as a part of the request
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												RetryPaymentForMedia
+							</CallName>
+											<RequiredInput>Always</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RequestPaymentForMediaResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response object for
+						requestPaymentForMedia
+						operation.
+						If the payment couldnot be set to retry, an error
+						indicating the same will be returned as a part of the response.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetPaymentDetailsForMediaResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response object for the
+						getPaymentDetailsForMedia operation.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="paymentDetail" type="tns:PaymentDetail">
+								<xs:annotation>
+									<xs:documentation>
+										The payment details for this media
+									</xs:documentation>
+									<xs:appinfo></xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<xs:complexType name="GetUserAccountDetailsForProductsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The request object for
+						getUserAccountDetailsForProducts operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>
+								GetUserAccountDetailsForProducts
+							</CallName>
+							<RequiredInput>Always</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="productIdentifier" type="tns:ProductIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										The product identifier type and value. The
+										service accepts ePID and CPID .
+										If product identifier is not
+										specified
+										service returns the user account details
+										for all the products.										
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												GetUserAccountDetailsForProduct
+											</CallName>
+											<RequiredInput>
+												No
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="activityDuration" type="xs:token"
+								minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										The duration in days for which we need the activity of the user.
+										For example if the activity duration is 7, the activities of
+										the user for the
+										last 7 days will be returned by the service.
+										By default the values for the last 60 days will be returned.
+										Values that are accepted are 1,7,14,30,60
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												GetUserAccountDetailsForProducts
+											</CallName>
+											<RequiredInput>
+												No
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput"
+								type="tns:PaginationInput">
+								<xs:annotation>
+									<xs:documentation>
+										Controls the pagination of the result set.
+										Child elements specify the
+										maximum number of products to return
+										per call and the page of
+										data to return. Controls the number of
+										products returned in the
+										response, but does not specify the
+										amount of data to return for each
+										product.
+										No sort order can be specified by the client.
+										The service will return results in descending order of activity
+										date.
+										Latest activity will be returned first.							
+							</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>GetUserAccountDetailsForProducts</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+
+	<xs:complexType name="PaymentDetail">
+		<xs:annotation>
+			<xs:documentation>
+				The payment details for media
+			</xs:documentation>
+			<xs:appinfo></xs:appinfo>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="paymentStatus" type="xs:token"
+				maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						The status of the payment. Returns Success,Failure or Scheduled
+						depending on the status of the payment.
+									</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="paymentInitiationDate" type="xs:dateTime"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						The payment initiation date for that payment
+									</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="paymentNotes" type="xs:string"
+				maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						The payment notes if any for this payment.If there is a failure in
+						the payment, then this
+						will contain the reason for the failure.
+										</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+			<xs:complexType name="GetUserAccountSummaryResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response object for the
+						getUserAccountSummary
+						operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>GetUserAccountSummary</CallInfo>
+						<Returned>Always</Returned>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="mediaSummary" type="tns:MediaSummary"
+								minOccurs="1" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										The container for media related information
+					</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>GetUserAccountSummary</CallInfo>
+										<Returned>Always</Returned>
+									</xs:appinfo>
+								</xs:annotation>
+
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MediaSummary">
+				<xs:annotation>
+					<xs:documentation>
+						The container for media related information
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>GetUserAccountSummary</CallInfo>
+						<Returned>Always</Returned>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="totalNoOfMedia" type="xs:int"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The total number of media
+								uploaded by the user.
+									</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									GetUserAccountSummary
+										</CallInfo>
+								<Returned>Always</Returned>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="totalAmountEarned" type="tns:Money"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The total amount earned by the
+								user
+									</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									GetUserAccountSummary
+										</CallInfo>
+								<Returned>Always</Returned>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="potentialAmount" type="tns:Money"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The potential amount that the
+								user is eligible for.
+									</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									GetUserAccountSummary
+										</CallInfo>
+								<Returned>Always</Returned>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<!--
+				<xs:complexType name="GetUserAccountDetailsForProductsResponse">
+				<xs:annotation> <xs:documentation> The response object for the
+				getUserAccountDetailsForProducts operation </xs:documentation>
+				<xs:appinfo></xs:appinfo> </xs:annotation> <xs:complexContent>
+				<xs:extension base="tns:BaseResponse"> <xs:sequence> <xs:element
+				name="userAccountDetailsForProduct"
+				type="tns:UserAccountDetailsForProduct" minOccurs="1"
+				maxOccurs="unbounded"> <xs:annotation> <xs:documentation> Container
+				for multiple products. These are the products that the user has
+				uploaded media for. </xs:documentation> <xs:appinfo></xs:appinfo>
+				</xs:annotation> </xs:element> </xs:sequence> </xs:extension>
+				</xs:complexContent> </xs:complexType>
+			-->
+			<xs:complexType name="GetUserAccountDetailsForProductsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response object for the
+						getUserAccountDetailsForProducts operation
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="userAccountDetailsForProduct" type="tns:UserAccountDetailsForProduct"
+								minOccurs="1" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Container for multiple products.
+										These are the
+										products that the
+										user has uploaded media for.
+									</xs:documentation>
+									<xs:appinfo></xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationOutput"
+								type="tns:PaginationOutput">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the pagination of the result set.
+										Child elements indicate the
+										maximum number of item listings
+										returned per response and
+										which page of
+										data has been returned.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>GetUserAccountDetailsForProducts</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether or not errors or
+								warnings were
+								generated during the
+								processing of the request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xsd:annotation>
+							<xs:documentation>
+								The release version that eBay used to
+								process
+								the request. Developer Technical
+								Support may ask you for the
+								version
+								value if you work with them to
+								troubleshoot issues.
+								The version in use is normally the
+								latest release version, as
+								specified in
+								the release notes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xsd:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xsd:annotation>
+							<xs:documentation>
+								This value represents the date and time
+								when
+								eBay processed the request. This
+								value is returned in GMT, the
+								ISO 8601
+								date and time format (YYYY- MM-
+								DDTHH:MM:SS.SSSZ). See
+								the "dateTime"
+								type for information about the time
+								format, and for
+								details on converting to
+								and from the GMT time zone.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xsd:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xsd:complexType name="PaginationInput">
+				<xsd:annotation>
+					<xs:documentation>
+						Controls the pagination of the result set. Child
+						elements specify the maximum
+						number of item listings to return per
+						call and which page of data to return.
+						Controls which listings are
+						returned in the response, but does not control
+						the details
+						associated with the returned items.
+					</xs:documentation>
+					<xsd:appinfo>
+						<xsd:typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="pageNumber" type="xsd:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies which subset of data (or "page") to
+								return in the call
+								response. The number of data pages is
+								determined by the total number of
+								items matching the request
+								search criteria (returned in
+								paginationOutput.totalEntries)
+								divided by the number of entries to
+								display in each response
+								(entriesPerPage). You can return up to the first
+								100 pages of the
+								result set by issuing multiple requests and specifying,
+								in
+								sequence, the pages to return.
+							</xs:documentation>
+							<xs:appinfo>
+								<Default>1</Default>
+								<CallInfo>
+									<AllCalls />
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="entriesPerPage" type="xsd:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies the maximum number of entries to
+								return in a single call. If
+								the number of entries found on the
+								specified pageNumber is less than the
+								value specified here, the
+								number of items returned will be less than the
+								value of
+								entriesPerPage. This indicates the end of the result set.
+								If
+								entriesPerPage is set to a number greater than 25, the default
+								value,
+								25, will be used.
+							</xs:documentation>
+							<xs:appinfo>
+								<Default>25</Default>
+								<CallInfo>
+									<AllCalls />
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xs:complexType name="PaginationOutput">
+				<xs:annotation>
+					<xs:documentation>
+						Shows the pagination data for the item search.
+						Child elements include the
+						page number returned, the maximum
+						entries returned per page, the total number
+						of pages that can be
+						returned, and the total number of items that match the
+						search
+						criteria.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="totalPages" type="xsd:int">
+						<xs:annotation>
+							<xs:documentation>
+								The total number of pages of data that could be
+								returned by repeated
+								search requests. Note that if you modify the
+								value of
+								inputPagination.entriesPerPage in a request, the value
+								output for
+								totalPages will change. A value of "0" is returned if
+								eBay does not find
+								any items that match the search criteria.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xsd:element minOccurs="0" name="totalEntries" type="xsd:int">
+						<xs:annotation>
+							<xs:documentation>
+								The total number of items found that match the
+								search criteria in your
+								request. Depending on the input value for
+								entriesPerPage, the response
+								might include only a portion (a
+								page) of the entire result set. A value
+								of "0" is returned if
+								eBay does not find any items that match the search
+								criteria.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="pageNumber" type="xsd:int">
+						<xs:annotation>
+							<xs:documentation>
+								The subset of item data returned in the current
+								response. Search results
+								are divided into sets, or "pages," of
+								item data. The number of pages is
+								equal to the total number of
+								items matching the search criteria divided
+								by the value specified
+								for entriesPerPage in the request. The response
+								for a request
+								contains one "page" of item data.
+								This returned value indicates
+								the page number of item data returned (a
+								subset of the complete
+								result set). If this field contains 1, the
+								response contains the
+								first page of item data (the default). If the value
+								returned in
+								totalEntries is less than the value for entriesPerPage,
+								pageNumber returns 1 and the response contains the entire result
+								set.
+								The value of pageNumber is normally equal to the value input
+								for
+								paginationInput.pageNumber. However, if the number input for
+								pageNumber
+								is greater than the total possible pages of output,
+								eBay returns the last
+								page of item data in the result set, and
+								the value for pageNumber is set
+								to the respective (last) page
+								number.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xsd:int">
+						<xs:annotation>
+							<xs:documentation>
+								The maximum number of items that can be
+								returned in the response. This
+								number is always equal to the
+								value input for
+								paginationInput.entriesPerPage.
+								The end of the
+								result set has been reached if the number specified for
+								entriesPerPage is greater than the number of items found on the
+								specified
+								pageNumber. In this case, there will be fewer items
+								returned than the
+								number specified in entriesPerPage. This can be
+								determined by comparing
+								the entriesPerPage value with the value
+								returned in the count attribute
+								for the searchResult field.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UploadMediaByUserRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the request object for uploading media
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="mediaRequest" type="tns:MediaRequest">
+								<xs:annotation>
+									<xs:documentation>
+										Container for all media related
+										information
+										sent as a part of
+										the request
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												UploadMediaByUser
+											</CallName>
+											<RequiredInput>
+												Always
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UploadMediaByUserResponse">
+				<xs:complexContent>
+					<xs:annotation>
+						<xs:documentation>
+							The Upload Media response returns the
+							Product
+							information(title,id,incentive
+							amount) and also media uploaded by
+							that
+							user for that product
+						</xs:documentation>
+					</xs:annotation>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="mediaResponse" type="tns:MediaResponse">
+								<xs:annotation>
+									<xs:documentation>
+										The container for media related
+										information.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												UploadMediaByUser
+											</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MediaRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the container for media related
+						information that is sent as a part of the
+						request.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>UploadMediaByUser</CallName>
+							<RequiredInput>Always</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="productIdentifier"
+						type="tns:ProductIdentifier">
+						<xs:annotation>
+							<xs:documentation>
+								The product identifier type and value. The
+								service accepts ePID and CPID .
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>MediaRequest</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="media" type="tns:MediaIdentifier"
+						minOccurs="1" maxOccurs="5">
+						<xs:annotation>
+							<xs:documentation>
+								The media to be uploaded/deleted
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>UploadMediaByUser</CallName>
+									<RequiredInput>
+										Always
+									</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MediaResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is the container for all media related
+						information in the response
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>RequiredInput</CallName>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="productWithMediaInfo" type="tns:ProductWithMediaInfo"
+						maxOccurs="1" minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Money">
+				<xs:annotation>
+					<xs:documentation>
+						This represents the eBay Money object
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xsd:simpleType name="ErrorCategory">
+				<xsd:annotation>
+					<xs:documentation>
+						There are three categories of error: request
+						errors, application errors,
+						and system errors. Request and
+						application errors are often caused by
+						passing invalid data in the
+						request. System errors are primarily caused by
+						application failures
+						and cannot be corrected by changing request values.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:token">
+					<xsd:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on the
+								eBay system side. For
+								example, a database or server could be
+								down. Inspect the error message to
+								find the cause of the problem.
+								If the problem is on the eBay side, an
+								application can retry the
+								request as-is a reasonable number of times
+								(eBay recommends
+								twice). If the error persists, contact Developer
+								Technical
+								Support. Once the problem has been resolved, the request may be
+								resent in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with the
+								request, with the most likely
+								source being the application
+								sending the request. For example, the
+								request is missing a
+								required data element or it contains an invalid
+								field. The
+								problem must be corrected before the request can be resent.
+								Inspect the error message to find the cause of the problem. If
+								the
+								problem is due to an application error, modify the
+								application and resend
+								the request. If the error is due to
+								invalid data, the source of the data
+								must be corrected before you
+								resend the resend request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with the
+								request, with the most likely
+								source being missing or invalid
+								data in the request. The problem must be
+								corrected before the
+								request can be retried. Inspect the error message to
+								find the
+								cause of the problem. If the problem is a result of end-user
+								data, alert the end-user to the problem and provide the means
+								for them to
+								correct the problem. Once the problem is resolved,
+								resend the request to
+								eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="ErrorData">
+				<xsd:annotation>
+					<xs:documentation>
+						A container for error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="errorId" type="xsd:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the particular
+								error condition that
+								occurred. Your application can use error
+								codes as identifiers in your
+								customized error-handling
+								algorithms.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element name="domain" type="xsd:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain in which the error occurred.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="subdomain" type="xsd:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain in which the error
+								occurred.
+								MarketplaceCatalog ->
+								The error is specific to the Marketplace Catalog subdomain.
+								MarketplaceCommon ->
+								The error is common to all Marketplace services.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the reported problem is fatal
+								(an error) or is less-
+								severe (a warning). Review the error
+								message details for information on
+								the cause.
+								If the request fails
+								and the application is the source of the error (for
+								example, a
+								required element is missing), update the application before
+								you
+								retry the request. If the problem is due to incorrect user data,
+								alert the end-user to the problem and provide the means for them
+								to
+								correct the data. Once the problem in the application or data
+								is
+								resolved, re-send the request to eBay.
+								If the source of the
+								problem is on eBay's side, you can retry the request
+								a reasonable
+								number of times (eBay recommends you try the request twice).
+								If
+								the error persists, contact Developer Technical Support. Once
+								the
+								problem has been resolved, you can resend the request in its
+								original
+								form.
+								If a warning occurs, warning information is returned in addition
+								to the
+								business data. Normally, you do not need to resend the
+								request (as the
+								original request was successful). However,
+								depending on the cause of the
+								warning, you might need to contact
+								the end user, or eBay, to effect a
+								long term solution to the
+								problem.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors: request
+								errors, application
+								errors, and system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element name="message" type="xsd:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition that
+								caused in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="exceptionId" type="xsd:token">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception associated
+								with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Various warning and error messages return one
+								or more variables that
+								contain contextual information about the error. This is often the
+								field or value that triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information regarding an error or warning that
+						occurred when eBay processed the request. Not returned when the
+						ack value is Success. Run-time errors are not reported here, but
+						are instead reported as part of a SOAP fault. 
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						The name of the input parameter returned with
+						the
+						error. Inspecting the parameter (or its
+						input value) will often aid
+						in understanding the
+						cause of the error. Not all error messages
+						contain this value.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a fatal error
+						(causing the request to fail) or a less severe
+						error (a warning)
+						that should be communicated to
+						the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								eBay encountered a fatal error during the processing of the request,
+								causing the request to fail. When eBay encounters an error, it
+								returns error data instead of the requested business data.
+								Inspect the error details and resolve the problem before
+								resubmitting the request. 
+						</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was successfully processed, but eBay encountered a
+								non-fatal error during the processing that could affect the data
+								returned. For example, eBay might have changed the value of an
+								input field. In this case, eBay returns a successful response,
+								but it also returns a warning. For best results, requests should
+								return without warnings. Inspect the warning details and resolve
+								the problem before resubmitting the request. 
+						</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Product">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName />
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="productIdentifier" type="tns:ProductIdentifier"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="productDetail" type="ns0:PropertyValue">
+						<xs:annotation>
+							<xs:documentation>
+								The details of the product
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe
+						error(causing the request to fail) or an
+						informational error (a
+						warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed
+								successfully,but
+								something occurred that
+								may affect your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not
+								processed successfully. When a
+								serious application-level error
+								occurs,the error is returned instead of
+								the business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ProductIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+						Type could be ePID, CPID
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketplaceCatalogDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="ePID"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								eBay Product Reference Id
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="CPID"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Core Product Reference Id
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="productId"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Product Reference Id
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PropertyValue">
+				<xs:annotation>
+					<xs:documentation>
+						This additional information about the product
+						such as Incentive amount.	 
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketplaceCatalogDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="propertyName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="value"
+						type="ns0:Value">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Value">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>
+							A value can be one of the types given below.
+						</xs:documentation>
+						<xs:appinfo>
+							<typeLibrarySource library="MarketplaceCatalogDomainTypeLibrary"
+								namespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services" />
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:element name="text" type="tns:StringValue">
+						<xs:annotation>
+							<xs:documentation>
+								For string value type.
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="StringValue">
+				<xs:annotation>
+					<xs:documentation>
+						This class holds a String value
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketplaceCatalogDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								a string value						
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MediaIdentifier">
+				<xs:annotation>
+					<xs:documentation>
+						This defines the attributes of the Media
+					</xs:documentation>
+				</xs:annotation>
+				
+			</xs:complexType>
+			<xs:complexType name="MediaSelectionDetail">
+				<xs:annotation>
+					<xs:documentation>
+						Container for request data for retrieving Media
+						Details and Status
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="media" type="tns:MediaIdentifier"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The media which has been uploaded
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										getUserAccountSummary
+									</CallName>
+									<RequiredInput>
+										Always
+									</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="selectionStatus"
+						type="tns:SelectionStatus">
+						<xs:annotation>
+							<xs:documentation>
+								The upload status of the media
+									</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="remarks"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The reasons for media rejection
+								if any.
+									</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="paidDate"
+						type="xs:date">
+						<xs:annotation>
+							<xs:documentation>
+								Date in which payment was made
+								to the user
+									</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="incentiveEarned"
+						type="tns:Money">
+						<xs:annotation>
+							<xs:documentation>
+								This represents the incentive
+								for each product
+									</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="SelectionStatus">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Submitted">
+						<xs:annotation>
+							<xs:documentation>
+								Media has been submitted but has not yet been
+								approved or rejected.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Approved">
+						<xs:annotation>
+							<xs:documentation>
+								Media is approved
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Rejected">
+						<xs:annotation>
+							<xs:documentation>
+								Media is rejected.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="DeleteMediaByUserRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The request object for deleting uploaded media.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="mediaRequest" type="tns:MediaRequest"
+								minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteMediaByUserResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response object for the delete media request
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="productWithMediaInfo" type="tns:ProductWithMediaInfo">
+								<xs:annotation>
+									<xs:documentation>
+										The product from which the media
+										has been
+										deleted. This will
+										contain the media uploaded by
+										that particular
+										user for this
+										product except the media which
+										has been deleted.
+									</xs:documentation>
+									<xs:appinfo></xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ProductWithMediaInfo">
+				<xs:annotation>
+					<xs:documentation>
+						Container for request data for retrieving
+						product
+						details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Product">
+						<xs:sequence>
+							<xs:element name="mediaIdentifier" maxOccurs="unbounded"
+								minOccurs="0" type="tns:MediaIdentifier">
+								<xs:annotation>
+									<xs:documentation>
+										Container for multiple media
+										objects.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												GetProductDetails
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UserAccountDetailsForProduct">
+				<xs:annotation>
+					<xs:documentation>
+						This contains the information about a particular
+						Product, its details, media uploaded by a
+						particular product by
+						that user and his account
+						details
+					</xs:documentation>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="productIdentifier"
+						type="tns:ProductIdentifier">
+						<xs:annotation>
+							<xs:documentation>
+								The product identifier type and value.
+								Product
+								identifiers, such as ePID values
+								or CPID values, are unique
+								across all
+								sites.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										GetUserAccountSummary
+									</CallName>
+									<RequiredInput>
+										Always
+									</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="productDetails" type="ns0:PropertyValue">
+						<xs:annotation>
+							<xs:documentation>
+								The details of the product
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="productStatus"
+						type="tns:ProductStatus">
+						<xs:annotation>
+							<xs:documentation>
+								Status of the product whose details are being
+								returned.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="mediaSummary" type="tns:MediaSummary"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The media summary for this particular product
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="mediaSelectionDetail" type="tns:MediaSelectionDetail"
+						minOccurs="1" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								The media related information
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										getUserAccountSummary
+									</CallName>
+									<RequiredInput>
+										Always
+									</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductStatus">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to indicate the status of the product.									
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketplaceCatalogDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="productsClosed"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that the product is closed.							
+			</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getUserAccountSummaryRequest">
+		<wsdl:part name="params" element="tns:getUserAccountSummaryRequest" />
+	</wsdl:message>
+	<wsdl:message name="getUserAccountSummaryResponse">
+		<wsdl:part name="params" element="tns:getUserAccountSummaryResponse" />
+	</wsdl:message>
+	<wsdl:message name="getUserAccountDetailsForProductsRequest">
+		<wsdl:part name="params"
+			element="tns:getUserAccountDetailsForProductsRequest" />
+	</wsdl:message>
+	<wsdl:message name="getUserAccountDetailsForProductsResponse">
+		<wsdl:part name="params"
+			element="tns:getUserAccountDetailsForProductsResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadMediaByUserRequest">
+		<wsdl:part name="params" element="tns:uploadMultipleMediaByUserRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadMediaByUserResponse">
+		<wsdl:part name="params" element="tns:uploadMultipleMediaByUserResponse" />
+	</wsdl:message>
+	<wsdl:message name="deleteMediaByUserRequest">
+		<wsdl:part name="params" element="tns:deleteMediaByUserRequest" />
+	</wsdl:message>
+	<wsdl:message name="deleteMediaByUserResponse">
+		<wsdl:part name="params" element="tns:deleteMediaByUserResponse" />
+	</wsdl:message>
+	<wsdl:message name="requestPaymentForMediaRequest">
+		<wsdl:part name="params" element="tns:requestPaymentForMediaRequest" />
+	</wsdl:message>
+		<wsdl:message name="getPaymentDetailsForMediaRequest">
+		<wsdl:part name="params" element="tns:getPaymentDetailsForMediaRequest" />
+	</wsdl:message>
+	<wsdl:message name="getPaymentDetailsForMediaResponse">
+		<wsdl:part name="params" element="tns:getPaymentDetailsForMediaResponse" />
+	</wsdl:message>
+	<wsdl:message name="requestPaymentForMediaResponse">
+		<wsdl:part name="params" element="tns:requestPaymentForMediaResponse" />
+	</wsdl:message>
+	<wsdl:portType name="CommunityProductUserAccountServicePort">
+		<wsdl:operation name="getUserAccountSummary">
+			<wsdl:documentation>
+				This operation is used to get user metrics like
+				total
+				media uploaded by user , total amount by user and the
+				potential
+				amount for the user.
+			</wsdl:documentation>
+			<wsdl:input name="getUserAccountSummaryRequest" message="ns0:getUserAccountSummaryRequest" />
+			<wsdl:output name="getUserAccountSummaryResponse"
+				message="ns0:getUserAccountSummaryResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getUserAccountDetailsForProducts">
+			<wsdl:documentation>
+				This operation is used to display the account
+				details of
+				the user. The Products that the user has uploaded media
+				for and the Media uploaded by user. If a particular
+				productId is
+				specified, only that product related
+				information for this user will
+				be returned.
+			</wsdl:documentation>
+			<wsdl:input name="getUserAccountDetailsForProductsRequest"
+				message="ns0:getUserAccountDetailsForProductsRequest" />
+			<wsdl:output name="getUserAccountDetailsForProductsResponse"
+				message="ns0:getUserAccountDetailsForProductsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadMediaByUser">
+			<wsdl:documentation>
+				This operation is used to upload media for a
+				product
+			</wsdl:documentation>
+			<wsdl:input name="uploadMediaByUserRequest" message="ns0:uploadMediaByUserRequest" />
+			<wsdl:output name="uploadMediaByUserResponse" message="ns0:uploadMediaByUserResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteMediaByUser">
+			<wsdl:documentation>
+				This operation is used to delete an uploaded
+				media
+			</wsdl:documentation>
+			<wsdl:input name="deleteMediaByUserRequest" message="ns0:deleteMediaByUserRequest" />
+			<wsdl:output name="deleteMediaByUserResponse" message="ns0:deleteMediaByUserResponse" />
+		</wsdl:operation>
+			<wsdl:operation name="getPaymentDetailsForMedia">
+			<wsdl:documentation>
+				This operation is used to getPaymentDetails for an uploaded media
+			</wsdl:documentation>
+			<wsdl:input name="getPaymentDetailsForMediaRequest"
+				message="ns0:getPaymentDetailsForMediaRequest" />
+			<wsdl:output name="getPaymentDetailsForMediaResponse"
+				message="ns0:getPaymentDetailsForMediaResponse" />				
+		</wsdl:operation>
+			<wsdl:operation name="requestPaymentForMedia">
+			<wsdl:documentation>
+				This is used to request a payment for an uploaded Media
+			</wsdl:documentation>
+			<wsdl:input name="requestPaymentForMediaRequest"
+				message="ns0:requestPaymentForMediaRequest" />
+			<wsdl:output name="requestPaymentForMediaResponse"
+				message="ns0:requestPaymentForMediaResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CommunityProductUserAccountServiceHttpBinding"
+		type="tns:CommunityProductUserAccountServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getUserAccountSummary">
+			<http:operation location="getUserAccountSummary" />
+			<wsdl:input>
+				<mime:content part="getUserAccountSummary" type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getUserAccountSummary" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserAccountDetailsForProducts">
+			<http:operation location="getUserAccountDetailsForProducts" />
+			<wsdl:input>
+				<mime:content part="getUserAccountDetailsForProducts"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getUserAccountDetailsForProducts"
+					type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="uploadMediaByUser">
+			<http:operation location="uploadMultipleMediaByUser" />
+			<wsdl:input>
+				<mime:content part="uploadMultipleMultipleMediaByUser"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="uploadMultipleMediaByUser" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteMediaByUser">
+			<http:operation location="deleteMultipleMediaByUser" />
+			<wsdl:input>
+				<mime:content part="deleteMultipleMediaByUser" type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="deleteMultipleMediaByUser" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+			<wsdl:operation name="getPaymentDetailsForMedia">
+			<http:operation location="getPaymentDetailsForMedia" />
+			<wsdl:input>
+				<mime:content part="getPaymentDetailsForMedia"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getPaymentDetailsForMedia"
+					type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="requestPaymentForMedia">
+			<http:operation location="requestPaymentForMedia" />
+			<wsdl:input>
+				<mime:content part="requestPaymentForMedia"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="requestPaymentForMedia"
+					type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+	</wsdl:binding>
+	<wsdl:binding name="CommunityProductUserAccountServiceSOAPBinding"
+		type="tns:CommunityProductUserAccountServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getUserAccountSummary">
+			<soap12:operation soapAction="urn:getUserAccountSummary" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<output>
+				<soap12:body use="literal" />
+			</output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserAccountDetailsForProducts">
+			<soap:operation soapAction="urn:getUserAccountDetailsForProducts" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<output>
+				<soap12:body use="literal" />
+			</output>
+		</wsdl:operation>
+		<wsdl:operation name="uploadMediaByUser">
+			<wsdl:documentation>
+				This operation is used to upload media for a
+				product
+			</wsdl:documentation>
+			<soap12:operation soapAction="urn:uploadMediaByUser"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteMediaByUser">
+			<soap12:operation soapAction="urn:deleteMediaByUser"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getPaymentDetailsForMedia">
+			<soap12:operation soapAction="urn:getPaymentDetailsForMedia"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+				<wsdl:operation name="requestPaymentForMedia">
+			<soap12:operation soapAction="urn:requestPaymentForMedia"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CommunityProductUserAccountService">
+		<wsdl:documentation>
+			This service is used to give user related information using
+			4
+			operations 1.GetUserAccountSummary - To get the User
+			Account Summary
+			information 2.GetUserAccountDetailsForProducts -
+			To give information
+			about the media uploaded by this user.
+			This can also be filtered by
+			productId. 3. UploadMediaByUser - To
+			upload the user's media 4.
+			DeleteMediaByUser - Delete the Media
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port name="CommunityProductUserAccountServiceHttpPort"
+			binding="tns:CommunityProductUserAccountServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/catalog/v1/CommunityProductUserAccountService" />
+		</wsdl:port>
+		<wsdl:port name="CommunityProductUserAccountServiceSOAPPort"
+			binding="tns:CommunityProductUserAccountServiceSOAPBinding">
+			<soap12:address
+				location="https://svcs.ebay.com/services/catalog/v1/CommunityProductUserAccountService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

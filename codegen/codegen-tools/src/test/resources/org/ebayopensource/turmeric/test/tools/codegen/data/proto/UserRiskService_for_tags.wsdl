@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="UserRiskService" targetNamespace="http://www.ebay.com/marketplace/security/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/security/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/security/v1/services">
+		<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+
+
+
+<xs:complexType name="GetVersionRequest">
+  <xs:complexContent>
+  <xs:extension base="tns:BaseRequest"/>
+  </xs:complexContent>
+</xs:complexType>
+ 
+<xs:complexType name="GetVersionResponse">
+  <xs:complexContent>
+  <xs:extension base="tns:BaseResponse"/>
+  </xs:complexContent>
+</xs:complexType>
+
+
+
+
+
+   
+<xs:simpleType name="UserRiskLevel">
+		<xs:annotation>
+			<xs:documentation>
+				specific return value High, Low, Medium or Unknown
+			</xs:documentation>
+		</xs:annotation>      
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="High"/>
+			<xs:enumeration value="Low"/>
+			<xs:enumeration value="Medium"/>
+			<xs:enumeration value="NotAvailable"/>
+		</xs:restriction>
+</xs:simpleType> 
+
+            <xs:complexType name="GetOrderFulfillmentUserRiskRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element maxOccurs="1" minOccurs="1" name="userLoginName" type="xs:string">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="GetOrderFulfillmentUserRiskResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element maxOccurs="1" minOccurs="1" name="userRiskLevel" type="tns:UserRiskLevel">
+            				</xs:element>
+            				<xs:element maxOccurs="unbounded" minOccurs="1" name="riskEvalFact" type="xs:token">
+            				</xs:element>
+            				<xs:element maxOccurs="1" minOccurs="1" name="riskEvaluationDate" type="xs:dateTime">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:element name="getOrderFulfillmentUserRiskRequest" type="tns:GetOrderFulfillmentUserRiskRequest">
+            </xs:element>
+		
+            <xs:element name="getOrderFulfillmentUserRiskResponse" type="tns:GetOrderFulfillmentUserRiskResponse">
+            </xs:element>
+		</xs:schema>
+  </types>
+  <message name="getOrderFulfillmentUserRiskResponse">
+    <part name="getOrderFulfillmentUserRiskResponse" element="tns:getOrderFulfillmentUserRiskResponse">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="getOrderFulfillmentUserRiskRequest">
+    <part name="getOrderFulfillmentUserRiskRequest" element="tns:getOrderFulfillmentUserRiskRequest">
+    </part>
+  </message>
+  <portType name="UserRiskServicePort">
+    <operation name="getVersion">
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="getOrderFulfillmentUserRisk">
+      <input message="tns:getOrderFulfillmentUserRiskRequest">
+    </input>
+      <output message="tns:getOrderFulfillmentUserRiskResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="UserRiskServiceHttpBinding" type="tns:UserRiskServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getOrderFulfillmentUserRisk">
+      <http:operation location="/getOrderFulfillmentUserRisk"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="UserRiskServiceSOAPBinding" type="tns:UserRiskServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getOrderFulfillmentUserRisk">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/getOrderFulfillmentUserRisk"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="UserRiskService">
+<wsdl:documentation>
+	  <Version>1.0.0</Version>
+  </wsdl:documentation>
+    <port name="UserRiskServiceHttpPort" binding="tns:UserRiskServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/security/v1/UserRiskService"/>
+    </port>
+    <port name="UserRiskServiceSOAPPort" binding="tns:UserRiskServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/security/v1/UserRiskService"/>
+      <soap:address location="https://svcs.ebay.com/services/security/v1/UserRiskService"/>
+    </port>
+  </service>
+</definitions>

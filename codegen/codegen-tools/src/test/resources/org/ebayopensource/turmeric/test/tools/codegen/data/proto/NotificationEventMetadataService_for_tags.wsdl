@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="NotificationEventMetadataService" targetNamespace="http://www.ebay.com/marketplace/notification/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/notification/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/notification/v1/services">
+
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>GetVersion request</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>GetVersion response</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addEventMetadataRequest" type="tns:AddEventMetadataRequest"/>
+			<xs:complexType name="AddEventMetadataRequest">
+				<xs:annotation>
+					<xs:documentation>Add a new notification event type, set the event type metadata.</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="eventMetadata" type="tns:EventMetadata"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addEventMetadataResponse" type="tns:AddEventMetadataResponse"/>
+			<xs:complexType name="AddEventMetadataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response type of addEventMetadata operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="eventMetadata" type="tns:EventMetadata"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="setEventMetadataRequest" type="tns:SetEventMetadataRequest"/>
+			<xs:complexType name="SetEventMetadataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Update the event metadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="eventMetadata" type="tns:EventMetadata"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="setEventMetadataResponse" type="tns:SetEventMetadataResponse"/>
+			<xs:complexType name="SetEventMetadataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response type of setEventMetadata operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="eventMetadata" type="tns:EventMetadata"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getEventMetadataRequest" type="tns:GetEventMetadataRequest"/>
+			<xs:complexType name="GetEventMetadataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Get event metadata by event type name.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="eventTypeName" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getEventMetadataResponse" type="tns:GetEventMetadataResponse"/>
+			<xs:complexType name="GetEventMetadataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response type of getEventMetadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="eventMetadata" type="tns:EventMetadata"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="getAllEventMetadataRequest" type="tns:GetAllEventMetadataRequest"/>
+			<xs:complexType name="GetAllEventMetadataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Get all event type metadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getAllEventMetadataResponse" type="tns:GetAllEventMetadataResponse"/>
+			<xs:complexType name="GetAllEventMetadataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response type of getAllEventMetadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="eventMetadata" type="tns:EventMetadata"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="EventMetadata">
+				<xs:annotation>
+					<xs:documentation>The container to hold the notification event type metadata and properties.</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="eventTypeId"
+						type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+									Notification Event Type Id. It's unique in system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="eventTypeName"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+									Notification Event Type name. It's unique in system.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="apiCallName"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+									Trading API Call Name. The field indicates which API call will be used to populate the real payload of the platform notification event.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="trainNumber"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+									The Train number of the event type be added.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="payloadFormat"
+						type="tns:PayloadFormat">
+						<xs:annotation>
+							<xs:documentation>
+									The payload format of the notification event.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="priority"
+						type="tns:EventPriority">
+						<xs:annotation>
+							<xs:documentation>
+									The priority of the notification event type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="description"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+									The description of the notification event type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="eventTypeProperty"
+						type="tns:EventTypeProperty">
+						<xs:annotation>
+							<xs:documentation>
+								Data pertaining to event type
+								properties(EVENT_LIFETIME_HOURS,DEVICE_SUPPORT,API_CALL_DETAIL_LEVEL)
+								as name-value
+								pair array.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="EventTypeProperty">
+				<xs:annotation>
+					<xs:documentation>
+						List of event type properties container.Include a list of name-value pair properties.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="property" type="tns:PropertyType">
+						<xs:annotation>
+							<xs:documentation>
+								Name-value pair
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="PropertyType">
+				<xs:annotation>
+					<xs:documentation>
+						Event Type Property defined as name-value pair(EVENT_LIFETIME_HOURS,DEVICE_SUPPORT,API_CALL_DETAIL_LEVEL).
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+			<xs:simpleType name="EventPriority">
+				<xs:annotation>
+					<xs:documentation>Event priority.</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="URGENT">
+						<xs:annotation>
+							<xs:documentation>
+								indicating the highest priority.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="HIGH">
+						<xs:annotation>
+							<xs:documentation>
+								indicating the high priority.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MEDIUM">
+						<xs:annotation>
+							<xs:documentation>
+								indicating the medium priority.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LOW">
+						<xs:annotation>
+							<xs:documentation>
+								indicating the lowest priority.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="PayloadFormat">
+				<xs:annotation>
+					<xs:documentation>
+						The schema options for event payload format.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="NotificationEventMetadataTypeLibrary" namespace="http://www.ebay.com/marketplace/notification/v1/types"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="JSON">
+						<xs:annotation>
+							<xs:documentation>
+								(in/out) indicating encoding is in JSON format.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NV">
+						<xs:annotation>
+							<xs:documentation>
+								(in/out) indicating encoding is in Name Value Pair format.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SOAP">
+						<xs:annotation>
+							<xs:documentation>
+								(in/out) indicating encoding is in SOAP format.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="XML">
+						<xs:annotation>
+							<xs:documentation>
+								(in/out) indicating encoding is in schema-based XML format.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+  </types>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="getEventMetadataResponse">
+    <part name="params" element="tns:getEventMetadataResponse">
+    </part>
+  </message>
+  <message name="addEventMetadataRequest">
+    <part name="params" element="tns:addEventMetadataRequest">
+    </part>
+  </message>
+  <message name="setEventMetadataResponse">
+    <part name="params" element="tns:setEventMetadataResponse">
+    </part>
+  </message>
+  <message name="setEventMetadataRequest">
+    <part name="params" element="tns:setEventMetadataRequest">
+    </part>
+  </message>
+  <message name="addEventMetadataResponse">
+    <part name="params" element="tns:addEventMetadataResponse">
+    </part>
+  </message>
+  <message name="getEventMetadataRequest">
+    <part name="params" element="tns:getEventMetadataRequest">
+    </part>
+  </message>
+  <message name="getAllEventMetadataRequest">
+    <part name="params" element="tns:getAllEventMetadataRequest">
+    </part>
+  </message>
+   <message name="getAllEventMetadataResponse">
+    <part name="params" element="tns:getAllEventMetadataResponse">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <portType name="NotificationEventMetadataServicePort">
+    <operation name="getVersion">
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="addEventMetadata">
+      <input message="tns:addEventMetadataRequest">
+    </input>
+      <output message="tns:addEventMetadataResponse">
+    </output>
+    </operation>
+    <operation name="setEventMetadata">
+      <input message="tns:setEventMetadataRequest">
+    </input>
+      <output message="tns:setEventMetadataResponse">
+    </output>
+    </operation>
+    <operation name="getEventMetadata">
+      <input message="tns:getEventMetadataRequest">
+    </input>
+      <output message="tns:getEventMetadataResponse">
+    </output>
+    </operation>
+	<operation name="getAllEventMetadata">
+      <input message="tns:getAllEventMetadataRequest">
+    </input>
+      <output message="tns:getAllEventMetadataResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="NotificationEventMetadataServiceSOAPBinding" type="tns:NotificationEventMetadataServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/notification/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addEventMetadata">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/notification/v1/services/addEventMetadata"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="setEventMetadata">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/notification/v1/services/setEventMetadata"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getEventMetadata">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/notification/v1/services/getEventMetadata"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+	<operation name="getAllEventMetadata">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/notification/v1/services/getEventMetadata"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="NotificationEventMetadataServiceHttpBinding" type="tns:NotificationEventMetadataServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addEventMetadata">
+      <http:operation location="/addEventMetadata"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="setEventMetadata">
+      <http:operation location="/setEventMetadata"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getEventMetadata">
+      <http:operation location="/getEventMetadata"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+	<operation name="getAllEventMetadata">
+      <http:operation location="/getEventMetadata"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="NotificationEventMetadataService">
+<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+    <port name="NotificationEventMetadataServiceHttpPort" binding="tns:NotificationEventMetadataServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/notification/v1/NotificationEventMetadataService"/>
+    </port>
+    <port name="NotificationEventMetadataServiceSOAPPort" binding="tns:NotificationEventMetadataServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/notification/v1/NotificationEventMetadataService"/>
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,1747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ClassifiedAdManagementPrivateService" targetNamespace="http://www.ebay.com/classifiedad/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/classifiedad/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/classifiedad/v1/services" xmlns:Q1="http://www.ebay.com/classifiedad/v1/services">
+            <xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="createAdInternalRequest" type="tns:CreateAdInternalRequest"/>
+			<xs:complexType name="CreateAdInternalRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="classifiedAd"
+								type="Q1:ClassifiedAdInternal" maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Represents that the category is a parent category</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="guid" type="xs:string"
+								maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>This is the machine id of the requester.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createAdInternalResponse" type="tns:CreateAdInternalResponse"/>
+			<xs:complexType name="CreateAdInternalResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="tokenId" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>Represents the unique id given to the listed ad's activity.</xs:documentation>
+            					</xs:annotation>
+							</xs:element>
+							<xs:element name="encryptedToken"
+								type="xs:string" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This is the encrypted form the Ad request.</xs:documentation>
+								</xs:annotation>  
+							</xs:element>
+							<xs:element name="blackListedKeywords"
+								type="xs:string" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This contains the black listed keywords for ad listing.</xs:documentation>
+            					</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		<xs:simpleType name="AdCategoryType">
+		<xs:annotation>
+			<xs:documentation/>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"/></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="L1">
+				<xs:annotation>
+					<xs:documentation>Represents that the category is a parent category</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="L2">
+				<xs:annotation>
+					<xs:documentation>Represents that the category is a child category</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+
+
+		</xs:restriction>
+	</xs:simpleType><xs:simpleType name="AdLocationType">
+		<xs:annotation>
+			<xs:documentation/>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"/></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="COUNTRY">
+				<xs:annotation>
+					<xs:documentation>Represents that the location is a country</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="REGION">
+				<xs:annotation>
+					<xs:documentation>Represents that the location is a region</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DEPARTMENT">
+				<xs:annotation>
+					<xs:documentation>Represents that the location is a department</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="POSTAL">
+				<xs:annotation>
+					<xs:documentation>Represents that the location is a postal code</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType><xs:simpleType name="AdSource">
+		<xs:annotation>
+			<xs:documentation>
+				This tells the origin of the Ad.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"/></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TROY">
+				<xs:annotation>
+					<xs:documentation>
+						Troy Inventory Fetch
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MOBILE">
+				<xs:annotation>
+					<xs:documentation>
+						Mobile Inventory Fetch
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="KIJIJI">
+				<xs:annotation>
+					<xs:documentation>
+						Indicate if Ad was originally listed in Kijiji
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType><xs:complexType name="Amount">
+        <xs:annotation><xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/></xs:appinfo></xs:annotation>
+        <xs:simpleContent>
+                  <xs:extension base="xs:double">
+                      <xs:attribute name="currencyId" type="xs:string" use="required"/>
+                  </xs:extension>
+           </xs:simpleContent>
+       </xs:complexType>
+			<xs:element name="confirmAdInternalResponse" type="tns:ConfirmAdInternalResponse">
+
+			</xs:element>
+			<xs:element name="confirmAdInternalRequest" type="tns:ConfirmAdInternalRequest">
+			</xs:element>
+
+			<xs:element name="reviseAdInternalResponse" type="tns:ReviseAdInternalResponse">
+
+			</xs:element>
+
+			<xs:element name="getAdByIdInternalResponse" type="tns:GetAdByIdInternalResponse">
+
+			</xs:element>
+
+
+			<xs:element name="relistAdInternalResponse" type="tns:RelistAdInternalResponse">
+
+			</xs:element>
+			<xs:element name="getAdByIdInternalRequest" type="tns:GetAdByIdInternalRequest">
+			</xs:element>
+			<xs:element name="relistAdInternalRequest" type="tns:RelistAdInternalRequest">
+			</xs:element>
+
+			<xs:element name="deleteAdInternalResponse" type="tns:DeleteAdInternalResponse">
+
+			</xs:element>
+			<xs:element name="deleteAdInternalRequest" type="tns:DeleteAdInternalRequest">
+			</xs:element>
+
+			<xs:element name="getAdByTokenInternalResponse" type="tns:GetAdByTokenInternalResponse">
+
+			</xs:element>
+			<xs:element name="getAdByTokenInternalRequest" type="tns:GetAdByTokenInternalRequest">
+			</xs:element>
+
+			<xs:element name="reportAdInternalResponse" type="tns:ReportAdInternalResponse">
+
+			</xs:element>
+			<xs:element name="reportAdInternalRequest" type="tns:ReportAdInternalRequest">
+			</xs:element>
+
+			<xs:element name="contactSellerInternalResponse" type="tns:ContactSellerInternalResponse">
+
+			</xs:element>
+			<xs:element name="contactSellerInternalRequest" type="tns:ContactSellerInternalRequest">
+			</xs:element>
+
+			<xs:element name="getAllAdsBySellerInternalResponse" type="tns:GetAllAdsBySellerInternalResponse">
+
+			</xs:element>
+			<xs:element name="getAllAdsBySellerInternalRequest" type="tns:GetAllAdsBySellerInternalRequest">
+			</xs:element>
+
+			<xs:element name="getActiveAdsBySellerInternalResponse" type="tns:GetActiveAdsBySellerInternalResponse">
+
+			</xs:element>
+
+			<xs:element name="getPendingAdsBySellerInternalResponse" type="tns:GetPendingAdsBySellerInternalResponse">
+
+			</xs:element>
+
+			<xs:element name="getUnconfirmAdsBySellerInternalResponse" type="tns:GetUnconfirmAdsBySellerInternalResponse">
+
+			</xs:element>
+
+			<xs:element name="getRejectedAdsBySellerInternalResponse" type="tns:GetRejectedAdsBySellerInternalResponse">
+
+			</xs:element>
+			<xs:element name="getRejectedAdsBySellerInternalRequest" type="tns:GetRejectedAdsBySellerInternalRequest">
+			</xs:element>
+			<xs:element name="getUnconfirmAdsBySellerInternalRequest" type="tns:GetUnconfirmAdsBySellerInternalRequest">
+			</xs:element>
+			<xs:element name="getPendingAdsBySellerInternalRequest" type="tns:GetPendingAdsBySellerInternalRequest">
+			</xs:element>
+			<xs:element name="getActiveAdsBySellerInternalRequest" type="tns:GetActiveAdsBySellerInternalRequest">
+			</xs:element>
+			<xs:complexType name="ConfirmAdInternalRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="encryptedToken"
+								type="xs:string" maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>This is the encrypted form the Ad request.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+
+							<xs:element name="guid"
+								type="xs:string" maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>This is the machine id of the requester.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ConfirmAdInternalResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+
+							<xs:element name="classifiedAd"
+								type="Q1:ClassifiedAdInternal" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="reviseAdInternalRequest" type="tns:ReviseAdInternalRequest">
+            </xs:element>
+            
+            <xs:complexType name="ReviseAdInternalRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="encryptedToken"
+            					type="xs:string" maxOccurs="1" minOccurs="1">
+            					<xs:annotation>
+									<xs:documentation>This is the encrypted form the Ad request.</xs:documentation>
+								</xs:annotation>            					
+            				</xs:element>
+
+            				<xs:element name="classifiedAd"
+            					type="Q1:ClassifiedAdInternal" maxOccurs="1"
+            					minOccurs="1">
+            					<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+            				</xs:element>
+            				<xs:element name="guid" type="xs:string"
+            					maxOccurs="1" minOccurs="1">
+            					<xs:annotation>
+									<xs:documentation>This is the machine id of the requester.</xs:documentation>
+								</xs:annotation>
+            				</xs:element>
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            <xs:simpleType name="AckValue">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+	
+			<xs:enumeration value="Success">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Failure">
+				<xs:annotation>
+	
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+	
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PartialFailure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+	
+		</xs:restriction>
+	</xs:simpleType>
+            <xs:complexType name="ReviseAdInternalResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="blackListedKeywords"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            					<xs:annotation>
+									<xs:documentation>This contains the black listed keywords for ad listing.</xs:documentation>
+            					</xs:annotation>
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="GetAdByIdInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="adId" type="xs:long"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Unique Id given to the ad.</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+						<xs:element name="includeExpiredAd"
+							type="xs:boolean" maxOccurs="1" minOccurs="0">
+							<xs:annotation>
+									<xs:documentation>This is a flag to check if the expired ads are to be included or not .</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetAdByIdInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="RelistAdInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+						<xs:element name="encryptedToken"
+							type="xs:string" maxOccurs="1" minOccurs="0">
+							<xs:annotation>
+									<xs:documentation>This is the encrypted form the Ad request.</xs:documentation>
+								</xs:annotation>       
+						</xs:element>
+						<xs:element name="blackListedKeyWords"
+							type="xs:string" maxOccurs="1" minOccurs="0">
+							<xs:annotation>
+									<xs:documentation>This contains the black listed keywords for ad listing.</xs:documentation>
+            					</xs:annotation>
+						</xs:element>
+						<xs:element name="tokenId"
+							type="xs:long" maxOccurs="1" minOccurs="0">
+							<xs:annotation>
+									<xs:documentation>Repesents the unique id given to the listed ad's activity..</xs:documentation>
+            					</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="DeleteAdInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse"/>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="GetAdByTokenInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="ReportAdInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse"/>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="ContactSellerInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse"/>
+			</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="GetAllAdsBySellerInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetActiveAdsBySellerInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetPendingAdsBySellerInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType
+			name="GetUnconfirmAdsBySellerInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetRejectedAdsBySellerInternalResponse">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetRejectedAdsBySellerInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="sellerEmail"
+							type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Email id of the seller listing the ad</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetUnconfirmAdsBySellerInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="sellerEmail"
+							type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Email id of the seller listing the ad</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetPendingAdsBySellerInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="sellerEmail"
+							type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Email id of the seller listing the ad</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetActiveAdsBySellerInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="sellerEmail"
+							type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Email id of the seller listing the ad</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetAllAdsBySellerInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="sellerEmail"
+							type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Email id of the seller listing the ad</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="ContactSellerInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="buyerEmail" type="xs:string"
+							maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Email Id if the buyer trying to contact seller</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+						<xs:element name="emailMessage" type="xs:string"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Message in the email body that buyer wants to send to seller</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="adId" type="xs:long"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Unique id of the ad</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="copySelf" type="xs:boolean"
+							maxOccurs="1" minOccurs="0">
+							<xs:annotation>
+									<xs:documentation>Flag to determine if buyer neeeds a copy of email</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+						<xs:element name="guid" type="xs:string"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>This is the machine id of the requester.</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="ReportAdInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="adId" type="xs:long"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Unique id of the ad</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+
+						<xs:element name="guid" type="xs:string"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>This is the machine id of the requester.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="actionType"
+							type="xs:token" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>This is the reason for reporting the ad.</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="GetAdByTokenInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="tokenId" type="xs:long"
+							maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Repesents the unique id given to the listed ad's activity..</xs:documentation>
+            					</xs:annotation>
+						</xs:element>
+
+						<xs:element name="includeExpiredAd"
+							type="xs:boolean" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This is a flag to check if the expired ads are to be included or not .</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="DeleteAdInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+						<xs:element name="encryptedToken" type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>This is the encrypted form the Ad request.</xs:documentation>
+								</xs:annotation>       
+						</xs:element>
+
+						<xs:element name="actionType"
+							type="xs:token" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>This is the reason for reporting the ad.</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+		<xs:complexType name="RelistAdInternalRequest">
+			<xs:complexContent>
+				<xs:extension base="tns:BaseServiceRequest">
+					<xs:sequence>
+
+						<xs:element name="tokenId"
+							type="xs:long" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Repesents the unique id given to the listed ad's activity..</xs:documentation>
+            					</xs:annotation>
+						</xs:element>
+
+
+						<xs:element name="classifiedAd"
+							type="Q1:ClassifiedAdInternal" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>Classified Ad object that has all the ad details</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+						<xs:element name="guid"
+							type="xs:string" maxOccurs="1" minOccurs="1">
+							<xs:annotation>
+									<xs:documentation>This is the machine id of the requester.</xs:documentation>
+								</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+		<xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="System"/>
+        <xs:enumeration value="Application"/>
+        <xs:enumeration value="Request"/>
+      </xs:restriction>
+
+	</xs:simpleType><xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="Error"/>
+        <xs:enumeration value="Warning"/>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/></xs:appinfo></xs:annotation>
+
+		<xs:simpleContent>
+		  <xs:extension base="xs:string">
+		    <xs:attribute name="name" type="xs:string" use="optional"/>
+		  </xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+    
+    <xs:complexType name="ClassifiedAd">
+		<xs:annotation>
+			<xs:documentation>Classified Ad</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="0" name="status" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>Status of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="seller" type="tns:ClassifiedAdUser">
+				<xs:annotation>
+					<xs:documentation>Details of the ad's user</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="pictures" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Pictures of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="price" type="tns:Amount">
+				<xs:annotation>
+					<xs:documentation>Price details of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="category" type="tns:ClassifiedAdCategory">
+				<xs:annotation>
+					<xs:documentation>Category details of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="location" type="tns:ClassifiedAdLocation">
+				<xs:annotation>
+					<xs:documentation>Location details of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="endTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>End time of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="startTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Start time of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="description" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Description of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="title" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Title of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			
+			<xs:element maxOccurs="1" minOccurs="0" name="adId" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>Unique id of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="attribute" type="tns:ClassifiedAdAttribute">
+				<xs:annotation>
+					<xs:documentation>Attribute details of the ad</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="userDesignation" type="tns:UserDesignationType">
+				<xs:annotation>
+					<xs:documentation>Represents the type of the user of the ad.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="ClassifiedAdAttribute">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="value" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Value given to an attribute</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of an attribute</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="attributeValueId" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>Unique id given to an attribute value</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="attributeId" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>Unique id given to an attribute</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="ClassifiedAdCategory">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="id" type="xs:long">
+            	<xs:annotation>
+					<xs:documentation>Unique id of a category</xs:documentation>
+				</xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="1" minOccurs="1" name="name" type="xs:string">
+            	<xs:annotation>
+					<xs:documentation>Name of the category</xs:documentation>
+				</xs:annotation>
+            </xs:element> 
+         	<xs:element maxOccurs="1" minOccurs="1" name="type" type="tns:AdCategoryType">
+         		<xs:annotation>
+					<xs:documentation>Represents type of category</xs:documentation>
+				</xs:annotation>
+         	</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="parentId" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>Parent id of a category</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="ClassifiedAdInternal">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:ClassifiedAd">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="soldPrice" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>Sold Price for the ad.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="soldStatus" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Sold status for the ad.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="externalSourceType" type="tns:AdSource">
+						<xs:annotation>
+							<xs:documentation>This indicates external site where the ad is listed.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="externalSourceId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Unique Id given for the external source.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="adProperties" type="tns:ClassifiedAdProperties">
+						<xs:annotation>
+							<xs:documentation>This represents the ad properties.</xs:documentation>
+						</xs:annotation>
+					</xs:element> 
+					<xs:element maxOccurs="1" minOccurs="0" name="userIP" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>This represents the user Ip address.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="postalCode" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>This represents the Postal Code of the ad.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="userInternal" type="tns:ClassifiedAdUserInternal">
+						<xs:annotation>
+							<xs:documentation>This represents the User Details.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="tokenId" type="xs:long">
+						<xs:annotation>
+								<xs:documentation>Represents the unique id given to the listed ad's activity.</xs:documentation>
+            				</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType><xs:complexType name="ClassifiedAdLocation">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="id" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>Unique id given to a location</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the location</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="type" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>Represents the type of location</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+            <xs:element maxOccurs="1" minOccurs="0" name="parentId" type="xs:long">
+            	 <xs:annotation>
+					<xs:documentation>Parent location's id of the location</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+            <xs:element maxOccurs="1" minOccurs="0" name="orderId" type="xs:long">
+            	<xs:annotation>
+					<xs:documentation>Order id of the location</xs:documentation>
+				</xs:annotation>
+            </xs:element>
+
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="ClassifiedAdProperties">
+		<xs:annotation>
+			<xs:documentation>
+				This will hold the Ad level flag information. TO be used
+				for internal service only, donot expose outside wsdl
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="0" name="autoApproved"
+				type="xs:boolean">
+				<xs:annotation>
+							<xs:documentation>Flag to indicate if the ad is a auto approved .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="phoneVisible"
+				type="xs:boolean">
+				<xs:annotation>
+							<xs:documentation>Flag to indicate if the phone details is to be displayed .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0"
+				name="optedMarketingEmail" type="xs:boolean">
+				<xs:annotation>
+							<xs:documentation>Flag to indicate if the marketing email is to be displayed .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="nameVisible"
+				type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the name is to be displayed .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0"
+				name="ReminderSent15Days" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the reminder is to be sent for 15 days .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0"
+				name="ReminderSent60Days" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the reminder is to be sent for 60 days .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="adChoice"
+				type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if it is a ad choice flow .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="relisted"
+				type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the ad is relisted .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="kijijiAd"
+				type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the ad is listed from kijiji.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+				processContents="lax">
+
+			<xs:element name="resubmitted" type="xs:boolean" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the ad is re submitted.</xs:documentation>
+				</xs:annotation>			
+			</xs:element>
+		</xs:sequence>
+</xs:complexType><xs:complexType name="ClassifiedAdUser">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the user</xs:documentation>
+				</xs:annotation>
+		</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="phoneNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Phone number of the user</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="ClassifiedAdUserInternal">
+		<xs:annotation>
+			<xs:documentation>
+				This holds the information that is needs to tell about
+				classified user. This is for internal services only, not
+				to be exposed outside eBay
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:ClassifiedAdUser">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="email" type="xs:string">
+						<xs:annotation>
+							<xs:documentation> Email Id of the user</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="userId" type="xs:long">
+						<xs:annotation>
+								<xs:documentation>User Id of the user.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="eBayUserId" type="xs:long">
+						<xs:annotation>
+								<xs:documentation>Ebay User Id of the user.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="eBayUserZipCode" type="xs:string">
+						<xs:annotation>
+								<xs:documentation>eBay User zipcode of the user.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="userProperties" type="tns:ClassifiedAdUserProperties">
+						<xs:annotation>
+								<xs:documentation>This represents the User properties.</xs:documentation>
+						</xs:annotation>
+					</xs:element>					
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType><xs:complexType name="ClassifiedAdUserProperties">
+		<xs:annotation>
+			<xs:documentation>
+				It hold the Ad user flags. Only for internal services use
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="0" name="classicChoice" type="xs:boolean">
+				<xs:annotation>
+						<xs:documentation>Flag to indicate if the user selected a classic ad.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="0" name="classifiedChoice" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Flag to indicate if the user selected a classified ad.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:simpleType name="UserDesignationType">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="ClassifiedAdDomainTypeLibrary" namespace="http://www.ebay.com/classifiedad/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PRIVATE">
+				<xs:annotation>
+					<xs:documentation>Represents that the seller is an individual</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BUSINESS">
+				<xs:annotation>
+					<xs:documentation>Represents that the seller is a business unit</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UNKNOWN">
+				<xs:annotation>
+					<xs:documentation>User is of unknown type</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType></xs:schema>
+  </types>
+  <message name="getAllAdsBySellerInternalRequest">
+    <part name="params" element="tns:getAllAdsBySellerInternalRequest">
+    </part>
+  </message>
+  <message name="reportAdInternalResponse">
+    <part name="params" element="tns:reportAdInternalResponse">
+    </part>
+  </message>
+  <message name="getUnconfirmAdsBySellerInternalResponse">
+    <part name="params" element="tns:getUnconfirmAdsBySellerInternalResponse">
+    </part>
+  </message>
+  <message name="getRejectedAdsBySellerInternalResponse">
+    <part name="params" element="tns:getRejectedAdsBySellerInternalResponse">
+    </part>
+  </message>
+  <message name="createAdInternalResponse">
+    <part name="params" element="tns:createAdInternalResponse">
+    </part>
+  </message>
+  <message name="contactSellerInternalResponse">
+    <part name="params" element="tns:contactSellerInternalResponse">
+    </part>
+  </message>
+  <message name="reviseAdInternalResponse">
+    <part name="params" element="tns:reviseAdInternalResponse">
+    </part>
+  </message>
+  <message name="getPendingAdsBySellerInternalResponse">
+    <part name="params" element="tns:getPendingAdsBySellerInternalResponse">
+    </part>
+  </message>
+  <message name="getPendingAdsBySellerInternalRequest">
+    <part name="params" element="tns:getPendingAdsBySellerInternalRequest">
+    </part>
+  </message>
+  <message name="deleteAdInternalResponse">
+    <part name="params" element="tns:deleteAdInternalResponse">
+    </part>
+  </message>
+  <message name="getActiveAdsBySellerInternalResponse">
+    <part name="params" element="tns:getActiveAdsBySellerInternalResponse">
+    </part>
+  </message>
+  <message name="reviseAdInternalRequest">
+    <part name="params" element="tns:reviseAdInternalRequest">
+    </part>
+  </message>
+  <message name="createAdInternalRequest">
+    <part name="params" element="tns:createAdInternalRequest">
+    </part>
+  </message>
+  <message name="contactSellerInternalRequest">
+    <part name="params" element="tns:contactSellerInternalRequest">
+    </part>
+  </message>
+  <message name="relistAdInternalResponse">
+    <part name="params" element="tns:relistAdInternalResponse">
+    </part>
+  </message>
+  <message name="relistAdInternalRequest">
+    <part name="params" element="tns:relistAdInternalRequest">
+    </part>
+  </message>
+  <message name="getUnconfirmAdsBySellerInternalRequest">
+    <part name="params" element="tns:getUnconfirmAdsBySellerInternalRequest">
+    </part>
+  </message>
+  <message name="reportAdInternalRequest">
+    <part name="params" element="tns:reportAdInternalRequest">
+    </part>
+  </message>
+  <message name="getAllAdsBySellerInternalResponse">
+    <part name="params" element="tns:getAllAdsBySellerInternalResponse">
+    </part>
+  </message>
+  <message name="getAdByIdInternalRequest">
+    <part name="params" element="tns:getAdByIdInternalRequest">
+    </part>
+  </message>
+  <message name="getAdByTokenInternalResponse">
+    <part name="params" element="tns:getAdByTokenInternalResponse">
+    </part>
+  </message>
+  <message name="deleteAdInternalRequest">
+    <part name="params" element="tns:deleteAdInternalRequest">
+    </part>
+  </message>
+  <message name="confirmAdInternalResponse">
+    <part name="params" element="tns:confirmAdInternalResponse">
+    </part>
+  </message>
+  <message name="getRejectedAdsBySellerInternalRequest">
+    <part name="params" element="tns:getRejectedAdsBySellerInternalRequest">
+    </part>
+  </message>
+  <message name="confirmAdInternalRequest">
+    <part name="params" element="tns:confirmAdInternalRequest">
+    </part>
+  </message>
+  <message name="getAdByIdInternalResponse">
+    <part name="params" element="tns:getAdByIdInternalResponse">
+    </part>
+  </message>
+  <message name="getAdByTokenInternalRequest">
+    <part name="params" element="tns:getAdByTokenInternalRequest">
+    </part>
+  </message>
+  <message name="getActiveAdsBySellerInternalRequest">
+    <part name="params" element="tns:getActiveAdsBySellerInternalRequest">
+    </part>
+  </message>
+  <portType name="ClassifiedAdManagementPrivateServicePort">
+    <operation name="createAdInternal">
+      <input message="tns:createAdInternalRequest">
+    </input>
+      <output message="tns:createAdInternalResponse">
+    </output>
+    </operation>
+    <operation name="confirmAdInternal">
+      <input message="tns:confirmAdInternalRequest">
+    </input>
+      <output message="tns:confirmAdInternalResponse">
+    </output>
+    </operation>
+    <operation name="reviseAdInternal">
+      <input message="tns:reviseAdInternalRequest">
+    </input>
+      <output message="tns:reviseAdInternalResponse">
+    </output>
+    </operation>
+    <operation name="getAdByIdInternal">
+      <input message="tns:getAdByIdInternalRequest">
+    </input>
+      <output message="tns:getAdByIdInternalResponse">
+    </output>
+    </operation>
+    <operation name="relistAdInternal">
+      <input message="tns:relistAdInternalRequest">
+    </input>
+      <output message="tns:relistAdInternalResponse">
+    </output>
+    </operation>
+    <operation name="deleteAdInternal">
+      <input message="tns:deleteAdInternalRequest">
+    </input>
+      <output message="tns:deleteAdInternalResponse">
+    </output>
+    </operation>
+    <operation name="getAdByTokenInternal">
+      <input message="tns:getAdByTokenInternalRequest">
+    </input>
+      <output message="tns:getAdByTokenInternalResponse">
+    </output>
+    </operation>
+    <operation name="reportAdInternal">
+      <input message="tns:reportAdInternalRequest">
+    </input>
+      <output message="tns:reportAdInternalResponse">
+    </output>
+    </operation>
+    <operation name="contactSellerInternal">
+      <input message="tns:contactSellerInternalRequest">
+    </input>
+      <output message="tns:contactSellerInternalResponse">
+    </output>
+    </operation>
+    <operation name="getAllAdsBySellerInternal">
+      <input message="tns:getAllAdsBySellerInternalRequest">
+    </input>
+      <output message="tns:getAllAdsBySellerInternalResponse">
+    </output>
+    </operation>
+    <operation name="getActiveAdsBySellerInternal">
+      <input message="tns:getActiveAdsBySellerInternalRequest">
+    </input>
+      <output message="tns:getActiveAdsBySellerInternalResponse">
+    </output>
+    </operation>
+    <operation name="getPendingAdsBySellerInternal">
+      <input message="tns:getPendingAdsBySellerInternalRequest">
+    </input>
+      <output message="tns:getPendingAdsBySellerInternalResponse">
+    </output>
+    </operation>
+    <operation name="getUnconfirmAdsBySellerInternal">
+      <input message="tns:getUnconfirmAdsBySellerInternalRequest">
+    </input>
+      <output message="tns:getUnconfirmAdsBySellerInternalResponse">
+    </output>
+    </operation>
+    <operation name="getRejectedAdsBySellerInternal">
+      <input message="tns:getRejectedAdsBySellerInternalRequest">
+    </input>
+      <output message="tns:getRejectedAdsBySellerInternalResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="ClassifiedAdManagementPrivateServiceHttpBinding" type="tns:ClassifiedAdManagementPrivateServicePort">
+    <http:binding verb="POST"/>
+    <operation name="createAdInternal">
+      <http:operation location="/createAdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="confirmAdInternal">
+      <http:operation location="/confirmAdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="reviseAdInternal">
+      <http:operation location="/reviseAdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getAdByIdInternal">
+      <http:operation location="/getAdByIdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="relistAdInternal">
+      <http:operation location="/relistAdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="deleteAdInternal">
+      <http:operation location="/deleteAdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getAdByTokenInternal">
+      <http:operation location="/getAdByTokenInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="reportAdInternal">
+      <http:operation location="/reportAdInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="contactSellerInternal">
+      <http:operation location="/contactSellerInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getAllAdsBySellerInternal">
+      <http:operation location="/getAllAdsBySellerInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getActiveAdsBySellerInternal">
+      <http:operation location="/getActiveAdsBySellerInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getPendingAdsBySellerInternal">
+      <http:operation location="/getPendingAdsBySellerInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getUnconfirmAdsBySellerInternal">
+      <http:operation location="/getUnconfirmAdsBySellerInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getRejectedAdsBySellerInternal">
+      <http:operation location="/getRejectedAdsBySellerInternal"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="ClassifiedAdManagementPrivateServiceSOAPBinding" type="tns:ClassifiedAdManagementPrivateServicePort">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createAdInternal">
+      <soap12:operation soapAction="urn:createAdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="confirmAdInternal">
+      <soap12:operation soapAction="urn:confirmAdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="reviseAdInternal">
+      <soap12:operation soapAction="urn:reviseAdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getAdByIdInternal">
+      <soap12:operation soapAction="urn:getAdByIdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="relistAdInternal">
+      <soap12:operation soapAction="urn:relistAdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteAdInternal">
+      <soap12:operation soapAction="urn:deleteAdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getAdByTokenInternal">
+      <soap12:operation soapAction="urn:getAdByTokenInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="reportAdInternal">
+      <soap12:operation soapAction="urn:reportAdInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="contactSellerInternal">
+      <soap12:operation soapAction="urn:contactSellerInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getAllAdsBySellerInternal">
+      <soap12:operation soapAction="urn:getAllAdsBySellerInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getActiveAdsBySellerInternal">
+      <soap12:operation soapAction="urn:getActiveAdsBySellerInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getPendingAdsBySellerInternal">
+      <soap12:operation soapAction="urn:getPendingAdsBySellerInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getUnconfirmAdsBySellerInternal">
+      <soap12:operation soapAction="urn:getUnconfirmAdsBySellerInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getRejectedAdsBySellerInternal">
+      <soap12:operation soapAction="urn:getRejectedAdsBySellerInternal" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="ClassifiedAdManagementPrivateService">
+    <port name="ClassifiedAdManagementPrivateServiceHttpPort" binding="tns:ClassifiedAdManagementPrivateServiceHttpBinding">
+      <http:address location="http://svcs.ebay.com/services/classifiedad/ClassifiedAdManagementPrivateService/v1"/>
+    </port>
+    <port name="ClassifiedAdManagementPrivateServiceSOAPPort" binding="tns:ClassifiedAdManagementPrivateServiceSOAPBinding">
+      <soap12:address location="http://svcs.ebay.com/services/classifiedad/ClassifiedAdManagementPrivateService/v1"/>
+    </port>
+  </service>
+</definitions>

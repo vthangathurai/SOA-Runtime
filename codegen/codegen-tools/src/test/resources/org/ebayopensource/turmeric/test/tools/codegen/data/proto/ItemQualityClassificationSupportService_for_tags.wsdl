@@ -1,0 +1,642 @@
+<wsdl:definitions name="ItemQualityClassificationSupportService" targetNamespace="http://www.ebay.com/marketplace/classification/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/classification/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/classification/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but
+								something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not
+								processed successfully. When a
+								serious application-level error
+								occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!--
+
+					processContents="lax" /> </xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="classifyItemsByItemIdsRequest" type="tns:ClassifyItemsByItemIdsRequest">
+
+                <xs:annotation>
+                	<xs:documentation>Batch operation for getting debug information on classifying multiple items given the itemId and optionally the results of prerequisite classifiers if any</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="classifyItemsByItemIdsResponse" type="tns:ClassifyItemsByItemIdsResponse">
+
+                <xs:annotation>
+                	<xs:documentation>Response to batch operation for getting debug information on classifying multiple items given the itemId and optionally the results of prerequisite classifiers if any </xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="classifyItemsByItemDetailsRequest" type="tns:ClassifyItemsByItemDetailsRequest">
+
+                <xs:annotation>
+                	<xs:documentation>Batch operation for getting debug information on classifying multiple items given each item's details(like title, price, seller rating, etc) and the results of prerequisite classifiers if any</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="classifyItemsByItemDetailsResponse" type="tns:ClassifyItemsByItemDetailsResponse">
+
+                <xs:annotation>
+                	<xs:documentation>Response to batch operation for getting debug information on classifying multiple items given each item's details(like title, price, seller rating, etc) and the results of prerequisite classifiers if any</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+
+			<xs:complexType name="ClassifyItemsByItemIdsRequest">
+                <xs:annotation>
+                	<xs:documentation>List of ClassifyItemByItemIdRequest </xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="classifyItemByItemIdRequest" type="tns:ClassifyItemByItemIdRequest">
+                                <xs:annotation>
+                                	<xs:documentation>List of ClassifyItemByItemIdRequest </xs:documentation>
+                                </xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="ClassifyItemByItemIdRequest">
+                <xs:annotation>
+                	<xs:documentation>Classification request for a single item by ItemId </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+					<xs:element name="itemId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>The eBay ItemId. The same ItemId is sent back to the client in service response so that client can correlate response with request in batch processing mode. </xs:documentation>
+						</xs:annotation>
+                    </xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="classificationInfo" type="tns:ClassifierResultList">
+						<xs:annotation>
+							<xs:documentation>Classification information coming from other classifiers(optional input parameter) </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ClassifierResult">
+		<xs:annotation>
+			<xs:documentation>
+				The classification result from a classifier
+			</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+			<xs:element name="classifierName" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>The name of the classifier</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+
+			<xs:element name="result" type="tns:NameValuePairs">
+				<xs:annotation>
+					<xs:documentation>The classification results in Name=Value format</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="ClassifierResultList">
+		<xs:annotation>
+			<xs:documentation>
+				A list of ClassifierResult
+			</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="classifierResult" type="tns:ClassifierResult">
+				<xs:annotation>
+					<xs:documentation>A list of classification results from one or more classifiers</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="NameValuePairs">
+		<xs:annotation>
+			<xs:documentation>A list of NameValuePair</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="nameValuePair" type="tns:NameValuePair">
+				<xs:annotation>
+					<xs:documentation>A list of NameValuePair</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="NameValuePair">
+		<xs:annotation>
+			<xs:documentation>
+				An entity to hold a name and its value(s)
+			</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+            <xs:element name="name" type="xs:string">
+            	<xs:annotation>
+            		<xs:documentation>The name</xs:documentation>
+            	</xs:annotation>
+                    </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="value" type="xs:string">
+            	<xs:annotation>
+            		<xs:documentation>The value(s) for the name</xs:documentation>
+            	</xs:annotation>
+                    </xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="ClassifyItemsByItemIdsResponse">
+                <xs:annotation>
+                	<xs:documentation>Batch operation for getting debug information on classifying multiple items given the itemId and optionally the results of prerequisite classifiers if any </xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element maxOccurs="unbounded" minOccurs="1" name="classifyItemByItemIdResponse" type="tns:ClassifyItemByItemIdResponse">
+                                <xs:annotation>
+                                	<xs:documentation>A list of ClassifyItemByItemIdResponse for batch operation</xs:documentation>
+                                </xs:annotation>
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="ClassifyItemByItemIdResponse">
+                <xs:annotation>
+                	<xs:documentation>The same ItemId as in the request is sent back to the client in service response so that client can correlate response with request in batch processing mode. </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+            		<xs:element name="itemId" type="xs:string"/>
+            		<xs:element name="itemQualityClassificationResult" type="tns:ItemQualityClassificationResult">
+                        <xs:annotation>
+                        	<xs:documentation>ItemQuality classification result</xs:documentation>
+                        </xs:annotation>
+            		</xs:element>
+            		<xs:element name="debugInfo" type="tns:NameValuePairs">
+            			<xs:annotation>
+            				<xs:documentation>Debug information on classifying the item in Name-Value formt</xs:documentation>
+            			</xs:annotation>
+                    </xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="ItemQualityClassificationResult">
+                <xs:annotation>
+                	<xs:documentation>Item quality classification result</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+            		<xs:element name="classificationResult" type="tns:NameValuePairs">
+                        <xs:annotation>
+                        	<xs:documentation>The classification result that is required downstream and needs to be persisted on the item</xs:documentation>
+                        </xs:annotation>
+            		</xs:element>
+            		<xs:element name="internalClassificationResult" type="tns:NameValuePairs">
+            			<xs:annotation>
+            				<xs:documentation>The classification result that is only needed by subsequent classifiers and does not need to be persisted on the item</xs:documentation>
+            			</xs:annotation>
+                    </xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="ClassifyItemsByItemDetailsRequest">
+                <xs:annotation>
+                	<xs:documentation>Batch operation for getting debug information on classifying multiple items given each item's details(like title, price, seller rating, etc) and the results of prerequisite classifiers if any</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element maxOccurs="unbounded" minOccurs="1" name="classifyItemByItemDetailRequest" type="tns:ClassifyItemByItemDetailRequest">
+                                <xs:annotation>
+                                	<xs:documentation>List of ClassifyItemByItemDetailRequest </xs:documentation>
+                                </xs:annotation>
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="ClassifyItemByItemDetailRequest">
+                <xs:annotation>
+                	<xs:documentation>Classification request for a single item by ItemDetail </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+            		<xs:element name="invocationId" type="xs:string">
+            			<xs:annotation>
+            				<xs:documentation>A unique ID assigned to each request by client within the context of this service call. This ID is sent back to client in service response so that client can correlate response with request in batch processing mode. </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+            		<xs:element name="itemDetail" type="tns:NameValuePairs">
+            			<xs:annotation>
+            				<xs:documentation>The item details in Name=Value format(eq- Title="This is the item title",Price=20.99, etc) </xs:documentation>
+            			</xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="1" minOccurs="0" name="classificationInfo" type="tns:ClassifierResultList">
+                        <xs:annotation>
+                        	<xs:documentation>Classification information from other classifiers(optional parameter)</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="ClassifyItemsByItemDetailsResponse">
+                <xs:annotation>
+                	<xs:documentation>Response to batch operation for getting debug information on classifying multiple items given each item's details(like title, price, seller rating, etc) and the results of prerequisite classifiers if any</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element maxOccurs="unbounded" minOccurs="1" name="classifyItemByItemDetailResponse" type="tns:ClassifyItemByItemDetailResponse">
+                                <xs:annotation>
+                                	<xs:documentation>A list of ClassifyItemByItemDetailResponse for batch operation </xs:documentation>
+                                </xs:annotation>
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="ClassifyItemByItemDetailResponse">
+                <xs:annotation>
+                	<xs:documentation>Response to a classification request for a single item by detail </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+            		<xs:element name="invocationId" type="xs:string">
+            			<xs:annotation>
+            				<xs:documentation>The same unique ID as in the request is sent back to the client in service response so that client can correlate response with request in batch processing mode. </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+            		<xs:element name="itemQualityClassificationResult" type="tns:ItemQualityClassificationResult">
+                        <xs:annotation>
+                        	<xs:documentation>Item quality classification result</xs:documentation>
+                        </xs:annotation>
+            		</xs:element>
+            		<xs:element name="debugInfo" type="tns:NameValuePairs">
+            			<xs:annotation>
+            				<xs:documentation>Debug information on the classification of the item in Name-Value format</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="classifyItemsByItemIdsRequest">
+		<wsdl:part element="tns:classifyItemsByItemIdsRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="classifyItemsByItemIdsResponse">
+		<wsdl:part element="tns:classifyItemsByItemIdsResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="classifyItemsByItemDetailsRequest">
+		<wsdl:part element="tns:classifyItemsByItemDetailsRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="classifyItemsByItemDetailsResponse">
+		<wsdl:part element="tns:classifyItemsByItemDetailsResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:portType name="ItemQualityClassificationSupportServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest"/>
+			<wsdl:output message="tns:getVersionResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="classifyItemsByItemIds">
+			<wsdl:documentation>This operation is used to get debug information on item quality classification of itemsgiven their itemIds. There is also an additional(optional) input parameter for all the factors generated by the prerequisite classifiers. The implementation of this service will query eBay Item database to get all the required item fields for example, title, start price, current price, etc. It will also call the prerequisite classifiers if the optional parameter above is not supplied. </wsdl:documentation>
+			<wsdl:input message="tns:classifyItemsByItemIdsRequest"/>
+			<wsdl:output message="tns:classifyItemsByItemIdsResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="classifyItemsByItemDetails">
+			<wsdl:documentation>This operation is called by the ItemClassificationSupportService and is used to get debug information on the item quality classification on one or more items given their item details like title, start price, current price, etc. There is also an additional(optional) input parameter for all the factors generated by the prerequisite classifiers. If not supplied, it will also call the prerequisite classifiers. </wsdl:documentation>
+			<wsdl:input message="tns:classifyItemsByItemDetailsRequest"/>
+			<wsdl:output message="tns:classifyItemsByItemDetailsResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ItemQualityClassificationSupportServiceHttpBinding" type="tns:ItemQualityClassificationSupportServicePort">
+		<http:binding verb="POST"/>
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion"/>
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="classifyItemsByItemIds">
+			<http:operation location="/classifyItemsByItemIds"/>
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="classifyItemsByItemDetails">
+			<http:operation location="/classifyItemsByItemDetails"/>
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ItemQualityClassificationSupportServiceSOAPBinding" type="tns:ItemQualityClassificationSupportServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getVersion">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/classification/v1/services/getVersion"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="classifyItemsByItemIds">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/classification/v1/services/classifyItemsByItemIds"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="classifyItemsByItemDetails">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/classification/v1/services/classifyItemsByItemDetails"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ItemQualityClassificationSupportService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			ItemQualityClassificationSupportService provides debug information on item quality classification of one or more items based on several item details from the eBay Items database
+		</wsdl:documentation>
+		<wsdl:port binding="tns:ItemQualityClassificationSupportServiceHttpBinding" name="ItemQualityClassificationSupportServiceHttpPort">
+			<http:address location="https://svcs.ebay.com/services/classification/v1/ItemQualityClassificationSupportService"/>
+		</wsdl:port>
+		<wsdl:port binding="tns:ItemQualityClassificationSupportServiceSOAPBinding" name="ItemQualityClassificationSupportServiceSOAPPort">
+			<soap12:address location="https://svcs.ebay.com/services/classification/v1/ItemQualityClassificationSupportService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

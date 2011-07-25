@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/reputation/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="BSADAdminService"
+	targetNamespace="http://www.ebay.com/marketplace/reputation/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/reputation/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:element name="getVersionRequest"
+				type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Gets the version of the service
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for getting the version of the service
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="processBstdOutflowRequest"
+				type="tns:ProcessBstdOutflowRequest" />
+			<xs:complexType name="ProcessBstdOutflowRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Processes sellers exiting below standard by deciding which action bundle to assign the seller
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="sellerName" type="xs:string"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="program" type="tns:Program"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="processBstdOutflowResponse"
+				type="tns:ProcessBstdOutflowResponse" />
+			<xs:complexType name="ProcessBstdOutflowResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for processing sellers exiting below standard by deciding which action bundle to assign the seller
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="bstdSegment" type="tns:SegmentIdType"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="processBstdProgramBundleList" type="tns:ProcessBstdProgramBundleType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="processBstdInflowRequest"
+				type="tns:ProcessBstdInflowRequest" />
+			<xs:complexType name="ProcessBstdInflowRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Processes sellers entering below standard by deciding which action bundle to assign the seller
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="sellerName" type="xs:string"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="program" type="tns:Program"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="processBstdInflowResponse"
+				type="tns:ProcessBstdInflowResponse" />
+			<xs:complexType name="ProcessBstdInflowResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for processing sellers entering below standard by deciding which action bundle to assign the seller
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="bstdSegment" type="tns:SegmentIdType"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="processBstdProgramBundleList" type="tns:ProcessBstdProgramBundleType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="ProcessBstdProgramBundleType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="program" type="tns:Program"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="bundleType" type="tns:BundleType" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:element name="getSellerAuditRequest"
+				type="tns:GetSellerAuditRequest" />
+			<xs:complexType name="GetSellerAuditRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Gets the seller audit information for a decision related to proof points, actions, etc.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="auditType" type="tns:AuditType"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="sellerName" type="xs:string"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="program" type="tns:Program"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="snapshotDate" type="xs:dateTime"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="snapshotId" type="xs:long"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="decisionType" type="tns:DecisionType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getSellerAuditResponse"
+				type="tns:GetSellerAuditResponse" />
+			<xs:complexType name="GetSellerAuditResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response to get the seller audit information for a decision related to proof points, actions, etc.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="sellerName" type="xs:string"/>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="decisionList" type="tns:DecisionInfoType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="setBstdSegmentRequest"
+				type="tns:SetBstdSegmentRequest" />
+			<xs:complexType name="SetBstdSegmentRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Sets the seller below standard segment
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="sellerName" type="xs:string"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="program" type="tns:Program"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="segment" type="tns:SegmentIdType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="setBstdSegmentResponse"
+				type="tns:SetBstdSegmentResponse" />
+			<xs:complexType name="SetBstdSegmentResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response to set the seller below standard segment
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="executeBundleRequest"
+				type="tns:ExecuteBundleRequest" />
+			<xs:complexType name="ExecuteBundleRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Execute a bundle for a user. A bundle will have a set of actions associated with it.
+						If snapshot id is passed then the application will decide the bundle type on its own.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="sellerName" type="xs:string"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="program" type="tns:Program"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="bundleType" type="tns:BundleType"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="snapshotId" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="executeBundleResponse"
+				type="tns:ExecuteBundleResponse" />
+			<xs:complexType name="ExecuteBundleResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for the execution of the bundle.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="result" type="xs:token"/>
+							<xs:element maxOccurs="1" minOccurs="0" name="resultDescription" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="DecisionInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="decisionType" type="tns:DecisionType" />
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="decisionProgramInfo" type="tns:ProgramDecisionInfoType" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ProgramDecisionInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="program" type="tns:Program" />
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="decisionValueList" type="tns:ProgramDecisionValueInfoType" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ProgramDecisionValueInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="decisionValue" type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="1" name="snapshotId" type="xs:long" />
+					<xs:element maxOccurs="1" minOccurs="1" name="decisionDate" type="xs:dateTime" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="proofPointList" type="tns:ProofPointType" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="actionList" type="tns:ActionType" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ProofPointType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="id" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="1" name="value" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ActionType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="type" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="1" name="state" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="1" name="retryCount" type="xs:int" />
+					<xs:element maxOccurs="1" minOccurs="1" name="actionDate" type="xs:dateTime" />
+					<xs:element maxOccurs="1" minOccurs="1" name="bundleType" type="tns:BundleType" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="AuditType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="BSAD"/>
+					<xs:enumeration value="ACTION"/>
+					<xs:enumeration value="COMPLETE"/>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="Program">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GLOBAL"/>
+					<xs:enumeration value="US"/>
+					<xs:enumeration value="UK"/>
+					<xs:enumeration value="DE"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="BundleType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NO_ACTION"/>
+					<xs:enumeration value="COACHING"/>
+					<xs:enumeration value="SELLING_LIMITS"/>
+					<xs:enumeration value="INDEFINITE_SELLING_RESTRICTION"/>
+					<xs:enumeration value="EXPIRE_LIMIT"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="SegmentIdType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="A"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="D"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="DecisionType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SLICE"/>
+					<xs:enumeration value="SEGMENT"/>
+					<xs:enumeration value="BUNDLE"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="processBstdOutflowRequest">
+		<wsdl:part element="tns:processBstdOutflowRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="processBstdOutflowResponse">
+		<wsdl:part element="tns:processBstdOutflowResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="processBstdInflowRequest">
+		<wsdl:part element="tns:processBstdInflowRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="processBstdInflowResponse">
+		<wsdl:part element="tns:processBstdInflowResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getSellerAuditRequest">
+		<wsdl:part element="tns:getSellerAuditRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getSellerAuditResponse">
+		<wsdl:part element="tns:getSellerAuditResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="setBstdSegmentRequest">
+		<wsdl:part element="tns:setBstdSegmentRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="setBstdSegmentResponse">
+		<wsdl:part element="tns:setBstdSegmentResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="executeBundleRequest">
+		<wsdl:part element="tns:executeBundleRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="executeBundleResponse">
+		<wsdl:part element="tns:executeBundleResponse" name="params" />
+	</wsdl:message>
+	<wsdl:portType name="BSADAdminServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Operation to get the version of the service.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="processBstdOutflow">
+			<wsdl:documentation>
+				Operation to processe sellers exiting below standard by deciding which action bundle to assign the seller.
+			</wsdl:documentation>
+			<wsdl:input message="tns:processBstdOutflowRequest" />
+			<wsdl:output message="tns:processBstdOutflowResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="processBstdInflow">
+			<wsdl:documentation>
+				Operation to processe sellers entering below standard by deciding which action bundle to assign the seller.
+			</wsdl:documentation>
+			<wsdl:input message="tns:processBstdInflowRequest" />
+			<wsdl:output message="tns:processBstdInflowResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getSellerAudit">
+			<wsdl:documentation>
+				Operation to get the seller audit information for a decision related to proof points, actions, etc.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSellerAuditRequest" />
+			<wsdl:output message="tns:getSellerAuditResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="setBstdSegment">
+			<wsdl:documentation>
+				Operation to set the below standard segment of a seller.
+			</wsdl:documentation>
+			<wsdl:input message="tns:setBstdSegmentRequest" />
+			<wsdl:output message="tns:setBstdSegmentResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="executeBundle">
+			<wsdl:documentation>
+				Operation to execute a bundle and the set of actions associated with it.
+			</wsdl:documentation>
+			<wsdl:input message="tns:executeBundleRequest" />
+			<wsdl:output message="tns:executeBundleResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BSADAdminServiceHttpBinding"
+		type="tns:BSADAdminServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="processBstdOutflow">
+			<http:operation location="/processBstdOutflow" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="processBstdInflow">
+			<http:operation location="/processBstdInflow" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSellerAudit">
+			<http:operation location="/getSellerAudit" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setBstdSegment">
+			<http:operation location="/setBstdSegment" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="executeBundle">
+			<http:operation location="/executeBundle" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="BSADAdminServiceSOAPBinding"
+		type="tns:BSADAdminServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="processBstdOutflow">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/processBstdOutflow" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="processBstdInflow">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/processBstdInflow" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSellerAudit">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/getSellerAudit" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setBstdSegment">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/setBstdSegment" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="executeBundle">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/executeBundle" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BSADAdminService">
+		<wsdl:documentation>
+			<version>1.0.0</version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:BSADAdminServiceHttpBinding"
+			name="BSADAdminServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/reputation/v1/BSADAdminService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:BSADAdminServiceSOAPBinding"
+			name="BSADAdminServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/reputation/v1/BSADAdminService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

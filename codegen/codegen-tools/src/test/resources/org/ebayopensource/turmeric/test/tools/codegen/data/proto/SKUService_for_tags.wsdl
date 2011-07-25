@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/mpinvintelligence/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" name="SKUService" targetNamespace="http://www.ebay.com/marketplace/mpinvintelligence/v1/services">
+	<types>
+		<xs:schema xmlns:tns="http://www.ebay.com/marketplace/mpinvintelligence/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ebay.com/marketplace/mpinvintelligence/v1/services" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="BaseRequest" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BaseResponse" abstract="true">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage" type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extension" type="tns:ExtensionType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element name="subdomain" type="xs:string" minOccurs="0"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element name="exceptionId" type="xs:token" minOccurs="0"/>
+					<xs:element name="parameter" type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--     USER DEFINED -->
+			<xs:simpleType name="ConditionEnum">
+				<xs:annotation>
+					<xs:documentation> Condition enums </xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="NEW">
+						<xs:annotation>
+							<xs:documentation>
+								Look at NEW products
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="USED">
+						<xs:annotation>
+							<xs:documentation>
+								Look at USED products
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="REFURBISHED">
+						<xs:annotation>
+							<xs:documentation>
+								Look at REFURBISHED products
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="DailyMeasureEnum">
+				<xs:annotation>
+					<xs:documentation> Daily measure enums </xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="dailySnapshot">
+						<xs:annotation>
+							<xs:documentation>
+								Look at daily snapshot Metric
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="AuctionEnum">
+				<xs:annotation>
+					<xs:documentation> Auction enums </xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="FixedPrice">
+						<xs:annotation>
+							<xs:documentation>
+								Look at Fixed Price products
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Auction">
+						<xs:annotation>
+							<xs:documentation>
+								Look at Auction products
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="SKUPricingMessageRequest">
+				<xs:annotation>
+					<xs:documentation> SKURequest input parameters </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="skuId" type="xs:long" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SKURequest">
+				<xs:annotation>
+					<xs:documentation> SKURequest input parameters </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="skuId" type="xs:long" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ListingRequest">
+				<xs:annotation>
+					<xs:documentation> Listing input parameters </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="listingId" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ProductRequest">
+				<xs:annotation>
+					<xs:documentation> ProductIdRequest input parameters </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="productId" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SKUDemandResponse">
+				<xs:annotation>
+					<xs:documentation> SKU Demand response </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="response" type="tns:DailySKUDemand" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SupplyDataResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="supplyData" type="tns:SupplyData" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Metrics">
+				<xs:sequence>
+					<xs:element name="pricingDetail" type="tns:PricingDetail" maxOccurs="1"/>
+					<xs:element name="demand" type="tns:DailySKUDemand" maxOccurs="unbounded"/>
+					<xs:element name="supplyData" type="tns:SupplyData" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PricingDetail">
+				<xs:sequence>
+					<xs:element name="dailyLowestPricing" type="tns:DailyLowestPricing" maxOccurs="unbounded"/>
+					<xs:element name="bestPrice" type="tns:DailyBestPrice" maxOccurs="1"/>
+					<xs:element name="averagePrice" type="tns:AveragePrice" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="metricDate" type="xs:dateTime"/>
+			</xs:complexType>			
+			<xs:complexType name="DailyLowestPricing">
+				<xs:sequence>
+					<xs:element name="lowestPrice" type="xs:decimal"/>
+					<xs:element name="lowestShippingPrice" type="xs:decimal"/>
+					<xs:element name="lowestPriceItemId" type="xs:long"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="auctionType" type="tns:AuctionEnum"/>
+			</xs:complexType>
+			<xs:complexType name="DailyBestPrice">
+				<xs:sequence>
+					<xs:element name="kviBestPrice" type="xs:decimal"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+			</xs:complexType>
+			<xs:complexType name="AveragePrice">
+				<xs:sequence>
+					<xs:element name="averagePrice" type="xs:decimal"/>
+					<xs:element name="averageShippingPrice" type="xs:decimal"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="auctionType" type="tns:AuctionEnum"/>
+				<xs:attribute name="timeFrame" type="xs:token"/>
+			</xs:complexType>
+			<xs:complexType name="RetailerPricing">
+				<xs:sequence>
+					<xs:element name="retailerDailyLowestPricing" type="tns:RetailerDailyLowestPricing" maxOccurs="unbounded"/>
+					<xs:element name="retailerBestPrice" type="tns:RetailerDailyBestPrice" maxOccurs="1"/>
+					<xs:element name="retailerAveragePrice" type="tns:RetailerAveragePrice" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="retailerMetricDate" type="xs:dateTime"/>
+			</xs:complexType>
+			<xs:complexType name="RetailerDailyLowestPricing">
+				<xs:annotation>
+					<xs:documentation> Retailer specific lowest pricing </xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="lowestPrice" type="xs:decimal"/>
+					<xs:element name="lowestShippingPrice" type="xs:decimal"/>
+					<xs:element name="lowestPriceURL" type="xs:string"/>
+					<xs:element name="sellerForLowestPricedItem" type="xs:string"/>
+					<xs:element name="scrapeTimestamp" type="xs:dateTime"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="retailerName" type="xs:string"/>
+			</xs:complexType>
+			<xs:complexType name="RetailerDailyBestPrice">
+				<xs:sequence>
+					<xs:element name="kviBestPrice" type="xs:decimal"/>
+					<xs:element name="overallBestPrice" type="xs:decimal"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+			</xs:complexType>
+			<xs:complexType name="RetailerAveragePrice">
+				<xs:sequence>
+					<xs:element name="averagePrice" type="xs:decimal"/>
+					<xs:element name="averageShippingPrice" type="xs:decimal"/>
+				</xs:sequence>
+				<xs:attribute name="timeFrame" type="xs:token"/>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="retailerName" type="xs:string"/>
+			</xs:complexType>
+			<xs:complexType name="SkuData">
+				<xs:annotation>
+					<xs:documentation> The complete sku </xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="skuId" type="xs:long"/>
+					<xs:element name="skuName" type="xs:string"/>
+					<xs:element name="skuCategoryId" type="xs:long"/>
+					<xs:element name="snapshotDate" type="xs:dateTime"/>
+					<xs:element name="siteId" type="xs:integer"/>
+					<xs:element name="metrics" type="tns:Metrics"/>
+					<xs:element name="retailerPricing" type="tns:RetailerPricing" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PricingDataResponse">
+				<xs:annotation>
+					<xs:documentation> Pricing info in response for a skuid  </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="response" type="tns:PricingData" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PricingData">
+				<xs:sequence>
+					<xs:element name="pricing" type="tns:PricingDetail"/>
+					<xs:element name="retailerPricing" type="tns:RetailerPricing"/>
+				</xs:sequence>
+				<xs:attribute name="skuId" type="xs:long"/>	
+				<xs:attribute name="siteId" type="xs:integer"/>		
+			</xs:complexType>
+			<xs:complexType name="TimeFrameSupplyData">
+				<xs:sequence>
+					<xs:element name="activeLiveListing" type="xs:long"/>
+					<xs:element name="quantitySold" type="xs:long"/>
+				</xs:sequence>
+				<xs:attribute name="timeFrame" type="xs:token"/>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="auctionType" type="tns:AuctionEnum"/>
+			</xs:complexType>
+			<xs:complexType name="DailySupplyData">
+				<xs:sequence>
+					<xs:element name="quantityAvailable" type="xs:long"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="auctionType" type="tns:AuctionEnum"/>
+			</xs:complexType>
+			<xs:complexType name="SupplyData">
+				<xs:sequence>
+					<xs:element name="dailySupplyData" type="tns:DailySupplyData" maxOccurs="1"/>
+					<xs:element name="timeFrameSupplyData" type="tns:TimeFrameSupplyData" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="skuId" type="xs:long"/>
+				<xs:attribute name="siteId" type="xs:integer"/>
+			</xs:complexType>
+			<xs:complexType name="DailySKUDemand">
+				<xs:sequence>
+					<xs:element name="averageDailyViewItemCount" type="xs:long"/>
+					<xs:element name="averageDailyBinBidCount" type="xs:long"/>
+					<xs:element name="averageDailySearchCount" type="xs:long"/>
+				</xs:sequence>
+				<xs:attribute name="condition" type="tns:ConditionEnum"/>
+				<xs:attribute name="auctionType" type="tns:AuctionEnum"/>
+				<xs:attribute name="skuId" type="xs:long"/>
+				<xs:attribute name="siteId" type="xs:integer"/>
+			</xs:complexType>
+			<xs:complexType name="RetailerPricingDataResponse">
+				<xs:annotation>
+					<xs:documentation> Pricing info in response for a skuid for a retailerf </xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="response" type="tns:RetailerPricing" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SKUResponse">
+				<xs:annotation>
+					<xs:documentation> Returns items based on matching fields from the catalog </xs:documentation>
+					<xs:appinfo>
+						<Summary> Returns items based on matching fields from the catalog </Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="skuResponse" type="tns:SkuData" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ListingDetail">
+				<xs:sequence>
+					<xs:element name="listingId" type="xs:long" minOccurs="1" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="skuId" type="xs:long"/>
+				<xs:attribute name="siteId" type="xs:integer"/>
+			</xs:complexType>
+			<xs:complexType name="SKUListingResponse">
+				<xs:annotation>
+					<xs:documentation> Returns items based on matching fields from the catalog </xs:documentation>
+					<xs:appinfo>
+						<Summary> Returns items based on matching fields from the catalog </Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="listingDetail" type="tns:ListingDetail" minOccurs="1" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SKUProductResponse">
+				<xs:annotation>
+					<xs:documentation> Returns items based on matching fields from the catalog </xs:documentation>
+					<xs:appinfo>
+						<Summary> Returns items based on matching fields from the catalog </Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:SKUResponse">
+						<xs:sequence>
+							<xs:element name="productId" type="xs:long" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SKUForListingResponse">
+				<xs:annotation>
+					<xs:documentation> Returns items based on matching fields from the catalog </xs:documentation>
+					<xs:appinfo>
+						<Summary> Returns items based on matching fields from the catalog </Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:SKUResponse">
+						<xs:sequence>
+							<xs:element name="listingId" type="xs:long" minOccurs="1" maxOccurs="1"/>						
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>			
+	
+			<xs:element name="getSKURequest" type="tns:SKURequest"/>
+			<xs:element name="getSKUForListingResponse" type="tns:SKUForListingResponse"/>
+			<xs:element name="getListingRequest" type="tns:ListingRequest"/>
+			<xs:element name="getProductRequest" type="tns:ProductRequest"/>
+			<xs:element name="getPricingDataResponse" type="tns:PricingDataResponse"/>
+			<xs:element name="getSKUDemandResponse" type="tns:SKUDemandResponse"/>
+			<xs:element name="getSupplyDataResponse" type="tns:SupplyDataResponse"/>
+			<xs:element name="getSKUResponse" type="tns:SKUResponse"/>
+			<xs:element name="getSKUListingResponse" type="tns:SKUListingResponse"/>
+			<xs:element name="getSKUProductResponse" type="tns:SKUProductResponse"/>
+			<xs:element name="getRetailerPricingDataResponse" type="tns:RetailerPricingDataResponse"/>
+		</xs:schema>
+	</types>
+	<message name="supplyDataMessageResponse">
+		<part name="body" element="tns:getSupplyDataResponse">
+    </part>
+	</message>
+	<message name="skuForListingMessageResponse">
+		<part name="body" element="tns:getSKUForListingResponse">
+    </part>
+	</message>	
+	<message name="listingMessageRequest">
+		<part name="body" element="tns:getListingRequest">
+    </part>
+	</message>
+	<message name="getVersionRequest">
+		<part name="params" element="tns:getVersionRequest">
+    </part>
+	</message>
+	<message name="skuMessageResponse">
+		<part name="body" element="tns:getSKUResponse">
+    </part>
+	</message>
+	<message name="pricingDataMessageResponse">
+		<part name="body" element="tns:getPricingDataResponse">
+    </part>
+	</message>
+	<message name="retailerPricingDataMessageResponse">
+		<part name="body" element="tns:getRetailerPricingDataResponse">
+    </part>
+	</message>
+	<message name="productMessageResponse">
+		<part name="body" element="tns:getSKUProductResponse">
+    </part>
+	</message>
+	<message name="productMessageRequest">
+		<part name="body" element="tns:getProductRequest">
+    </part>
+	</message>
+	<message name="listingMessageResponse">
+		<part name="body" element="tns:getSKUListingResponse">
+    </part>
+	</message>
+	<message name="skuMessageRequest">
+		<part name="body" element="tns:getSKURequest">
+    </part>
+	</message>
+	<message name="getVersionResponse">
+		<part name="params" element="tns:getVersionResponse">
+    </part>
+	</message>
+	<message name="skuDemandMessageResponse">
+		<part name="body" element="tns:getSKUDemandResponse">
+    </part>
+	</message>
+	<portType name="SKUServicePort">
+		<operation name="getVersion">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<input message="tns:getVersionRequest">
+    </input>
+			<output message="tns:getVersionResponse">
+    </output>
+		</operation>
+		<operation name="getSKUDemand">
+			<wsdl:documentation> getSKUDemand gets demand Metric given the sku id</wsdl:documentation>
+			<input message="tns:skuMessageRequest">
+    </input>
+			<output message="tns:skuDemandMessageResponse">
+    </output>
+		</operation>
+		<operation name="getSKUSupply">
+			<wsdl:documentation>getSKUSupply gets the supply Metric given the sku id</wsdl:documentation>
+			<input message="tns:skuMessageRequest">
+    </input>
+			<output message="tns:supplyDataMessageResponse">
+    </output>
+		</operation>
+		<operation name="getSKUDetail">
+			<wsdl:documentation>getSKUDetail gets the sku Metric given the sku id</wsdl:documentation>
+			<input message="tns:skuMessageRequest">
+    </input>
+			<output message="tns:skuMessageResponse">
+    </output>
+		</operation>
+		<operation name="getSKUForListing">
+			<wsdl:documentation>getSKUForListing gets the sku Metric given the listing id</wsdl:documentation>
+			<input message="tns:listingMessageRequest">
+    </input>
+			<output message="tns:skuForListingMessageResponse">
+    </output>
+		</operation>
+		<operation name="getListingForSKU">
+			<wsdl:documentation>getListingForSKU gets the listing given the sku id</wsdl:documentation>
+			<input message="tns:skuMessageRequest">
+    </input>
+			<output message="tns:listingMessageResponse">
+    </output>
+		</operation>
+		<operation name="getSKUForProduct">
+			<wsdl:documentation>getSKUForProductId gets the sku details given the productId</wsdl:documentation>
+			<input message="tns:productMessageRequest">
+    </input>
+			<output message="tns:productMessageResponse">
+    </output>
+		</operation>
+		<operation name="getSKUPricing">
+			<wsdl:documentation>getSKUPricing gets the retailer/ebay pricing details given the sku id</wsdl:documentation>
+			<input message="tns:skuMessageRequest">
+    </input>
+			<output message="tns:pricingDataMessageResponse">
+    </output>
+		</operation>
+	</portType>
+	<binding name="SKUServiceSOAPBinding" type="tns:SKUServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="getVersion">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getVersion"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getSKUDemand">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getSKUDemand"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getSKUSupply">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getSKUSupply"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getSKUDetail">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getSKUDetail"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getSKUForListing">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/servicess#getSKUForListing"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getListingForSKU">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getListingForSKU"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getSKUForProduct">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getSKUForProductId"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getSKUPricing">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/mpinvintelligence/v1/services#getSKUPricing"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="SKUService">
+		<port name="SKUServiceSOAPPort" binding="tns:SKUServiceSOAPBinding">
+			<soap:address location="https://svcs.ebay.com/services/mpinvintelligence/v1/SKUService"/>
+		</port>
+	</service>
+</definitions>

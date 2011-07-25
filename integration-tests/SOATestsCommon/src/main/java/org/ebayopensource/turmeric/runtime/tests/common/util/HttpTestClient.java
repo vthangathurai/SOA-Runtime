@@ -129,6 +129,8 @@ public class HttpTestClient {
 			return e.getMessage();
 		}
 	}
+	
+	
 
 	private String getResponse(Request request, Map queryParams, String body) {
 		Iterator itr = queryParams.entrySet().iterator();
@@ -199,6 +201,37 @@ public class HttpTestClient {
 //
 //				return response.getBody() + response.getHeader("X-EBAY-SOA-RESPONSE-DATA-FORMAT");
 //			else return response.getRequestStatus().getName();
+
+		} catch (BaseClientSideException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	public Response getResponse(Request request, Map queryParams, String body, String type) {
+		Iterator itr = queryParams.entrySet().iterator();
+		String key = null, value= null;
+		Response response = null;
+
+		while (itr.hasNext()) {
+			Map.Entry entry = (Map.Entry)itr.next();
+			key = entry.getKey().toString();
+			value = entry.getValue().toString();
+			request.addHeader(key,value);
+			if(key.equals("X-TURMERIC-SOA-REQUEST-DATA-FORMAT") && value.equals("XML")){
+				request.setContentType("text/xml");
+			}
+		}
+		if (type.contentEquals("POST")) request.setMethod(Request.POST);
+		else if (type.contentEquals("GET")) request.setMethod(Request.GET);
+		else if (type.contentEquals("PUT")) request.setMethod(Request.PUT);
+		else if (type.contentEquals("DELETE")) request.setMethod(Request.DELETE);
+
+		request.setRawData(body.getBytes());
+		try {
+			response = m_client.invoke(request);
+			return response;
 
 		} catch (BaseClientSideException e) {
 			e.printStackTrace();

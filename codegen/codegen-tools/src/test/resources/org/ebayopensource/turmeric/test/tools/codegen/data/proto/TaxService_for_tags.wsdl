@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://www.ebay.com/marketplace/checkout/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns0="http://www.ebay.com/marketplace/checkout/v1/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/checkout/v1/services" xmlns:tns="http://www.ebay.com/marketplace/checkout/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			
+<xs:element name="calculateTaxRequest"  type="tns:CalculateTaxRequest"/>
+<xs:element name="calculateTaxResponse"  type="tns:CalculateTaxResponse"/>
+<xs:element name="recordTaxRequest"  type="tns:RecordTaxRequest"/>
+<xs:element name="recordTaxResponse"  type="tns:RecordTaxResponse"/>
+<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+
+<!-- Order Line Item ID -->
+<xs:complexType name="ItemTransactionID">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="itemID" type="xs:string">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="transactionID" type="xs:string">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Order Line Item ID -->
+
+<!-- Adjustment Type -->
+<xs:simpleType name="AdjustmentType">
+	<xs:annotation>
+		<xs:documentation>
+			Types of adjustments that are supported, additional charges or refund
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="Charge"/>
+		<xs:enumeration value="Refund"/>
+	</xs:restriction>
+</xs:simpleType>
+<!-- Adjustment Type -->
+
+<!-- Fee Type -->
+<xs:simpleType name="FeeType">
+	<xs:annotation>
+		<xs:documentation>
+			Specifies the type of fee
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="TireRecyclingFee"/>
+		<xs:enumeration value="EcoRecyclingFee"/>
+	</xs:restriction>
+</xs:simpleType>
+<!-- Fee Type -->
+
+<!-- Adjusment Amount -->
+<xs:complexType name="AdjustmentAmount">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="adjustmentAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+				Adjustment Amount
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="adjustmentType" type="tns:AdjustmentType">
+			<xs:annotation>
+			<xs:documentation>
+				Specifies the type of adjustment being applied, additional charges or refund
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Adjusment Amount -->
+
+<!-- Summary Amounts -->
+<xs:complexType name="SummaryAmounts">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="subtotalAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="shippingAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="handlingAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Summary Amounts -->
+
+<!-- Summary Adjustment Amounts -->
+<xs:complexType name="SummaryAdjustmentAmounts">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="subtotalAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="shippingAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="handlingAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Summary Adjustment Amounts -->
+
+<!-- Summary Tax Amounts -->
+<xs:complexType name="SummaryTaxAmounts">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="subtotalTaxAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="shippingTaxAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="handlingTaxAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="feeList" type="tns:FeeList">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Summary Tax Amounts -->
+
+<!-- Fee List -->
+<xs:complexType name="FeeList">
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="fee" type="tns:Fee"/>
+	</xs:sequence>
+</xs:complexType>
+<!-- Fee List -->
+
+<!-- Fee -->
+<xs:complexType name="Fee">
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="feeType" type="tns:FeeType">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="feeAmount" type="tns:Amount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Fee -->
+
+<!-- Summary Tax Adjustment Amounts -->
+<xs:complexType name="SummaryTaxAdjustmentAmounts">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="subtotalTaxAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="shippingTaxAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="handlingTaxAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="feeList" type="tns:FeeList">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Summary Tax Adjustment Amounts -->
+
+<!-- Get Version Request -->
+<xs:complexType name="GetVersionRequest">
+  <xs:complexContent>
+  <xs:extension base="tns:BaseRequest"/>
+  </xs:complexContent>
+</xs:complexType>
+<!-- Get Version Request -->
+
+<!-- Get Version Response -->
+<xs:complexType name="GetVersionResponse">
+  <xs:complexContent>
+  <xs:extension base="tns:BaseResponse"/>
+  </xs:complexContent>
+</xs:complexType>
+<!-- Get Version Response -->
+
+<!-- Calculate Tax Request -->
+<xs:complexType name="CalculateTaxRequest">
+	<xs:annotation>
+		<xs:documentation>
+
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>	
+				<xs:element maxOccurs="1" minOccurs="1" name="orderAdjustmentList" type="tns:OrderAdjustmentList"/>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+<!-- Calculate Tax Request -->
+
+<!-- Order Adjustments List -->
+<xs:complexType name="OrderAdjustmentList">
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="orderAdjustment" type="tns:OrderAdjustment"/>
+	</xs:sequence>
+</xs:complexType>			
+<!-- Order Adjustments List -->
+
+<!-- Order Adjustment -->
+<xs:complexType name="OrderAdjustment">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="clientRefID" type="xs:string">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderVersionNumber" type="xs:long">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderID" type="xs:string">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="orderAdjustmentAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="orderLineItemAdjustmentList" type="tns:OrderLineItemAdjustmentList">
+			<xs:annotation>
+			<xs:documentation>
+
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Order Adjustment -->
+
+<!-- Order Line Item Adjustments List -->
+<xs:complexType name="OrderLineItemAdjustmentList">
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="orderLineItemAdjustment" type="tns:OrderLineItemAdjustment"/>
+	</xs:sequence>
+</xs:complexType>
+<!-- Order Line Item Adjustments List -->
+
+<!-- Order Line Item Adjustment -->
+<xs:complexType name="OrderLineItemAdjustment">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderLineItemID" type="tns:ItemTransactionID">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="summaryAdjustmentAmounts" type="tns:SummaryAdjustmentAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="summaryTaxAdjustmentAmounts" type="tns:SummaryTaxAdjustmentAmounts">
+			<xs:annotation>
+			<xs:documentation>
+
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Order Line Item Adjustment -->
+
+<!-- Calculate Tax Response -->
+<xs:complexType name="CalculateTaxResponse">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+    <xs:complexContent>
+    <xs:extension base="tns:BaseResponse">
+    	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="adjustedOrderList" type="tns:AdjustedOrderList"/>
+    	</xs:sequence>
+    </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+<!-- Calculate Tax Response -->
+
+<!-- Adjusted Order List -->
+<xs:complexType name="AdjustedOrderList">
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="adjustedOrder" type="tns:AdjustedOrder"/>
+	</xs:sequence>
+</xs:complexType>			
+<!-- Adjusted Order List -->
+
+<!-- Adjusted Order -->
+<xs:complexType name="AdjustedOrder">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderID" type="xs:string">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderVersionNumber" type="xs:long">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="adjustedOrderLineItemList" type="tns:AdjustedOrderLineItemList">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="adjustedOrderTotals" type="tns:AdjustedOrderTotals">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Adjusted Order -->
+
+<!-- Adjusted Order Line Item List -->
+<xs:complexType name="AdjustedOrderLineItemList">
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="adjustedOrderLineItem" type="tns:AdjustedOrderLineItem"/>
+	</xs:sequence>
+</xs:complexType>
+<!-- Adjusted Order Line Item List -->
+
+<!-- Adjusted Order Line Item -->
+<xs:complexType name="AdjustedOrderLineItem">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderLineItemID" type="tns:ItemTransactionID">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="refundAmounts" type="tns:RefundAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="adjustedLineItemSummaryAmounts" type="tns:SummaryAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="adjustedLineItemSummaryTaxAmounts" type="tns:SummaryTaxAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Adjusted Order Line Item -->
+
+<!-- Refund Amounts -->
+<xs:complexType name="RefundAmounts">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="refundSummaryAmounts" type="tns:SummaryAmounts">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="refundSummaryTaxAmounts" type="tns:SummaryTaxAmounts">
+			<xs:annotation>
+			<xs:documentation>
+				
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>	
+<!-- Refund Amounts -->
+
+<!-- Adjusted Order Totals -->
+<xs:complexType name="AdjustedOrderTotals">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="orderAdjustmentAmount" type="tns:AdjustmentAmount">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="orderSummaryAmounts" type="tns:SummaryAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="orderSummaryTaxAmounts" type="tns:SummaryTaxAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="0" name="refundAmounts" type="tns:RefundAmounts">
+			<xs:annotation>
+			<xs:documentation>
+			
+			</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Adjusted Order Totals -->
+
+<!-- Record Tax Request -->
+<xs:complexType name="RecordTaxRequest">
+	<xs:annotation>
+	<xs:documentation>
+		
+	</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+		<xs:sequence>	
+			<xs:element maxOccurs="1" minOccurs="1" name="orderAdjustmentList" type="tns:OrderAdjustmentList"/>
+		</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+<!-- Record Tax Request -->
+
+<!-- Record Tax Response -->
+<xs:complexType name="RecordTaxResponse">
+	<xs:annotation>
+		<xs:documentation>
+			
+		</xs:documentation>
+	</xs:annotation>
+    <xs:complexContent>
+    <xs:extension base="tns:BaseResponse">
+    	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="0" name="recordTaxStatusList" type="tns:RecordTaxStatusList"/>
+    	</xs:sequence>
+    </xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<!-- Record Tax Response -->
+
+<!-- Record Tax Response Status List -->
+<xs:complexType name="RecordTaxStatusList">
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="1" name="recordTaxStatus" type="tns:RecordTaxStatus"/>
+	</xs:sequence>
+</xs:complexType>
+<!-- Record Tax Response Status List -->
+
+<!-- Record Tax Response Status -->
+<xs:complexType name="RecordTaxStatus">
+	<xs:annotation>
+		<xs:documentation>
+
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="1" minOccurs="1" name="ack" type="tns:AckValue">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether there are any errors
+					or warnings associated with the
+					processing of the request.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="1" minOccurs="1" name="orderID" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+<!-- Record Tax Response Status -->
+
+
+<!-- Shared Types -->
+
+<xs:complexType name="Amount">
+<xs:annotation>
+    <xs:appinfo>
+	<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:simpleContent>
+    <xs:extension base="xs:double">
+	<xs:attribute name="currencyId" type="xs:string" use="required">
+	</xs:attribute>
+    </xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+
+<xs:simpleType name="AckValue">
+<xs:annotation>
+    <xs:documentation>Indicates whether the error is a severe error (causing the request to fail) or an informational error (a warning) that should be communicated to the user.</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:restriction base="xs:string">
+    <xs:enumeration value="Success">
+	<xs:annotation>
+	    <xs:documentation>The request was processed successfully, but something occurred that may affect your application or the user.</xs:documentation>
+	</xs:annotation>
+    </xs:enumeration>
+    <xs:enumeration value="Failure">
+	<xs:annotation>
+	    <xs:documentation>The request that triggered the error was not processed successfully. When a serious application-level error occurs, the error is returned instead of the business data.</xs:documentation>
+	</xs:annotation>
+    </xs:enumeration>
+    <xs:enumeration value="Warning">
+	<xs:annotation>
+	    <xs:documentation>The request that triggered the error was processed successfully but with some warnings.</xs:documentation>
+	</xs:annotation>
+    </xs:enumeration>
+    <xs:enumeration value="PartialFailure">
+	<xs:annotation>
+	    <xs:documentation>The request that triggered the error was processed successfully but with some warnings.</xs:documentation>
+	</xs:annotation>
+    </xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType abstract="true" name="BaseRequest">
+<xs:annotation>
+    <xs:documentation>This is the base class for request container for all service operations.</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:sequence>
+    <xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="ns0:ExtensionType">
+    </xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType abstract="true" name="BaseResponse">
+<xs:annotation>
+    <xs:documentation>Base response container for all service operations. Contains error information associated with the request.</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:sequence>
+    <xs:element name="ack" type="ns0:AckValue">
+	<xs:annotation>
+	    <xs:documentation>
+	    </xs:documentation>
+	    <xs:appinfo>
+		<CallInfo>
+		    <AllCalls>
+		    </AllCalls>
+		    <Returned>Always</Returned>
+		</CallInfo>
+	    </xs:appinfo>
+	</xs:annotation>
+    </xs:element>
+    <xs:element minOccurs="0" name="errorMessage" type="ns0:ErrorMessage">
+	<xs:annotation>
+	    <xs:documentation>Information for an error or warning that occurred when eBay processed the request.</xs:documentation>
+	    <xs:appinfo>
+		<CallInfo>
+		    <AllCalls>
+		    </AllCalls>
+		    <Returned>Conditionally</Returned>
+		</CallInfo>
+	    </xs:appinfo>
+	</xs:annotation>
+    </xs:element>
+    <xs:element minOccurs="0" name="version" type="xs:string">
+	<xs:annotation>
+	    <xs:documentation>
+	    </xs:documentation>
+	    <xs:appinfo>
+		<CallInfo>
+		    <AllCalls>
+		    </AllCalls>
+		    <Returned>Always</Returned>
+		</CallInfo>
+	    </xs:appinfo>
+	</xs:annotation>
+    </xs:element>
+    <xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+	<xs:annotation>
+	    <xs:documentation>
+	    </xs:documentation>
+	    <xs:appinfo>
+		<CallInfo>
+		    <AllCalls>
+		    </AllCalls>
+		    <Returned>Always</Returned>
+		</CallInfo>
+	    </xs:appinfo>
+	</xs:annotation>
+    </xs:element>
+    <xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="ns0:ExtensionType">
+    </xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="ErrorCategory">
+<xs:annotation>
+    <xs:documentation>Documentation goes here.</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:restriction base="xs:token">
+    <xs:enumeration value="System">
+    </xs:enumeration>
+    <xs:enumeration value="Application">
+    </xs:enumeration>
+    <xs:enumeration value="Request">
+    </xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+<xs:complexType name="ErrorData">
+<xs:annotation>
+    <xs:documentation>Documentation goes here</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:sequence>
+    <xs:element name="errorId" type="xs:long">
+    </xs:element>
+    <xs:element name="domain" type="xs:string">
+    </xs:element>
+    <xs:element minOccurs="0" name="subdomain" type="xs:string">
+    </xs:element>
+    <xs:element name="severity" type="ns0:ErrorSeverity">
+    </xs:element>
+    <xs:element name="category" type="ns0:ErrorCategory">
+    </xs:element>
+    <xs:element name="message" type="xs:string">
+    </xs:element>
+    <xs:element minOccurs="0" name="exceptionId" type="xs:token">
+    </xs:element>
+    <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="ns0:ErrorParameter">
+    </xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ErrorMessage">
+<xs:annotation>
+    <xs:documentation>Documentation goes here</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<!-- 
+<xs:sequence>
+
+processContents="lax" />
+</xs:sequence>
+-->
+<xs:sequence>
+    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="ns0:ErrorData">
+    </xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ErrorParameter">
+<xs:annotation>
+    <xs:documentation>Documentation goes here</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:simpleContent>
+    <xs:extension base="xs:string">
+	<xs:attribute name="name" type="xs:string" use="optional">
+	</xs:attribute>
+    </xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:simpleType name="ErrorSeverity">
+<xs:annotation>
+    <xs:documentation>Documentation goes here.</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:restriction base="xs:token">
+    <xs:enumeration value="Error">
+    </xs:enumeration>
+    <xs:enumeration value="Warning">
+    </xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="ExtensionType">
+<xs:annotation>
+    <xs:documentation>Documentation goes here</xs:documentation>
+    <xs:appinfo>
+	<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+	</typeLibrarySource>
+    </xs:appinfo>
+</xs:annotation>
+<xs:sequence>
+    <xs:element name="id" type="xs:positiveInteger">
+    </xs:element>
+    <xs:element name="version" type="xs:string">
+    </xs:element>
+    <xs:element name="contentType" type="xs:string">
+    </xs:element>
+    <xs:element name="value" type="xs:string">
+    </xs:element>
+
+
+</xs:sequence>
+</xs:complexType>
+
+<!-- Shared Types -->
+
+</xs:schema>
+  </types>
+
+<message name="getVersionRequest">
+  <part name="messageParameters" element="ns0:getVersionRequest"/>
+</message>
+ <message name="getVersionResponse">
+  <wsdl:part name="messageParameters" element="ns0:getVersionResponse"/>
+</message>
+  <message name="recordTaxResponse">
+    <part name="params" element="ns0:recordTaxResponse">
+    </part>
+  </message>
+  <message name="calculateTaxRequest">
+    <part name="params" element="ns0:calculateTaxRequest">
+    </part>
+  </message>
+  <message name="calculateTaxResponse">
+    <part name="params" element="ns0:calculateTaxResponse">
+    </part>
+  </message>
+  <message name="recordTaxRequest">
+    <part name="params" element="ns0:recordTaxRequest">
+    </part>
+  </message>
+  <portType name="TaxServicePort">
+    <operation name="calculateTax">
+      <input message="ns0:calculateTaxRequest">
+    </input>
+      <output message="ns0:calculateTaxResponse">
+    </output>
+    </operation>
+    <operation name="recordTax">
+      <input message="ns0:recordTaxRequest">
+    </input>
+      <output message="ns0:recordTaxResponse">
+    </output>
+    </operation>
+	  <operation name="getVersion">
+	    <input name="getVersionRequest" message="ns0:getVersionRequest"/>
+	    <output name="getVersionResponse" message="ns0:getVersionResponse"/>
+	  </operation>
+  </portType>
+  <binding name="TaxServiceHttpBinding" type="ns0:TaxServicePort">
+    <http:binding verb="POST"/>
+    <operation name="calculateTax">
+      <http:operation location="TaxService/calculateTax"/>
+      <input>
+        <mime:content part="calculateTax" type="text/xml"/>
+      </input>
+      <output>
+        <mime:content part="calculateTax" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="recordTax">
+      <http:operation location="TaxService/recordTax"/>
+      <input>
+        <mime:content part="recordTax" type="text/xml"/>
+      </input>
+      <output>
+        <mime:content part="recordTax" type="text/xml"/>
+      </output>
+    </operation>
+  <operation name="getVersion">
+   <http:operation location="getVersion" />
+   <input>
+         <mime:content type="application/x-www-form-urlencoded" />
+   </input>
+   <output>
+        <mime:content type="text/xml" />
+   </output>
+  </operation>
+</binding>
+  <binding name="TaxServiceSOAPBinding" type="ns0:TaxServicePort">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="calculateTax">
+      <soap12:operation soapAction="urn:calculateTax" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="recordTax">
+      <soap12:operation soapAction="urn:recordTax" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+	<operation name="getVersion">
+	  <soap12:operation soapAction="urn:getVersion" style="document"/>
+	    <input>
+	      <soap12:body use="literal"/>
+	    </input>
+	    <output>
+	      <soap12:body use="literal"/>
+	    </output>
+	</operation>
+  </binding>
+  <service name="TaxService">
+<wsdl:documentation>
+	<Version>1.0.0</Version>
+    </wsdl:documentation>
+    <port name="TaxServiceHttpPort" binding="ns0:TaxServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/checkout/TaxService/v1"/>
+    </port>
+    <port name="TaxServiceSOAPPort" binding="ns0:TaxServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/checkout/TaxService/v1"/>
+    </port>
+  </service>
+</definitions>

@@ -130,4 +130,11 @@ public class ClientConfigTest extends AbstractTurmericTestCase {
 		
 	}
 	
-}
+	@Test
+	public void testZeroConfigFilePath() {
+		String path = ClientConfigManager.getZeroClientConfigFilePath("production");
+		assertEquals("META-INF/soa/client/config/production/DefaultClientConfig.xml", path);
+		
+		path = ClientConfigManager.getZeroClientConfigFilePath("feature");
+		assertEquals("META-INF/soa/client/config/feature/DefaultClientConfig.xml", path);
+	}

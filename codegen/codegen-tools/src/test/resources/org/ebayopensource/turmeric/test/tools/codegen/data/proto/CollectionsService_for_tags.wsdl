@@ -1,0 +1,5242 @@
+<definitions name="CollectionsService" targetNamespace="http://www.ebay.com/marketplace/utility/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/utility/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/utility/v1/services">
+
+
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+
+				</xs:sequence>
+			</xs:complexType>
+
+			
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			
+			
+			<!-- ********* -->
+			
+			<xs:element name="createCollectionsRequest" type="tns:CreateCollectionsRequest"/>
+		<xs:element name="createCollectionsResponse" type="tns:CreateCollectionsResponse"/>
+			<xs:complexType name="CreateCollectionsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is useful for creating a collection. There are four required parameters like userName,collectionName,collectionCategory,visibility and some optional paramters like userId,ownerId,collectionEntry and collectionAttribute.
+						There can be mutiple occurances for collectionEntry and collectionAttribute.
+					</xs:documentation>
+					 <xs:appinfo>
+      				<summary>
+      				   	For creating a new collection
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element name="newCollection"
+								type="tns:CollectionDataType" minOccurs="1"
+								maxOccurs="unbounded">
+							</xs:element>
+							<xs:element name="containmentType"
+								type="tns:CollectionContainmentType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>			
+			<xs:complexType name="CreateCollectionsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="collectionId" type="tns:CollectionIdType" maxOccurs="unbounded">
+							<xs:annotation>
+      							<xs:documentation>
+       								This is the id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+							      <CallInfo>
+							            <CallName>createCollection</CallName>
+									<RequiredInput>No</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+						</xs:annotation>
+					</xs:element>	
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+
+			
+			
+			
+			<xs:simpleType name="VisibilityType">
+				<xs:annotation>
+					<xs:documentation>
+						The collection can be set as either private or public visibility type. only public collections can be searched. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="public">
+						<xs:annotation>
+      							<xs:documentation>
+									A public collection, on the other hand, can be read by anybody. Also public collections are searchable. 
+      							</xs:documentation>							
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="private">
+						<xs:annotation>
+      							<xs:documentation>
+									A private collection can only be accessed by the owners.
+      							</xs:documentation>							
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="shared">
+						<xs:annotation>
+      							<xs:documentation>
+									A shared collection can only be accessed by the owners and shared users.
+      							</xs:documentation>							
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>			
+			
+			<xs:simpleType name="SystemAttributeName">
+				<xs:annotation>
+					<xs:documentation>
+						System attribute names. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="allowed_users">
+						<xs:annotation>
+      							<xs:documentation>
+									Users with whom ist is shared. 
+      							</xs:documentation>							
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="CollectionContainmentType">
+				<xs:annotation>
+					<xs:documentation>
+						The collection can be set as either ordered or hashset based on which the entry identity is to be determined. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ordered">
+						<xs:annotation>
+      							<xs:documentation>
+									Ordered collection i.e. seq_no column will identify an entry. 
+      							</xs:documentation>							
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="hashset">
+						<xs:annotation>
+      							<xs:documentation>
+									Hashset collection i.e. value column will identify an entry.
+      							</xs:documentation>							
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+
+			<xs:simpleType name="EntriesOrderByType">
+				<xs:annotation>
+					<xs:documentation>
+						The collection can be ordered by natural order,
+						modified date or EntryValue.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="as_stored">
+						<xs:annotation>
+							<xs:documentation>
+								Order entries in natural order.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="modified_date">
+						<xs:annotation>
+							<xs:documentation>
+								Order entries by modified date.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="entry_value">
+						<xs:annotation>
+							<xs:documentation>
+								Order entries by entry value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+					<xs:enumeration value="entry_position"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ValueDataType">
+				<xs:annotation>
+					<xs:documentation>
+						Value of an attribute can be of type long,
+						string, data etc.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="long">
+						<xs:annotation>
+							<xs:documentation>
+								value is a number.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="string">
+						<xs:annotation>
+							<xs:documentation>
+								value is a string.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="date">
+						<xs:annotation>
+							<xs:documentation>
+								value is a date.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+					<xs:enumeration value="double"></xs:enumeration>
+					<xs:enumeration value="binary"></xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="EntryDataType">
+				<xs:annotation>
+					<xs:documentation>		
+					This EntryDataType has the various attributes of each entry of a collection.		
+				</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="position" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+					<xs:element name="appEntryType" type="xs:long" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Application-provided type of the entry. 
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="attribute" type="tns:AttributeType" maxOccurs="unbounded" minOccurs="0"	>
+						<xs:annotation>
+							<xs:documentation>
+								The attributes of the entry
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="expiryDate"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The expiry date of the entry
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>			
+
+			<xs:complexType name="EntryType">
+				<xs:annotation>
+					<xs:documentation>		
+					This EntryType has the various attributes of each entry of a collection. this can have mulitple occurances		
+				</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<!-- entryId is required in setEntry operation -->
+
+					<xs:element name="entryKey"
+						type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The key of the entry
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+
+
+
+
+					<xs:element name="entryData" type="tns:EntryDataType" minOccurs="1" maxOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>			
+			
+			<xs:simpleType name="CollectionIdType">
+				<xs:restriction base="xs:string">					
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="AttributeType">
+				<xs:annotation>
+					<xs:documentation>					
+				</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>					
+					<xs:element minOccurs="1" name="attributeName" type="xs:string">
+							<xs:annotation>
+      							<xs:documentation>
+									The name of the attribute
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+								<CallInfo>
+									<MaxLength>32</MaxLength>
+							            <CallName>createCollection</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="1" name="valueDataType" type="tns:ValueDataType">
+							<xs:annotation>
+      							<xs:documentation>
+									The type of value data 
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+								<CallInfo>
+									<MaxLength>32</MaxLength>
+							            <CallName>createCollection</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="attributeValue" type="xs:string">
+							<xs:annotation>
+      							<xs:documentation>
+									The value of the attribute
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+								<CallInfo>
+									<MaxLength>1024</MaxLength>
+							            <CallName>createCollection</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			
+			
+			<xs:complexType name="EntryKeyType">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+						<xs:annotation>
+							<xs:documentation>
+								The collection id
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<MaxLength>32</MaxLength>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element><xs:element minOccurs="1" name="collectionContainmentType" type="tns:CollectionContainmentType">
+						<xs:annotation>
+							<xs:documentation>
+								The collection entry type to determine
+								identity of an entry
+							</xs:documentation>
+							<xs:appinfo>
+								<summary>
+									The collection entry type to
+									determine identity of an entry
+								</summary>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element><xs:choice>
+						<xs:element maxOccurs="1" minOccurs="1" name="position" type="xs:long">
+							<xs:annotation>
+								<xs:documentation>
+									The position of an entry
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<MaxLength>32</MaxLength>
+										<CallName>
+											createCollection
+										</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element><xs:element maxOccurs="1" minOccurs="1" name="value" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The value of an entry
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<MaxLength>32</MaxLength>
+										<CallName>
+											createCollection
+										</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<!-- end of createCollection -->
+			
+            <xs:complexType name="CollectionDataType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="collectionName"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name of the collection
+							</xs:documentation>
+							<xs:appinfo>
+								<MaxLength>50</MaxLength>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="locale" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element minOccurs="1" name="appCollectionType"
+						type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								The category of the entry
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="visibilityType" type="tns:VisibilityType" minOccurs="1" maxOccurs="1"></xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="collectionEntry" type="tns:EntryType">
+						<xs:annotation>
+							<xs:documentation>
+								Entries of the collection to be added.
+								This has various attributes in itself
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="collectionAttribute" type="tns:AttributeType">
+						<xs:annotation>
+							<xs:documentation>
+								The attributes of the collection.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0"
+						name="collectionExpiryDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The expiry date of the collection
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+            </xs:complexType>
+			
+			<xs:complexType name="CollectionType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="collectionId"
+						type="tns:CollectionIdType">
+						<xs:annotation>
+							<xs:documentation>
+								This is the id of the collection that is
+								automatically generated once the
+								collection is created.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="data" type="tns:CollectionDataType" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Mutable data of the collection
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="1"
+						name="collectionContainmentType"
+						type="tns:CollectionContainmentType">
+						<xs:annotation>
+							<xs:documentation>
+								The type of the collection which is
+								created
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0"
+						name="collectionCreationDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The creation date of the collection
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0"
+						name="collectionModificationDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								The modification date of the collection
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>
+										createCollection
+									</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<!-- end createCollection -->
+
+			<xs:complexType name="CollectionViewDescriptorType">
+				<xs:annotation>
+					<xs:documentation>
+						Controls what parts of the CollectionDataType need to be returned when the collection is retrieved and how entries need to be ordered.						
+					</xs:documentation>
+					<xs:appinfo>
+						<summary>
+							Controls what parts of the
+							CollectionDataType need to be returned when
+							the collection is retrieved.
+						</summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1"
+						name="includeCollectionEntries" type="xs:boolean"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								A flag to identify whether
+								collection entries will be
+								returned.
+							</xs:documentation>
+							<xs:appinfo>
+								<summary>
+									A flag to identify whether
+									collection entries will be
+									returned.
+								</summary>
+								<CallInfo>
+									<CallName>
+										getCollection
+									</CallName>
+									<RequiredInput>
+										No
+									</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element
+						name="includeCollectionAttributes" type="xs:boolean"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="includeEntryAttributes"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+					</xs:element>
+
+					
+					<xs:element minOccurs="0" name="orderEntriesBy" type="tns:EntriesOrderByType">
+						<xs:annotation>
+    							<xs:documentation>
+							Order by which entries will be returned.
+    							</xs:documentation>
+						 <xs:appinfo>						  
+						<summary>
+
+		     				</summary>
+						<CallInfo>
+							<CallName>getCollection</CallName>
+							<RequiredInput>No</RequiredInput>
+					      </CallInfo>
+				      	</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="readCollectionsRequest" type="tns:ReadCollectionsRequest"/>
+			<xs:element name="readCollectionsResponse" type="tns:ReadCollectionsResponse"/>
+			
+			<xs:complexType name="ReadCollectionsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This type has returnEntryAttributes which is of boolean type and collectionId. One or more collectionId's can be specified here. The collectionId's should be valid. Based on the input the corresponding collections are returned.
+					</xs:documentation>
+					 <xs:appinfo>
+      				<summary>
+      				   	To get the collections along with the entries
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+									<xs:documentation>
+										The id of the collection that is
+										automatically generated once the
+										collection is created
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The id of the collection
+											that is automatically
+											generated once the
+											collection is created.
+										</summary>
+										<CallInfo>
+											<CallName>
+												getCollections
+											</CallName>
+											<RequiredInput>
+												No
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="collectionView"
+								type="tns:CollectionViewDescriptorType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="ReadCollectionsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This return the response with the information about the collections that were specified. For example: collectionEntry,collectionAttributes and other elements of the collections.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="collection" type="tns:CollectionType">
+								<xs:annotation>
+      							<xs:documentation>
+									The collection along with other details
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+							      <CallInfo>
+							            <CallName>getCollection</CallName>				
+									<Returned>Conditionally</Returned>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+					</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end getCollections -->
+			
+			<xs:element name="deleteCollectionsRequest" type="tns:DeleteCollectionsRequest"/>
+			<xs:element name="deleteCollectionsResponse" type="tns:DeleteCollectionsResponse"/>
+			<xs:complexType name="DeleteCollectionsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						We need to give the one or many valid collectionId's here to delete a collection or collections. All data related to this collection such as collection attribute, entry, entry attribute will be deleted. 
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Used to remove one or more collections based on the collection id's specified.
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>
+									<summary>
+      				   					The id of the collection that is automatically generated once the collection is created.
+      								</summary>						  
+							      <CallInfo>
+							            <CallName>removeCollections</CallName>
+									<RequiredInput>No</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteCollectionsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The collectionId's that could not be removed are collectioned here along with the error message.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="deletedCollectionId" type="tns:CollectionIdType"/>							
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end remove Collections -->
+			<xs:element name="deleteAllEntriesRequest" type="tns:DeleteAllEntriesRequest"/>
+			<xs:element name="deleteAllEntriesResponse" type="tns:DeleteAllEntriesResponse"/>
+			<xs:complexType name="DeleteAllEntriesRequest">
+				<xs:annotation>
+					<xs:documentation>	
+						Removes all the entries of a collection. The collectionId for which all the entries need to be removed has to be specified here. the collectionID needs to be valid
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes all the entries of a collection.
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created
+      							</xs:documentation>
+						      	<xs:appinfo>
+									<summary>
+      				   					The id of the collection that is automatically generated once the collection is created
+      								</summary>						  
+							      <CallInfo>
+							            <CallName>removeAllEntries</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteAllEntriesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The collectionId's for which all the entries could not be removed will be specified in the response.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				
+			</xs:complexType>
+			<!-- end remove AllEntries -->
+
+			
+			<xs:element name="addEntriesRequest" type="tns:AddEntriesRequest"/>
+			<xs:element name="addEntriesResponse" type="tns:AddEntriesResponse"/>
+			<xs:complexType name="AddEntriesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to add multiple entries to a collection. collectionId needs to be valid. Collection entry needs to be constructed according to the definition in URL.
+						Entry type of new entry must belong to what are defined in WSDL 
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Adds multiple entries to the collection
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element name="collectionId" type="tns:CollectionIdType">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>
+									<summary>
+      				   					The id of the collection that is automatically generated once the collection is created.
+      								</summary>							  
+							      <CallInfo>
+							            <CallName>addEntries</CallName>
+									<RequiredInput>No</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="newEntry" type="tns:EntryType">
+							<xs:annotation>
+      							<xs:documentation>
+       								Entries of the collection to be added. This has various attributes and attribute values in itself
+      							</xs:documentation>
+						      <xs:appinfo>
+								<summary>
+       								Entries of the collection to be added. This has various attributes and attribute values in itself
+      							</summary>							  
+						      <CallInfo>
+						            <CallName>addEntries</CallName>
+						            <RequiredInput>Yes</RequiredInput>
+						      </CallInfo>
+					      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				
+			</xs:complexType>
+			
+			<xs:complexType name="AddEntriesResponse">
+				<xs:annotation>
+					<xs:documentation>							
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="addedEntryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+									The key of the entry added
+      							</xs:documentation>						      	
+							</xs:annotation>
+					</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+				
+			</xs:complexType>
+			
+			<!-- end addEntries -->
+			<xs:element name="getAllEntriesRequest" type="tns:GetAllEntriesRequest"/>
+			<xs:element name="getAllEntriesResponse" type="tns:GetAllEntriesResponse"/>
+			<xs:complexType name="GetAllEntriesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to get multiple entries of a collection,which may include the entryAttributes. The collectionId needs to be valid and a flag needs to be given which would specify whether to return entryAttributes.
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Gets the entries of a collection
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							
+							<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+									<summary>
+      				   					The id of the collection that is automatically generated once the collection is created.
+      								</summary>					  
+							      <CallInfo>
+							            <CallName>getEntries</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="includeEntryAttributes" type="xs:boolean" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			
+			<xs:complexType name="GetAllEntriesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The collectionEntry and collectionAttributes are returned here for the collectionId's specified in the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+                            <xs:element name="collectionId" type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+                            <xs:element maxOccurs="unbounded"
+								minOccurs="0" name="entry" type="tns:EntryType">
+								<xs:annotation>
+									<xs:documentation>
+										Entries of the collection to be
+										added. This has various
+										attributes in itself
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getEntries
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end getEntries -->
+			<xs:element name="updateEntriesRequest" type="tns:UpdateEntriesRequest"/>
+			<xs:element name="updateEntriesResponse" type="tns:UpdateEntriesResponse"/>
+			<xs:complexType name="UpdateEntriesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is to set multiple attributes of a collection. This is like Update Entry operation. collectionId needs to be valid.
+						Collection entry needs to be constructed according to the definition in URL. Entry type of new entry must belong to what are defined in WSDL 
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Sets the entries to a collection. This is like Update Entry operation. 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:EntryType">
+								<xs:annotation>
+      							<xs:documentation>
+       								Entries of the collection to be added. This has various attributes in itself
+      							</xs:documentation>
+						      <xs:appinfo>
+								<summary>
+      				   				Entries of the collection to be added. This has various attributes in itself
+      							</summary>							  
+						      <CallInfo>
+						            <CallName>setEntries</CallName>
+						            <RequiredInput>No</RequiredInput>
+						      </CallInfo>
+					      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UpdateEntriesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="updatedEntryKey"
+								type="tns:EntryKeyType" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end setEntries -->
+			<xs:element name="deleteEntriesRequest" type="tns:DeleteEntriesRequest"/>
+			<xs:element name="deleteEntriesResponse" type="tns:DeleteEntriesResponse"/>
+			<xs:complexType name="DeleteEntriesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to delete entries of a collection. Both the collectionId and entryId needs to be valid.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Deletes the attributes of an entry.
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								This has the names of the entries that are tobe deleted.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+									<summary>
+       								This has the names of the entries that are tobe deleted.
+      								</summary>					  
+							      <CallInfo>
+							            <CallName>removeEntries</CallName>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteEntriesResponse">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="deletedEntryKey" type="tns:EntryKeyType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end remove Entries -->
+
+			<!-- start putCollectionAttributeValues -->
+			<xs:element name="putCollectionAttributeValuesRequest" type="tns:PutCollectionAttributeValuesRequest"/>
+			<xs:element name="putCollectionAttributeValuesResponse" type="tns:PutCollectionAttributeValuesResponse"/>
+			<xs:complexType
+				name="PutCollectionAttributeValuesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to edit the specified collection
+						level attribute values. The
+						collectionAttributeId needs to be valid.
+					</xs:documentation>
+					<xs:appinfo>
+						<summary>
+							Edits the specified collection level
+							attribute values
+						</summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+
+							<xs:element minOccurs="1"
+								name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+									<xs:documentation>
+										The id of the collection that is
+										automatically generated once the
+										collection is created.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The id of the collection
+											that is automatically
+											generated once the
+											collection is created.
+										</summary>
+										<CallInfo>
+											<CallName>
+												addCollectionAttributes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1"
+								name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+									<xs:documentation>
+										The id of the collection
+										attribute that is automatically
+										generated once the collection
+										attribute is created.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The id of the collection
+											attribute that is
+											automatically generated once
+											the collection attribute is
+											created.
+
+										</summary>
+										<CallInfo>
+											<CallName>
+												setCollectionAttributeValues
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PutCollectionAttributeValuesResponse">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<!-- add more per required -->
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="existedAttributeValues"
+								type="tns:AttributeType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end putCollectionAttributeValues -->
+
+			<!-- start removeCollectionAttributeValues -->
+		
+			<xs:element name="removeCollectionAttributeValuesRequest" type="tns:RemoveCollectionAttributeValuesRequest"/>
+			<xs:element name="removeCollectionAttributeValuesResponse" type="tns:RemoveCollectionAttributeValuesResponse"/>
+			<xs:complexType name="RemoveCollectionAttributeValuesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to remove the values of a collection attribute. valid collectionAttributeId and collectionAttributeValueIds have to be specified.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes the specified collection level attribute values 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+
+							<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>
+									<summary>
+      				   					The id of the collection that is automatically generated once the collection is created.
+      								</summary>						  
+							      <CallInfo>
+							            <CallName>addCollectionAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="collectionAttributeName" type="xs:string">
+								<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection attribute that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				Removes the specified collection level attribute values
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>removeCollectionAttributeValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="collectionAttributeValue" type="xs:string">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collectionAttributeValue.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+									<summary>
+			      					   	The id of the collectionAttributeValue
+				      				</summary>					  
+							      <CallInfo>
+							            <CallName>removeCollectionAttributeValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveCollectionAttributeValuesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="1"
+								minOccurs="1" name="removedAttributeValues" type="tns:AttributeType" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<!-- start putEntryAttributeValues -->
+			<xs:element name="putEntryAttributeValuesRequest" type="tns:PutEntryAttributeValuesRequest"/>
+			<xs:element name="putEntryAttributeValuesResponse" type="tns:PutEntryAttributeValuesResponse"/>
+			<xs:complexType name="PutEntryAttributeValuesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to edit the specified entry level attribute values. The EntryAttributeId needs to be valid. 			
+					</xs:documentation>
+						<xs:appinfo>
+      				<summary>
+      				   	Edits the specified entry level attribute values
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+       								This has the id's of the entries that are automatically generated once the entries of the collection are created.
+      							</xs:documentation>
+						      	<xs:appinfo>
+								<summary>
+      				   				This has the id's of the entries that are automatically generated once the entries of the collection are created
+      							</summary>							  
+							      <CallInfo>
+							            <CallName>addEntryAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The id of the entry attribute that is automatically generated once the entry attribute is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The id of the entry attribute that is automatically generated once the entry attribute is created.
+
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>setEntryAttributeValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PutEntryAttributeValuesResponse">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<!-- add more per required -->
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="existedAttributeValues"
+								type="tns:AttributeType" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end setEntryAttributeValues -->
+
+			<!-- start removeEntryAttributeValues -->
+		
+			<xs:element name="removeEntryAttributeValuesRequest" type="tns:RemoveEntryAttributeValuesRequest"/>
+			<xs:element name="removeEntryAttributeValuesResponse" type="tns:RemoveEntryAttributeValuesResponse"/>
+			<xs:complexType name="RemoveEntryAttributeValuesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to remove the values of a entry-attribute. valid EntryAttributeId and EntryAttributeValueIds have to be specified.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes the specified entry level attribute values 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+       								This has the id's of the entries that are automatically generated once the entries of the collection are created.
+      							</xs:documentation>
+						      	<xs:appinfo>
+								<summary>
+      				   				This has the id's of the entries that are automatically generated once the entries of the collection are created
+      							</summary>							  
+							      <CallInfo>
+							            <CallName>addEntryAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="entryAttributeName" type="xs:string">
+								<xs:annotation>
+      							<xs:documentation>
+       								The id of the entry attribute that is automatically generated once the entry is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				Removes the specified entry level attribute values
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>removeEntryAttributeValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="entryAttributeValue" type="xs:string">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the EntryAttributeValue.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+									<summary>
+			      					   	The id of the EntryAttributeValue
+				      				</summary>					  
+							      <CallInfo>
+							            <CallName>removeEntryAttributeValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveEntryAttributeValuesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="removedAttributeValues"
+								type="tns:AttributeType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<!-- end removeEntryAttributeValues -->
+
+			
+			
+			<xs:element name="removeEntryAttributesRequest" type="tns:RemoveEntryAttributesRequest"/>
+			<xs:element name="removeEntryAttributesResponse" type="tns:RemoveEntryAttributesResponse"/>
+			<xs:complexType name="RemoveEntryAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The attributes of the entryId which is specified will be removed. The entryId	and entryAttributeIds need to be valid.
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes the attributes of the entry.
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							
+
+							
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								This has the id's of the entries that are automatically generated once the entries of the collection are created.
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+									<summary>
+      								   	Removes the attributes of the entry.
+			      					</summary>
+							      <CallInfo>
+							            <CallName>removeEntry</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="entryAttributeName" type="xs:string">
+								<xs:annotation>
+      							<xs:documentation>
+       								This has the id's of the entry attributes that are automatically generated once the entries attrbutes are created.
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+									<summary>
+      								   	This has the id's of the entry attributes that are automatically generated once the entries attrbutes are created.
+			      					</summary>
+							      <CallInfo>
+							            <CallName>removeEntry</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+								</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveEntryAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="removedAttributeName" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end removeEntryAttributes -->
+
+			<xs:element name="removeAllEntryAttributesRequest" type="tns:RemoveAllEntryAttributesRequest"/>
+			<xs:element name="removeAllEntryAttributesResponse" type="tns:RemoveAllEntryAttributesResponse"/>
+			<xs:complexType name="RemoveAllEntryAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						The attributes of the entryId which is specified will be removed. The entryId	and entryAttributeIds need to be valid.
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes the attributes of the entry.
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								This has the id's of the entries that are automatically generated once the entries of the collection are created.
+      							</xs:documentation>
+						      	<xs:appinfo>						  
+									<summary>
+      								   	Removes the attributes of the entry.
+			      					</summary>
+							      <CallInfo>
+							            <CallName>removeEntry</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveAllEntryAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="putEntryAttributesRequest" type="tns:PutEntryAttributesRequest"/>
+			<xs:element name="putEntryAttributesResponse" type="tns:PutEntryAttributesResponse"/>
+			<xs:complexType name="PutEntryAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>	
+						This is used to edit the specified entry level attributes for the given entryId. The entryId needs to be valid. The attribute name must have a max of 10 characters and attribute value must have a max of 340 characters.				
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Edits the specified  entry level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							
+							
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								This has the id's of the entries that are automatically generated once the entries of the collection are created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      							   	This has the id's of the entries that are automatically generated once the entries of the collection are created.
+		      					</summary>					  
+							      <CallInfo>
+							            <CallName>setEntries</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The attibutes of the entry which have to be set
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+       								The attibutes of the entry which have to be set
+		      					</summary>					  
+							      <CallInfo>
+							            <CallName>setEntries</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PutEntryAttributesResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="replacedAttributeName"
+								type="xs:string" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end setEntryAttributes -->
+			
+			<xs:element name="getAllEntryAttributesRequest" type="tns:GetAllEntryAttributesRequest"/>
+			<xs:element name="getAllEntryAttributesResponse" type="tns:GetAllEntryAttributesResponse"/>
+			<xs:complexType name="GetAllEntryAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						A valid entryId needs to be specified here in order to get the attributes of an entry.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Gets the specified  entry level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+
+
+
+							<xs:element minOccurs="1" name="entryKey"
+								type="tns:EntryKeyType">
+								<xs:annotation>
+									<xs:documentation>
+										This has the id's of the entries
+										that are automatically generated
+										once the entries of the
+										collection are created.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											This has the id's of the
+											entries that are
+											automatically generated once
+											the entries of the
+											collection are created.
+										</summary>
+										<CallInfo>
+											<CallName>
+												getEntryAttributes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="includeAttributeValues"
+								type="xs:boolean" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAllEntryAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The attributes of the specified entryId are returned here	
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+									<xs:documentation>
+										The attribute is returned here
+										along with the values
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getEntryAttibutes
+											</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end getEntryAttributes -->
+			
+			<xs:element name="getAllCollectionAttributesRequest" type="tns:GetAllCollectionAttributesRequest"/>
+			<xs:element name="getAllCollectionAttributesResponse" type="tns:GetAllCollectionAttributesResponse"/>
+			<xs:complexType name="GetAllCollectionAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						A valid collectionId needs to be given as input to get the attributes of the collection.				
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Gets the specified collection level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1"
+								name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+									<xs:documentation>
+										The id of the collection that is
+										automatically generated once the
+										collection is created.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The id of the collection
+											that is automatically
+											generated once the
+											collection is created.
+										</summary>
+										<CallInfo>
+											<CallName>
+												getCollectionAttributes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="includeAttributeValues"
+								type="xs:boolean" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAllCollectionAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The collection attributes are returned here.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+									<xs:documentation>
+										The attributes of the collection
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getCollectionAttributes
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="getEntryAttributesRequest" type="tns:GetEntryAttributesRequest"/>
+			<xs:element name="getEntryAttributesResponse" type="tns:GetEntryAttributesResponse"/>
+
+			<xs:complexType name="GetEntryAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						A valid entryId needs to be specified here in order to get the attributes of an entry.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Gets the specified  entry level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryKey"
+								type="tns:EntryKeyType">
+								<xs:annotation>
+									<xs:documentation>
+										This has the id's of the entries
+										that are automatically generated
+										once the entries of the
+										collection are created.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											This has the id's of the
+											entries that are
+											automatically generated once
+											the entries of the
+											collection are created.
+										</summary>
+										<CallInfo>
+											<CallName>
+												getEntryAttributes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="attributeName"
+								type="xs:string" minOccurs="1" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetEntryAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The attributes of the specified entryId are returned here	
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="entryKey"
+								type="tns:EntryKeyType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+									<xs:documentation>
+										The attribute is returned here
+										along with the values
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getEntryAttibutes
+											</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end getEntryAttributes -->
+			
+			<xs:element name="getCollectionAttributesRequest" type="tns:GetCollectionAttributesRequest"/>
+			<xs:element name="getCollectionAttributesResponse" type="tns:GetCollectionAttributesResponse"/>
+			
+			<xs:complexType name="GetCollectionAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						A valid collectionId needs to be given as input to get the attributes of the collection.				
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Gets the specified collection level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1"
+								name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+									<xs:documentation>
+										The id of the collection that is
+										automatically generated once the
+										collection is created.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The id of the collection
+											that is automatically
+											generated once the
+											collection is created.
+										</summary>
+										<CallInfo>
+											<CallName>
+												getCollectionAttributes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="attributeName"
+								type="xs:string" minOccurs="1" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetCollectionAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The collection attributes are returned here.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="attribute" type="tns:AttributeType">
+								<xs:annotation>
+									<xs:documentation>
+										The attributes of the collection
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getCollectionAttributes
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<!-- end getCollectionAttributes -->
+			<xs:element name="putCollectionAttributesRequest" type="tns:PutCollectionAttributesRequest"/>
+			<xs:element name="putCollectionAttributesResponse" type="tns:PutCollectionAttributesResponse"/>
+			<xs:complexType name="PutCollectionAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to edit the specified collection level attributes. The collectionId needs to be valid. The attribute name must have a max of 10 characters and attribute value must have a max of 340 characters				
+					</xs:documentation>
+						<xs:appinfo>
+      				<summary>
+      				   	Edits the specified collection level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The id of the collection that is automatically generated once the collection is created.
+
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>setCollectionAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="attribute" type="tns:AttributeType">
+							<xs:annotation>
+      							<xs:documentation>
+       								The attribtues of the collection
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The attribtues of the collection
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>setCollectionAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PutCollectionAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<!-- add more per required -->
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="replacedAttributeName"
+								type="xs:string" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end setCollectionAttributes -->
+			
+			<xs:element name="removeCollectionAttributesRequest" type="tns:RemoveCollectionAttributesRequest"/>
+			<xs:element name="removeCollectionAttributesResponse" type="tns:RemoveCollectionAttributesResponse"/>
+			<xs:complexType name="RemoveCollectionAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to remove the attributes and aits values of a collection. valid collectionId and collectionAttributeIds have to be specified.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes the specified collection level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				Removes the specified collection level attributes 
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>removeCollectionAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="attributeName" type="xs:string">
+							<xs:annotation>
+      							<xs:documentation>
+       								The id of the collectionAttributes.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+									<summary>
+			      					   	The id of the collectionAttributes
+				      				</summary>					  
+							      <CallInfo>
+							            <CallName>removeCollectionAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveCollectionAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="collectionId"
+								type="tns:CollectionIdType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="removedAttributeName" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end removeCollectionAttributes -->
+
+			<xs:element name="removeAllCollectionAttributesRequest" type="tns:RemoveAllCollectionAttributesRequest"/>
+			<xs:element name="removeAllCollectionAttributesResponse" type="tns:RemoveAllCollectionAttributesResponse"/>
+			<xs:complexType name="RemoveAllCollectionAttributesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to remove the attributes and aits values of a collection. valid collectionId and collectionAttributeIds have to be specified.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Removes the specified collection level attributes 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="collectionId" type="tns:CollectionIdType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The id of the collection that is automatically generated once the collection is created.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				Removes the specified collection level attributes 
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>removeCollectionAttributes</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveAllCollectionAttributesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="collectionId" type="tns:CollectionIdType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:element name="updateCollectionsRequest" type="tns:UpdateCollectionsRequest"/>
+			<xs:element name="updateCollectionsResponse" type="tns:UpdateCollectionsResponse"/>
+			<xs:complexType name="UpdateCollectionsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to update collection. It can be used to update collection name, locale, expiry date and visibility type
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	This is used to update collection.		 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+
+
+
+
+
+
+
+
+
+
+							<xs:element name="collectionIdWithData"
+								type="tns:CollectionIdWithDataType" minOccurs="1" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UpdateCollectionsResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="updatedCollectionId"
+								type="tns:CollectionIdType" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end updateCollection -->
+
+			<xs:element name="moveEntryToTopRequest" type="tns:MoveEntryToTopRequest"/>
+			<xs:element name="moveEntryToTopResponse" type="tns:MoveEntryToTopResponse"/>
+			<xs:complexType name="MoveEntryToTopRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to move an entry to the top of the collection of ordered containment type.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	This is used to update collection.		 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The entry key of an entry to be moved to top.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The entry key of an entry to be moved to top.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>moveEntryToTop</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoveEntryToTopResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="movedEntryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+									The key of the entry added
+      							</xs:documentation>						      	
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end moveEntryToTop -->
+
+			<xs:element name="moveEntryToBottomRequest" type="tns:MoveEntryToBottomRequest"/>
+			<xs:element name="moveEntryToBottomResponse" type="tns:MoveEntryToBottomResponse"/>
+			<xs:complexType name="MoveEntryToBottomRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to move an entry to the top of the collection of ordered containment type.		.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	This is used to update collection.		 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The entry key of an entry to be moved to bottom.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The entry key of an entry to be moved to bottom.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>moveEntryToBottom</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoveEntryToBottomResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="movedEntryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+									The key of the entry added
+      							</xs:documentation>						      	
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end moveEntryToBottom -->
+			
+			<xs:element name="moveEntryAfterRequest" type="tns:MoveEntryAfterRequest"/>
+			<xs:element name="moveEntryAfterResponse" type="tns:MoveEntryAfterResponse"/>
+			<xs:complexType name="MoveEntryAfterRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to move an entry to the top of the collection of ordered containment type.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	This is used to update collection.		 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The entry key of an entry to be moved.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The entry key of an entry to be moved.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>moveEntryToTop</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="refEntryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The entry key of reference entry after which the entry is to be moved.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+       								The entry key of reference entry after which the entry is to be moved.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>moveEntryAfter</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoveEntryAfterResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="movedEntryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+									The key of the entry added
+      							</xs:documentation>						      	
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end moveEntryAfter -->
+
+			<xs:element name="moveEntryBeforeRequest" type="tns:MoveEntryBeforeRequest"/>
+			<xs:element name="moveEntryBeforeResponse" type="tns:MoveEntryBeforeResponse"/>
+			<xs:complexType name="MoveEntryBeforeRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to move an entry to the top of the collection of ordered containment type.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	This is used to update collection.		 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The entry key of an entry to be moved.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+      				   				The entry key of an entry to be moved.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>moveEntryToTop</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="refEntryKey" type="tns:EntryKeyType">
+								<xs:annotation>
+      							<xs:documentation>
+       								The entry key of reference entry before which the entry is to be moved.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+       								The entry key of reference entry before which the entry is to be moved.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>moveEntryAfter</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoveEntryBeforeResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="movedEntryKey" type="tns:EntryKeyType">
+							<xs:annotation>
+      							<xs:documentation>
+									The key of the entry added
+      							</xs:documentation>						      	
+							</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end moveEntryBefore -->
+
+			<xs:element name="findCollectionsWithEntryValueRequest" type="tns:FindCollectionsWithEntryValueRequest"/>
+			<xs:element name="findCollectionsWithEntryValueResponse" type="tns:FindCollectionsWithEntryValueResponse"/>
+			<xs:complexType name="FindCollectionsWithEntryValueRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to find collections with a specific entry-value.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	This is used to find collections with a specific entry-value		 
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="entryValue"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The entry value of an entry.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The entry value of an entry.
+										</summary>
+										<CallInfo>
+											<CallName>
+												findCollectionsWithEntryValue
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+
+
+
+
+							<xs:element name="collectionView"
+								type="tns:CollectionViewDescriptorType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindCollectionsWithEntryValueResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="requestedEntryValue" type="xs:string" minOccurs="1" maxOccurs="1">
+
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="collection" type="tns:CollectionType">
+								<xs:annotation>
+									<xs:documentation>
+										The collection along with
+										other details
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getCollection
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end findCollectionsWithEntryValue -->
+
+
+
+			<xs:element name="findCollectionsByOwnerIdAndCollectionTypesRequest" type="tns:FindCollectionsByOwnerIdAndCollectionTypesRequest"/>
+			<xs:element name="findCollectionsByOwnerIdAndCollectionTypesResponse" type="tns:FindCollectionsByOwnerIdAndCollectionTypesResponse"/>
+			<xs:complexType name="FindCollectionsByOwnerIdAndCollectionTypesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to find collections with specific owner id and specific list type values.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+						This is used to find collections with specific owner id and specific list type values.		
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="ownerId"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The owner of list.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The owner of list.
+										</summary>
+										<CallInfo>
+											<CallName>
+												findCollectionsByOwnerIdAndCollectionTypes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="collectionType" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Application managed list type.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											Application managed list
+											type.
+										</summary>
+										<CallInfo>
+											<CallName>
+												findCollectionsByOwnerIdAndCollectionTypes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+
+
+
+
+							<xs:element name="collectionView"
+								type="tns:CollectionViewDescriptorType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindCollectionsByOwnerIdAndCollectionTypesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+
+							<xs:element name="ownerId" type="xs:string"
+								minOccurs="1" maxOccurs="1">
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="collection" type="tns:CollectionType">
+								<xs:annotation>
+									<xs:documentation>
+										The collection along with other
+										details
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												getCollection
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end findCollectionsByOwnerIdAndCollectionTypes -->
+
+
+
+			<xs:element name="findCollectionEntriesByOwnerIdAndEntryTypesRequest" type="tns:FindCollectionEntriesByOwnerIdAndEntryTypesRequest"/>
+			<xs:element name="findCollectionEntriesByOwnerIdAndEntryTypesResponse" type="tns:FindCollectionEntriesByOwnerIdAndEntryTypesResponse"/>
+			<xs:complexType name="FindCollectionEntriesByOwnerIdAndEntryTypesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to find collections entries with specific owner id and specific entry type values.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+						This is used to find collections entries with specific owner id and specific entry type values.		
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="ownerId"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The owner of list.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The owner of list.
+										</summary>
+										<CallInfo>
+											<CallName>
+												findCollectionEntriesByOwnerIdAndEntryTypes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="entryType" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Application managed entry type.
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											Application managed entry
+											type.
+										</summary>
+										<CallInfo>
+											<CallName>
+												findCollectionEntriesByOwnerIdAndEntryTypes
+											</CallName>
+											<RequiredInput>
+												Yes
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+
+
+
+
+							<xs:element name="includeAttributes"
+								type="xs:boolean" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FindCollectionEntriesByOwnerIdAndEntryTypesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+
+							<xs:element name="ownerId"
+								type="xs:string" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="entry" type="tns:EntryType">
+								<xs:annotation>
+									<xs:documentation>
+										The entries
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												findCollectionEntriesByOwnerIdAndEntryTypes
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end findCollectionEntriesByOwnerIdAndEntryTypes -->
+
+
+
+			<xs:element name="deleteCollectionEntriesByOwnerIdAndEntryValuesRequest" type="tns:DeleteCollectionEntriesByOwnerIdAndEntryValuesRequest"/>
+			<xs:element name="deleteCollectionEntriesByOwnerIdAndEntryValuesResponse" type="tns:DeleteCollectionEntriesByOwnerIdAndEntryValuesResponse"/>
+			<xs:complexType name="DeleteCollectionEntriesByOwnerIdAndEntryValuesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is used to find collections entries with specific owner id and specific entry type values.		
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+						This is used to find collections entries with specific owner id and specific entry type values.		
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="ownerId" type="xs:string">
+								<xs:annotation>
+      							<xs:documentation>
+       								The owner of list.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+       								The owner of list.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>deleteCollectionEntriesByOwnerIdAndEntryValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="entryValue" type="xs:string">
+								<xs:annotation>
+      							<xs:documentation>
+       								entry value.
+      							</xs:documentation>
+						      	<xs:appinfo>	
+								<summary>
+       								entry value.
+      							</summary>					  
+							      <CallInfo>
+							            <CallName>deleteCollectionEntriesByOwnerIdAndEntryValues</CallName>
+									<RequiredInput>Yes</RequiredInput>
+							      </CallInfo>
+						      	</xs:appinfo>
+							</xs:annotation>
+							</xs:element>
+
+
+
+							
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DeleteCollectionEntriesByOwnerIdAndEntryValuesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+
+							<xs:element name="ownerId" type="xs:string"
+								minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="deletedEntryKey"
+								type="tns:EntryKeyType" minOccurs="0" maxOccurs="unbounded">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- end deleteCollectionEntriesByOwnerIdAndEntryValues -->
+
+
+
+
+			<xs:element name="findCollectionsByOwnerIdRequest" type="tns:FindCollectionsByOwnerIdRequest"/>
+			<xs:element name="findCollectionsByOwnerIdResponse" type="tns:FindCollectionsByOwnerIdResponse"/>
+			<xs:complexType name="FindCollectionsByOwnerIdRequest">
+				<xs:annotation>
+					<xs:documentation>	
+						We need to give the ownerId and userName to find all the collections created by the owner id (user id), including collection attributes, entries, entry attributes.
+						The ownerId needs to be valid.
+					</xs:documentation>
+					<xs:appinfo>
+      				<summary>
+      				   	Finds all the collections created by the given owner id.
+      				</summary>
+				      </xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="ownerId"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										CS can create a collection for a
+										user. When ownerId is not
+										passed, use 'userId' from the
+										context. If it's anonymous user,
+										the owner id could be a unique
+										GUID
+									</xs:documentation>
+									<xs:appinfo>
+										<summary>
+											The id of the owner who
+											created the collection
+										</summary>
+										<CallInfo>
+											<CallName>
+												findCollectionsByOwnerId
+											</CallName>
+											<RequiredInput>
+												No
+											</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+
+
+							<xs:element name="collectionView"
+								type="tns:CollectionViewDescriptorType" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="FindCollectionsByOwnerIdResponse">
+				<xs:annotation>
+					<xs:documentation>	
+						In the response the various collections that have been created with the given ownerid ,the attributes and the entries of the collection are returned						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+
+                            <xs:element name="ownerId" type="xs:string">
+							</xs:element>
+                            <xs:element maxOccurs="unbounded"
+								minOccurs="0" name="collection" type="tns:CollectionType">
+								<xs:annotation>
+									<xs:documentation>
+										The returned collection
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>
+												findCollectionsByOwnerId
+											</CallName>
+											<Returned>
+												Conditionally
+											</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<!-- end findCollectionsByOwnerId -->
+			
+			
+			<!-- end findByCollectionName -->
+			<xs:complexType abstract="true" name="BaseCollectionServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base Collection class for request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">				
+						<!--<xs:sequence>
+
+							processContents="lax" />
+						</xs:sequence>-->
+
+					</xs:extension>
+				</xs:complexContent>
+
+
+							
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseCollectionServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations in Incentive Service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<!--<xs:sequence>
+
+							processContents="lax" />
+						</xs:sequence>-->
+					</xs:extension>
+				</xs:complexContent>
+
+
+			</xs:complexType>
+			
+			<!-- ********* -->
+
+
+			<xs:element name="getEntriesRequest" type="tns:GetEntriesRequest">
+
+			</xs:element>
+			<xs:element name="getEntriesResponse" type="tns:GetEntriesResponse">
+
+			</xs:element>
+			<xs:complexType name="GetEntriesResponse">
+				<xs:annotation>
+					<xs:documentation>	
+						In the response the various collections that have been created with the given ownerid ,the attributes and the entries of the collection are returned						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="entry"
+								type="tns:EntryType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetEntriesRequest">
+				<xs:annotation>
+					<xs:documentation>	
+						In the response the various collections that have been created with the given ownerid ,the attributes and the entries of the collection are returned						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" maxOccurs="unbounded"
+								name="entryKey" type="tns:EntryKeyType">
+							</xs:element>
+							<xs:element name="includeEntryAttributes"
+								type="xs:boolean" minOccurs="1" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="lookupCollectionIdByNameRequest" type="tns:LookupCollectionIdByNameRequest">
+
+			</xs:element>
+			<xs:element name="lookupCollectionIdByNameResponse" type="tns:LookupCollectionIdByNameResponse">
+
+			</xs:element>
+			<xs:complexType	name="LookupCollectionIdByNameRequest">
+				<xs:annotation>
+					<xs:documentation>	
+						Returns collection ID given its name and owner id 												
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceRequest">
+						<xs:sequence>
+							<xs:element name="collectionName"
+								type="xs:string">
+							</xs:element>
+							<xs:element name="ownerId"
+								type="xs:string" minOccurs="0" maxOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType	name="LookupCollectionIdByNameResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseCollectionServiceResponse">
+						<xs:sequence>
+							<xs:element name="collectionId" type="tns:CollectionIdType" minOccurs="0" maxOccurs="1"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+    
+        
+			<xs:complexType name="CollectionIdWithDataType">
+				<xs:sequence>
+                    <xs:element name="collectionId" type="tns:CollectionIdType">
+					</xs:element>
+                    <xs:element name="collectionData" type="tns:CollectionDataType"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="ReservedCollectionAttributeName">
+				<xs:annotation>
+					<xs:documentation>
+						Collection attributes reserved for internal use by the Collections Service
+					</xs:documentation>
+					<xs:appinfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="__CS.SHARED-WITH__">
+						<xs:annotation>
+							<xs:documentation>
+								List of users given collection is shared with.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ReservedEntryAttributeName">
+				<xs:annotation>
+					<xs:documentation>
+						This type is reserved for future use
+					</xs:documentation>
+					<xs:appinfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="__CS.RESERVED.FOR.FUTURE.USE__">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+		    <xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+
+    </xs:schema>
+  </types>
+  <message name="moveEntryToBottomResponse">
+    <part element="tns:moveEntryToBottomResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="updateCollectionsResponse">
+    <part element="tns:updateCollectionsResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeEntryAttributesResponse">
+    <part element="tns:removeEntryAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeAllEntryAttributesResponse">
+    <part element="tns:removeAllEntryAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="putEntryAttributeValuesRequest">
+    <part element="tns:putEntryAttributeValuesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionsWithEntryValueResponse">
+    <part element="tns:findCollectionsWithEntryValueResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteAllEntriesRequest">
+    <part element="tns:deleteAllEntriesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeEntryAttributeValuesRequest">
+    <part element="tns:removeEntryAttributeValuesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="getAllEntriesResponse">
+    <part element="tns:getAllEntriesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteAllEntriesResponse">
+    <part element="tns:deleteAllEntriesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="readCollectionsRequest">
+    <part element="tns:readCollectionsRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeCollectionAttributeValuesRequest">
+    <part element="tns:removeCollectionAttributeValuesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionsWithEntryValueRequest">
+    <part element="tns:findCollectionsWithEntryValueRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="putEntryAttributesResponse">
+    <part element="tns:putEntryAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeEntryAttributesRequest">
+    <part element="tns:removeEntryAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeAllEntryAttributesRequest">
+    <part element="tns:removeAllEntryAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="getAllCollectionAttributesRequest">
+    <part element="tns:getAllCollectionAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="getCollectionAttributesRequest">
+    <part element="tns:getCollectionAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionsByOwnerIdAndCollectionTypesResponse">
+    <part element="tns:findCollectionsByOwnerIdAndCollectionTypesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteEntriesRequest">
+    <part element="tns:deleteEntriesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeCollectionAttributeValuesResponse">
+    <part element="tns:removeCollectionAttributeValuesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryAfterResponse">
+    <part element="tns:moveEntryAfterResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="createCollectionsResponse">
+    <part element="tns:createCollectionsResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryToTopResponse">
+    <part element="tns:moveEntryToTopResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeCollectionAttributesResponse">
+    <part element="tns:removeCollectionAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeAllCollectionAttributesResponse">
+    <part element="tns:removeAllCollectionAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="getAllEntryAttributesResponse">
+    <part element="tns:getAllEntryAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="getEntryAttributesResponse">
+    <part element="tns:getEntryAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryToTopRequest">
+    <part element="tns:moveEntryToTopRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeCollectionAttributesRequest">
+    <part element="tns:removeCollectionAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeAllCollectionAttributesRequest">
+    <part element="tns:removeAllCollectionAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="removeEntryAttributeValuesResponse">
+    <part element="tns:removeEntryAttributeValuesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="putCollectionAttributeValuesRequest">
+    <part element="tns:putCollectionAttributeValuesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="addEntriesResponse">
+    <part element="tns:addEntriesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="getCollectionAttributesResponse">
+    <part element="tns:getCollectionAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="getAllCollectionAttributesResponse">
+    <part element="tns:getAllCollectionAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionEntriesByOwnerIdAndEntryTypesRequest">
+    <part element="tns:findCollectionEntriesByOwnerIdAndEntryTypesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryBeforeRequest">
+    <part element="tns:moveEntryBeforeRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="putEntryAttributeValuesResponse">
+    <part element="tns:putEntryAttributeValuesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="putEntryAttributesRequest">
+    <part element="tns:putEntryAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="updateEntriesRequest">
+    <part element="tns:updateEntriesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="updateEntriesResponse">
+    <part element="tns:updateEntriesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryBeforeResponse">
+    <part element="tns:moveEntryBeforeResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionEntriesByOwnerIdAndEntryTypesResponse">
+    <part element="tns:findCollectionEntriesByOwnerIdAndEntryTypesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="addEntriesRequest">
+    <part element="tns:addEntriesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteCollectionEntriesByOwnerIdAndEntryValuesRequest">
+    <part element="tns:deleteCollectionEntriesByOwnerIdAndEntryValuesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionsByOwnerIdResponse">
+    <part element="tns:findCollectionsByOwnerIdResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="putCollectionAttributeValuesResponse">
+    <part element="tns:putCollectionAttributeValuesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="putCollectionAttributesResponse">
+    <part element="tns:putCollectionAttributesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="putCollectionAttributesRequest">
+    <part element="tns:putCollectionAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="createCollectionsRequest">
+    <part element="tns:createCollectionsRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionsByOwnerIdRequest">
+    <part element="tns:findCollectionsByOwnerIdRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="findCollectionsByOwnerIdAndCollectionTypesRequest">
+    <part element="tns:findCollectionsByOwnerIdAndCollectionTypesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteEntriesResponse">
+    <part element="tns:deleteEntriesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteCollectionEntriesByOwnerIdAndEntryValuesResponse">
+    <part element="tns:deleteCollectionEntriesByOwnerIdAndEntryValuesResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="updateCollectionsRequest">
+    <part element="tns:updateCollectionsRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryToBottomRequest">
+    <part element="tns:moveEntryToBottomRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="readCollectionsResponse">
+    <part element="tns:readCollectionsResponse" name="messageParameters">
+    </part>
+  </message>
+  <message name="getEntryAttributesRequest">
+    <part element="tns:getEntryAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="getAllEntryAttributesRequest">
+    <part element="tns:getAllEntryAttributesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteCollectionsRequest">
+    <part element="tns:deleteCollectionsRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="getAllEntriesRequest">
+    <part element="tns:getAllEntriesRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="moveEntryAfterRequest">
+    <part element="tns:moveEntryAfterRequest" name="messageParameters">
+    </part>
+  </message>
+  <message name="deleteCollectionsResponse">
+    <part element="tns:deleteCollectionsResponse" name="messageParameters">
+    </part>
+  </message>
+  <wsdl:message name="getEntriesRequest">
+  	<wsdl:part name="messageParameters" element="tns:getEntriesRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEntriesResponse">
+  	<wsdl:part name="messageParameters" element="tns:getEntriesResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lookupCollectionIdByNameRequest">
+  	<wsdl:part name="messageParameters" element="tns:lookupCollectionIdByNameRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lookupCollectionIdByNameResponse">
+  	<wsdl:part name="messageParameters" element="tns:lookupCollectionIdByNameResponse"></wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getVersionRequest">
+    <wsdl:part name="messageParameters" element="tns:getVersionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="messageParameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  
+
+  <portType name="CollectionsServicePort">
+    <operation name="createCollections">
+<wsdl:documentation>
+				eBay application uses this to add a collection.
+			</wsdl:documentation>
+      <input message="tns:createCollectionsRequest">
+    </input>
+      <output message="tns:createCollectionsResponse">
+    </output>
+    </operation>
+    <wsdl:operation name="lookupCollectionIdByName">
+    	<wsdl:input message="tns:lookupCollectionIdByNameRequest"></wsdl:input>
+    	<wsdl:output message="tns:lookupCollectionIdByNameResponse"></wsdl:output>
+    </wsdl:operation>
+
+    <operation name="readCollections">
+<wsdl:documentation>
+				eBay application uses this to get the contents of collections.
+			</wsdl:documentation>
+      <input message="tns:readCollectionsRequest">
+    </input>
+      <output message="tns:readCollectionsResponse">
+    </output>
+    </operation>
+
+    <operation name="updateCollections">
+<wsdl:documentation>
+				eBay application uses this to remove values for an attribute of a collection entry.
+			</wsdl:documentation>
+      <input message="tns:updateCollectionsRequest">
+    </input>
+      <output message="tns:updateCollectionsResponse">
+    </output>
+    </operation>
+    <operation name="deleteCollections">
+<wsdl:documentation>
+				eBay application uses this to delete a collection or collections. 
+				All data related to this collection such as collection attribute, entry, entry attribute will be deleted.
+			</wsdl:documentation>
+      <input message="tns:deleteCollectionsRequest">
+    </input>
+      <output message="tns:deleteCollectionsResponse">
+    </output>
+    </operation>
+
+    <operation name="getCollectionAttributes">
+<wsdl:documentation>
+				eBay application uses this to get the attributes of a collection.
+			</wsdl:documentation>
+      <input message="tns:getCollectionAttributesRequest">
+    </input>
+      <output message="tns:getCollectionAttributesResponse">
+    </output>
+    </operation>
+    <operation name="getAllCollectionAttributes">
+<wsdl:documentation>
+				eBay application uses this to get the attributes of a collection.
+			</wsdl:documentation>
+      <input message="tns:getAllCollectionAttributesRequest">
+    </input>
+      <output message="tns:getAllCollectionAttributesResponse">
+    </output>
+    </operation>
+    <operation name="putCollectionAttributes">
+<wsdl:documentation>
+				eBay application uses this to set the attributes of a collection.
+			</wsdl:documentation>
+      <input message="tns:putCollectionAttributesRequest">
+    </input>
+      <output message="tns:putCollectionAttributesResponse">
+    </output>
+    </operation>
+    <operation name="removeCollectionAttributes">
+<wsdl:documentation>
+				eBay application uses this to delete attributes of a collection.
+			</wsdl:documentation>
+      <input message="tns:removeCollectionAttributesRequest">
+    </input>
+      <output message="tns:removeCollectionAttributesResponse">
+    </output>
+    </operation>
+    <operation name="removeAllCollectionAttributes">
+<wsdl:documentation>
+				eBay application uses this to delete attributes of a collection.
+			</wsdl:documentation>
+      <input message="tns:removeAllCollectionAttributesRequest">
+    </input>
+      <output message="tns:removeAllCollectionAttributesResponse">
+    </output>
+    </operation>
+
+    <operation name="putCollectionAttributeValues">
+<wsdl:documentation>
+				eBay application uses this to set values for an attribute of a collection.
+			</wsdl:documentation>
+      <input message="tns:putCollectionAttributeValuesRequest">
+    </input>
+      <output message="tns:putCollectionAttributeValuesResponse">
+    </output>
+    </operation>
+    <operation name="removeCollectionAttributeValues">
+	<wsdl:documentation>
+				eBay application uses this to remove values for an attribute of a collection.
+			</wsdl:documentation>
+      <input message="tns:removeCollectionAttributeValuesRequest">
+    </input>
+      <output message="tns:removeCollectionAttributeValuesResponse">
+    </output>
+    </operation>
+    <operation name="addEntries">
+<wsdl:documentation>
+				eBay application uses this to add mutilple entries to a collection
+			</wsdl:documentation>
+      <input message="tns:addEntriesRequest">
+    </input>
+      <output message="tns:addEntriesResponse">
+    </output>
+    </operation>
+    <wsdl:operation name="getEntries">
+			<wsdl:documentation>
+				Look up a single entry by its key 
+			</wsdl:documentation>
+    	<wsdl:input message="tns:getEntriesRequest"></wsdl:input>
+    	<wsdl:output message="tns:getEntriesResponse"></wsdl:output>
+    </wsdl:operation>
+    <operation name="getAllEntries">
+	<wsdl:documentation>
+				eBay application gets multiple entries of a collection using this, which may include the entry attributes
+			</wsdl:documentation>
+      <input message="tns:getAllEntriesRequest">
+    </input>
+      <output message="tns:getAllEntriesResponse">
+    </output>
+    </operation>
+    <operation name="updateEntries">
+<wsdl:documentation>
+				eBay application uses this to set the entries of a collection.
+			</wsdl:documentation>
+      <input message="tns:updateEntriesRequest">
+    </input>
+      <output message="tns:updateEntriesResponse">
+    </output>
+    </operation>
+    <operation name="deleteEntries">
+<wsdl:documentation>
+				eBay application uses this to remove entries of a collection.
+			</wsdl:documentation>
+      <input message="tns:deleteEntriesRequest">
+    </input>
+      <output message="tns:deleteEntriesResponse">
+    </output>
+    </operation>
+    <operation name="deleteAllEntries">
+<wsdl:documentation>
+				eBay application uses this to delete all entries of a collection.
+			</wsdl:documentation>
+      <input message="tns:deleteAllEntriesRequest">
+    </input>
+      <output message="tns:deleteAllEntriesResponse">
+    </output>
+    </operation>
+    <operation name="moveEntryToTop">
+<wsdl:documentation>
+				eBay application uses this to move an entry to top.
+			</wsdl:documentation>
+      <input message="tns:moveEntryToTopRequest">
+    </input>
+      <output message="tns:moveEntryToTopResponse">
+    </output>
+    </operation>
+    <operation name="moveEntryToBottom">
+<wsdl:documentation>
+				eBay application uses this to move an entry to bottom.
+			</wsdl:documentation>
+      <input message="tns:moveEntryToBottomRequest">
+    </input>
+      <output message="tns:moveEntryToBottomResponse">
+    </output>
+    </operation>
+    <operation name="moveEntryAfter">
+<wsdl:documentation>
+				eBay application uses this to move an entry.
+			</wsdl:documentation>
+      <input message="tns:moveEntryAfterRequest">
+    </input>
+      <output message="tns:moveEntryAfterResponse">
+    </output>
+    </operation>
+    <operation name="moveEntryBefore">
+<wsdl:documentation>
+				eBay application uses this to move an entry.
+			</wsdl:documentation>
+      <input message="tns:moveEntryBeforeRequest">
+    </input>
+      <output message="tns:moveEntryBeforeResponse">
+    </output>
+    </operation>
+
+    <operation name="getEntryAttributes">
+<wsdl:documentation>
+				eBay application uses this to get attributes of a entry.
+			</wsdl:documentation>
+      <input message="tns:getEntryAttributesRequest">
+    </input>
+      <output message="tns:getEntryAttributesResponse">
+    </output>
+    </operation>
+    <operation name="getAllEntryAttributes">
+<wsdl:documentation>
+				eBay application uses this to get attributes of a entry.
+			</wsdl:documentation>
+      <input message="tns:getAllEntryAttributesRequest">
+    </input>
+      <output message="tns:getAllEntryAttributesResponse">
+    </output>
+    </operation>
+    <operation name="putEntryAttributes">
+<wsdl:documentation>
+				eBay application uses this to set attributes of an entry.
+			</wsdl:documentation>
+      <input message="tns:putEntryAttributesRequest">
+    </input>
+      <output message="tns:putEntryAttributesResponse">
+    </output>
+    </operation>
+    <operation name="removeEntryAttributes">
+<wsdl:documentation>
+				eBay application uses this to deletes attributes of a entry.
+			</wsdl:documentation>
+      <input message="tns:removeEntryAttributesRequest">
+    </input>
+      <output message="tns:removeEntryAttributesResponse">
+    </output>
+    </operation>
+
+    <operation name="removeAllEntryAttributes">
+<wsdl:documentation>
+				eBay application uses this to deletes attributes of a entry.
+			</wsdl:documentation>
+      <input message="tns:removeAllEntryAttributesRequest">
+    </input>
+      <output message="tns:removeAllEntryAttributesResponse">
+    </output>
+    </operation>
+
+    <operation name="putEntryAttributeValues">
+<wsdl:documentation>
+				eBay application uses this to set values for an attribute of a collection entry.
+			</wsdl:documentation>
+      <input message="tns:putEntryAttributeValuesRequest">
+    </input>
+      <output message="tns:putEntryAttributeValuesResponse">
+    </output>
+    </operation>
+    <operation name="removeEntryAttributeValues">
+<wsdl:documentation>
+				eBay application uses this to remove values for an attribute of a collection entry.
+			</wsdl:documentation>
+      <input message="tns:removeEntryAttributeValuesRequest">
+    </input>
+      <output message="tns:removeEntryAttributeValuesResponse">
+    </output>
+    </operation>
+    <operation name="findCollectionsByOwnerId">
+<wsdl:documentation>
+				eBay application finds all the collections created by the owner id (user id), including collection attributes, entries, entry attributes using this.
+			</wsdl:documentation>
+      <input message="tns:findCollectionsByOwnerIdRequest">
+    </input>
+      <output message="tns:findCollectionsByOwnerIdResponse">
+    </output>
+    </operation>
+    <operation name="findCollectionsWithEntryValue">
+<wsdl:documentation>
+				eBay application uses this to find collections having  an entry with a specific value.
+			</wsdl:documentation>
+      <input message="tns:findCollectionsWithEntryValueRequest">
+    </input>
+      <output message="tns:findCollectionsWithEntryValueResponse">
+    </output>
+    </operation>
+    <operation name="findCollectionsByOwnerIdAndCollectionTypes">
+<wsdl:documentation>
+				eBay application uses this to find collections having with a specific owner and having specific list types value.
+			</wsdl:documentation>
+      <input message="tns:findCollectionsByOwnerIdAndCollectionTypesRequest">
+    </input>
+      <output message="tns:findCollectionsByOwnerIdAndCollectionTypesResponse">
+    </output>
+    </operation>
+    <operation name="findCollectionEntriesByOwnerIdAndEntryTypes">
+<wsdl:documentation>
+				eBay application uses this to find entries having with a specific owner and having specific entry types value.
+			</wsdl:documentation>
+      <input message="tns:findCollectionEntriesByOwnerIdAndEntryTypesRequest">
+    </input>
+      <output message="tns:findCollectionEntriesByOwnerIdAndEntryTypesResponse">
+    </output>
+    </operation>
+    <operation name="deleteCollectionEntriesByOwnerIdAndEntryValues">
+<wsdl:documentation>
+				eBay application uses this to delete entries having with a specific owner and having specific entry values.
+			</wsdl:documentation>
+      <input message="tns:deleteCollectionEntriesByOwnerIdAndEntryValuesRequest">
+    </input>
+      <output message="tns:deleteCollectionEntriesByOwnerIdAndEntryValuesResponse">
+    </output>
+    </operation>
+    
+    <wsdl:operation name="getVersion">
+		<wsdl:documentation>
+			Retrieve the version of the service
+		</wsdl:documentation>
+	      <wsdl:input message="tns:getVersionRequest">
+	    </wsdl:input>
+	      <wsdl:output message="tns:getVersionResponse">
+	    </wsdl:output>
+    </wsdl:operation>
+    
+  </portType>
+  <binding name="CollectionsServiceHttpBinding"
+  	type="tns:CollectionsServicePort">
+
+  	<http:binding verb="POST" />
+  	<operation name="removeEntryAttributes">
+
+  		<http:operation location="/removeEntryAttributes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="getAllEntryAttributes">
+
+  		<http:operation location="/getAllEntryAttributes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="createCollections">
+
+  		<http:operation location="/createCollections" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+
+  	<operation name="readCollections">
+
+  		<http:operation location="/readCollections" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="deleteCollections">
+
+  		<http:operation location="/deleteCollections" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="deleteAllEntries">
+
+  		<http:operation location="/deleteAllEntries" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="deleteEntries">
+
+  		<http:operation location="/deleteEntries" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="addEntries">
+
+  		<http:operation location="/addEntries" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="getAllEntries">
+
+  		<http:operation location="/getAllEntries" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="updateEntries">
+
+  		<http:operation location="/updateEntries" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+
+  	<operation name="getAllCollectionAttributes">
+
+  		<http:operation location="/getAllCollectionAttributes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="putCollectionAttributes">
+
+  		<http:operation location="/putCollectionAttributes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="removeCollectionAttributes">
+
+  		<http:operation location="/removeCollectionAttributes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+
+  	<operation name="putCollectionAttributeValues">
+
+  		<http:operation location="/putCollectionAttributeValues" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="removeCollectionAttributeValues">
+
+  		<http:operation location="/removeCollectionAttributeValues" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+
+  	<operation name="putEntryAttributeValues">
+
+  		<http:operation location="/putEntryAttributeValues" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="removeEntryAttributeValues">
+
+  		<http:operation location="/removeEntryAttributeValues" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+
+
+  	<operation name="findCollectionsByOwnerId">
+
+  		<http:operation location="/findCollectionsByOwnerId" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="updateCollections">
+
+  		<http:operation location="/updateCollections" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="moveEntryToTop">
+
+  		<http:operation location="/moveEntryToTop" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="moveEntryToBottom">
+
+  		<http:operation location="/moveEntryToBottom" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="moveEntryAfter">
+
+  		<http:operation location="/moveEntryAfter" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="moveEntryBefore">
+
+  		<http:operation location="/moveEntryBefore" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="findCollectionsWithEntryValue">
+
+  		<http:operation location="/findCollectionsWithEntryValue" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="findCollectionsByOwnerIdAndCollectionTypes">
+
+  		<http:operation
+  			location="/findCollectionsByOwnerIdAndCollectionTypes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation name="findCollectionEntriesByOwnerIdAndEntryTypes">
+
+  		<http:operation
+  			location="/findCollectionEntriesByOwnerIdAndEntryTypes" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<operation
+  		name="deleteCollectionEntriesByOwnerIdAndEntryValues">
+
+  		<http:operation
+  			location="/deleteCollectionEntriesByOwnerIdAndEntryValues" />
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+
+  		</input>
+  		<output>
+  			<mime:content type="text/xml" />
+
+
+
+
+
+  		</output>
+  	</operation>
+  	<wsdl:operation name="lookupCollectionIdByName">
+
+  		<http:operation location="/lookupCollectionIdByName" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+
+
+
+
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getEntries">
+
+  		<http:operation location="/getEntries" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+
+
+
+
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getCollectionAttributes">
+
+  		<http:operation location="/getCollectionAttributes" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+
+
+
+
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="removeAllCollectionAttributes">
+
+  		<http:operation location="/removeAllCollectionAttributes" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+
+
+
+
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getEntryAttributes">
+
+  		<http:operation location="/getEntryAttributes" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+
+
+
+
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="putEntryAttributes">
+
+  		<http:operation location="/putEntryAttributes" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+
+
+
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+
+
+
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="removeAllEntryAttributes">
+  		<http:operation location="/removeAllEntryAttributes" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getVersion">
+  		<http:operation location="/getVersion" />
+  		<wsdl:input>
+  			<mime:content type="application/x-www-form-urlencoded" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<mime:content type="text/xml" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  </binding>
+  <binding name="CollectionsServiceSOAPBinding"
+  	type="tns:CollectionsServicePort">
+
+  	<soap:binding style="document"
+  		transport="http://schemas.xmlsoap.org/soap/http" />
+  	<operation name="createCollections">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/createCollections" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+
+  	<operation name="readCollections">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/readCollections" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="deleteCollections">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/deleteCollections" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="deleteAllEntries">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/deleteAllEntries" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="deleteEntries">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/deleteEntries" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="addEntries">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/addEntries" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="getAllEntries">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getAllEntries" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="updateEntries">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/updateEntries" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+
+  	<operation name="getAllCollectionAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getAllCollectionAttributes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="putCollectionAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/putCollectionAttributes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="removeCollectionAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/removeCollectionAttributes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+
+  	<operation name="putEntryAttributeValues">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/putEntryAttributeValues" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="removeEntryAttributeValues">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/removeEntryAttributeValues" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+
+
+  	<operation name="findCollectionsByOwnerId">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/findCollectionsByOwnerId" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+
+  	<operation name="putCollectionAttributeValues">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/putCollectionAttributeValues" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="removeCollectionAttributeValues">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/removeCollectionAttributeValues" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+
+  	<operation name="removeEntryAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/removeEntryAttributes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="getAllEntryAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getAllEntryAttributes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="updateCollections">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/updateCollections" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="moveEntryToTop">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/moveEntryToTop" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="moveEntryToBottom">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/moveEntryToBottom" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="moveEntryAfter">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/moveEntryAfter" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="moveEntryBefore">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/moveEntryBefore" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="findCollectionsWithEntryValue">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/findCollectionsWithEntryValue" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="findCollectionsByOwnerIdAndCollectionTypes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/findCollectionsByOwnerIdAndCollectionTypes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="findCollectionEntriesByOwnerIdAndEntryTypes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/findCollectionEntriesByOwnerIdAndEntryTypes" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation
+  		name="deleteCollectionEntriesByOwnerIdAndEntryValues">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/deleteCollectionEntriesByOwnerIdAndEntryValues" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<wsdl:operation name="lookupCollectionIdByName">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/lookupCollectionIdByName" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getEntries">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getEntries" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getCollectionAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getCollectionAttributes" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="removeAllCollectionAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/removeAllCollectionAttributes" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getEntryAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getEntryAttributes" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="putEntryAttributes">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/putEntryAttributes" />
+  		<wsdl:input>
+
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="removeAllEntryAttributes">
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/removeAllEntryAttributes" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="getVersion">
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/utility/v1/services/getVersion" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  	</wsdl:operation>
+  </binding>
+  <service name="CollectionsService">
+<wsdl:documentation>
+			<Version>1.0.0</Version>
+			The Collections Service lets eBay applications be able to group eBay entities (items, saved searches, saved sellers, or products, etc) into an ordered collection and                         store it. This web service enables eBay applications to create, fetch, and manipulate collections and collection details. 
+		</wsdl:documentation>
+    <port binding="tns:CollectionsServiceHttpBinding" name="CollectionsServiceHttpPort">
+      <http:address location="http://svcs.ebay.com/services/utility/v1/CollectionsService"/>
+    </port>
+    <port binding="tns:CollectionsServiceSOAPBinding" name="CollectionsServiceSOAPPort">
+      <soap12:address 
+      	location="http://svcs.ebay.com/services/utility/v1/CollectionsService"/>
+    </port>
+  </service>
+</definitions>

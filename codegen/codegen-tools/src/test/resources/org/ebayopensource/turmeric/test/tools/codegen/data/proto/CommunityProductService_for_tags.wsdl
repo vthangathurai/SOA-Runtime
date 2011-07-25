@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/catalog/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	name="CommunityProductService"
+	targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"
+				type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addProductsRequest"
+				type="tns:AddProductsRequest" />
+			<xs:complexType name="AddProductsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="addProductRequest"
+								type="tns:AddProductRequest" maxOccurs="unbounded"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="communityProvider"
+								type="tns:CommunityProvider" maxOccurs="1" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addProductsResponse"
+				type="tns:AddProductsResponse" />
+			<xs:complexType name="AddProductsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="addProductResponse" type="tns:AddProductResponse" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getProductSubmissionsRequest"
+				type="tns:GetProductSubmissionsRequest" >
+				<xs:annotation>
+					<xs:documentation>Pagination for clients who wants to fetch data based on pagination 
+This is a number that gets returned by the SOA and used by the clients to get the next set of results. 
+The pagination is done by sorting using default sort (on submission date)</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:complexType name="GetProductSubmissionsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+
+							<xs:element name="productSubmissionFilter" type="tns:ProductSubmissionFilter"
+								maxOccurs="unbounded" minOccurs="0">
+                                <xs:annotation>
+                                	<xs:documentation>Reduces the number of product submissions returned in the response according to the filters you specify. </xs:documentation>
+                                </xs:annotation>
+							</xs:element>
+							<xs:element name="outputDataset" type="tns:OutputDatasetType"
+								maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This will define what are information of Product Submissions to be returned. 
+Possible Dataset values: 
+StatusOnly - only Status information 
+SubmissionWithStatus - original submission data with status	information
+</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="paginationInput"
+								type="tns:PaginationInput" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Controls the pagination of the result set. Child elements specify the maximum number of product submissions to return per call and the page of data to return. 
+Controls the number of product submissions returned in the response, but does not specify the amount of data to return for each product submission. </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+
+							<xs:element name="sortOption"
+								type="tns:SortOption" maxOccurs="unbounded" minOccurs="0">
+                                <xs:annotation>
+                                	<xs:documentation>Controls the sorting of the result set. Child elements specify the sort type and sort order of product submissions to return per call. 
+Controls the sorting of product submissions returned in the response. It can support up to two sort options, representing primary sort and secondary sort.</xs:documentation>
+                                </xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getProductSubmissionsResponse"
+				type="tns:GetProductSubmissionsResponse" />
+			<xs:complexType name="GetProductSubmissionsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="productSubmission"
+								type="tns:ProductSubmission" />
+							<xs:element name="paginationOutput"
+								type="tns:PaginationOutput" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<xs:complexType name="AddProductRequest">
+				<xs:complexContent>
+					<xs:extension
+						base="tns:BaseCommunityProductServiceRequest">
+
+						<xs:sequence>
+							<xs:element name="site" type="tns:SiteCodeType" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="propertyValue"
+								type="tns:PropertyValue" maxOccurs="unbounded" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+        
+            <xs:complexType name="CommunityProvider">
+            	<xs:sequence>
+            		<xs:element name="channel"
+            			type="tns:CommunityProviderChannelType">
+            		</xs:element>
+            		<xs:element name="name" type="xs:string"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="CommunityProviderChannelType">
+                <xs:annotation>
+                	<xs:documentation>Channel Type of Community Provider who provides Product submissions. Possible Values are: SYI, PDP, InternalBulk, etc.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+        
+            <xs:complexType name="BaseCommunityProductServiceRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+            				<xs:element name="invocationId"
+            					type="xs:string">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="SiteCodeType">
+                <xs:annotation>
+                	<xs:documentation>Refer to http://developer.ebay.com/DevZone/XML/docs/Reference/eBay/types/SiteCodeType.html for a list of valid ebay Sites.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+            <xs:complexType name="PropertyValue">
+            	<xs:sequence>
+            		<xs:element name="propertyName"
+            			type="tns:PropertyName" maxOccurs="1"
+            			minOccurs="1">
+            		</xs:element>
+            		<xs:element name="value"
+            			type="tns:Value"
+            			maxOccurs="unbounded" minOccurs="0">
+            		</xs:element>
+
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="PropertyName">
+            	<xs:sequence>
+            		<xs:element name="name" type="xs:string"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="Value">
+            	<xs:choice>
+            		<xs:element name="text" type="tns:StringValue" maxOccurs="1" minOccurs="1"></xs:element>
+            		<xs:element name="number" type="tns:NumericValue" maxOccurs="1" minOccurs="1"></xs:element>
+            		<xs:element name="URL" type="tns:URIValue" maxOccurs="1" minOccurs="1"></xs:element>
+            	</xs:choice>
+            </xs:complexType>
+            
+		
+            <xs:complexType name="AddProductResponse">
+            	<xs:complexContent>
+            		<xs:extension
+            			base="tns:BaseCommunityProductServiceResponse">
+            			<xs:sequence>
+
+
+
+
+            				<xs:element name="status"
+            					type="tns:ProductSubmissionStatus" maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType
+            	name="BaseCommunityProductServiceResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="ProductSubmissionStatusCode">
+                <xs:annotation>
+                	<xs:documentation>Status for product submissions from Community, possible values are: Rejected, Pending, Approved</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+            <xs:complexType name="ProductSubmissionStatusReasonCode">
+                <xs:annotation>
+                	<xs:documentation>Reason Code for product submissions from Community, possible values are: FoundDuplicateProduct, InsufficientInformation, WrongCategory, etc.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+            
+            <xs:complexType name="MatchingProductWithConfidence">
+            	<xs:sequence>
+            		<xs:element name="epid" type="xs:string" maxOccurs="1" minOccurs="1"></xs:element>
+            		<xs:element name="confidenceScore" type="xs:double" maxOccurs="1" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+
+
+
+		
+            <xs:complexType name="ProductSubmission">
+            	<xs:sequence>
+            		<xs:element name="productPropertyValue"
+            			type="tns:PropertyValue" maxOccurs="unbounded"
+            			minOccurs="1">
+            		</xs:element>
+
+
+
+            		<xs:element name="productSubmissionStatus" type="tns:ProductSubmissionStatus" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            
+		
+            <xs:complexType name="PaginationInput">
+                <xs:annotation>
+                	<xs:documentation>Controls the pagination of the result set. Child elements specify the maximum number of product submissions to return per call and the page of data to return. </xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+            		<xs:element name="pageNumber" type="xs:int" maxOccurs="1" minOccurs="0">
+            			<xs:annotation>
+            				<xs:documentation> Specifies which subset of data (or "page") to return in the call response. The number of data pages is determined by the total number of items matching the request search criteria (returned in paginationOutput.totalEntries) divided by the number of entries to display in each response (entriesPerPage). You can return up to the first 100 pages of the result set by issuing multiple requests and specifying, in sequence, the pages to return.
+Max: 100. Default: 1. </xs:documentation>
+            			</xs:annotation></xs:element>
+            		<xs:element name="entriesPerPage" type="xs:int" maxOccurs="1" minOccurs="0">
+            			<xs:annotation>
+            				<xs:documentation>Specifies the maximum number of entries to return in a single call. If the number of entries found on the specified pageNumber is less than the value specified here, the number of items returned will be less than the value of entriesPerPage. This indicates the end of the result set.
+
+If entriesPerPage is set to a number greater than 100, the default value, 100, will be used.
+Max: 100. Default: 100. </xs:documentation></xs:annotation></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="StringValue">
+            	<xs:sequence>
+            		<xs:element name="value" type="xs:string" maxOccurs="1" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="NumericValue">
+            	<xs:sequence>
+            		<xs:element name="value" type="xs:string" maxOccurs="1" minOccurs="1"></xs:element>
+            		<xs:element name="unitOfMeasure" type="xs:token" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="URIValue">
+            	<xs:sequence>
+
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="PaginationOutput">
+            	<xs:sequence>
+            		<xs:element name="totalPages" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            		<xs:element name="totalEntries" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            		<xs:element name="pageNumber" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            		<xs:element name="entriesPerPage" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="ProductSubmissionStatus">
+            	<xs:sequence>
+            		<xs:element name="statusCode" type="tns:ProductSubmissionStatusCode" maxOccurs="1" minOccurs="1"></xs:element>
+            		<xs:element name="statusReasonCode"
+            			type="tns:ProductSubmissionStatusReasonCode" maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="statusReasonDetail"
+            			type="xs:string" maxOccurs="1" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="matchingProductWithConfidence" type="tns:MatchingProductWithConfidence" maxOccurs="unbounded" minOccurs="0"></xs:element>
+            		<xs:element name="createdEPID" type="xs:string" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="SortOrder">
+                <xs:annotation>
+                	<xs:documentation>Order of the sort, either Ascending or Descending. Default Sort Order is Ascending.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+            <xs:complexType name="SortOption">
+            	<xs:sequence>
+            		<xs:element name="sortType" type="tns:SortType" maxOccurs="1" minOccurs="0"></xs:element>
+            		<xs:element name="sortOrder" type="tns:SortOrder" maxOccurs="1" minOccurs="0"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="SortType">
+                <xs:annotation>
+                	<xs:documentation>Type of sort, possible values are: BySubmissionTime, BySellerId, BySKU, etc. Default sort type is BySubmissionTime.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+            
+            <xs:complexType name="OutputDatasetType">
+                <xs:annotation>
+                	<xs:documentation>This will define what are information of Product Submissions to be returned. 
+Possible Dataset values: 
+StatusOnly - only Status information 
+SubmissionWithStatus - original submission data with status	information
+
+</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+            <xs:complexType name="ProductSubmissionFilter">
+            	<xs:sequence>
+            		<xs:element name="name" type="tns:ProductSubmissionFilterType" maxOccurs="1" minOccurs="1"></xs:element>
+            		<xs:element name="value" type="xs:string" maxOccurs="1" minOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="ProductSubmissionFilterType">
+                <xs:annotation>
+                	<xs:documentation>Type of Product Submission  Filter, possible values are: SubmissionStartDate, SubmissionEndDate, SellerName, SKU, etc.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"></xs:extension>
+            	</xs:simpleContent>
+            </xs:complexType>
+            
+            
+        </xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="addProductsRequest">
+		<wsdl:part element="tns:addProductsRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="addProductsResponse">
+		<wsdl:part element="tns:addProductsResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getProductSubmissionsRequest">
+		<wsdl:part element="tns:getProductSubmissionsRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getProductSubmissionsResponse">
+		<wsdl:part element="tns:getProductSubmissionsResponse" name="params" />
+	</wsdl:message>
+	<wsdl:portType name="CommunityProductServicePort">
+		<wsdl:documentation></wsdl:documentation>
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>operation to get current version of the service</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="addProducts">
+			<wsdl:documentation>
+operation to submit requests to add products to eBay catalog.</wsdl:documentation>
+			<wsdl:input message="tns:addProductsRequest" />
+			<wsdl:output message="tns:addProductsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getProductSubmissions">
+			<wsdl:documentation>
+operation to query information about product submissions.</wsdl:documentation>
+			<wsdl:input message="tns:getProductSubmissionsRequest" />
+			<wsdl:output message="tns:getProductSubmissionsResponse" />
+		</wsdl:operation>
+
+
+	</wsdl:portType>
+	<wsdl:binding name="CommunityProductServiceHttpBinding"
+		type="tns:CommunityProductServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addProducts">
+			<http:operation location="/addProducts" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductSubmissions">
+			<http:operation location="/getProductSubmissions" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="CommunityProductServiceSOAPBinding"
+		type="tns:CommunityProductServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addProducts">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/addProduct" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductSubmissions">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/catalog/v1/services/getProductSubmissions" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CommunityProductService">
+		<wsdl:documentation>CommunityProductService is the interface for eBay sellers, partners and internal tools to submit Product request and query the result of submission. 
+CommunityProductService provides operations to add product request from community, query the information of product requests. 
+C3 Active project builds this internal facing service so that the product addition requests from eBay community are validated and new product might be created and published to eBay.com.  
+From the addition request data, a product candidate is created, might be reviewed and enriched as needed, and approved, finally published to eBay.com as a product.			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:CommunityProductServiceHttpBinding"
+			name="CommunityProductServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/catalog/v1/CommunityProductService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:CommunityProductServiceSOAPBinding"
+			name="CommunityProductServiceSOAPPort">
+			<wsdl:documentation>CommunityProductService is the interface for eBay sellers, partners and internal tools to submit Product request and query the result of submission. 
+CommunityProductService provides operations to add product request from community, query the status of product requests. 
+C3 Active project builds this internal facing service so that the product addition requests from eBay community are validated and new product might be created and published to eBay.com. 
+ From the addition request data, a product candidate is created, might be reviewed and enriched as needed, and approved, finally published to eBay.com as a product.</wsdl:documentation>
+			<soap12:address
+				location="https://svcs.ebay.com/services/catalog/v1/CommunityProductService" />
+				<soap:address
+				location="https://svcs.ebay.com/services/catalog/v1/CommunityProductService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

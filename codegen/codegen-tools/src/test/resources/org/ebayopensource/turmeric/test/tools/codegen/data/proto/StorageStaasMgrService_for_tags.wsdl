@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/storage/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="StorageStaasMgrService"
+	targetNamespace="http://www.ebay.com/marketplace/storage/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/storage/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest"
+				type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addStorageProviderAccountRequest"
+				type="tns:AddStorageProviderAccountRequest" />
+			<xs:complexType name="AddStorageProviderAccountRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation will create a user account with name of the value passed in as parameter of "userName"
+						under sub tenant with the name of value passed in as parameter of "subTenantName". It will create a 
+						new sub tenant if the sub tenant has not been created. If the user account has not been created, it will 
+						create a new one.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="profileLabel" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The value comes from CloudMgr. The value should be high, medium, low</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="serviceURL" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>A URL pointing to Atmos host or vip</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="userName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>A string for the name of to be created Atmos user account</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="subTenantName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>A string for the name of to be created sub tenant</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="tenantName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Name of Atmos tenant</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="tenantAdminChannel" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>eSAM channel for Atmos tenant admin name</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="tenantPasswdChannel" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>eSAM channel for Atmos tenant admin password</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="policyName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>A string of policy to be assigned to sub tenant</xs:documentation>
+								</xs:annotation></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addStorageProviderAccountResponse"
+				type="tns:AddStorageProviderAccountResponse" />
+			<xs:complexType name="AddStorageProviderAccountResponse">
+				<xs:annotation>
+					<xs:documentation>
+						After new user account is created, this operation will get the shared secret, and sub tenant id. Then it will
+						encrypt the user name, shared secret, and return the encrypted user name and shared secret with the sub tenant id 
+						back to the caller.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="userNameEncrypted" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The encrypted Atmos user name.</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="sharedSecretEncrypted" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The encrypted share secret of user account</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="subTenantId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The sub tenant id</xs:documentation>
+								</xs:annotation></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+        	<xs:element name="removeStorageProviderAccountRequest"
+				type="tns:RemoveStorageProviderAccountRequest" />
+			<xs:complexType name="RemoveStorageProviderAccountRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation will remove a storage user account with
+						the corresponding consumerId passed in as parameter of "consumerId"
+						Note: Application should make sure to remove data objects for 
+						the consumerId first
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="consumerId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>A string of consumerId whose storage user is being removed </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="tenantName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Name of Atmos tenant</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="tenantAdminChannel" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation> Atmos tenant admin name, can be eSam one</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="tenantPasswdChannel" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation> Atmos tenant admin password, can be eSam one</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="removeStorageProviderAccountResponse"
+				type="tns:RemoveStorageProviderAccountResponse" />
+			<xs:complexType name="RemoveStorageProviderAccountResponse">
+				<xs:annotation>
+					<xs:documentation>
+						After the user account is removed successfully, the sub tenant id 
+						is returned back to the caller.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="subTenantId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The sub tenant id</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:element name="addStaasConfigDataRequest"
+				type="tns:AddStaasConfigDataRequest" >
+				<xs:annotation>
+					<xs:documentation>The SOA request passed Staas Mgr to insert records in lookuphost</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:complexType name="AddStaasConfigDataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation will insert a new record into storage_user table and storage_service_client table
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="consumerId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Consumer id from asset repository</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="userName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The encrypted user account name.</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="sharedSecret" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>The encrypted shared secret</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="domain" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Domain from asset repository</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="subTenantName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Sub tenant name.</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="subTenantId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Atmos sub tenant id</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="assetName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Asset name from asset repository</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="profileLabel" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>A label for Atmos account profile</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="soaSubjectGroup" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>SOA subject group</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="dataSource" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>StaasMgr user this to lookup storage_datasource table to find datasource id</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="tenantName" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Name of Atmos tenant</xs:documentation>
+								</xs:annotation></xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="tenantId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>tenant id</xs:documentation>
+								</xs:annotation></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="addStaasConfigDataResponse"
+				type="tns:AddStaasConfigDataResponse" >
+				<xs:annotation>
+					<xs:documentation>Response sent back to cloud mgr</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:complexType name="AddStaasConfigDataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="soaProfile" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Soa profile</xs:documentation>
+								</xs:annotation></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<xs:element name="removeStaasConfigDataRequest"
+				type="tns:RemoveStaasConfigDataRequest" >
+				<xs:annotation>
+					<xs:documentation>The SOA request passed Staas Mgr to remove records for the specified consumerId in lookuphost</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:complexType name="RemoveStaasConfigDataRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation will remove a new record from storage_user table and storage_service_client table
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="consumerId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Consumer id from asset repository</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="removeStaasConfigDataResponse"
+				type="tns:RemoveStaasConfigDataResponse" >
+				<xs:annotation>
+					<xs:documentation>Response sent back to cloud mgr</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:complexType name="RemoveStaasConfigDataResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="soaProfile" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>Soa profile</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+		</xs:schema>
+	</wsdl:types>
+	
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="addStorageProviderAccountRequest">
+		<wsdl:part element="tns:addStorageProviderAccountRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="addStorageProviderAccountResponse">
+		<wsdl:part element="tns:addStorageProviderAccountResponse"
+			name="params" />
+	</wsdl:message>
+		<wsdl:message name="removeStorageProviderAccountRequest">
+		<wsdl:part element="tns:removeStorageProviderAccountRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="removeStorageProviderAccountResponse">
+		<wsdl:part element="tns:removeStorageProviderAccountResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="addStaasConfigDataRequest">
+		<wsdl:part element="tns:addStaasConfigDataRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="addStaasConfigDataResponse">
+		<wsdl:part element="tns:addStaasConfigDataResponse"
+			name="params" />
+	</wsdl:message>
+	
+	<wsdl:message name="removeStaasConfigDataRequest">
+		<wsdl:part element="tns:removeStaasConfigDataRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="removeStaasConfigDataResponse">
+		<wsdl:part element="tns:removeStaasConfigDataResponse"
+			name="params" />
+	</wsdl:message>
+	
+	
+	<wsdl:portType name="StorageStaasMgrServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="addStorageProviderAccount">
+			<wsdl:documentation>Create a new Atmos user accoun
+			</wsdl:documentation>
+			<wsdl:input message="tns:addStorageProviderAccountRequest" />
+			<wsdl:output
+				message="tns:addStorageProviderAccountResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="removeStorageProviderAccount">
+			<wsdl:documentation>Remove a user account
+			</wsdl:documentation>
+			<wsdl:input message="tns:removeStorageProviderAccountRequest" />
+			<wsdl:output
+				message="tns:removeStorageProviderAccountResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="addStaasConfigData">
+			<wsdl:documentation>Insert one record to storage_service_client table, and a record to storage_user tabl
+			</wsdl:documentation>
+			<wsdl:input message="tns:addStaasConfigDataRequest" />
+			<wsdl:output message="tns:addStaasConfigDataResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="removeStaasConfigData">
+			<wsdl:documentation>Removet one record from 2 tables: storage_service_client and storage_user
+			</wsdl:documentation>
+			<wsdl:input message="tns:removeStaasConfigDataRequest" />
+			<wsdl:output message="tns:removeStaasConfigDataResponse" />
+		</wsdl:operation>
+		
+	</wsdl:portType>
+	<wsdl:binding name="StorageStaasMgrServiceHttpBinding"
+		type="tns:StorageStaasMgrServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addStorageProviderAccount">
+			<http:operation location="/addStorageProviderAccount" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeStorageProviderAccount">
+			<http:operation location="/removeStorageProviderAccount" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addStaasConfigData">
+			<http:operation location="/addStaasConfigData" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="removeStaasConfigData">
+			<http:operation location="/removeStaasConfigData" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		
+	</wsdl:binding>
+	<wsdl:binding name="StorageStaasMgrServiceSOAPBinding"
+		type="tns:StorageStaasMgrServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/storage/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addStorageProviderAccount">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/storage/v1/services/addStorageProviderAccount" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="removeStorageProviderAccount">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/storage/v1/services/removeStorageProviderAccount" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="addStaasConfigData">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/storage/v1/services/addStaasConfigData" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="removeStaasConfigData">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/storage/v1/services/removeStaasConfigData" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:binding>
+	<wsdl:service name="StorageStaasMgrService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:StorageStaasMgrServiceHttpBinding"
+			name="StorageStaasMgrServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/storage/v1/StorageStaasMgrService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:StorageStaasMgrServiceSOAPBinding"
+			name="StorageStaasMgrServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/storage/v1/StorageStaasMgrService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

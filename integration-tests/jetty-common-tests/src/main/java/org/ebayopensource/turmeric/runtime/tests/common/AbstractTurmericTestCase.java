@@ -23,8 +23,17 @@ public abstract class AbstractTurmericTestCase extends org.ebayopensource.turmer
 	 * A visual clue that the transport should be LOCAL, and not using
 	 * the embedded jetty server.
 	 */
+	protected static final byte[] FILE_NOT_FOUND = "404 Blah".getBytes();
+	protected static final byte[] XML_MIME_STUFF = ("\r\nContent-Type: text/xml; charset=utf-8")
+			
+			.getBytes();
+	protected static final byte[] FILE_NOT_FOUND_MSG = ("<html><body>File not found</body></html>")
+			.getBytes();
 	protected static final URL LOCAL_TRANSPORT = null;
+	protected static final byte[] ISE = "500 Internal Server Error".getBytes();
 
+	protected static final byte[] SERVER_FAULT = "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><soap:Fault><faultcode>soap:Server</faultcode><faultstring>A server error occured while processing the request.</faultstring></soap:Fault></soap:Body></soap:Envelope>"
+			.getBytes();
 	/**
 	 * Quick sanity checks for various resources that should be
 	 * present in the classpath/classloader.

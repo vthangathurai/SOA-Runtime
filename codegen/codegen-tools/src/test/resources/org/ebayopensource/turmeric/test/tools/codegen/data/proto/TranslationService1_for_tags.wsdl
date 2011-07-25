@@ -1,0 +1,4122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="TranslationService"
+	targetNamespace="http://www.ebay.com/marketplace/l10n/v1/services"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://www.ebay.com/marketplace/l10n/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+    	targetNamespace="http://www.ebay.com/marketplace/l10n/v1/services">
+
+<xs:element name="getRealmsRequest"  type="tns:GetRealmsRequest"/>
+<xs:element name="getRealmsResponse"  type="tns:GetRealmsResponse"/>
+
+<xs:element name="getProjectsRequest"  type="tns:GetProjectsRequest"/>
+<xs:element name="getProjectsResponse"  type="tns:GetProjectsResponse"/>
+<xs:element name="getProjectRequest"  type="tns:GetProjectRequest"/>
+<xs:element name="getProjectResponse"  type="tns:GetProjectResponse"/>
+<xs:element name="getProjectStatusRequest"  type="tns:GetProjectStatusRequest"/>
+<xs:element name="getProjectStatusResponse"  type="tns:GetProjectStatusResponse"/>
+<xs:element name="createProjectRequest"  type="tns:CreateProjectRequest"/>
+<xs:element name="createProjectResponse"  type="tns:CreateProjectResponse"/>
+<xs:element name="updateProjectRequest"  type="tns:UpdateProjectRequest"/>
+<xs:element name="updateProjectResponse"  type="tns:UpdateProjectResponse"/>
+<xs:element name="evaluateProjectRequest"  type="tns:EvaluateProjectRequest"/>
+<xs:element name="evaluateProjectResponse"  type="tns:EvaluateProjectResponse"/>
+<xs:element name="commitProjectRequest"  type="tns:CommitProjectRequest"/>
+<xs:element name="commitProjectResponse"  type="tns:CommitProjectResponse"/>
+<xs:element name="cancelProjectRequest"  type="tns:CancelProjectRequest"/>
+<xs:element name="cancelProjectResponse"  type="tns:CancelProjectResponse"/>
+
+<xs:element name="getJobsRequest"  type="tns:GetJobsRequest"/>
+<xs:element name="getJobsResponse"  type="tns:GetJobsResponse"/>
+<xs:element name="getJobRequest"  type="tns:GetJobRequest"/>
+<xs:element name="getJobResponse"  type="tns:GetJobResponse"/>
+<xs:element name="getJobStatusRequest"  type="tns:GetJobStatusRequest"/>
+<xs:element name="getJobStatusResponse"  type="tns:GetJobStatusResponse"/>
+<xs:element name="addJobRequest"  type="tns:AddJobRequest"/>
+<xs:element name="addJobResponse"  type="tns:AddJobResponse"/>
+<xs:element name="cancelJobRequest"  type="tns:CancelJobRequest"/>
+<xs:element name="cancelJobResponse"  type="tns:CancelJobResponse"/>
+
+<xs:element name="getContentNamesRequest"  type="tns:GetContentNamesRequest"/>
+<xs:element name="getContentNamesResponse"  type="tns:GetContentNamesResponse"/>
+<xs:element name="getSourceContentRequest"  type="tns:GetSourceContentRequest"/>
+<xs:element name="getSourceContentResponse"  type="tns:GetSourceContentResponse"/>
+<xs:element name="getTranslatedContentRequest"  type="tns:GetTranslatedContentRequest"/>
+<xs:element name="getTranslatedContentResponse"  type="tns:GetTranslatedContentResponse"/>
+<xs:element name="addSourceContentRequest"  type="tns:AddSourceContentRequest"/>
+<xs:element name="addSourceContentResponse"  type="tns:AddSourceContentResponse"/>
+<xs:element name="updateSourceContentRequest"  type="tns:UpdateSourceContentRequest"/>
+<xs:element name="updateSourceContentResponse"  type="tns:UpdateSourceContentResponse"/>
+<xs:element name="submitTranslatedContentChangeRequest"  type="tns:SubmitTranslatedContentChangeRequest"/>
+<xs:element name="submitTranslatedContentChangeResponse"  type="tns:SubmitTranslatedContentChangeResponse"/>
+<xs:element name="getContentUnitNamesRequest"  type="tns:GetContentUnitNamesRequest"/>
+<xs:element name="getContentUnitNamesResponse"  type="tns:GetContentUnitNamesResponse"/>
+<xs:element name="getContentUnitRequest"  type="tns:GetContentUnitRequest"/>
+<xs:element name="getContentUnitResponse"  type="tns:GetContentUnitResponse"/>
+
+<xs:element name="getAttachmentNamesRequest"  type="tns:GetAttachmentNamesRequest"/>
+<xs:element name="getAttachmentNamesResponse"  type="tns:GetAttachmentNamesResponse"/>
+<xs:element name="uploadAttachmentRequest"  type="tns:UploadAttachmentRequest"/>
+<xs:element name="uploadAttachmentResponse"  type="tns:UploadAttachmentResponse"/>
+<xs:element name="linkAttachmentRequest"  type="tns:LinkAttachmentRequest"/>
+<xs:element name="linkAttachmentResponse"  type="tns:LinkAttachmentResponse"/>
+
+<xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+
+<xs:complexType name="GetVersionRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Requests the version of the service.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Requests the version of the service.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetVersionResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Returns the version of the service.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Returns the version of the service.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:simpleType name="SegmentType">
+	<xs:annotation>
+		<xs:documentation>
+			Container for available types of segment.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="TEXT">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Text.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="BPT">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					BPT.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="EPT">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					EPT.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="IPT">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					IPT.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="AuthoringType">
+	<xs:annotation>
+		<xs:documentation>
+			Container for available authoring types of content unit.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="MACHINE_TRANSLATION">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Machine translated.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="HUMAN_TRANSLATION">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Human translated.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="TM_TRANSLATION_MATCH_NO_CONTEXT">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					TM translated without matching context.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Attachment">
+	<xs:annotation>
+		<xs:documentation>
+			Attachment encoded in Base64 Binary format
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="name" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The name of the attachment
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="description" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					The description of the attachment
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="size" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					The size of the attachment, max 10MB
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="data" type="xs:base64Binary" xmime:expectedContentTypes="application/any">
+			<xs:annotation>
+				<xs:documentation>
+					The data in the attached file
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="JobState">
+	<xs:annotation>
+		<xs:documentation>
+			Container for available states of job.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CREATED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					The job is just created.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SUBMITTED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Job is submitted.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="IN_PROGRESS">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Job is in progress.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CANCELED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Job is canceled.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="COMPLETED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Job is completed.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="ActivityType">
+	<xs:annotation>
+		<xs:documentation>
+			Container for available types of job activity.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="TRANSLATE_1">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Translate level 1.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="TRANSLATE_2">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Translate level 2.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="TRANSLATE_3">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Translate 3.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="BUGFIX">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Bug fix.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="ProjectState">
+	<xs:annotation>
+		<xs:documentation>
+			Container for available states of project.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="CREATED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					The project is just created.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="SUBMITTED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Project is submitted.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="IN_PROGRESS">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Project is in progress.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="CANCELED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Project is canceled.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="COMPLETED">
+  			<xs:annotation>
+ 				<xs:documentation>
+ 					Project is completed.
+ 				</xs:documentation>
+ 			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Realm">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a realm.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="realmPath" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for a realm.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getRealms</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="realmName" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the realm.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>256</MaxLength>
+					<CallInfo>
+						<CallName>getRealms</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="parent" minOccurs="0" type="tns:Realm">
+			<xs:annotation>
+				<xs:documentation>
+					Parent of the realm.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getRealms</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="child" maxOccurs="unbounded" minOccurs="0" type="tns:Realm">
+			<xs:annotation>
+				<xs:documentation>
+					Children of the realm.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getRealms</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Timeline">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a time line.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="timeRange" type="tns:TimeRange">
+			<xs:annotation>
+				<xs:documentation>
+					Time range of the time line.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Contact">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a project contact.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="username" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Contact user name.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="domain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Contact user name domain.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="firstName" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Contact first name.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="lastName" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Contact last name.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="email" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Contact user email.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="phone" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Contact user phone.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ProjectInfo">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about project info.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="description" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Project description.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="contact" maxOccurs="unbounded" type="tns:Contact">
+			<xs:annotation>
+				<xs:documentation>
+					Project contact container.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="note" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Project note.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="requestedDueDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					Requested due date.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="timelineTemplate" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Targeted due date.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="requestedTimeline" maxOccurs="unbounded" minOccurs="0" type="tns:Timeline">
+			<xs:annotation>
+				<xs:documentation>
+					Requested time lines container.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Project">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a project.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="projectId" minOccurs="0" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for a project, assigned by the system.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProjects</CallName>
+						<CallName>getProject</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="realmPath" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Path of the realm the project belongs to.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>256</MaxLength>
+					<CallInfo>
+						<CallName>getProjects</CallName>
+						<CallName>getProject</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="projectName" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the project.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>256</MaxLength>
+					<CallInfo>
+						<CallName>getProjects</CallName>
+						<CallName>getProject</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="projectInfo" minOccurs="0" type="tns:ProjectInfo">
+			<xs:annotation>
+				<xs:documentation>
+					Project info.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProjects</CallName>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="dueDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					Project completion date.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="timeline" maxOccurs="unbounded" minOccurs="0" type="tns:Timeline">
+			<xs:annotation>
+				<xs:documentation>
+					Actual time lines.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProject</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="projectState" type="tns:ProjectState">
+			<xs:annotation>
+				<xs:documentation>
+					State of the project.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getProjects</CallName>
+						<CallName>getProject</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="processingLog" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Processing log for the project.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>3000</MaxLength>
+					<CallInfo>
+						<CallName>getProjects</CallName>
+						<CallName>getProject</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="JobInfo">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about job info.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="activityType" type="tns:ActivityType">
+			<xs:annotation>
+				<xs:documentation>
+					Job activity type.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="note" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Note for the job.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>512</MaxLength>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="contentName" maxOccurs="unbounded" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Source content name list for the job.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="targetLocale" maxOccurs="unbounded" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Target country language list for the job.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Job">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a job.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="jobId" minOccurs="0" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for a job, assigned by the system.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="projectId" minOccurs="0" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					The project this job belongs to.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="jobName" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the job.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>256</MaxLength>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="jobInfo" minOccurs="0" type="tns:JobInfo">
+			<xs:annotation>
+				<xs:documentation>
+					Job activity type.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="jobState" type="tns:JobState">
+			<xs:annotation>
+				<xs:documentation>
+					State of the job.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="processingLog" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Processing log for the job.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>3000</MaxLength>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ContentUnit">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a content unit.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="unitName" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the unit.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>256</MaxLength>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="position" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					Position.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="usage" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Usage.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="processing" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Processing.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="segment" maxOccurs="unbounded" minOccurs="0" type="tns:Segment">
+			<xs:annotation>
+				<xs:documentation>
+					Segment parts container.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="note" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Note for the unit.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>512</MaxLength>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="sid" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Unit SID.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>512</MaxLength>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="authoringType" minOccurs="0" type="tns:AuthoringType">
+			<xs:annotation>
+				<xs:documentation>
+					Unit authoring type.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Content">
+	<xs:annotation>
+		<xs:documentation>
+			Container for details about a content.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="contentName" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for a content in a project.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="note" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Note for the content.
+				</xs:documentation>
+				<xs:appinfo>
+					<MaxLength>512</MaxLength>
+					<CallInfo>
+						<CallName>getJob</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="locale" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Country language of the content.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="contentUnit" maxOccurs="unbounded" minOccurs="0" type="tns:ContentUnit">
+			<xs:annotation>
+				<xs:documentation>
+					Content units container.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Segment">
+	<xs:annotation>
+		<xs:documentation>
+			Container for a segment.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="note" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Segment note.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="text" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Segment text.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="segementType" type="tns:SegmentType">
+			<xs:annotation>
+				<xs:documentation>
+					Segment type.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="pairingId" minOccurs="0" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Segment paring id.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<CallName>getSourceContent</CallName>
+						<CallName>getTranslatedContent</CallName>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GetRealmsRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve a list of realms configured in the system so as to decide
+			a proper realm to use. Generally it	should be the first	one to be called.
+			The caller identity and	token are sent in HTTPS header.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve a list of realms configured in the system.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetRealmsResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the getRealms operation.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="realm" maxOccurs="unbounded" minOccurs="0" type="tns:Realm">
+					<xs:annotation>
+						<xs:documentation>
+							A realm configured in the system.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getRealms</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CreateProjectRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Adds a project to the system.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Adds a project to the system.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="realmPath" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The realm for the project.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>createProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="projectName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the project to be added.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>createProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="projectInfo" type="tns:ProjectInfo">
+					<xs:annotation>
+						<xs:documentation>
+							Info of the project to be added.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>createProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CreateProjectResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the createProject operation.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="projectId" type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>createProject</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UpdateProjectRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Update some information about a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Update some information about a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>UpdateProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="projectInfo" type="tns:ProjectInfo">
+					<xs:annotation>
+						<xs:documentation>
+							Info of the project to be updated.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>UpdateProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UpdateProjectResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AddJobRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Adds a job to a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Adds a job to a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The project of job.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>addJob</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="jobName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the job.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>addJob</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="jobInfo" type="tns:JobInfo">
+					<xs:annotation>
+						<xs:documentation>
+							The info of job to be added.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>addJob</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AddJobResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the addJob operation.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="jobId" type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>addJob</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CancelJobRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Cancel a job from a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Cancel a job from a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="jobId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of job to be canceled.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>cancelJob</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CancelJobResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AddSourceContentRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Add a content to a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Add a content to a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The project id of the content.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>addSourceContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="content" type="tns:Content">
+					<xs:annotation>
+						<xs:documentation>
+							The content to be added.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>addSourceContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AddSourceContentResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SubmitTranslatedContentChangeRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Submit translated content change.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Submit translated content change.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The project id of the content.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>submitTranslatedContentChange</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the content.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>submitTranslatedContentChange</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="targetLocale" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The target country language of the content.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>submitTranslatedContentChange</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentUnitName" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the content unit.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>submitTranslatedContentChange</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="instruction" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The change instruction.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>submitTranslatedContentChange</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SubmitTranslatedContentChangeResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetContentUnitNamesRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve content unit name list for a content.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve content unit name list for a content.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnitNames</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The content name.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnitNames</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetContentUnitNamesResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the getContentUnitNames operation.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="contentUnitName" maxOccurs="unbounded" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Content unit name list.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnitNames</CallName>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetContentUnitRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve content a content unit.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve content a content unit.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnit</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Content name.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnit</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="locale" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Country language.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnit</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentUnitName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Content unit name.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnit</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetContentUnitResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the getContentUnit operation.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="contentUnit" type="tns:ContentUnit">
+					<xs:annotation>
+						<xs:documentation>
+							Content unit.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentUnit</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="EvaluateProjectRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Evaluate a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Evaluate a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the project to be evaluated.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>evaluateProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="EvaluateProjectResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Response container for the evaluateProject operation.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="timeline" maxOccurs="unbounded" minOccurs="0" type="tns:Timeline">
+					<xs:annotation>
+						<xs:documentation>
+							Estimated time lines.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>evaluateProject</CallName>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CommitProjectRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Commit a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Commit a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the project to be committed.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>commitProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CommitProjectResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CancelProjectRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Cancel a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Cancel a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the project to be canceled.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>cancelProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CancelProjectResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetProjectsRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve projects in a realm.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve projects in a realm.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="realmPath" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Realm path.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProjects</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="projectState" minOccurs="0" type="tns:ProjectState">
+					<xs:annotation>
+						<xs:documentation>
+							Project state filter.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProjects</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="projectName" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Project name filter.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProjects</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetProjectsResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getProjects call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="project" maxOccurs="unbounded" minOccurs="0" type="tns:Project">
+					<xs:annotation>
+						<xs:documentation>
+							Retrieved projects.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProjects</CallName>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetProjectRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the project to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProject</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetProjectResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getProject call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="project" type="tns:Project">
+					<xs:annotation>
+						<xs:documentation>
+							Project to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProject</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetProjectStatusRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve a project status.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve a project status.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the project to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProjectStatus</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetProjectStatusResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getProjectStatus call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="projectState" type="tns:ProjectState">
+					<xs:annotation>
+						<xs:documentation>
+							Project current state.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getProjectStatus</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetJobsRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve jobs for a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve jobs for a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJobs</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="jobState" minOccurs="0" type="tns:JobState">
+					<xs:annotation>
+						<xs:documentation>
+							Job state filter.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJobs</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="jobName" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Job name filter.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJobs</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetJobsResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getJobs call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="job" maxOccurs="unbounded" minOccurs="0" type="tns:Job">
+					<xs:annotation>
+						<xs:documentation>
+							Jobs to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJobs</CallName>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetJobRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve a job.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve a job.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="jobId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the job to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJob</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetJobResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getJob call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="job" type="tns:Job">
+					<xs:annotation>
+						<xs:documentation>
+							Job to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJob</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetJobStatusRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve a job status.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve a job status.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="jobId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							The id of the job to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJobStatus</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetJobStatusResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getJobStatus call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="jobState" type="tns:JobState">
+					<xs:annotation>
+						<xs:documentation>
+							Job current state.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getJobStatus</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetContentNamesRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve content names for a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve content names for a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentNames</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="jobName" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Job name filter.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentNames</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetContentNamesResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getContentNames call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="contentName" maxOccurs="unbounded" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Content names for a project.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getContentNames</CallName>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetSourceContentRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Retrieve a source content.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Retrieve a source content.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="contentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Source content name.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getSourceContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetSourceContentResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getSourceContent call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="content" type="tns:Content">
+					<xs:annotation>
+						<xs:documentation>
+							Content to be retrieved.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getSourceContent</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetTranslatedContentRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Get a translated content.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Get a translated content.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getTranslatedContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Content name.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getTranslatedContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="targetLocale" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Target country language.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getTranslatedContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetTranslatedContentResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getTranslatedContent call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="content" type="tns:Content">
+					<xs:annotation>
+						<xs:documentation>
+							Translated content.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getTranslatedContent</CallName>
+								<Returned>Always</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UpdateSourceContentRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Updates a source content.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Updates a source content.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="content" type="tns:Content">
+					<xs:annotation>
+						<xs:documentation>
+							The content to be updated.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>updateSourceContent</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UpdateSourceContentResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetAttachmentNamesRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Get attachment names of a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Get attachment names of a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getAttachmentNames</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentName" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Content name filter.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getAttachmentNames</CallName>
+								<RequiredInput>No</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GetAttachmentNamesResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Container for getAttachmentNames call response.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse">
+			<xs:sequence>
+				<xs:element name="attachmentName" maxOccurs="unbounded" minOccurs="0" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Attachment names.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>getAttachmentNames</CallName>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UploadAttachmentRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Upload an attachment to a project.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Upload an attachment to a project.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>uploadAttachment</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="attachment" type="tns:Attachment">
+					<xs:annotation>
+						<xs:documentation>
+							The attachment.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>uploadAttachment</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UploadAttachmentResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="LinkAttachmentRequest">
+	<xs:annotation>
+		<xs:documentation>
+			Associate an attachment to a content.
+		</xs:documentation>
+		<xs:appinfo>
+			<Summary>
+				Associate an attachment to a content.
+			</Summary>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseRequest">
+			<xs:sequence>
+				<xs:element name="projectId" minOccurs="1"  type="xs:long">
+					<xs:annotation>
+						<xs:documentation>
+							Project id.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>linkAttachment</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="attachmentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The attachment.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>linkAttachment</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="contentName" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The content.
+						</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<CallName>linkAttachment</CallName>
+								<RequiredInput>Yes</RequiredInput>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="LinkAttachmentResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the call was successful.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexContent>
+		<xs:extension base="tns:BaseResponse"/>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- Common types start -->
+
+<!-- Base request types -->
+<xs:complexType name="TimeRange">
+		<xs:annotation>
+			<xs:documentation>
+				Container for time ranges.
+			</xs:documentation>
+			<xs:appinfo>
+				<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+			<CallInfo>
+				<CallName>getProjects</CallName>
+				<RequiredInput>No</RequiredInput>
+			</CallInfo>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element minOccurs="0" name="timeFrom" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>
+				Specifies the earliest (oldest) date to be used in a date range.
+			</xs:documentation>
+			<xs:appinfo>
+				<CallInfo>
+					<CallName>submitTranslatedContentChange</CallName>
+					<CallName>updateProject</CallName>
+					<RequiredInput>No</RequiredInput>
+				</CallInfo>
+			</xs:appinfo>
+		</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="timeTo" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>
+				Specifies the latest (most recent) date to be used in a date range.
+			</xs:documentation>
+			<xs:appinfo>
+				<CallInfo>
+					<CallName>getRealms</CallName>
+					<RequiredInput>Yes</RequiredInput>
+				</CallInfo>
+				<CallInfo>
+					<CallName>submitTranslatedContentChange</CallName>
+					<CallName>updateProject</CallName>
+					<RequiredInput>No</RequiredInput>
+				</CallInfo>
+			</xs:appinfo>
+		</xs:annotation>
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType abstract="true" name="BaseRequest">
+		<xs:annotation>
+			<xs:appinfo>
+				<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+			</xs:appinfo>
+			<xs:documentation>
+				This is the base class for request container for all
+				service operations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+					</xs:element>
+		</xs:sequence>
+</xs:complexType>
+
+
+<!-- Base response types -->
+<xs:complexType abstract="true" name="BaseResponse">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			Base response container for all service operations.
+			Contains error information associated with the request.
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:sequence>
+		<xs:element name="ack" type="tns:AckValue">
+			<xs:annotation>
+				<xs:documentation>
+
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Always</Returned>
+
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+			<xs:annotation>
+				<xs:documentation>
+					Information for an error or warning that
+					occurred when eBay processed the request.
+				</xs:documentation>
+
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+		<xs:element minOccurs="0" name="version" type="xs:string">
+			<xs:annotation>
+				<xs:documentation/>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Always</Returned>
+
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+
+		</xs:element>
+		<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation/>
+
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ExtensionType">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>Documentation goes here</xs:documentation>
+		<xs:appinfo/>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="id" type="xs:positiveInteger">
+				</xs:element>
+		<xs:element name="version" type="xs:string">
+				</xs:element>
+		<xs:element name="contentType" type="xs:string">
+				</xs:element>
+		<xs:element name="value" type="xs:string">
+				</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="AckValue">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			Indicates whether the error is a severe error (causing the request to fail)
+			or an informational error (a warning) that should be communicated to the
+			user.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="Success">
+			<xs:annotation>
+				<xs:documentation>
+					The request was processed successfully, but something occurred that may
+					affect your application or the user.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Failure">
+			<xs:annotation>
+				<xs:documentation>
+					The request that triggered the error was not processed successfully.
+					When a serious application-level error occurs, the error is returned
+					instead of the business data.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Warning">
+			<xs:annotation>
+				<xs:documentation>
+					The request that triggered the error was processed successfully but with some warnings.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="PartialFailure">
+			<xs:annotation>
+				<xs:documentation>
+					The request that triggered the error was processed successfully but with some warnings.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:complexType name="ErrorMessage">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			ErrorMessage to indicate any Error/Warning occured as part of service call.
+			Any run time error will not be reported here, but will be reported aspart of
+			soap fault.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="error"  type="tns:ErrorData">
+			<xs:annotation>
+				<xs:documentation>
+					ActivityProfile about a single error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="ErrorData">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			This represents error details.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="errorId" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+						A unique code that identifies the particular error condition that occurred.
+						Your application can use error codes as identifiers in your customized
+						error-handling algorithms.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="domain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the domain upon which the error occurred.
+					&lt;dl&gt;
+					&lt;lh&gt;Domains include:&lt;/lh&gt;
+					&lt;dt&gt;
+						Marketplace
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						A business or validation error occurred for the UserProfile Service.
+					&lt;/dd&gt;
+					&lt;dt&gt;
+						SOA
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						An exception occurred in the Service Oriented Architecture (SOA) framework.
+					&lt;/dd&gt;
+					&lt;/dl&gt;
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="severity" type="tns:ErrorSeverity">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether the error caused the request to fail (Error) or not
+					(Warning).
+					&lt;br&gt;&lt;br&gt;
+					If the request fails and the source of the problem is within the application
+					(such as a missing required element), please change the application before you
+					retry the request. If the problem is due to end-user input data, please alert
+					the end-user to the problem and provide the means for them to correct the data.
+					Once the problem in the application or data is resolved, you can attempt to re-
+					send the request to eBay.
+					&lt;br&gt;&lt;br&gt;
+					If the source of the problem is on eBay's side, you can retry the request as-is
+					a reasonable number of times (eBay recommends twice). If the error persists,
+					contact Developer Technical Support. Once the problem has been resolved, the
+					request may be resent in its original form.
+					&lt;br&gt;&lt;br&gt;
+					When a warning occurs, the error is returned in addition to the business data.
+					In this case, you do not need to retry the request (as the original request was
+					successful). However, depending on the cause or nature of the warning, you
+					might need to contact either the end user or eBay to effect a long term
+					solution to the problem to prevent it from reoccurring in the future.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="category" type="tns:ErrorCategory">
+			<xs:annotation>
+				<xs:documentation>
+					There are three categories of errors: request errors, application errors, and
+					system errors.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="message" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					A detailed description of the condition that resulted in the error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="subdomain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the subdomain upon which the error occurred. Subdomains include the
+					following: UserProfile (in which the error is specific to the UserProfile
+					service) and MarketplaceCommon (in which the error is common to all
+					Marketplace
+					services).
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for an exception associated with an error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"  type="tns:ErrorParameter">
+			<xs:annotation>
+				<xs:documentation>
+					Some warning and error messages return one or more variables that contain
+					contextual information about the error. This is often the field or value that
+					triggered the error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="ErrorParameter">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			Contextual information associated with an error.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleContent>
+		<xs:extension base="xs:string">
+			<xs:attribute name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						The name of the parameter in the list of parameter types returned
+						within the error type.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls/>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:extension>
+	</xs:simpleContent>
+</xs:complexType>
+
+
+<xs:simpleType name="ErrorSeverity">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			Indicates whether the error is a severe error (causing the request to fail)
+			or an informational error (a warning) that should be communicated to the
+			user.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="Error">
+			<xs:annotation>
+				<xs:documentation>
+					The request that triggered the error was not processed successfully.
+					When a serious application-level error occurs, the error is returned
+					instead of the business data.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Warning">
+			<xs:annotation>
+				<xs:documentation>
+					The request was processed successfully, but something occurred that may
+					affect your application or the user. For example, eBay may have changed a
+					value the user sent in. In this case, eBay returns a normal, successful
+					response and also returns the warning.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="ErrorCategory">
+	<xs:annotation>
+		<xs:appinfo>
+			<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+		</xs:appinfo>
+		<xs:documentation>
+			There are three categories of error: request errors, application errors,
+			and system errors. Request and application errors are caused primarily by
+			invalid data passed in the request. System errors are caused primarily by
+			application failures and cannot be corrected by changing request values.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="System">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates that an error has occurred on the eBay system side, such as a
+					database or server down. An application can retry the request as-is a
+					reasonable number of times (eBay recommends twice). If the error
+					persists, contact Developer Technical Support. Once the problem has been
+					resolved, the request may be resent in its original form.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Application">
+			<xs:annotation>
+				<xs:documentation>
+					An error occurred due to a problem with the request, such as missing or
+					invalid fields. The problem must be corrected before the request can be
+					made again. If the problem is due to something in the application (such
+					as a missing required field), the application must be changed. Once the
+					problem in the appilcation or data is resolved, resend the corrected
+					request to eBay.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Request">
+			<xs:annotation>
+				<xs:documentation>
+					An error occurred due to a problem with the request, such as invalid or
+					missing data. The problem must be corrected before the request can be
+					made again. If the problem is a result of end-user data, the application
+					must alert the end-user to the problem and provide the means for the
+					end-user to correct the data. Once the problem in the data is resolved,
+					resend the request to eBay with the corrected data.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+<!-- Common types end -->
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getVersionRequest">
+    <wsdl:part name="getVersionRequest" element="tns:getVersionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="getVersionResponse" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addSourceContentRequest">
+    <wsdl:part name="addSourceContentRequest" element="tns:addSourceContentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addJobRequest">
+    <wsdl:part name="addJobRequest" element="tns:addJobRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateProjectRequest">
+    <wsdl:part name="updateProjectRequest" element="tns:updateProjectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createProjectResponse">
+    <wsdl:part name="createProjectResponse" element="tns:createProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getContentNamesRequest">
+    <wsdl:part name="getContentNamesRequest" element="tns:getContentNamesRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getContentNamesResponse">
+    <wsdl:part name="getContentNamesResponse" element="tns:getContentNamesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSourceContentRequest">
+    <wsdl:part name="getSourceContentRequest" element="tns:getSourceContentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSourceContentResponse">
+    <wsdl:part name="getSourceContentResponse" element="tns:getSourceContentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProjectRequest">
+    <wsdl:part name="getProjectRequest" element="tns:getProjectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProjectResponse">
+    <wsdl:part name="getProjectResponse" element="tns:getProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProjectStatusRequest">
+    <wsdl:part name="getProjectStatusRequest" element="tns:getProjectStatusRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProjectStatusResponse">
+    <wsdl:part name="getProjectStatusResponse" element="tns:getProjectStatusResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTranslatedContentRequest">
+    <wsdl:part name="getTranslatedContentRequest" element="tns:getTranslatedContentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTranslatedContentResponse">
+    <wsdl:part name="getTranslatedContentResponse" element="tns:getTranslatedContentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getJobsRequest">
+    <wsdl:part name="getJobsRequest" element="tns:getJobsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getJobsResponse">
+    <wsdl:part name="getJobsResponse" element="tns:getJobsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getJobRequest">
+    <wsdl:part name="getJobRequest" element="tns:getJobRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getJobResponse">
+    <wsdl:part name="getJobResponse" element="tns:getJobResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getJobStatusRequest">
+    <wsdl:part name="getJobStatusRequest" element="tns:getJobStatusRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getJobStatusResponse">
+    <wsdl:part name="getJobStatusResponse" element="tns:getJobStatusResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateProjectRequest">
+    <wsdl:part name="evaluateProjectRequest" element="tns:evaluateProjectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateProjectResponse">
+    <wsdl:part name="evaluateProjectResponse" element="tns:evaluateProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="commitProjectRequest">
+    <wsdl:part name="commitProjectRequest" element="tns:commitProjectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="commitProjectResponse">
+    <wsdl:part name="commitProjectResponse" element="tns:commitProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelProjectRequest">
+    <wsdl:part name="cancelProjectRequest" element="tns:cancelProjectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelProjectResponse">
+    <wsdl:part name="cancelProjectResponse" element="tns:cancelProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRealmsRequest">
+    <wsdl:part name="getRealmsRequest" element="tns:getRealmsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRealmsResponse">
+    <wsdl:part name="getRealmsResponse" element="tns:getRealmsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelJobRequest">
+    <wsdl:part name="cancelJobRequest" element="tns:cancelJobRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createProjectRequest">
+    <wsdl:part name="createProjectRequest" element="tns:createProjectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateProjectResponse">
+    <wsdl:part name="updateProjectResponse" element="tns:updateProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addJobResponse">
+    <wsdl:part name="addJobResponse" element="tns:addJobResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProjectsRequest">
+    <wsdl:part name="getProjectsRequest" element="tns:getProjectsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProjectsResponse">
+    <wsdl:part name="getProjectsResponse" element="tns:getProjectsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addSourceContentResponse">
+    <wsdl:part name="addSourceContentResponse" element="tns:addSourceContentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelJobResponse">
+    <wsdl:part name="cancelJobResponse" element="tns:cancelJobResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="submitTranslatedContentChangeRequest">
+    <wsdl:part name="submitTranslatedContentChangeRequest" element="tns:submitTranslatedContentChangeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="submitTranslatedContentChangeResponse">
+    <wsdl:part name="submitTranslatedContentChangeResponse" element="tns:submitTranslatedContentChangeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getContentUnitNamesRequest">
+    <wsdl:part name="getContentUnitNamesRequest" element="tns:getContentUnitNamesRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getContentUnitNamesResponse">
+    <wsdl:part name="getContentUnitNamesResponse" element="tns:getContentUnitNamesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getContentUnitRequest">
+    <wsdl:part name="getContentUnitRequest" element="tns:getContentUnitRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getContentUnitResponse">
+    <wsdl:part name="getContentUnitResponse" element="tns:getContentUnitResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateSourceContentRequest">
+    <wsdl:part name="updateSourceContentRequest" element="tns:updateSourceContentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateSourceContentResponse">
+    <wsdl:part name="updateSourceContentResponse" element="tns:updateSourceContentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAttachmentNamesRequest">
+    <wsdl:part name="getAttachmentNamesRequest" element="tns:getAttachmentNamesRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAttachmentNamesResponse">
+    <wsdl:part name="getAttachmentNamesResponse" element="tns:getAttachmentNamesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="uploadAttachmentRequest">
+    <wsdl:part name="uploadAttachmentRequest" element="tns:uploadAttachmentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="uploadAttachmentResponse">
+    <wsdl:part name="uploadAttachmentResponse" element="tns:uploadAttachmentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="linkAttachmentRequest">
+    <wsdl:part name="linkAttachmentRequest" element="tns:linkAttachmentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="linkAttachmentResponse">
+    <wsdl:part name="linkAttachmentResponse" element="tns:linkAttachmentResponse">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:portType name="TranslationServicePort">
+    <wsdl:operation name="getRealms">
+      <wsdl:input message="tns:getRealmsRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getRealmsResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createProject">
+      <wsdl:input message="tns:createProjectRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:createProjectResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateProject">
+      <wsdl:input message="tns:updateProjectRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:updateProjectResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addJob">
+      <wsdl:input message="tns:addJobRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:addJobResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelJob">
+      <wsdl:input message="tns:cancelJobRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:cancelJobResponse">
+      </wsdl:output>
+    </wsdl:operation> 
+    <wsdl:operation name="addSourceContent">
+      <wsdl:input message="tns:addSourceContentRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:addSourceContentResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="submitTranslatedContentChange">
+      <wsdl:input message="tns:submitTranslatedContentChangeRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:submitTranslatedContentChangeResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentUnitNames">
+      <wsdl:input message="tns:getContentUnitNamesRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getContentUnitNamesResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentUnit">
+      <wsdl:input message="tns:getContentUnitRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getContentUnitResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateProject">
+      <wsdl:input message="tns:evaluateProjectRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:evaluateProjectResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="commitProject">
+      <wsdl:input message="tns:commitProjectRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:commitProjectResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelProject">
+      <wsdl:input message="tns:cancelProjectRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:cancelProjectResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProjects">
+      <wsdl:input message="tns:getProjectsRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getProjectsResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProject">
+      <wsdl:input message="tns:getProjectRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getProjectResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProjectStatus">
+      <wsdl:input message="tns:getProjectStatusRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getProjectStatusResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJobs">
+      <wsdl:input message="tns:getJobsRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getJobsResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJob">
+      <wsdl:input message="tns:getJobRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getJobResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJobStatus">
+      <wsdl:input message="tns:getJobStatusRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getJobStatusResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentNames">
+      <wsdl:input message="tns:getContentNamesRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getContentNamesResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSourceContent">
+      <wsdl:input message="tns:getSourceContentRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getSourceContentResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTranslatedContent">
+      <wsdl:input message="tns:getTranslatedContentRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getTranslatedContentResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateSourceContent">
+      <wsdl:input message="tns:updateSourceContentRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:updateSourceContentResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAttachmentNames">
+      <wsdl:input message="tns:getAttachmentNamesRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getAttachmentNamesResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="uploadAttachment">
+      <wsdl:input message="tns:uploadAttachmentRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:uploadAttachmentResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="linkAttachment">
+      <wsdl:input message="tns:linkAttachmentRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:linkAttachmentResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <wsdl:input message="tns:getVersionRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getVersionResponse">
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  
+  <wsdl:binding name="TranslationServiceSOAPBinding" type="tns:TranslationServicePort">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getRealms">
+      <soap12:operation soapAction="urn:getRealms" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createProject">
+      <soap12:operation soapAction="urn:createProject" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateProject">
+      <soap12:operation soapAction="urn:updateProject" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addJob">
+      <soap12:operation soapAction="urn:addJob" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelJob">
+      <soap12:operation soapAction="urn:cancelJob" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation> 
+    <wsdl:operation name="addSourceContent">
+      <soap12:operation soapAction="urn:addSourceContent" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="submitTranslatedContentChange">
+      <soap12:operation soapAction="urn:submitTranslatedContentChange" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentUnitNames">
+      <soap12:operation soapAction="urn:getContentUnitNames" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentUnit">
+      <soap12:operation soapAction="urn:getContentUnit" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateProject">
+      <soap12:operation soapAction="urn:evaluateProject" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="commitProject">
+      <soap12:operation soapAction="urn:commitProject" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelProject">
+      <soap12:operation soapAction="urn:cancelProject" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProjects">
+      <soap12:operation soapAction="urn:getProjects" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProject">
+      <soap12:operation soapAction="urn:getProject" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProjectStatus">
+      <soap12:operation soapAction="urn:getProjectStatus" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJobs">
+      <soap12:operation soapAction="urn:getJobs" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJob">
+      <soap12:operation soapAction="urn:getJob" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJobStatus">
+      <soap12:operation soapAction="urn:getJobStatus" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentNames">
+      <soap12:operation soapAction="urn:getContentNames" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSourceContent">
+      <soap12:operation soapAction="urn:getSourceContent" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTranslatedContent">
+      <soap12:operation soapAction="urn:getTranslatedContent" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateSourceContent">
+      <soap12:operation soapAction="urn:updateSourceContent" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAttachmentNames">
+      <soap12:operation soapAction="urn:getAttachmentNames" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="uploadAttachment">
+      <soap12:operation soapAction="urn:uploadAttachment" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="linkAttachment">
+      <soap12:operation soapAction="urn:linkAttachment" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <soap12:operation soapAction="urn:getVersion" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  
+  <wsdl:binding name="TranslationServiceHttpBinding" type="tns:TranslationServicePort">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="getRealms">
+      <http:operation location="TranslationService/getRealms"/>
+      <wsdl:input>
+        <mime:content part="getRealmsRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getRealmsResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createProject">
+      <http:operation location="TranslationService/createProject"/>
+      <wsdl:input>
+        <mime:content part="createProjectRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="createProjectResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateProject">
+      <http:operation location="TranslationService/updateProject"/>
+      <wsdl:input>
+        <mime:content part="updateProjectRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="updateProjectResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addJob">
+      <http:operation location="TranslationService/addJob"/>
+      <wsdl:input>
+        <mime:content part="addJobRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="addJobResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelJob">
+      <http:operation location="TranslationService/cancelJob"/>
+      <wsdl:input>
+        <mime:content part="cancelJobRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="cancelJobResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation> 
+    <wsdl:operation name="addSourceContent">
+      <http:operation location="TranslationService/addSourceContent"/>
+      <wsdl:input>
+        <mime:content part="addSourceContentRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="addSourceContentResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="submitTranslatedContentChange">
+      <http:operation location="TranslationService/submitTranslatedContentChange"/>
+      <wsdl:input>
+        <mime:content part="submitTranslatedContentChangeRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="submitTranslatedContentChangeResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentUnitNames">
+      <http:operation location="TranslationService/getContentUnitNames"/>
+      <wsdl:input>
+        <mime:content part="getContentUnitNamesRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getContentUnitNamesResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentUnit">
+      <http:operation location="TranslationService/getContentUnit"/>
+      <wsdl:input>
+        <mime:content part="getContentUnitRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getContentUnitResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateProject">
+      <http:operation location="TranslationService/evaluateProject"/>
+      <wsdl:input>
+        <mime:content part="evaluateProjectRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="evaluateProjectResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="commitProject">
+      <http:operation location="TranslationService/commitProject"/>
+      <wsdl:input>
+        <mime:content part="commitProjectRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="commitProjectResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelProject">
+      <http:operation location="TranslationService/cancelProject"/>
+      <wsdl:input>
+        <mime:content part="cancelProjectRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="cancelProjectResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProjects">
+      <http:operation location="TranslationService/getProjects"/>
+      <wsdl:input>
+        <mime:content part="getProjectsRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getProjectsResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProject">
+      <http:operation location="TranslationService/getProject"/>
+      <wsdl:input>
+        <mime:content part="getProjectRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getProjectResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProjectStatus">
+      <http:operation location="TranslationService/getProjectStatus"/>
+      <wsdl:input>
+        <mime:content part="getProjectStatusRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getProjectStatusResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJobs">
+      <http:operation location="TranslationService/getJobs"/>
+      <wsdl:input>
+        <mime:content part="getJobsRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getJobsResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJob">
+      <http:operation location="TranslationService/getJob"/>
+      <wsdl:input>
+        <mime:content part="getJobRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getJobResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJobStatus">
+      <http:operation location="TranslationService/getJobStatus"/>
+      <wsdl:input>
+        <mime:content part="getJobStatusRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getJobStatusResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContentNames">
+      <http:operation location="TranslationService/getContentNames"/>
+      <wsdl:input>
+        <mime:content part="getContentNamesRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getContentNamesResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSourceContent">
+      <http:operation location="TranslationService/getSourceContent"/>
+      <wsdl:input>
+        <mime:content part="getSourceContentRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getSourceContentResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTranslatedContent">
+      <http:operation location="TranslationService/getTranslatedContent"/>
+      <wsdl:input>
+        <mime:content part="getTranslatedContentRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getTranslatedContentResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateSourceContent">
+      <http:operation location="TranslationService/updateSourceContent"/>
+      <wsdl:input>
+        <mime:content part="updateSourceContentRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="updateSourceContentResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAttachmentNames">
+      <http:operation location="TranslationService/getAttachmentNames"/>
+      <wsdl:input>
+        <mime:content part="getAttachmentNamesRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getAttachmentNamesResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="uploadAttachment">
+      <http:operation location="TranslationService/uploadAttachment"/>
+      <wsdl:input>
+        <mime:content part="uploadAttachmentRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="uploadAttachmentResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="linkAttachment">
+      <http:operation location="TranslationService/linkAttachment"/>
+      <wsdl:input>
+        <mime:content part="linkAttachmentRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="linkAttachmentResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <http:operation location="TranslationService/getVersion"/>
+      <wsdl:input>
+        <mime:content part="getVersionRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getVersionResponse" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  
+  <wsdl:service name="TranslationService">
+<wsdl:documentation>
+		<Version>1.0.0</Version>
+	</wsdl:documentation>
+    <wsdl:port name="TranslationServiceHttp" binding="tns:TranslationServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/l10n/v1/TranslationService"/>
+    </wsdl:port>
+    <wsdl:port name="TranslationServiceSOAP" binding="tns:TranslationServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/l10n/v1/TranslationService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

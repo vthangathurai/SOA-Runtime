@@ -1,0 +1,1703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/cs/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	name="CSUserPolicyViolationService"
+	targetNamespace="http://www.ebay.com/marketplace/cs/v1/services">
+	<wsdl:types>
+	
+	<xs:schema xmlns:tns="http://www.ebay.com/marketplace/cs/v1/services"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/cs/v1/services">
+			
+		<!-- xs:schema xmlns:tns1="http://www.ebay.com/marketplace/services"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/cs/v1/services">
+			<xs:import
+				namespace="http://www.ebay.com/marketplace/services" /-->
+			<xs:element name="getVersionRequest" 
+				type="tns:GetVersionRequest" />
+			<xs:element name="getVersionResponse" 
+				type="tns:GetVersionResponse" />
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="CSUserL3PolicyViolationAttributeType">
+				<xs:annotation>
+					<xs:documentation>
+						Attribute id-value pair of a L3 policy.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="attributeName"
+						type="tns:L3PolicyViolationAttributesEnumType">
+						<xs:annotation>
+							<xs:documentation>
+								Attribute Name
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="attributeValue" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Attribute value
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="macActivityId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="creationDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lastModifiedDate" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="CSUserL3PolicyViolationStatusType">
+				<xs:annotation>
+					<xs:documentation>
+						Violation status.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ACTIVE">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="INACTIVE">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="EXPIRED">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="CSUserL3PolicyViolationType">
+				<xs:annotation>
+					<xs:documentation>
+						L3 Policy violation with policy id, attributes
+						and bunch of other elements.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="csUserL3PolicyViolationId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Primary key of entry in table.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="externalServiceId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="userId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="l3PolicyId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="policyViolationStatus"
+						type="tns:CSUserL3PolicyViolationStatusType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="siteId" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="violationExpirationDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="createdBy" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="applicationName" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="csUserL3PolicyViolationAttribute"
+						type="tns:CSUserL3PolicyViolationAttributeType">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="csUserL5PolicyViolation"
+						type="tns:CSUserL5PolicyViolationType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="creationDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lastModifiedDate" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType
+				name="CSUserL5PolicyViolationAttributeType">
+				<xs:annotation>
+					<xs:documentation>
+						Attribute id-value pair of a L5 policy.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="attributeName"
+						type="tns:L5PolicyViolationAttributesEnumType">
+						<xs:annotation>
+							<xs:documentation>
+								Attribute name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="attributeValue" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Attribute value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="creationDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lastModifiedDate" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CSUserL5PolicyViolationType">
+				<xs:annotation>
+					<xs:documentation>
+						L5 Policy violation with policy id and
+						attributes.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="csUserL5PolicyViolationId" type="xs:long">
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="csUserL5PolicyViolationAttribute"
+						type="tns:CSUserL5PolicyViolationAttributeType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="l5PolicyId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="creationDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="lastModifiedDate" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType
+				name="CSUserPolicyViolationServiceAcknowledgementType">
+				<xs:annotation>
+					<xs:documentation>
+						The AcknowledgementType has the identifier and
+						the message to be used in the response.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="message" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="csUserL3PolicyViolationId" type="xs:long">
+					</xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="L3PolicyViolationAttributesEnumType">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="OFFENSE_INTENSITY">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MAC_ACTIVITY_ID">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MAC_THREAD_ID">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MESSAGE_ID">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ACCOUNT_ISSUE_ID">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="WHITE_LIST">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="IS_OVERRIDE">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="EARLIEST_LISTING">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="L5PolicyViolationAttributesEnumType">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MEMBER">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ITEM_MEMBER">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="WHITE_LIST">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="PolicyViolationDomainEnumType">
+				<xs:annotation>
+					<xs:documentation>
+						Violation domains
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="CSUserPolicyViolationTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SELLER_VIOLATION">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="FEEDBACK_VIOLATION">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="addUserPolicyViolationRequest"
+				 type="tns:AddUserPolicyViolationRequest" />
+			<xs:element name="addUserPolicyViolationResponse"
+				 type="tns:AddUserPolicyViolationResponse" />
+
+			<xs:complexType name="AddUserPolicyViolationRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="csUserL3PolicyViolation"
+								type="tns:CSUserL3PolicyViolationType" maxOccurs="unbounded"
+								minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AddUserPolicyViolationResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="result"
+								type="tns:CSUserPolicyViolationServiceAcknowledgementType"
+								maxOccurs="unbounded" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element name="modifyUserPolicyViolationStatusRequest"
+				 type="tns:ModifyUserPolicyViolationStatusRequest" />
+			<xs:element name="modifyUserPolicyViolationStatusResponse"
+				 type="tns:ModifyUserPolicyViolationStatusResponse" />
+
+			<xs:complexType
+				name="ModifyUserPolicyViolationStatusRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolationId"
+								type="xs:long" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="userId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="policyViolationStatus"
+								type="tns:CSUserL3PolicyViolationStatusType" maxOccurs="1"
+								minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="ModifyUserPolicyViolationStatusResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="result"
+								type="tns:CSUserPolicyViolationServiceAcknowledgementType"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element
+				name="getUserPolicyViolationByL3ViolationIdRequest" 
+				type="tns:GetUserPolicyViolationByL3ViolationIdRequest" />
+			<xs:element
+				name="getUserPolicyViolationByL3ViolationIdResponse" 
+				type="tns:GetUserPolicyViolationByL3ViolationIdResponse" />
+
+			<xs:complexType
+				name="GetUserPolicyViolationByL3ViolationIdRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolationId"
+								type="xs:long">
+							</xs:element>
+							<xs:element name="userId" type="xs:long">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="GetUserPolicyViolationByL3ViolationIdResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolation"
+								type="tns:CSUserL3PolicyViolationType" maxOccurs="1"
+								minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element
+				name="getUserPolicyViolationsByExternalServiceIdRequest"
+				
+				type="tns:GetUserPolicyViolationsByExternalServiceIdRequest" />
+			<xs:element
+				name="getUserPolicyViolationsByExternalServiceIdResponse"
+				
+				type="tns:GetUserPolicyViolationsByExternalServiceIdResponse" />
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByExternalServiceIdRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="externalServiceId"
+								type="xs:string" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="userId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByExternalServiceIdResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolation"
+								type="tns:CSUserL3PolicyViolationType" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element
+				name="getUserPolicyViolationsByDateRangeAndStatusRequest"
+				
+				type="tns:GetUserPolicyViolationsByDateRangeAndStatusRequest" />
+			<xs:element
+				name="getUserPolicyViolationsByDateRangeAndStatusResponse"
+				
+				type="tns:GetUserPolicyViolationsByDateRangeAndStatusResponse" />
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByDateRangeAndStatusRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="userId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="dateRange"
+								type="tns:DateRangeType" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="policyViolationStatus"
+								type="tns:CSUserL3PolicyViolationStatusType" maxOccurs="1"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="domain"
+								type="tns:PolicyViolationDomainEnumType" maxOccurs="1"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByDateRangeAndStatusResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolation"
+								type="tns:CSUserL3PolicyViolationType" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element
+				name="getUserPolicyViolationsByL3PolicyIdAndStatusRequest"
+				
+				type="tns:GetUserPolicyViolationsByL3PolicyIdAndStatusRequest" />
+			<xs:element
+				name="getUserPolicyViolationsByL3PolicyIdAndStatusResponse"
+				
+				type="tns:GetUserPolicyViolationsByL3PolicyIdAndStatusResponse" />
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByL3PolicyIdAndStatusRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="userId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="l3PolicyId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="policyViolationStatus"
+								type="tns:CSUserL3PolicyViolationStatusType" maxOccurs="1"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="domain"
+								type="tns:PolicyViolationDomainEnumType" maxOccurs="1"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByL3PolicyIdAndStatusResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolation"
+								type="tns:CSUserL3PolicyViolationType" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:element
+				name="getUserPolicyViolationsByDateRangeAndL3PolicyIdRequest"
+				
+				type="tns:GetUserPolicyViolationsByDateRangeAndL3PolicyIdRequest" />
+			<xs:element
+				name="getUserPolicyViolationsByDateRangeAndL3PolicyIdResponse"
+				
+				type="tns:GetUserPolicyViolationsByDateRangeAndL3PolicyIdResponse" />
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByDateRangeAndL3PolicyIdRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+							<xs:element name="userId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="dateRange"
+								type="tns:DateRangeType" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="l3PolicyId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="domain"
+								type="tns:PolicyViolationDomainEnumType" maxOccurs="1"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType
+				name="GetUserPolicyViolationsByDateRangeAndL3PolicyIdResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="csUserL3PolicyViolation"
+								type="tns:CSUserL3PolicyViolationType" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="pagination"
+								type="tns:CSPaginationType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="DateRangeType">
+				<xs:annotation>
+					<xs:documentation>
+						Provides the start date and end date pair.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="CSCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="endDate" type="xs:dateTime">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="startDate" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CSPageAttributeType">
+				<xs:annotation>
+					<xs:documentation>
+						Attributes describing the page.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="CSCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="pageAttributeName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="pageAttributeValue" type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CSPageHistogramType">
+				<xs:annotation>
+					<xs:documentation>
+						This represents a histogram. Histogram is a
+						ordered triplet of page number, entries per page
+						and the attribute for that page. For example, if
+						you are paginating on the basis of time period,
+						each page will have a from date and to date for
+						that page. That will go in Page Attribute.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="CSCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="1" minOccurs="1" name="page"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The number of this particular page link.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The number of entries in this page link.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="pageAttribute" type="tns:CSPageAttributeType">
+						<xs:annotation>
+							<xs:documentation>
+								The list of starting and ending
+								number/date/etc for this page link. This
+								would be used by the API to narrow the
+								range during subsequent retrieval of
+								entries.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CSPaginationType">
+				<xs:annotation>
+					<xs:documentation>
+						Contains data for controlling pagination in API
+						requests. Pagination of returned data is
+						required for some calls and not needed in or not
+						supported for some calls. See the documentation
+						for individual calls to determine whether
+						pagination is supported, required, or desirable.
+
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="CSCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/cs/v1/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="entriesPerPage" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies the maximum number of entries
+								to return in a single call. If the
+								number of entries that can be returned
+								is less than the value specified in
+								EntriesPerPage, then that number of
+								entries is returned instead. For most
+								calls, the max is 200 and the default is
+								25. For GetSearchResults, the max value
+								is 400. For GetSellerPayments, the max
+								value is 200 and the default value is
+								200. See the documentation for other
+								individual calls to determine the
+								correct max and default values. For
+								GetOrders, not applicable to eBay.com
+								(for GetOrders, applicable to Half.com).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="currentPageNumber" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Current page. Should start from 1 and be
+								updated with every call.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="requestedPage" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="pageHistogram" type="tns:CSPageHistogramType">
+						<xs:annotation>
+							<xs:documentation>
+								Element holding information for each
+								page.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="totalNumberOfEntries" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="totalNumberOfPages" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies the number of the page of data
+								to return in the current call. Default
+								is 1 for most calls. For some calls, the
+								default is 0. For GetSellerPayments, the
+								default is 1. For
+								GetProductSearchResults, specify 0 or a
+								positive value lower than the
+								approximate number of pages available
+								(which you determine by examining the
+								results of your initial request). See
+								the documentation for other individual
+								calls to determine the correct default
+								value. For GetOrders, not applicable to
+								eBay.com (for GetOrders, applicable to
+								Half.com).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+		<!-- /xs:schema>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns1="http://www.ebay.com/marketplace/services"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/services"-->
+			<xsd:simpleType name="AckValue">
+				<xsd:annotation>
+					<xsd:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Success">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Failure">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Warning">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="PartialFailure">
+						<xsd:annotation>
+							<xsd:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType abstract="true"
+				name="BaseServiceRequest">
+				<xsd:annotation>
+					<xsd:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xsd:annotation>
+					<xsd:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="ack" type="tns:AckValue">
+						<xsd:annotation>
+							<xsd:documentation />
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xsd:annotation>
+							<xsd:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xsd:documentation>
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="version"
+						type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation />
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="timestamp"
+						type="xsd:dateTime">
+						<xsd:annotation>
+							<xsd:documentation />
+							<xsd:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="ErrorCategory">
+				<xsd:annotation>
+					<xsd:documentation>
+						Documentation goes here.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:token">
+					<xsd:enumeration value="System" />
+					<xsd:enumeration value="Application" />
+					<xsd:enumeration value="Request" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="ErrorData">
+				<xsd:annotation>
+					<xsd:documentation>
+						Documentation goes here
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="errorId" type="xsd:long" />
+					<xsd:element name="domain" type="xsd:string" />
+					<xsd:element minOccurs="0" name="subdomain"
+						type="xsd:string" />
+					<xsd:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xsd:element name="category"
+						type="tns:ErrorCategory" />
+					<xsd:element name="message" type="xsd:string" />
+					<xsd:element minOccurs="0" name="exceptionId"
+						type="xsd:token" />
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ErrorMessage">
+				<xsd:annotation>
+					<xsd:documentation>
+						Documentation goes here
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ErrorParameter">
+				<xsd:annotation>
+					<xsd:documentation>
+						Documentation goes here
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleContent>
+					<xsd:extension base="xsd:string">
+						<xsd:attribute name="name" type="xsd:string"
+							use="optional" />
+					</xsd:extension>
+				</xsd:simpleContent>
+			</xsd:complexType>
+			<xsd:simpleType name="ErrorSeverity">
+				<xsd:annotation>
+					<xsd:documentation>
+						Documentation goes here.
+					</xsd:documentation>
+					<xsd:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:token">
+					<xsd:enumeration value="Error" />
+					<xsd:enumeration value="Warning" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		<!-- /xsd:schema-->
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="messageParameters"
+			element="tns:getVersionRequest" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="messageParameters"
+			element="tns:getVersionResponse" />
+	</wsdl:message>
+	<wsdl:message name="addUserPolicyViolationRequest">
+		<wsdl:part name="parameters"
+			element="tns:addUserPolicyViolationRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addUserPolicyViolationResponse">
+		<wsdl:part name="parameters"
+			element="tns:addUserPolicyViolationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="modifyUserPolicyViolationStatusRequest">
+		<wsdl:part name="parameters"
+			element="tns:modifyUserPolicyViolationStatusRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="modifyUserPolicyViolationStatusResponse">
+		<wsdl:part name="parameters"
+			element="tns:modifyUserPolicyViolationStatusResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserPolicyViolationByL3ViolationIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationByL3ViolationIdRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationByL3ViolationIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationByL3ViolationIdResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByExternalServiceIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByExternalServiceIdRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByExternalServiceIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByExternalServiceIdResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByDateRangeAndStatusRequest">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByDateRangeAndStatusRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByDateRangeAndStatusResponse">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByDateRangeAndStatusResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByL3PolicyIdAndStatusRequest">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByL3PolicyIdAndStatusRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByL3PolicyIdAndStatusResponse">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByL3PolicyIdAndStatusResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByDateRangeAndL3PolicyIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByDateRangeAndL3PolicyIdRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message
+		name="getUserPolicyViolationsByDateRangeAndL3PolicyIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:getUserPolicyViolationsByDateRangeAndL3PolicyIdResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="CSUserPolicyViolationServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Retrieves current service version.
+			</wsdl:documentation>
+			<wsdl:input name="getVersionRequest"
+				message="tns:getVersionRequest" />
+			<wsdl:output name="getVersionResponse"
+				message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="addUserPolicyViolation">
+			<wsdl:documentation>
+				Adds L3 Policy Violation with its attributes and L5
+				Policy Violations and its attributes to the tables.
+			</wsdl:documentation>
+			<wsdl:input message="tns:addUserPolicyViolationRequest"></wsdl:input>
+			<wsdl:output message="tns:addUserPolicyViolationResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="modifyUserPolicyViolationStatus">
+			<wsdl:documentation>
+				Modifies the status of the L3 Policy Violation
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:modifyUserPolicyViolationStatusRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:modifyUserPolicyViolationStatusResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserPolicyViolationByL3ViolationId">
+			<wsdl:documentation>
+				Retrieves the L3 Policy Violation by the
+				L3PolicyViolationId
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:getUserPolicyViolationByL3ViolationIdRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getUserPolicyViolationByL3ViolationIdResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByExternalServiceId">
+			<wsdl:documentation>
+				Retrieves the L3 Policy Violation information by the
+				ExternalServiceId
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:getUserPolicyViolationsByExternalServiceIdRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getUserPolicyViolationsByExternalServiceIdResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByDateRangeAndStatus">
+			<wsdl:documentation>
+				Retrieves the L3 Policy Violation information by userId,
+				creation date range and violation status and optionally
+				by the domain.
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:getUserPolicyViolationsByDateRangeAndStatusRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getUserPolicyViolationsByDateRangeAndStatusResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByL3PolicyIdAndStatus">
+			<wsdl:documentation>
+				Retrieves the L3 Policy Violation information by userId,
+				L3 Policy id and violation status and optionally by the
+				domain.
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:getUserPolicyViolationsByL3PolicyIdAndStatusRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getUserPolicyViolationsByL3PolicyIdAndStatusResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByDateRangeAndL3PolicyId">
+			<wsdl:documentation>
+				Retrieves the L3 Policy Violation information by userId,
+				creation date range and L3 Policy i and optionally by
+				the domain.
+			</wsdl:documentation>
+			<wsdl:input
+				message="tns:getUserPolicyViolationsByDateRangeAndL3PolicyIdRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getUserPolicyViolationsByDateRangeAndL3PolicyIdResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CSUserPolicyViolationServiceHttpBinding"
+		type="tns:CSUserPolicyViolationServicePort">
+
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="getVersion" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="addUserPolicyViolation">
+
+			<http:operation location="/addUserPolicyViolation" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="modifyUserPolicyViolationStatus">
+
+			<http:operation location="/modifyUserPolicyViolationStatus" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserPolicyViolationByL3ViolationId">
+
+			<http:operation
+				location="/getUserPolicyViolationByL3ViolationId" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByExternalServiceId">
+
+			<http:operation
+				location="/getUserPolicyViolationsByExternalServiceId" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByDateRangeAndStatus">
+
+			<http:operation
+				location="/getUserPolicyViolationsByDateRangeAndStatus" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByL3PolicyIdAndStatus">
+
+			<http:operation
+				location="/getUserPolicyViolationsByL3PolicyIdAndStatus" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByDateRangeAndL3PolicyId">
+
+			<http:operation
+				location="/getUserPolicyViolationsByDateRangeAndL3PolicyId" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+
+
+
+
+
+
+
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+
+
+
+
+
+
+
+
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="CSUserPolicyViolationServiceSOAPBinding"
+		type="tns:CSUserPolicyViolationServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="getVersion">
+			<soap12:operation soapAction="urn:getVersion"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="addUserPolicyViolation">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/addUserPolicyViolation" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="modifyUserPolicyViolationStatus">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/modifyUserPolicyViolationStatus" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserPolicyViolationByL3ViolationId">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getUserPolicyViolationByL3ViolationId" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByExternalServiceId">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getUserPolicyViolationsByExternalServiceId" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByDateRangeAndStatus">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getUserPolicyViolationsByDateRangeAndStatus" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByL3PolicyIdAndStatus">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getUserPolicyViolationsByL3PolicyIdAndStatus" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="getUserPolicyViolationsByDateRangeAndL3PolicyId">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/cs/v1/services/getUserPolicyViolationsByDateRangeAndL3PolicyId" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CSUserPolicyViolationService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			Member policy violations will be recorded in the site
+			tables. This service will provide operations that interact
+			with this data.
+		</wsdl:documentation>
+		<wsdl:port binding="tns:CSUserPolicyViolationServiceHttpBinding"
+			name="CSUserPolicyViolationServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/cs/CSUserPolicyViolationService/v1" />
+		</wsdl:port>
+		<wsdl:port binding="tns:CSUserPolicyViolationServiceSOAPBinding"
+			name="CSUserPolicyViolationServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/cs/CSUserPolicyViolationService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,1307 @@
+<definitions name="BuyingListService" targetNamespace="http://www.ebay.com/marketplace/buying/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/buying/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/buying/v1/services">
+      <xs:complexType name="ExtensionType">
+        <xs:annotation>
+          <xs:documentation>Reserved for future use.</xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="id" type="xs:positiveInteger">
+		    <xs:annotation>
+		    <xs:documentation>
+		    Reserved for future use.
+		    </xs:documentation>
+		    </xs:annotation>
+		  </xs:element>
+          <xs:element name="version" type="xs:string">
+		    <xs:annotation>
+		    <xs:documentation>
+		    Reserved for future use.
+		    </xs:documentation>
+		    </xs:annotation>
+		  </xs:element>
+          <xs:element name="contentType" type="xs:string">
+		    <xs:annotation>
+		    <xs:documentation>
+		    Reserved for future use.
+		    </xs:documentation>
+		    </xs:annotation>
+		  </xs:element>
+          <xs:element name="value" type="xs:string">
+		    <xs:annotation>
+		    <xs:documentation>
+		    Reserved for future use.
+		    </xs:documentation>
+		    </xs:annotation>
+		  </xs:element>
+
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="AckValue">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates whether the error is a severe error (causing the request to fail) or an
+            informational error (a warning) that should be
+            communicated to the user.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Success">
+            <xs:annotation>
+              <xs:documentation>
+                The request was processed successfully,
+                but something occurred that may affect
+                your application or the user.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Failure">
+            <xs:annotation>
+              <xs:documentation>
+                The request that triggered the error was
+                not processed successfully. When a
+                serious application-level error occurs,
+                the error is returned instead of the
+                business data.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Warning">
+            <xs:annotation>
+              <xs:documentation>
+                The request that triggered the error was
+                processed successfully but with some
+                warnings.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="PartialFailure">
+            <xs:annotation>
+              <xs:documentation>
+                The request that triggered the error was
+                processed successfully but with some
+                warnings.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType abstract="true" name="BaseRequest">
+        <xs:annotation>
+          <xs:documentation>
+            This is the base class for request container for
+            all service operations.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+		    <xs:annotation>
+		    <xs:documentation>
+		    Reserved for future use.
+		    </xs:documentation>
+		    </xs:annotation>
+		  </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType abstract="true" name="BaseResponse">
+        <xs:annotation>
+          <xs:documentation>
+            Base response container for all service
+            operations. Contains error information
+            associated with the request.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="ack" type="tns:AckValue">
+            <xs:annotation>
+              <xs:documentation>
+              Indicates whether the error is a severe error (causing the request to fail) 
+              or an informational error (a warning) that should be communicated to the user. 
+              </xs:documentation>
+              <xs:appinfo>
+                <CallInfo>
+                  <AllCalls/>
+                  <Returned>Always</Returned>
+                </CallInfo>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+            <xs:annotation>
+              <xs:documentation>
+                Information for an error or warning that
+                occurred when eBay processed the request.
+              </xs:documentation>
+              <xs:appinfo>
+                <CallInfo>
+                  <AllCalls/>
+                  <Returned>Conditionally</Returned>
+                </CallInfo>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="version" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+			  The released version of this service that eBay uses to process the request. 
+			  The version in use is normally the latest release version, 
+			  as specified in the service documentation.							
+			  </xs:documentation>
+              <xs:appinfo>
+                <CallInfo>
+                  <AllCalls/>
+                  <Returned>Always</Returned>
+                </CallInfo>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+            <xs:annotation>
+              <xs:documentation>
+			   This value represents the date and time when eBay processed the request.
+			   This value is returned in GMT, the ISO 8601 date and time format (YYYY-
+			   MM-DDTHH:MM:SS.SSSZ). See the &quot;dateTime&quot; type for information about the
+			   time format, and for details on converting to and from the GMT time zone.
+			  </xs:documentation>
+              <xs:appinfo>
+                <CallInfo>
+                  <AllCalls/>
+                  <Returned>Always</Returned>
+                </CallInfo>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+                      <xs:annotation>
+		                <xs:documentation>
+		  			  Reserved for future use.							
+		  			  </xs:documentation>
+		              </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ErrorCategory">
+        <xs:annotation>
+          <xs:documentation>
+            There are three categories of errors: Request errors, Application 
+			errors, and System errors.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="System">
+					<xs:annotation>
+					<xs:documentation>
+					System error.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+					<xs:annotation>
+					<xs:documentation>
+					Application error.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+					<xs:annotation>
+					<xs:documentation>
+					Request error.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ErrorData">
+        <xs:annotation>
+          <xs:documentation>
+            A container for error details.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="errorId" type="xs:long" >
+		  <xs:annotation>
+			<xs:documentation>
+			A unique code that identifies the particular error condition that
+			occurred. Your application can use error codes as identifiers in your
+            customized error-handling algorithms.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element name="domain" type="xs:string" >
+		  <xs:annotation>
+			<xs:documentation>
+			Name of the domain in which the error occurred.
+			          &lt;dl&gt;
+			          &lt;dt&gt;
+			            &lt;strong&gt;domain values:&lt;/strong&gt;
+			          &lt;/dt&gt;
+			          &lt;dt&gt;
+			            Marketplace
+			          &lt;/dt&gt;
+			          &lt;dd&gt;
+			            A business or validation error occurred in the service.
+			          &lt;/dd&gt;
+			          &lt;dt&gt;
+			            SOA 
+			          &lt;/dt&gt;
+			          &lt;dd&gt;
+			            An exception occurred in the SOA (Service Oriented Architecture)
+			            framework.
+			          &lt;/dd&gt;
+                      &lt;/dl&gt;
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element minOccurs="0" name="subdomain" type="xs:string" >
+		  <xs:annotation>
+			<xs:documentation>
+			Name of the subdomain in which the error occurred:
+			          &lt;dl&gt;
+			          &lt;dt&gt;Subdomain values:&lt;/dt&gt;
+			          &lt;dt&gt;&lt;i&gt;ThisServiceDomain&lt;/i&gt;&lt;/dt&gt;
+			          &lt;dd&gt;The error is specific to this service.&lt;/dd&gt;
+			          &lt;dt&gt;MarketplaceCommon&lt;/dt&gt;
+			          &lt;dd&gt;The error is common to all services.&lt;/dd&gt;
+                      &lt;/dl&gt;
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element name="severity" type="tns:ErrorSeverity" >
+		  <xs:annotation>
+			<xs:documentation>
+			Indicates whether the reported problem is fatal (an error) or is less-
+			          severe (a warning). Review the error message details for information on
+			          the cause.
+			          &lt;br&gt;&lt;br&gt;
+			          If the request fails and the application is the source of the error (for
+			          example, a required element is missing), update the application before
+			          you retry the request. If the problem is due to incorrect user data,
+			          alert the end-user to the problem and provide the means for them to
+			          correct the data. 
+			          &lt;br&gt;&lt;br&gt;
+			          If the source of the problem is in the service, you can retry the request
+			          a reasonable number of times (try the request twice).
+			          After the problem is resolved, you can resend the request in its original
+			          form.
+			          &lt;br&gt;&lt;br&gt;
+			          If a warning occurs, warning information is returned in addition to the
+			          business data. Normally, you do not need to resend the request (as the
+          original request was successful).
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element name="category" type="tns:ErrorCategory" >
+		  <xs:annotation>
+			<xs:documentation>
+			There are three categories of errors: Request errors, Application 
+          errors, and System errors.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element name="message" type="xs:string" >
+		  <xs:annotation>
+			<xs:documentation>
+			A detailed description of the condition that caused the error.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element minOccurs="0" name="exceptionId" type="xs:token" >
+		  <xs:annotation>
+			<xs:documentation>
+			Unique identifier for an exception associated with an error.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter" >
+		  <xs:annotation>
+			<xs:documentation>
+			Various warning and error messages that return one or more variables that 
+			contain contextual information about the error. This is often the 
+            field or value that triggered the error.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ErrorMessage">
+        <xs:annotation>
+          <xs:documentation>
+            Information regarding an error or warning that occurred when eBay processed
+			the request. Not returned when the ack value is Success. Run-time errors are
+            not reported here, but are instead reported as part of a SOAP fault.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+          		  <xs:annotation>
+		  			<xs:documentation>
+		  			A container for error details.
+		  			</xs:documentation>
+		             </xs:annotation>
+        </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ErrorParameter">
+        <xs:annotation>
+          <xs:documentation>
+            Contextual data associated with an error.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="name" type="xs:string" use="optional">
+            <xs:annotation>
+			<xs:documentation>
+			Error name.						
+			</xs:documentation>
+		    </xs:annotation>
+		    </xs:attribute>
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:simpleType name="ErrorSeverity">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates whether the error is a fatal error (causing the request to fail)
+            or a less severe error (a warning) that should be communicated to the user.
+          </xs:documentation>
+          <xs:appinfo>
+            <typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+          </xs:appinfo>
+        </xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error">
+					<xs:annotation>
+					<xs:documentation>
+					Error message.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+					<xs:annotation>
+					<xs:documentation>
+					Warning message.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+      </xs:simpleType>
+      <!-- ****common types begin -->
+      
+      <xs:complexType name="List">
+      <xs:annotation>
+  			<xs:documentation>Describes elements of a user created list, for example, the name of the list, the list ID,
+  			list type, list creation date, and list modified date. 
+  			</xs:documentation> 
+  	  </xs:annotation>
+      
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Specifies the name of a user or system created list.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          
+          <xs:element name="id" type="xs:string" minOccurs="0" maxOccurs="1">
+		           <xs:annotation>
+		              <xs:documentation> 
+		               Specifies the ID of a user or system created list.
+		              </xs:documentation>
+		            </xs:annotation>
+		  </xs:element>
+		  
+		<xs:element minOccurs="0"
+			name="creationDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The creation date of a user list.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+		
+		<xs:element minOccurs="0"
+			name="modificationDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>
+					The modification date of a list.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:element>
+					
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="entry" type="tns:ListEntry">
+            <xs:annotation>
+              <xs:documentation>
+                Entries in a list.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element> 
+          
+          <xs:element name="listType" type="tns:ListType" minOccurs="1" maxOccurs="1">
+           <xs:annotation>
+              <xs:documentation>
+                List type.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>         
+        </xs:sequence>
+                  
+      </xs:complexType>
+
+      <xs:simpleType name="ListType">
+				<xs:annotation>
+					<xs:documentation>
+						A universal list or a group gift.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNIVERSAL">
+					            <xs:annotation>
+					              <xs:documentation>
+					                Universal list.
+					              </xs:documentation>
+                   </xs:annotation>
+                   </xs:enumeration>
+				</xs:restriction>
+	  </xs:simpleType> 
+	  	        
+      <xs:complexType name="ListEntry">
+        <xs:annotation>
+          <xs:documentation>
+            List entry can be an item, a saved search, or a saved seller.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        <xs:element name="creationDate" type="xs:dateTime" minOccurs="0" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Creation date.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+        <xs:element name="modificationDate" type="xs:dateTime" minOccurs="0" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Modification date.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>        
+        <xs:element name="entryType" type="tns:ListEntryType" minOccurs="1" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Entry type.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+        <xs:element name="item" type="tns:Item" minOccurs="0" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Item.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+		<xs:element name="endTime" type="xs:dateTime" minOccurs="1" maxOccurs="1">
+           <xs:annotation>
+             <xs:documentation>
+               End time.
+             </xs:documentation>		              
+           </xs:annotation>
+         </xs:element>        
+        <xs:element name="savedSearch" type="tns:SavedSearch" minOccurs="0" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Saved search.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+        <xs:element name="savedSeller" type="tns:SavedSeller" minOccurs="0" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Saved seller.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>	       
+        </xs:sequence>
+      </xs:complexType>
+            
+      <xs:simpleType name="ListEntryType">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether an entry is an item, a saved search, or a saved seller.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ITEM">
+					<xs:annotation>
+					<xs:documentation>
+					Item entry.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SAVED_SEARCH">
+					<xs:annotation>
+					<xs:documentation>
+					Saved search entry.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SAVED_SELLER">
+					<xs:annotation>
+					<xs:documentation>
+					Saved seller entry.
+					</xs:documentation>
+					</xs:annotation>
+					</xs:enumeration>					
+				</xs:restriction>
+	  </xs:simpleType>      
+      
+      <xs:complexType name="Item">
+	        <xs:sequence>
+	          <xs:element name="itemId" type="xs:string" minOccurs="1" maxOccurs="1">
+	            <xs:annotation>
+	              <xs:documentation>
+	                Item ID.
+	              </xs:documentation>
+	            </xs:annotation>
+	          </xs:element>
+	          
+			<xs:element name="variationId" type="xs:string" minOccurs="0" maxOccurs="1">
+	            <xs:annotation>
+	              <xs:documentation>
+	                Variation ID.
+	              </xs:documentation>
+	            </xs:annotation>
+	          </xs:element>
+	          	          	          
+	          <xs:element name="siteId" type="xs:long" minOccurs="0" maxOccurs="1">
+	            <xs:annotation>
+	              <xs:documentation>
+	                Item listed site ID.
+	              </xs:documentation>
+	            </xs:annotation>
+	          </xs:element>
+
+	          <xs:element name="saleType" type="xs:long" minOccurs="0" maxOccurs="1">
+	            <xs:annotation>
+	              <xs:documentation>
+	                Sale type.
+	              </xs:documentation>
+	            </xs:annotation>
+	          </xs:element>
+	          
+
+	          <xs:element name="productRefId" type="xs:string" minOccurs="0" maxOccurs="1">
+	            <xs:annotation>
+	              <xs:documentation>
+	                Product reference ID for an product.
+	              </xs:documentation>
+	            </xs:annotation>
+	          </xs:element>
+	          
+	          <xs:element name="sellerId" type="xs:string" minOccurs="0" maxOccurs="1">
+	            <xs:annotation>
+	              <xs:documentation>
+	                Seller Id encoded with EIAS.
+	              </xs:documentation>
+	            </xs:annotation>
+	          </xs:element>
+	          
+	        </xs:sequence>
+      </xs:complexType>
+      
+
+      <xs:complexType name="SavedSeller">
+        <xs:sequence>
+          <xs:element name="sellerId" type="xs:string" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Seller ID encode or decode with EIAS.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      
+      <xs:complexType name="SavedSearch">
+        <xs:sequence>
+          <xs:element name="savedSearchId" type="xs:string" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Saved search ID encode or decode with EIAS.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      
+
+      <xs:complexType name="ListEntrySet">
+        <xs:sequence>
+        <xs:element name="listId" type="xs:string" minOccurs="1" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			List ID.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>        
+        <xs:element name="listEntry" type="tns:ListEntry" minOccurs="1" maxOccurs="unbounded" >
+		  <xs:annotation>
+			<xs:documentation>
+			List entry.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+	       
+        </xs:sequence>
+      </xs:complexType>
+            
+       <!-- **** common types end-->
+            
+      <xs:element name="createListsRequest" type="tns:CreateListsRequest"/>
+      <xs:element name="createListsResponse" type="tns:CreateListsResponse"/>
+      
+      <xs:complexType name="CreateListsRequest">
+        <xs:annotation>
+          <xs:documentation>
+            Creates a new  list.
+          </xs:documentation>
+          <xs:appinfo>
+            <summary>
+              Creates a new list.
+            </summary>
+          </xs:appinfo>
+        </xs:annotation>
+            <xs:sequence>
+				<xs:element name="list" type="tns:List" minOccurs="1" maxOccurs="unbounded" >
+		  <xs:annotation>
+			<xs:documentation>
+			List.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+				<xs:element minOccurs="0" name="includeListsWithEntries" type="xs:boolean" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Flag to include lists with entries.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+            </xs:sequence>
+      </xs:complexType>
+      
+      <xs:complexType name="CreateListsResponse">
+        <xs:annotation>
+          <xs:documentation>
+				Create a user list.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseResponse">
+            <xs:sequence>
+              <xs:element name="list" type="tns:List" minOccurs="1" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>
+                    Contains a list that was created that includes name, ID, creation date, and modification date.
+                  </xs:documentation>
+                  <xs:appinfo>
+                    <CallInfo>
+                      <CallName>createList</CallName>
+                    </CallInfo>
+                  </xs:appinfo>
+                </xs:annotation>
+              </xs:element>              
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      
+      <xs:element name="addListEntriesRequest" type="tns:AddListEntriesRequest"/>
+      <xs:element name="addListEntriesResponse" type="tns:AddListEntriesResponse"/>
+     
+      <xs:complexType name="AddListEntriesRequest">
+        <xs:annotation>
+          <xs:documentation>
+            Adds one ore more entries to one or more lists.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseRequest">
+            <xs:sequence>                            
+            
+              <xs:element name="listEntrySet" type="tns:ListEntrySet" minOccurs="1" maxOccurs="unbounded" >
+		  <xs:annotation>
+			<xs:documentation>
+			List entry.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+              
+              <xs:element minOccurs="0" name="includeListsWithEntries" type="xs:boolean" maxOccurs="1" >
+		  <xs:annotation>
+			<xs:documentation>
+			Flag to include lists with entries.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+                
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      
+      <xs:complexType name="AddListEntriesResponse">
+        <xs:annotation>
+          <xs:documentation>
+            Returns information about a list.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseResponse">
+            <xs:sequence>
+               <xs:element name="list" type="tns:List" minOccurs="1" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>
+                    Contains name, ID, creation date, modification date, and entries for one or more lists.
+                  </xs:documentation>
+                  <xs:appinfo>
+                    <CallInfo>
+                      <CallName>addListEntriesResponse</CallName>
+                    </CallInfo>
+                  </xs:appinfo>
+                </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+   
+      <xs:element name="updateListRequest" type="tns:UpdateListRequest"/>
+      <xs:element name="updateListResponse" type="tns:UpdateListResponse"/>
+  
+      <xs:complexType name="UpdateListRequest">
+		<xs:annotation>
+          <xs:documentation>
+            Updates a list name.
+          </xs:documentation>
+        </xs:annotation>       
+       <xs:complexContent>
+          <xs:extension base="tns:BaseRequest">
+          <xs:sequence>
+          	<xs:element name="listName" type="xs:string" minOccurs="1" maxOccurs="1">
+		            <xs:annotation>
+		              <xs:documentation>
+		                List name to replace.
+		              </xs:documentation>
+		              <xs:appinfo>
+		                <MaxLength>50</MaxLength>
+		                <CallInfo>
+		                  <CallName>
+		                    updateList
+		                  </CallName>
+		                  <RequiredInput>Yes</RequiredInput>
+		                </CallInfo>
+		              </xs:appinfo>
+		            </xs:annotation>
+		          </xs:element>
+
+          	<xs:element name="listId" type="xs:string" minOccurs="1" maxOccurs="1">
+		            <xs:annotation>
+		              <xs:documentation>
+		                ID of a list to rename.
+		              </xs:documentation>
+		              <xs:appinfo>
+		                <CallInfo>
+		                  <CallName>
+		                    updateList
+		                  </CallName>
+		                  <RequiredInput>Yes</RequiredInput>
+		                </CallInfo>
+		              </xs:appinfo>
+		            </xs:annotation>
+		          </xs:element>
+
+		   </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>       
+      </xs:complexType>
+      
+      <xs:complexType  name="UpdateListResponse">
+        <xs:annotation>
+          <xs:documentation>
+            Base response container for all service operations in the Buying List Service.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseResponse">
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+
+      <xs:element name="getListsRequest" type="tns:GetListsRequest"/>
+      <xs:element name="getListsResponse" type="tns:GetListsResponse"/>
+  
+      <xs:complexType name="GetListsRequest">
+              <xs:annotation>
+	            <xs:documentation>
+	              Gets the contents of one or more collections.
+	            </xs:documentation>
+              </xs:annotation>
+       <xs:complexContent>
+          <xs:extension base="tns:BaseRequest">
+           <xs:sequence>	          	
+				<xs:element name="listId" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+		            <xs:annotation>
+		              <xs:documentation>
+		                One or more list IDs to find.
+		              </xs:documentation>
+		              <xs:appinfo>
+		                <CallInfo>
+		                  <CallName>
+		                    findList
+		                  </CallName>
+		                </CallInfo>
+		              </xs:appinfo>
+		            </xs:annotation>
+		          </xs:element>	          	
+	          	
+	          	<xs:element minOccurs="0" name="includeListsWithEntries" type="xs:boolean" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>
+							A flag to identify whether to return list entries.
+						</xs:documentation>
+						<xs:appinfo>
+							<summary>
+								A flag to identify whether to return list entries.
+							</summary>
+							<CallInfo>
+								<CallName>
+									FindList
+								</CallName>
+							</CallInfo>
+						</xs:appinfo>
+					</xs:annotation>
+				</xs:element>	
+				
+			</xs:sequence>
+          </xs:extension>
+        </xs:complexContent>       
+      </xs:complexType>
+      
+    <xs:complexType  name="GetListsResponse">
+		<xs:complexContent>
+	        <xs:annotation>
+	          <xs:documentation>
+	             Gets the contents of one or more collections.
+	          </xs:documentation>        
+			</xs:annotation>
+			
+			<xs:extension base="tns:BaseResponse">
+			
+	        <xs:sequence>
+	          	<xs:element minOccurs="0" name="list" type="tns:List" maxOccurs="unbounded" />
+	        </xs:sequence> 
+			
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+      
+      <xs:element name="deleteListsRequest"  type="tns:DeleteListsRequest"/>
+      <xs:element name="deleteListsResponse" type="tns:DeleteListsResponse"/>  
+      
+      <xs:complexType name="DeleteListsRequest">
+		<xs:annotation>
+          <xs:documentation>
+				Deletes one or more collections.
+				All data related to this collection such as a collection attribute, 
+                an entry, and entry attributes are deleted.
+          </xs:documentation>
+        </xs:annotation>       
+       <xs:sequence>
+          	<xs:element minOccurs="1" name="listId" type="xs:string" maxOccurs="unbounded" />
+        </xs:sequence>       
+      </xs:complexType>
+      
+      <xs:complexType  name="DeleteListsResponse">
+        <xs:annotation>
+          <xs:documentation>
+            Deletes one or more collections.
+			All data related to this collection such as a collection attribute, 
+            an entry, and entry attributes are deleted.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseResponse">
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+     
+      <xs:element name="deleteListEntriesRequest" type="tns:DeleteListEntriesRequest"/>
+      <xs:element name="deleteListEntriesResponse" type="tns:DeleteListEntriesResponse"/>
+      
+      <xs:complexType name="DeleteListEntriesRequest">
+		<xs:annotation>
+          <xs:documentation>
+            Deletes one or more list entries.
+          </xs:documentation>
+        </xs:annotation>       
+       <xs:sequence>
+	        <xs:element name="listEntrySet" type="tns:ListEntrySet" minOccurs="1" maxOccurs="unbounded" >
+		  <xs:annotation>
+			<xs:documentation>
+			Delete a list entry.
+			</xs:documentation>
+           </xs:annotation>
+        </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      
+      <xs:complexType  name="DeleteListEntriesResponse">
+        <xs:annotation>
+          <xs:documentation>
+            Base response container for all service
+            operations in buying list Service.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseResponse">
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>      
+     
+      <xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+      <xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+      
+      <xs:complexType name="GetVersionRequest">
+              <xs:annotation>
+	            <xs:documentation>
+	              Gets the version for this service.
+	            </xs:documentation>
+             </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseRequest"/>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="GetVersionResponse">
+           <xs:annotation>
+	  	   <xs:documentation>
+	  	     Gets the version for this service.
+	  	   </xs:documentation>
+           </xs:annotation>
+        <xs:complexContent>
+          <xs:extension base="tns:BaseResponse"/>
+        </xs:complexContent>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  
+  <wsdl:message name="createListsResponse">
+    <wsdl:part element="tns:createListsResponse" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+   <wsdl:message name="createListsRequest">
+    <wsdl:part element="tns:createListsRequest" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getListsResponse">
+    <wsdl:part element="tns:getListsResponse" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+   <wsdl:message name="getListsRequest">
+    <wsdl:part element="tns:getListsRequest" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="updateListResponse">
+    <wsdl:part element="tns:updateListResponse" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+   <wsdl:message name="updateListRequest">
+    <wsdl:part element="tns:updateListRequest" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+  
+  <wsdl:message name="addListEntriesResponse">
+    <wsdl:part element="tns:addListEntriesResponse" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+   <wsdl:message name="addListEntriesRequest">
+    <wsdl:part element="tns:addListEntriesRequest" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>  
+  
+  <wsdl:message name="deleteListsResponse">
+    <wsdl:part element="tns:deleteListsResponse" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+   <wsdl:message name="deleteListsRequest">
+    <wsdl:part element="tns:deleteListsRequest" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+ 
+  <wsdl:message name="deleteListEntriesResponse">
+    <wsdl:part element="tns:deleteListEntriesResponse" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+   <wsdl:message name="deleteListEntriesRequest">
+    <wsdl:part element="tns:deleteListEntriesRequest" name="messageParameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getVersionRequest">
+    <wsdl:part name="messageParameters" element="tns:getVersionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="messageParameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  
+  <portType name="BuyingListServicePort">
+    <operation name="createLists">
+      <wsdl:documentation>
+        Adds a collection.
+      </wsdl:documentation>
+      <input message="tns:createListsRequest">
+      </input>
+      <output message="tns:createListsResponse">
+      </output>
+    </operation>
+    
+    <operation name="getLists">
+      <wsdl:documentation>
+        Gets the contents of one or more collections.
+      </wsdl:documentation>
+      <input message="tns:getListsRequest">
+      </input>
+      <output message="tns:getListsResponse">
+      </output>
+    </operation>
+    
+    <operation name="updateList">
+      <wsdl:documentation>
+        Removes values for an attribute in a collection entry.
+      </wsdl:documentation>
+      <input message="tns:updateListRequest">
+      </input>
+      <output message="tns:updateListResponse">
+      </output>
+    </operation>
+    
+    <operation name="addListEntries">
+      <wsdl:documentation>
+        Finds all the collections created by the 
+        owner id (user id), including collection attributes, entries, 
+        entry attributes using this.
+      </wsdl:documentation>
+      <input message="tns:addListEntriesRequest">
+      </input>
+      <output message="tns:addListEntriesResponse">
+      </output>
+    </operation>
+    
+    <operation name="deleteLists">
+      <wsdl:documentation>
+        Deletes one or more collections.
+        All data related to this collection such as a collection attribute, 
+        entry, and entry attributes are deleted.
+      </wsdl:documentation>
+      <input message="tns:deleteListsRequest">
+      </input>
+      <output message="tns:deleteListsResponse">
+      </output>
+    </operation>
+
+    <operation name="deleteListEntries">
+      <wsdl:documentation>
+        Rmoves entries in a collection.
+      </wsdl:documentation>
+      <input message="tns:deleteListEntriesRequest">
+      </input>
+      <output message="tns:deleteListEntriesResponse">
+      </output>
+    </operation>
+    
+    <wsdl:operation name="getVersion">
+      <wsdl:documentation>
+        Retrieves the version of the service.
+      </wsdl:documentation>
+      <wsdl:input message="tns:getVersionRequest">
+      </wsdl:input>
+      <wsdl:output message="tns:getVersionResponse">
+      </wsdl:output>
+    </wsdl:operation>
+  </portType>
+
+  <binding name="BuyingListServiceHttpBinding" type="tns:BuyingListServicePort">
+    <http:binding verb="POST"/>
+    <operation name="createLists">
+      <http:operation location="/createLists"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getLists">
+      <http:operation location="/getLists"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="updateList">
+      <http:operation location="/updateList"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addListEntries">
+      <http:operation location="/addListEntries"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="deleteLists">
+      <http:operation location="/deleteLists"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="deleteListEntries">
+      <http:operation location="/deleteListEntries"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>    
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="BuyingListServiceSOAPBinding" type="tns:BuyingListServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createLists">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/createLists"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>    
+    <operation name="getLists">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/getLists"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteLists">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/deleteLists"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="updateList">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/updateList"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addListEntries">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/addListEntries"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteListEntries">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/deleteListEntries"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation> 
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/buying/v1/services/getVersion"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </binding>
+  <service name="BuyingListService">
+    <wsdl:documentation>
+      <Version>1.0.0</Version>
+      The Buying List Service lets eBay applications group eBay 
+      entities (items, saved searches, saved sellers) 
+      into an ordered collection and store it. This web service enables 
+      eBay applications to create, fetch, and manipulate collections 
+      and collection details.
+    </wsdl:documentation>
+    <port binding="tns:BuyingListServiceHttpBinding" name="BuyingListServiceHttpPort">
+      <http:address location="http://svcs.ebay.com/services/buying/v1/BuyingListService"/>
+    </port>
+    <port binding="tns:BuyingListServiceSOAPBinding" name="BuyingListServiceSOAPPort">
+      <soap12:address location="http://svcs.ebay.com/services/buying/v1/BuyingListService"/>
+    </port>
+  </service>
+</definitions>

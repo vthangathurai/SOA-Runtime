@@ -1,0 +1,1464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:ordermanagement="http://www.ebay.com/marketplace/ordermanagement/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="OrderManagementService"
+	targetNamespace="http://www.ebay.com/marketplace/ordermanagement/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/ordermanagement/v1/services"
+			xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" ecore:nsPrefix="ordermanagement"
+			ecore:package="com.ebay.mmp.ordermanagement"
+			xmlns:ordermanagement="http://www.ebay.com/marketplace/ordermanagement/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but
+								something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not
+								processed successfully. When a
+								serious application-level error
+								occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="ordermanagement:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="ordermanagement:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="ordermanagement:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="ordermanagement:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain" type="xs:string" />
+					<xs:element name="severity" type="ordermanagement:ErrorSeverity" />
+					<xs:element name="category" type="ordermanagement:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+						type="ordermanagement:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!--
+
+					processContents="lax" /> </xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="ordermanagement:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="ordermanagement:GetVersionRequest" />
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="ordermanagement:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Contract">
+				<xs:sequence>
+
+                    <xs:element name="buyerId" type="xs:long"></xs:element>
+                    <xs:element name="state" type="ordermanagement:OrderStatus"></xs:element>
+
+                    <xs:element name="order" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+                </xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="PurchaseOrder">
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:Contract">
+
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RefundOrder">
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:Contract" />
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CancelOrder">
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:Contract" />
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PayoutOrder">
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:Contract" />
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType ecore:name="reviseOrder" name="ReviseOrder">
+				<xs:complexContent>
+					<xs:extension base="ordermanagement:Contract" />
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Order">
+				<xs:sequence>
+					<xs:element name="sellerId" type="xs:long" />
+					<xs:element type="ordermanagement:PaymentMethod" name="paymentMethod" />
+					<xs:element name="paymentToken" type="xs:string" />
+					<xs:element name="paymentState" type="ordermanagement:PaymentStatus" />
+					<xs:element type="ordermanagement:LineItem" name="lineItem"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="LineItem">
+				<xs:sequence>
+					<xs:element name="externalId" type="xs:string"></xs:element>
+					<xs:element name="price" type="xs:decimal" />
+					<xs:element name="quantity" type="xs:long" />
+					<xs:element name="shippingState" type="ordermanagement:ShipmentStatus" />
+					<xs:element name="priceLine" type="ordermanagement:PriceLine"
+						minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="incentive" type="ordermanagement:PriceLine"
+						minOccurs="1" maxOccurs="unbounded" />
+					<xs:element type="ordermanagement:ShippingMethod" name="shippingMethod" />
+					<xs:element type="ordermanagement:Address" name="shipToAddress" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="Address">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" />
+					<xs:element name="street1" type="xs:string" />
+					<xs:element name="street2" type="xs:string" />
+					<xs:element name="city" type="xs:string" />
+					<xs:element name="county" type="xs:string" />
+					<xs:element name="stateOrProvince" type="xs:string" />
+					<xs:element name="country" type="xs:string" />
+					<xs:element name="postalCode" type="xs:string" />
+					<xs:element name="phone" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PriceLine">
+				<xs:sequence>
+					<xs:element name="type" type="ordermanagement:PriceLineType"></xs:element>
+					<xs:element name="externalId" type="xs:long" />
+					<xs:element name="amount" type="xs:decimal" />
+					<xs:element name="desc" type="xs:string" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="Incentive">
+				<xs:sequence>
+					<xs:element name="incentive" type="xs:string"></xs:element>
+					<xs:element name="priceLine" type="ordermanagement:PriceLine"></xs:element>
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="ShippingMethod">
+				<xs:sequence>
+					<xs:element type="ordermanagement:PriceLine" name="costPriceLine" />
+					<xs:element type="ordermanagement:PriceLine" name="discountPriceLine" />
+					<xs:element name="shippingServiceToken" type="xs:string" />
+					<xs:element name="shippingServiceName" type="xs:string" />
+					<xs:element name="shippingCarrier" type="xs:string" />
+					<xs:element name="carrierServiceCode" type="xs:string" />
+					<xs:element name="minDeliveryDate" type="xs:dateTime" />
+					<xs:element name="maxDeliveryDate" type="xs:dateTime" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="PaymentMethod">
+				<xs:sequence>
+					<xs:element name="method" type="xs:string" />
+					<xs:element name="amount" type="xs:decimal" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:long" />
+			</xs:complexType>
+			<xs:complexType name="OrderUpdateResult">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="orderId"
+						type="xs:long" />
+					<xs:element name="status" type="ordermanagement:OrderUpdateResultType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OrderManager">
+				<xs:annotation>
+					<xs:appinfo ecore:key="operations"
+						source="http://www.eclipse.org/emf/2002/Ecore">
+						<operation name="createPurchaseOrder" type="ordermanagement:PurchaseOrder">
+							<parameter name="cartId" type="xs:long" />
+						</operation>
+						<operation lowerBound="1" name="findPurchaseOrder"
+							type="ordermanagement:PurchaseOrder">
+							<parameter name="purchaseOrderId" type="xs:long" />
+						</operation>
+						<operation name="findPurchaseOrders" type="ordermanagement:PurchaseOrder"
+							upperBound="-1">
+							<parameter name="purchaseOrderIds" type="xs:long"
+								upperBound="-1" />
+						</operation>
+						<operation name="findOrder" type="ordermanagement:Order">
+							<parameter name="orderId" type="xs:long" />
+						</operation>
+						<operation name="findOrdersContainingMerchandise" type="ordermanagement:Order"
+							upperBound="-1">
+							<parameter name="merchandiseId" type="xs:string" />
+						</operation>
+						<operation name="findAllOrdersBySeller" type="ordermanagement:Order"
+							upperBound="-1">
+							<parameter name="sellerId" type="xs:long" />
+						</operation>
+						<operation lowerBound="1" name="markShipped"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+							<parameter name="trackId" type="xs:string" />
+						</operation>
+						<operation lowerBound="1" name="unmarkShipped"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+						</operation>
+						<operation lowerBound="1" name="markShipmentReceived"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+						</operation>
+						<operation lowerBound="1" name="unmarkShipmentReceived"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+						</operation>
+						<operation lowerBound="1" name="markPaid"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+							<parameter name="paymentsKey" type="xs:string" />
+						</operation>
+						<operation lowerBound="1" name="unmarkPaid"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+						</operation>
+						<operation lowerBound="1" name="markPaymentRecieved"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+						</operation>
+						<operation lowerBound="1" name="unmarkPaymentRecieved"
+							type="ordermanagement:OrderUpdateResult">
+							<parameter name="orderId" type="xs:long" upperBound="-1" />
+						</operation>
+						<operation name="createReverseOrder" type="ordermanagement:CancelOrder">
+							<parameter name="orderId" type="xs:long" />
+						</operation>
+						<operation name="createRefundOrder" type="ordermanagement:RefundOrder">
+							<parameter name="orderId" type="xs:long" />
+							<parameter name="proformaOrder" type="ordermanagement:ProformaOrder" />
+						</operation>
+						<operation name="createPayoutOrder" type="ordermanagement:RefundOrder">
+							<parameter name="orderId" type="xs:long" />
+							<parameter name="proformaOrder" type="ordermanagement:ProformaOrder" />
+						</operation>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType name="ProformaOrder">
+				<xs:sequence>
+					<xs:element name="adjustPriceLine" type="ordermanagement:PriceLine"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="orderId" type="xs:long" />
+			</xs:complexType>
+			<xs:simpleType name="PaymentStatus">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNKNOWN" />
+					<xs:enumeration value="NOT_PAID" />
+					<xs:enumeration value="PENDING" />
+					<xs:enumeration value="PAID" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ShipmentStatus">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNKNOWN" />
+					<xs:enumeration value="NOT_SHIPPED" />
+					<xs:enumeration value="SHIPPED" />
+					<xs:enumeration value="RECEIVED" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="OrderStatus">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNKNOWN" />
+					<xs:enumeration value="INIT" />
+					<xs:enumeration value="COMMITED" />
+					<xs:enumeration value="DELETED" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="PriceLineType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNKNOWN" />
+					<xs:enumeration value="ITEM_COST" />
+					<xs:enumeration value="ITEM_TAX" />
+					<xs:enumeration value="SHIPPING_COST" />
+					<xs:enumeration value="HANDLING_COST" />
+					<xs:enumeration value="INCENTIVE" />
+					<xs:enumeration value="SHIPPING_TAX" />
+					<xs:enumeration value="SHIPPING_DISCOUNT" />
+					<xs:enumeration value="ORDER_ADJUSTMENT" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="OrderUpdateResultType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNKNOWN" />
+					<xs:enumeration value="SUCCESS" />
+					<xs:enumeration value="PARTIAL_FAILURE" />
+					<xs:enumeration value="FAILURE" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="createPurchaseOrderRequest"
+				type="ordermanagement:CreatePurchaseOrderRequest" />
+
+			<xs:element name="createPurchaseOrderResponse"
+				type="ordermanagement:CreatePurchaseOrderResponse" />
+
+			<xs:element name="findPurchaseOrderRequest"
+				type="ordermanagement:FindPurchaseOrderRequest" />
+
+			<xs:element name="findPurchaseOrderResponse"
+				type="ordermanagement:FindPurchaseOrderResponse" />
+
+			<xs:element name="findPurchaseOrdersRequest"
+				type="ordermanagement:FindPurchaseOrdersRequest" />
+
+			<xs:element name="findPurchaseOrdersResponse"
+				type="ordermanagement:FindPurchaseOrdersResponse">
+			</xs:element>
+
+			<xs:complexType name="CreatePurchaseOrderRequest">
+				<xs:sequence>
+					<xs:element name="cartId" type="xs:long"></xs:element>
+					<xs:element name="cart" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CreatePurchaseOrderResponse">
+				<xs:sequence>
+					<xs:element name="purchaseOrder" type="ordermanagement:PurchaseOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindPurchaseOrderRequest">
+				<xs:sequence>
+					<xs:element name="purchaseOrderId" type="xs:long"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindPurchaseOrderResponse">
+				<xs:sequence>
+					<xs:element name="purchaseOrder" type="ordermanagement:PurchaseOrder"
+						maxOccurs="1" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindPurchaseOrdersRequest">
+				<xs:sequence>
+					<xs:element name="purchaseOrderId" type="xs:long"
+						maxOccurs="unbounded" minOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindPurchaseOrdersResponse">
+				<xs:sequence>
+					<xs:element name="purchaseOrder" type="ordermanagement:PurchaseOrder"
+						maxOccurs="unbounded" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="findOrderResponse" type="ordermanagement:FindOrderResponse"></xs:element>
+			<xs:element name="findOrderRequest" type="ordermanagement:FindOrderRequest"></xs:element>
+			<xs:element name="findOrdersRequest" type="ordermanagement:FindOrdersRequest"></xs:element>
+			<xs:element name="findOrdersResponse" type="ordermanagement:FindOrdersResponse"></xs:element>
+			<xs:complexType name="FindOrderRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindOrderResponse">
+				<xs:sequence>
+					<xs:element name="order" type="ordermanagement:Order"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindOrdersRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindOrdersResponse">
+				<xs:sequence>
+					<xs:element name="order" type="ordermanagement:Order"
+						minOccurs="0" maxOccurs="unbounded"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="findAllOrdersBySellerRequest"
+				type="ordermanagement:FindAllOrdersBySellerRequest"></xs:element>
+			<xs:element name="findAllOrdersBySellerResponse"
+				type="ordermanagement:FindAllOrdersBySellerResponse"></xs:element>
+			<xs:complexType name="FindAllOrdersBySellerRequest">
+				<xs:sequence>
+					<xs:element name="sellerId" type="xs:long"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindAllOrdersBySellerResponse">
+				<xs:sequence>
+					<xs:element name="order" type="ordermanagement:Order"
+						maxOccurs="unbounded" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="markShippedRequest" type="ordermanagement:MarkShippedRequest"></xs:element>
+			<xs:element name="markShippedResponse" type="ordermanagement:MarkShippedResponse"></xs:element>
+			<xs:complexType name="MarkShippedRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" minOccurs="0"
+						maxOccurs="unbounded"></xs:element>
+					<xs:element name="trackId" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MarkShippedResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="unmarkShippedRequest" type="ordermanagement:UnmarkShippedRequest"></xs:element>
+			<xs:element name="unmarkShippedResponse" type="ordermanagement:UnmarkShippedResponse"></xs:element>
+			<xs:complexType name="UnmarkShippedRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UnmarkShippedResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="markShipmentReceivedRequest"
+				type="ordermanagement:MarkShipmentReceivedRequest"></xs:element>
+			<xs:element name="markShipmentReceivedResponse"
+				type="ordermanagement:MarkShipmentReceivedResponse"></xs:element>
+			<xs:complexType name="MarkShipmentReceivedRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MarkShipmentReceivedResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="unmarkShipmentReceivedRequest"
+				type="ordermanagement:UnmarkShipmentReceivedRequest"></xs:element>
+			<xs:element name="unmarkShipmentReceivedResponse"
+				type="ordermanagement:UnmarkShipmentReceivedResponse"></xs:element>
+			<xs:complexType name="UnmarkShipmentReceivedRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UnmarkShipmentReceivedResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="markPaidRequest" type="ordermanagement:MarkPaidRequest"></xs:element>
+			<xs:element name="markPaidResponse" type="ordermanagement:MarkPaidResponse"></xs:element>
+			<xs:complexType name="MarkPaidRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0">
+					</xs:element>
+					<xs:element name="paymentsKey" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MarkPaidResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="unmarkPaidRequest" type="ordermanagement:UnmarkPaidRequest"></xs:element>
+			<xs:element name="unmarkPaidResponse" type="ordermanagement:UnmarkPaidResponse"></xs:element>
+			<xs:complexType name="UnmarkPaidRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UnmarkPaidResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="markPaymentReceivedRequest"
+				type="ordermanagement:MarkPaymentReceivedRequest"></xs:element>
+			<xs:element name="markPaymentReceivedResponse"
+				type="ordermanagement:MarkPaymentReceivedResponse"></xs:element>
+			<xs:complexType name="MarkPaymentReceivedRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="MarkPaymentReceivedResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="unmarkPaymentReceivedRequest"
+				type="ordermanagement:UnmarkPaymentReceivedRequest"></xs:element>
+			<xs:element name="unmarkPaymentReceivedResponse"
+				type="ordermanagement:UnmarkPaymentReceivedResponse"></xs:element>
+			<xs:complexType name="UnmarkPaymentReceivedRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UnmarkPaymentReceivedResponse">
+				<xs:sequence>
+					<xs:element name="orderUpdateResult" type="ordermanagement:OrderUpdateResult"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="cancelOrderRequest" type="ordermanagement:CancelOrderRequest"></xs:element>
+			<xs:element name="cancelOrderResponse" type="ordermanagement:CancelOrderResponse"></xs:element>
+			<xs:complexType name="CancelOrderRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CancelOrderResponse">
+				<xs:sequence>
+					<xs:element name="cancelOrder" type="ordermanagement:CancelOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="createRefundOrderRequest"
+				type="ordermanagement:CreateRefundOrderRequest"></xs:element>
+			<xs:element name="createRefundOrderResponse"
+				type="ordermanagement:CreateRefundOrderResponse"></xs:element>
+			<xs:complexType name="CreateRefundOrderRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+					<xs:element name="proformaOrder" type="ordermanagement:ProformaOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CreateRefundOrderResponse">
+				<xs:sequence>
+					<xs:element name="refundOrder" type="ordermanagement:RefundOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="createPayoutOrderRequest"
+				type="ordermanagement:CreatePayoutOrderRequest"></xs:element>
+			<xs:element name="createPayoutOrderResponse"
+				type="ordermanagement:CreatePayoutOrderResponse"></xs:element>
+			<xs:complexType name="CreatePayoutOrderRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+					<xs:element name="proformaOrder" type="ordermanagement:ProformaOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CreatePayoutOrderResponse">
+				<xs:sequence>
+					<xs:element name="payoutOrder" type="ordermanagement:PayoutOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="findOrdersContainingMerchandiseRequest"
+				type="ordermanagement:FindOrdersContainingMerchandiseRequest"></xs:element>
+			<xs:element name="findOrdersContainingMerchandiseResponse"
+				type="ordermanagement:FindOrdersContainingMerchandiseResponse"></xs:element>
+			<xs:complexType name="FindOrdersContainingMerchandiseRequest">
+				<xs:sequence>
+					<xs:element name="merchandiseId" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="FindOrdersContainingMerchandiseResponse">
+				<xs:sequence>
+					<xs:element name="order" type="ordermanagement:Order"
+						maxOccurs="unbounded" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="reviseOrderRequest" type="ordermanagement:ReviseOrderRequest"></xs:element>
+			<xs:element name="reviseOrderResponse" type="ordermanagement:ReviseOrderResponse"></xs:element>
+			<xs:complexType name="ReviseOrderRequest">
+				<xs:sequence>
+					<xs:element name="orderId" type="xs:long"></xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="lineItemId"
+						type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ReviseOrderResponse">
+				<xs:sequence>
+					<xs:element name="reviseOrder" type="ordermanagement:ReviseOrder"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="ordermanagement:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="ordermanagement:getVersionResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="createPurchaseOrderRequest">
+		<wsdl:part element="ordermanagement:createPurchaseOrderRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="createPurchaseOrderResponse">
+		<wsdl:part element="ordermanagement:createPurchaseOrderResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="findPurchaseOrderRequest">
+		<wsdl:part element="ordermanagement:findPurchaseOrderRequest"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="findPurchaseOrderResponse">
+		<wsdl:part element="ordermanagement:findPurchaseOrderResponse"
+			name="params" />
+	</wsdl:message>
+	<wsdl:message name="findOrdersContainingMerchandiseRequest">
+		<wsdl:part name="params"
+			element="ordermanagement:findOrdersContainingMerchandiseRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findOrdersContainingMerchandiseResponse">
+		<wsdl:part name="params"
+			element="ordermanagement:findOrdersContainingMerchandiseResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findPurchaseOrdersRequest">
+		<wsdl:part name="params" element="ordermanagement:findPurchaseOrdersRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findPurchaseOrdersResponse">
+		<wsdl:part name="findPurchaseOrdersResponse" element="ordermanagement:findPurchaseOrdersResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findOrderRequest">
+		<wsdl:part name="params" element="ordermanagement:findOrderRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findOrderResponse">
+		<wsdl:part name="findOrderResponse" element="ordermanagement:findOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findOrdersRequest">
+		<wsdl:part name="params" element="ordermanagement:findOrdersRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findOrdersResponse">
+		<wsdl:part name="findOrdersResponse" element="ordermanagement:findOrdersResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findAllOrdersBySellerRequest">
+		<wsdl:part name="params"
+			element="ordermanagement:findAllOrdersBySellerRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findAllOrdersBySellerResponse">
+		<wsdl:part name="findAllOrdersBySellerResponse"
+			element="ordermanagement:findAllOrdersBySellerResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markShippedRequest">
+		<wsdl:part name="params" element="ordermanagement:markShippedRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markShippedResponse">
+		<wsdl:part name="markShippedResponse" element="ordermanagement:markShippedResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkShippedRequest">
+		<wsdl:part name="params" element="ordermanagement:unmarkShippedRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkShippedResponse">
+		<wsdl:part name="unmarkShippedResponse" element="ordermanagement:unmarkShippedResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markShipmentReceivedRequest">
+		<wsdl:part name="params"
+			element="ordermanagement:markShipmentReceivedRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markShipmentReceivedResponse">
+		<wsdl:part name="markShipmentReceivedResponse"
+			element="ordermanagement:markShipmentReceivedResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkShipmentReceivedRequest">
+		<wsdl:part name="params"
+			element="ordermanagement:unmarkShipmentReceivedRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkShipmentReceivedResponse">
+		<wsdl:part name="unmarkShipmentReceivedResponse"
+			element="ordermanagement:unmarkShipmentReceivedResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markPaidRequest">
+		<wsdl:part name="params" element="ordermanagement:markPaidRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markPaidResponse">
+		<wsdl:part name="markPaidResponse" element="ordermanagement:markPaidResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkPaidRequest">
+		<wsdl:part name="params" element="ordermanagement:unmarkPaidRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkPaidResponse">
+		<wsdl:part name="unmarkPaidResponse" element="ordermanagement:unmarkPaidResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markPaymentReceivedRequest">
+		<wsdl:part name="params" element="ordermanagement:markPaymentReceivedRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="markPaymentReceivedResponse">
+		<wsdl:part name="markPaymentReceivedResponse"
+			element="ordermanagement:markPaymentReceivedResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkPaymentReceivedRequest">
+		<wsdl:part name="params"
+			element="ordermanagement:unmarkPaymentReceivedRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="unmarkPaymentReceivedResponse">
+		<wsdl:part name="unmarkPaymentReceivedResponse"
+			element="ordermanagement:unmarkPaymentReceivedResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="cancelOrderRequest">
+		<wsdl:part name="params" element="ordermanagement:cancelOrderRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="cancelOrderResponse">
+		<wsdl:part name="cancelOrderResponse" element="ordermanagement:cancelOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createRefundOrderRequest">
+		<wsdl:part name="params" element="ordermanagement:createRefundOrderRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createRefundOrderResponse">
+		<wsdl:part name="createRefundOrderResponse" element="ordermanagement:createRefundOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createPayoutOrderRequest">
+		<wsdl:part name="params" element="ordermanagement:createPayoutOrderRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createPayoutOrderResponse">
+		<wsdl:part name="createPayoutOrderResponse" element="ordermanagement:createPayoutOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="reviseOrderRequest">
+		<wsdl:part name="params" element="ordermanagement:reviseOrderRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="reviseOrderResponse">
+		<wsdl:part name="reviseOrderResponse" element="ordermanagement:reviseOrderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="OrderManagementServicePort">
+
+		<wsdl:operation name="createPurchaseOrder">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="ordermanagement:createPurchaseOrderRequest" />
+			<wsdl:output message="ordermanagement:createPurchaseOrderResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findPurchaseOrder">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="ordermanagement:findPurchaseOrderRequest" />
+			<wsdl:output message="ordermanagement:findPurchaseOrderResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findOrdersContainingMerchandise">
+			<wsdl:input message="ordermanagement:findOrdersContainingMerchandiseRequest"></wsdl:input>
+			<wsdl:output
+				message="ordermanagement:findOrdersContainingMerchandiseResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findPurchaseOrders">
+			<wsdl:input message="ordermanagement:findPurchaseOrdersRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:findPurchaseOrdersResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrder">
+			<wsdl:input message="ordermanagement:findOrderRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:findOrderResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrders">
+			<wsdl:input message="ordermanagement:findOrdersRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:findOrdersResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findAllOrdersBySeller">
+			<wsdl:input message="ordermanagement:findAllOrdersBySellerRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:findAllOrdersBySellerResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markShipped">
+			<wsdl:input message="ordermanagement:markShippedRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:markShippedResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkShipped">
+			<wsdl:input message="ordermanagement:unmarkShippedRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:unmarkShippedResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markShipmentReceived">
+			<wsdl:input message="ordermanagement:markShipmentReceivedRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:markShipmentReceivedResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkShipmentReceived">
+			<wsdl:input message="ordermanagement:unmarkShipmentReceivedRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:unmarkShipmentReceivedResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markPaid">
+			<wsdl:input message="ordermanagement:markPaidRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:markPaidResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkPaid">
+			<wsdl:input message="ordermanagement:unmarkPaidRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:unmarkPaidResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markPaymentReceived">
+			<wsdl:input message="ordermanagement:markPaymentReceivedRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:markPaymentReceivedResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkPaymentReceived">
+			<wsdl:input message="ordermanagement:unmarkPaymentReceivedRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:unmarkPaymentReceivedResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrder">
+			<wsdl:input message="ordermanagement:cancelOrderRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:cancelOrderResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createRefundOrder">
+			<wsdl:input message="ordermanagement:createRefundOrderRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:createRefundOrderResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createPayoutOrder">
+			<wsdl:input message="ordermanagement:createPayoutOrderRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:createPayoutOrderResponse"></wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getVersion">
+			<wsdl:input message="ordermanagement:getVersionRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:getVersionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="reviseOrder">
+			<wsdl:input message="ordermanagement:reviseOrderRequest"></wsdl:input>
+			<wsdl:output message="ordermanagement:reviseOrderResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="OrderManagementServiceHttpBinding"
+		type="ordermanagement:OrderManagementServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createPurchaseOrder">
+			<http:operation location="/createPurchaseOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findPurchaseOrder">
+			<http:operation location="/findPurchaseOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrdersContainingMerchandise">
+			<http:operation location="/findOrderContainingMerchandise" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findPurchaseOrders">
+			<http:operation location="/findPurchaseOrders" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrder">
+			<http:operation location="/findOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrders">
+			<http:operation location="/findOrders" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findAllOrdersBySeller">
+			<http:operation location="/findAllOrdersBySeller" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markShipped">
+			<http:operation location="/markShipped" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkShipped">
+			<http:operation location="/unmarkShipped" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markShipmentReceived">
+			<http:operation location="/markShipmentReceived" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkShipmentReceived">
+			<http:operation location="/unmarkShipmentReceived" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markPaid">
+			<http:operation location="/markPaid" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkPaid">
+			<http:operation location="/unmarkPaid" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markPaymentReceived">
+			<http:operation location="/markPaymentReceived" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkPaymentReceived">
+			<http:operation location="/unmarkPaymentReceived" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrder">
+			<http:operation location="/cancelOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createRefundOrder">
+			<http:operation location="/createRefundOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createPayoutOrder">
+			<http:operation location="/createPayoutOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="reviseOrder">
+			<http:operation location="/reviseOrder" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="OrderManagementServiceSOAPBinding"
+		type="ordermanagement:OrderManagementServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/reputation/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createPurchaseOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/createPurchaseOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findPurchaseOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/findPurchaseOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrdersContainingMerchandise">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/findOrderContainingMerchandise" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findPurchaseOrders">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/findPurchaseOrders" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/findOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findOrders">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/findOrders" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findAllOrdersBySeller">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/findAllOrdersBySeller" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markShipped">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/markShipped" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkShipped">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/unmarkShipped" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markShipmentReceived">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/markShipmentReceived" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkShipmentReceived">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/unmarkShipmentReceived" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markPaid">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/markPaid" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkPaid">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/unmarkPaid" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="markPaymentReceived">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/markPaymentReceived" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unmarkPaymentReceived">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/unmarkPaymentReceived" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/cancelOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createRefundOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/createRefundOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createPayoutOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/createPayoutOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="reviseOrder">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ordermanagement/v1/services/reviseOrder" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="OrderManagementService">
+		<wsdl:documentation>
+			<version>1.0.0</version>
+		</wsdl:documentation>
+		<wsdl:port binding="ordermanagement:OrderManagementServiceHttpBinding"
+			name="OrderManagementServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/ordermanagement/v1/OrderManagementService" />
+		</wsdl:port>
+		<wsdl:port binding="ordermanagement:OrderManagementServiceSOAPBinding"
+			name="OrderManagementServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/ordermanagement/v1/OrderManagementService" />
+			<soap:address
+				location="https://svcs.ebay.com/services/ordermanagement/v1/OrderManagementService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

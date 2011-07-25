@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ContactInfoUtilityService" targetNamespace="http://www.ebay.com/marketplace/registration/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/registration/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/registration/v1/services">
+	<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+		<xs:complexType name="BaseValidationResponse">
+				<xs:annotation>
+					<xs:documentation>
+					Response used for all the registration related validations.
+					</xs:documentation>
+					<xs:appinfo>
+						<summary>							
+			            		</summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="ValidationResult" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+							Result of the validate operation
+							</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<AllCalls/>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Returns the current version of the service.
+						This simple call can be used to monitor the service for availability.
+						This call has no input parameters and
+						the response contains only the standard output fields.
+					</xs:documentation>
+					<xs:appinfo>
+						<summary>
+							Returns the current version of the service. 
+            		</summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response container for the getVersion API call.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="validateRegistrationEmailAddressRequest" type="tns:ValidateRegistrationEmailAddressRequest"/>
+			<xs:complexType name="ValidateRegistrationEmailAddressRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="emailAddress" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="validateRegistrationEmailAddressResponse" type="tns:ValidateRegistrationEmailAddressResponse"/>
+			<xs:complexType name="ValidateRegistrationEmailAddressResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--start Request Response for validateOwnerName-->
+			<xs:element name="validateOwnerNameRequest" type="tns:ValidateOwnerNameRequest"/>
+			<xs:complexType name="ValidateOwnerNameRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="ownerName" type="tns:PersonName"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="countryCode" type="xs:token"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PersonName">
+					<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+		        <xs:sequence>
+		              <xs:element name="firstName" type="xs:string" maxOccurs="1" minOccurs="1">
+		              </xs:element>
+		              <xs:element name="middleName"
+		                    type="xs:string" maxOccurs="1" minOccurs="0">
+		              </xs:element>
+		              <xs:element name="lastName" type="xs:string" maxOccurs="1" minOccurs="1">
+		              </xs:element>
+		              <xs:element name="salutation"
+		                    type="xs:token" maxOccurs="1" minOccurs="0">
+		              </xs:element>
+		        </xs:sequence>
+			</xs:complexType>			
+			<xs:element name="validateOwnerNameResponse" type="tns:ValidateOwnerNameResponse"/>
+			<xs:complexType name="ValidateOwnerNameResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="validateOwnerFirstNameRequest" type="tns:ValidateOwnerFirstNameRequest"/>
+			<xs:complexType name="ValidateOwnerFirstNameRequest">
+			<xs:complexContent>
+			<xs:extension base="tns:BaseRequest">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="firstName" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="countryCode" type="xs:token"/>
+				</xs:sequence>
+				</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="validateOwnerFirstNameResponse" type="tns:ValidateOwnerFirstNameResponse"/>
+			<xs:complexType name="ValidateOwnerFirstNameResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--End Request Response for validateOwnerFirstName-->
+			<!--Start Request Response for validateOwnerLastName-->
+			<xs:element name="validateOwnerLastNameRequest" type="tns:ValidateOwnerLastNameRequest"/>
+			<xs:complexType name="ValidateOwnerLastNameRequest">
+				<xs:complexContent>
+
+			<xs:extension base="tns:BaseRequest">
+			
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="lastName" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="countryCode" type="xs:token"/>
+				</xs:sequence>
+					</xs:extension>
+						</xs:complexContent>
+
+				
+			</xs:complexType>
+			<xs:element name="validateOwnerLastNameResponse" type="tns:ValidateOwnerLastNameResponse"/>
+			<xs:complexType name="ValidateOwnerLastNameResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--End Request Response for validateOwnerLastName-->
+			<!--Start Request Response for validateOwnerMiddleName-->
+			<xs:element name="validateOwnerMiddleNameRequest" type="tns:ValidateOwnerMiddleNameRequest"/>
+			<xs:complexType name="ValidateOwnerMiddleNameRequest">
+			<xs:complexContent>
+
+			<xs:extension base="tns:BaseRequest">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="middleName" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="countryCode" type="xs:token"/>
+				</xs:sequence>
+					</xs:extension>
+				
+</xs:complexContent>
+
+			</xs:complexType>
+			<xs:element name="validateOwnerMiddleNameResponse" type="tns:ValidateOwnerMiddleNameResponse"/>
+			<xs:complexType name="ValidateOwnerMiddleNameResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--End Request Response for validateOwnerMiddleName-->
+			<!--End Request Response for validateOwnerName-->
+			<!--start Request Response for validatePhoneNumber-->
+			<xs:element name="validateRegistrationPhoneNumberRequest" type="tns:ValidateRegistrationPhoneNumberRequest"/>
+			<xs:complexType name="ValidateRegistrationPhoneNumberRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="phoneNumber" type="tns:PhoneNumber"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="countryCode" type="xs:token"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		<xs:complexType name="PhoneNumber">
+			<xs:annotation>
+				<xs:appinfo>
+					<typeLibrarySource library="UserServiceCommonTypeLibrary"
+						namespace="http://www.ebay.com/marketplace/user/v1/types" />
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="CountryPrefix" type="xs:string"
+					maxOccurs="1" minOccurs="0"></xs:element>
+				<xs:element name="AreaCode" type="xs:string" maxOccurs="1"
+					minOccurs="0"></xs:element>
+				<xs:element name="LocalNumberPart1" type="xs:string"
+					maxOccurs="1" minOccurs="1"></xs:element>
+				<xs:element name="LocalNumberPart2" type="xs:string"
+					maxOccurs="1" minOccurs="0"></xs:element>
+				<xs:element name="Extension" type="xs:string" maxOccurs="1"
+					minOccurs="0"></xs:element>
+			</xs:sequence>
+		</xs:complexType>			
+			<xs:element name="validateRegistrationPhoneNumberResponse" type="tns:ValidateRegistrationPhoneNumberResponse"/>
+			<xs:complexType name="ValidateRegistrationPhoneNumberResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!--End Request Response for validatePhoneNumber-->
+			<!--start Request Response for validateRegistrationAddress-->
+			<xs:element name="validateRegistrationAddressRequest" type="tns:ValidateRegistrationAddressRequest"/>
+			<xs:complexType name="ValidateRegistrationAddressRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="addressData" type="tns:Address"/>
+							<xs:element maxOccurs="1" minOccurs="1" name="countryOfResidenceCode" type="xs:token"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="validateRegistrationAddressResponse" type="tns:ValidateRegistrationAddressResponse"/>
+			<xs:complexType name="ValidateRegistrationAddressResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseValidationResponse">						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Address">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="name" type="xs:string"/>
+					<xs:element minOccurs="0" name="street1" type="xs:string"/>
+					<xs:element minOccurs="0" name="street2" type="xs:string"/>
+					<xs:element minOccurs="0" name="city" type="xs:string"/>
+					<xs:element minOccurs="0" name="county" type="xs:string"/>
+					<xs:element minOccurs="0" name="stateOrProvince" type="xs:string"/>
+					<xs:element minOccurs="0" name="country" type="xs:string"/>
+					<xs:element minOccurs="0" name="postalCode" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+  </types>
+  <message name="validateOwnerMiddleNameResponse">
+    <part name="params" element="tns:validateOwnerMiddleNameResponse">
+    </part>
+  </message>
+  <message name="validateOwnerFirstNameResponse">
+    <part name="params" element="tns:validateOwnerFirstNameResponse">
+    </part>
+  </message>
+  <message name="validateOwnerLastNameResponse">
+    <part name="params" element="tns:validateOwnerLastNameResponse">
+    </part>
+  </message>
+  <message name="validateOwnerMiddleNameRequest">
+    <part name="params" element="tns:validateOwnerMiddleNameRequest">
+    </part>
+  </message>
+  <message name="validateOwnerFirstNameRequest">
+    <part name="params" element="tns:validateOwnerFirstNameRequest">
+    </part>
+  </message>
+  <message name="validateOwnerLastNameRequest">
+    <part name="params" element="tns:validateOwnerLastNameRequest">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="validateRegistrationAddressRequest">
+    <part name="params" element="tns:validateRegistrationAddressRequest">
+    </part>
+  </message>
+  <message name="validateRegistrationEmailAddressRequest">
+    <part name="params" element="tns:validateRegistrationEmailAddressRequest">
+    </part>
+  </message>
+  <message name="validateRegistrationEmailAddressResponse">
+    <part name="params" element="tns:validateRegistrationEmailAddressResponse">
+    </part>
+  </message>
+  <message name="validateRegistrationPhoneNumberResponse">
+    <part name="params" element="tns:validateRegistrationPhoneNumberResponse">
+    </part>
+  </message>
+  <message name="validateOwnerNameResponse">
+    <part name="params" element="tns:validateOwnerNameResponse">
+    </part>
+  </message>
+  <message name="validateRegistrationAddressResponse">
+    <part name="params" element="tns:validateRegistrationAddressResponse">
+    </part>
+  </message>
+  <message name="validateRegistrationPhoneNumberRequest">
+    <part name="params" element="tns:validateRegistrationPhoneNumberRequest">
+    </part>
+  </message>
+  <message name="validateOwnerNameRequest">
+    <part name="params" element="tns:validateOwnerNameRequest">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <portType name="ContactInfoUtilityServicePort">
+    <operation name="getVersion">
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="validateRegistrationEmailAddress">
+<documentation>
+				Validate given email address request and send the status in the response.
+			</documentation>
+      <input message="tns:validateRegistrationEmailAddressRequest">
+    </input>
+      <output message="tns:validateRegistrationEmailAddressResponse">
+    </output>
+    </operation>
+    <operation name="validateOwnerName">
+<documentation>
+				Validate given name including first,last, middle and send the status in the response.
+			</documentation>
+      <input message="tns:validateOwnerNameRequest">
+    </input>
+      <output message="tns:validateOwnerNameResponse">
+    </output>
+    </operation>
+    <operation name="validateOwnerFirstName">
+<documentation>
+				Validate given name including first and send the status in the response.
+			</documentation>
+      <input message="tns:validateOwnerFirstNameRequest">
+    </input>
+      <output message="tns:validateOwnerFirstNameResponse">
+    </output>
+    </operation>
+    <operation name="validateOwnerLastName">
+<documentation>
+				Validate given name including last and send the status in the response.
+			</documentation>
+      <input message="tns:validateOwnerLastNameRequest">
+    </input>
+      <output message="tns:validateOwnerLastNameResponse">
+    </output>
+    </operation>
+    <operation name="validateOwnerMiddleName">
+<documentation>
+				Validate given name including middle and send the status in the response.
+			</documentation>
+      <input message="tns:validateOwnerMiddleNameRequest">
+    </input>
+      <output message="tns:validateOwnerMiddleNameResponse">
+    </output>
+    </operation>
+    <operation name="validateRegistrationPhoneNumber">
+<documentation>
+				Validate given phone number and send the status in the response.
+			</documentation>
+      <input message="tns:validateRegistrationPhoneNumberRequest">
+    </input>
+      <output message="tns:validateRegistrationPhoneNumberResponse">
+    </output>
+    </operation>
+    <operation name="validateRegistrationAddress">
+<documentation>
+				Validate given address and send the status in the response.
+			</documentation>
+      <input message="tns:validateRegistrationAddressRequest">
+    </input>
+      <output message="tns:validateRegistrationAddressResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="ContactInfoUtilityServiceHttpBinding" type="tns:ContactInfoUtilityServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateRegistrationEmailAddress">
+      <http:operation location="/validateRegistrationEmailAddress"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerName">
+      <http:operation location="/validateOwnerName"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerFirstName">
+      <http:operation location="/validateOwnerFirstName"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerLastName">
+      <http:operation location="/validateOwnerLastName"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerMiddleName">
+      <http:operation location="/validateOwnerMiddleName"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateRegistrationPhoneNumber">
+      <http:operation location="/validateRegistrationPhoneNumber"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="validateRegistrationAddress">
+      <http:operation location="/validateRegistrationAddress"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="ContactInfoUtilityServiceSOAPBinding" type="tns:ContactInfoUtilityServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateRegistrationEmailAddress">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateRegistrationEmailAddress"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerName">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateOwnerName"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerFirstName">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateOwnerFirstName"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerLastName">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateOwnerLastName"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateOwnerMiddleName">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateOwnerMiddleName"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateRegistrationPhoneNumber">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateRegistrationPhoneNumber"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validateRegistrationAddress">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/registration/v1/services/validateRegistrationAddress"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="ContactInfoUtilityService">
+<documentation>
+			<Version>1.0.0</Version>
+			This service provides ability to validate user personal as well as businees inputs.
+		</documentation>
+    <port name="ContactInfoUtilityServiceHttpPort" binding="tns:ContactInfoUtilityServiceHttpBinding">
+      <http:address location="http://svcs.ebay.com/services/registration/v1/ContactInfoUtilityService"/>
+    </port>
+    <port name="ContactInfoUtilityServiceSOAPPort" binding="tns:ContactInfoUtilityServiceSOAPBinding">
+      <soap12:address location="http://svcs.ebay.com/services/registration/v1/ContactInfoUtilityService"/>
+    </port>
+  </service>
+</definitions>

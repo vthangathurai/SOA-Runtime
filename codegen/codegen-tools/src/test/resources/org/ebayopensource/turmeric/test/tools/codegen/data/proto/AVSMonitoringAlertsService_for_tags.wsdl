@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.ebay.com/marketplace/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ebay.com/marketplace/services" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services"> 						
+			<xs:complexType name="MonitoringAlertList">				
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="elementsOfMonitoringAlert"  type="tns:MonitoringAlert"/>
+				</xs:sequence>				
+			</xs:complexType>			
+			<xs:complexType name="ErrorInfo">				
+				<xs:sequence>
+					<xs:element minOccurs="0" name="errorData" type="xs:string"/>
+					<xs:element minOccurs="0" name="errorDesc" type="xs:string"/>					
+				</xs:sequence>				
+			</xs:complexType>			
+			<xs:complexType name="MonitoringAlert">				
+				<xs:sequence>
+					<xs:element minOccurs="0" name="historicalMean" type="xs:double"/>
+					<xs:element minOccurs="0" name="currentStat" type="xs:double"/>
+					<xs:element minOccurs="0" name="historicalStdDev" type="xs:double"/>
+					<xs:element minOccurs="0" name="metricName" type="xs:string"/>
+					<xs:element minOccurs="0" name="alertTimeStamp" type="xs:dateTime"/>
+					<xs:element minOccurs="0" name="coloName" type="xs:string"/>
+					<xs:element minOccurs="0" name="metricType" type="xs:string"/>
+					<xs:element minOccurs="0" name="buildName" type="xs:string"/>
+					<xs:element minOccurs="0" name="poolName" type="xs:string"/>
+					<xs:element minOccurs="0" name="alertCount" type="xs:int"/>					
+				</xs:sequence>				
+			</xs:complexType>			
+			<xs:complexType name="MonitoringAlertsResponse">				
+				<xs:sequence>
+					<xs:element minOccurs="0" name="monitoringAlerts" type="tns:MonitoringAlertList"/>
+					<xs:element minOccurs="0" name="errorInfo" type="tns:ErrorInfo"/>					
+				</xs:sequence>				
+			</xs:complexType>		
+			<xs:complexType name="MonitoringAlertsRequest">				
+				<xs:sequence>
+					<xs:element minOccurs="0" name="fromTimeStamp" type="xs:dateTime"/>
+					<xs:element minOccurs="0" name="toTimeStamp" type="xs:dateTime"/>
+					<xs:element minOccurs="0" name="metricName" type="xs:string"/>
+					<xs:element minOccurs="0" name="metricType" type="xs:string"/>
+					<xs:element minOccurs="0" name="coloName" type="xs:string"/>
+					<xs:element minOccurs="0" name="buildName" type="xs:string"/>
+					<xs:element minOccurs="0" name="poolName" type="xs:string"/>
+					<xs:element minOccurs="0" name="alertCountLimit" type="xs:int"/>					
+				</xs:sequence>				
+			</xs:complexType>						
+			<xs:complexType name="getMonitoringAlertsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="alertsRequest" type="tns:MonitoringAlertsRequest"/>					
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getMonitoringAlertsResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="returnData" type="tns:MonitoringAlertsResponse"/>
+				</xs:sequence>
+			</xs:complexType>			
+			<xs:complexType name="insertMonitoringAlertsRequest">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="alerts" type="tns:MonitoringAlertList"/>					
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="insertMonitoringAlertsResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="result" type="xs:boolean"/>
+					<xs:element minOccurs="0" name="errorInfo" type="tns:ErrorInfo"/>	
+				</xs:sequence>
+			</xs:complexType>						
+			<xs:element name="getMonitoringAlerts" type="tns:getMonitoringAlertsRequest"/>
+			<xs:element name="getMonitoringAlertsResponse"  type="tns:getMonitoringAlertsResponse"/>			
+			<xs:element name="insertMonitoringAlerts" type="tns:insertMonitoringAlertsRequest"/>
+			<xs:element name="insertMonitoringAlertsResponse"  type="tns:insertMonitoringAlertsResponse"/>			
+		</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getMonitoringAlertsRequest">
+    <wsdl:part name="parameters" element="tns:getMonitoringAlerts">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="insertMonitoringAlertsResponse">
+    <wsdl:part name="parameters" element="tns:insertMonitoringAlertsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="insertMonitoringAlertsRequest">
+    <wsdl:part name="parameters" element="tns:insertMonitoringAlerts">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMonitoringAlertsResponse">
+    <wsdl:part name="parameters" element="tns:getMonitoringAlertsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AVSMonitoringAlertsServicePortType">
+    <wsdl:operation name="getMonitoringAlerts">
+      <wsdl:input message="tns:getMonitoringAlertsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getMonitoringAlertsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertMonitoringAlerts">
+      <wsdl:input message="tns:insertMonitoringAlertsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:insertMonitoringAlertsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AVSMonitoringAlertsServiceHTTPBinding" type="tns:AVSMonitoringAlertsServicePortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="getMonitoringAlerts">
+      <http:operation location="AVSMonitoringAlertsService/getMonitoringAlerts"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertMonitoringAlerts">
+      <http:operation location="AVSMonitoringAlertsService/insertMonitoringAlerts"/>
+      <wsdl:input>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AVSMonitoringAlertsServiceSoap11Binding" type="tns:AVSMonitoringAlertsServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getMonitoringAlerts">
+      <soap:operation soapAction="urn:getMonitoringAlerts" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertMonitoringAlerts">
+      <soap:operation soapAction="urn:insertMonitoringAlerts" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AVSMonitoringAlertsServiceSoap12Binding" type="tns:AVSMonitoringAlertsServicePortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getMonitoringAlerts">
+      <soap12:operation soapAction="urn:getMonitoringAlerts" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertMonitoringAlerts">
+      <soap12:operation soapAction="urn:insertMonitoringAlerts" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AVSMonitoringAlertsService">
+    <wsdl:port name="AVSMonitoringAlertsServiceHttpEndpoint" binding="tns:AVSMonitoringAlertsServiceHTTPBinding">
+      <http:address location="http://localhost:8080/AVSMonitoringAlertsService"/>
+    </wsdl:port>
+    <wsdl:port name="AVSMonitoringAlertsServiceHttpSoap12Endpoint" binding="tns:AVSMonitoringAlertsServiceSoap12Binding">
+      <soap12:address location="http://localhost:8080/AVSMonitoringAlertsService"/>
+    </wsdl:port>
+    <wsdl:port name="AVSMonitoringAlertsServiceHttpSoap11Endpoint" binding="tns:AVSMonitoringAlertsServiceSoap11Binding">
+      <soap:address location="http://localhost:8080/AVSMonitoringAlertsService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

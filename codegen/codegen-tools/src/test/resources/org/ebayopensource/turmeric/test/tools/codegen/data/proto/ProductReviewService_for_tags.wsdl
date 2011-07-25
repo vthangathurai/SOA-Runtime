@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/productreview/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ProductReviewService"
+	targetNamespace="http://www.ebay.com/marketplace/productreview/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/productreview/v1/services">
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getProductReviewsRequest" type="tns:GetProductReviewsRequestType" />
+
+			<xs:element name="getProductReviewsResponse" type="tns:GetProductReviewsResponseType" />
+			<xs:complexType name="GetProductReviewsRequestType">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="productReferenceId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="sortOption" type="tns:ReviewsSortType"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="numberOfReturedReviews" type="xs:int"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="partnerId" type="xs:int" maxOccurs="1"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="relevanceScore" type="xs:long"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="ratingScore" type="tns:ReviewRatingType"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+
+							<xs:element name="needProductInfo" type="xs:boolean"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="needAuthorInfo" type="xs:boolean"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetProductReviewsResponseType">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+
+						<xs:sequence>
+							<xs:element name="productTitle" type="xs:string"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="numberOfVotes" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="productAvgRating" type="xs:float"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="totalProductReviews" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="prodReferenceId" type="xs:long"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="reviews" type="tns:ReviewList"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:simpleType name="ReviewsSortType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MOST_RECENT">
+						<xs:annotation>
+							<xs:documentation>
+								MOST RECENT
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LEAST_RECENT">
+						<xs:annotation>
+							<xs:documentation>
+								LEAST RECENT
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MOST_HELPFUL">
+						<xs:annotation>
+							<xs:documentation>
+								MOST HELPFUL
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LEAST_HELPFUL">
+						<xs:annotation>
+							<xs:documentation>
+								We believe we own the data
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MOST_POSITIVE">
+						<xs:annotation>
+							<xs:documentation>
+								MOST POSITIVE
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LEAST_POSITIVE">
+						<xs:annotation>
+							<xs:documentation>
+								LEAST POSITIVE
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="HIGHEST_RATED">
+						<xs:annotation>
+							<xs:documentation>
+								HIGHEST RATED
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LOWEST_RATED">
+						<xs:annotation>
+							<xs:documentation>
+								LOWEST RATED
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LOWEST_PARTNER_REVIEW_RANK">
+						<xs:annotation>
+							<xs:documentation>
+								LOWEST PARTNER REVIEW RANK
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+					<xs:enumeration value="HIGHEST_RELEVANCE_SCORE">
+						<xs:annotation>
+							<xs:documentation>
+								HIGHEST RELEVANCE SCORE
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CONTENT_ID">
+						<xs:annotation>
+							<xs:documentation>
+								CONTENT ID
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>			
+					<xs:enumeration value="NONE">
+						<xs:annotation>
+							<xs:documentation>
+								NONE
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+
+			<xs:simpleType name="ReviewRatingType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="HORRIBLE">
+						<xs:annotation>
+							<xs:documentation>
+								HORRIBLE
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="POOR">
+						<xs:annotation>
+							<xs:documentation>
+								POOR
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AVERAGE">
+						<xs:annotation>
+							<xs:documentation>
+								AVERAGE
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="GOOD">
+						<xs:annotation>
+							<xs:documentation>
+								GOOD
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="EXCELLENT">
+						<xs:annotation>
+							<xs:documentation>
+								EXCELLENT
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Invalid">
+						<xs:annotation>
+							<xs:documentation>
+								Invalid
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ReviewList">
+				<xs:sequence>
+					<xs:element name="review" type="tns:Review" maxOccurs="unbounded"
+						minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Review">
+				<xs:sequence>
+					<xs:element name="reviewID" type="xs:long" maxOccurs="1"
+						minOccurs="1" />
+					<xs:element name="reviewTitle" type="xs:string"
+						maxOccurs="1" minOccurs="1" />
+					<xs:element name="datePosted" type="xs:date" maxOccurs="1"
+						minOccurs="1" />
+					<xs:element name="reviewContent" type="xs:string"
+						maxOccurs="1" minOccurs="1" />
+					<xs:element name="author" type="tns:Author" maxOccurs="1"
+						minOccurs="0">
+					</xs:element>
+					<xs:element name="vote" type="tns:Vote" maxOccurs="1"
+						minOccurs="1"></xs:element>
+					<xs:element name="rating" type="xs:int" maxOccurs="1"
+						minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Author">
+				<xs:sequence>
+					<xs:element name="authorId" type="xs:long" maxOccurs="1"
+						minOccurs="1"></xs:element>
+					<xs:element name="authorName" type="xs:string"
+						maxOccurs="1" minOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Vote">
+				<xs:sequence>
+					<xs:element name="voteTotal" type="xs:int" maxOccurs="1"
+						minOccurs="1"></xs:element>
+					<xs:element name="votePositive" type="xs:int" maxOccurs="1"
+						minOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail)
+						or an informational error (a warning)
+						that should be communicated
+						to the
+						user.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully, but
+								something occurred that
+								may
+								affect your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was not
+								processed
+								successfully.
+								When a serious application-level error
+								occurs, the error is returned
+								instead of the business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but
+								with some warnings.
+					</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but
+								with some warnings.				</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all
+						service operations.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations.
+						Contains error information associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the request.
+					</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"></xs:enumeration>
+					<xs:enumeration value="Application"></xs:enumeration>
+					<xs:enumeration value="Request"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"></xs:element>
+					<xs:element name="domain" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"></xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity"></xs:element>
+					<xs:element name="category" type="tns:ErrorCategory"></xs:element>
+					<xs:element name="message" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"></xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+						type="tns:ErrorParameter"></xs:element>
+				</xs:sequence>
+
+
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"></xs:enumeration>
+					<xs:enumeration value="Warning"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>Documentation goes here</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<!--
+
+					processContents="lax" /> </xs:sequence>
+				-->
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="tns:ErrorData">
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getProductReviewsRequest">
+		<wsdl:part element="tns:getProductReviewsRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getProductReviewsResponse">
+		<wsdl:part element="tns:getProductReviewsResponse" name="params" />
+	</wsdl:message>
+	<wsdl:portType name="ProductReviewServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getProductReviews">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getProductReviewsRequest" />
+			<wsdl:output message="tns:getProductReviewsResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ProductReviewServiceHttpBinding" type="tns:ProductReviewServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductReviews">
+			<http:operation location="/getProductReviews" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ProductReviewServiceSOAPBinding" type="tns:ProductReviewServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/productreview/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductReviews">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/productreview/v1/services/getProductReviews" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ProductReviewService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:ProductReviewServiceHttpBinding"
+			name="ProductReviewServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/productreview/v1/ProductReviewService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:ProductReviewServiceSOAPBinding"
+			name="ProductReviewServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/productreview/v1/ProductReviewService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

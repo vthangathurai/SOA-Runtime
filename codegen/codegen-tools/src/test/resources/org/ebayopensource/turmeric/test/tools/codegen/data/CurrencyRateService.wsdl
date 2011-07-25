@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/billing/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="CurrencyRateService"
+	targetNamespace="http://www.ebay.com/marketplace/billing/v1/services">
+	<wsdl:types>
+	
+	
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/billing/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether an error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					</xs:documentation>
+					
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but a condition occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error did
+								not process successfully. When a
+								serious application-level error
+								occurs, the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error 
+								processed successfully, but warnings occurred.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error 
+								processed successfully, but warnings occurred.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Base class for the request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType">
+						<xs:annotation>
+						<xs:documentation>Reserved for future use.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error is a severe error (causing the request to fail) 
+								or an informational error (a warning) that should be communicated to the user. 
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information about an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The released version of this service that eBay uses to process the request. 
+								The version in use is normally the latest release version, 
+								as specified in the service documentation.							
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time when eBay processed the request.
+								This value is returned in GMT, the ISO 8601 date and time format (YYYY-
+								MM- DDTHH:MM:SS.SSSZ). See the &quot;dateTime&quot; type for information about the
+								time format, and for details on converting to and from the GMT time zone.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+							<xs:appinfo>
+
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of errors: request errors, application 
+						errors, and system errors.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						A container for error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+   <xs:element name="errorId" type="xs:long">
+        <xs:annotation>
+         <xs:documentation>
+          A unique code that identifies the particular error condition that
+          occurred. Your application can use error codes as identifiers in your
+          customized error-handling algorithms.
+         </xs:documentation>
+         <xs:appinfo>         
+           <default/>
+           <min/>
+           <max/>                   
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element name="domain" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Name of the domain in which the error occurred.
+          &lt;dl&gt;
+          &lt;dt&gt;
+            &lt;strong&gt;domain values:&lt;/strong&gt;
+          &lt;/dt&gt;
+          &lt;dt&gt;
+            Marketplace
+          &lt;/dt&gt;
+          &lt;dd&gt;
+            A business or validation error occurred in the service.
+          &lt;/dd&gt;
+          &lt;dt&gt;
+            SOA 
+          &lt;/dt&gt;
+          &lt;dd&gt;
+            An exception occurred in the SOA (Service Oriented Architecture)
+            framework.
+          &lt;/dd&gt;
+          &lt;/dl&gt;
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element minOccurs="0" name="subdomain" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Name of the subdomain in which the error occurred:
+          &lt;dl&gt;
+          &lt;dt&gt;
+            Subdomain values:
+          &lt;/dt&gt;
+          &lt;dt&gt;
+            &lt;i&gt;ThisServiceDomain&lt;/i&gt;
+          &lt;/dt&gt;
+          &lt;dd&gt;
+            The error is specific to this service.
+          &lt;/dd&gt;
+          &lt;dt&gt;
+            MarketplaceCommon
+          &lt;/dt&gt;
+          &lt;dd&gt;
+            The error is common to all services.
+          &lt;/dd&gt;
+          &lt;/dl&gt;
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element name="severity" type="tns:ErrorSeverity">
+        <xs:annotation>
+         <xs:documentation>
+          Indicates whether the reported problem is fatal (an error) or is less-
+          severe (a warning). Review the error message details for information on
+          the cause.
+          &lt;br&gt;&lt;br&gt;
+          If the request fails and the application is the source of the error (for
+          example, a required element is missing), update the application before
+          you retry the request. If the problem is due to incorrect user data,
+          alert the end-user to the problem and provide the means for them to
+          correct the data. 
+          &lt;br&gt;&lt;br&gt;
+          If the source of the problem is in the service, you can retry the request
+          a reasonable number of times (try the request twice).
+          After the problem is resolved, you can resend the request in its original
+          form.
+          &lt;br&gt;&lt;br&gt;
+          If a warning occurs, warning information is returned in addition to the
+          business data. Normally, you do not need to resend the request (as the
+          original request was successful). 
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element name="category" type="tns:ErrorCategory">
+        <xs:annotation>
+         <xs:documentation>
+          There are three categories of errors: Request errors, application 
+          errors, and system errors.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element name="message" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          A detailed description of the condition that caused the error.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+
+       <xs:element minOccurs="0" name="exceptionId" type="xs:token">
+        <xs:annotation>
+         <xs:documentation>
+          Unique identifier for an exception associated with an error.
+         </xs:documentation>
+         <xs:appinfo> 
+          <ListBasedOn/>
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+        type="tns:ErrorParameter">
+        <xs:annotation>
+         <xs:documentation>
+          Various warning and error messages that return one or more variables that 
+          contain contextual information about the error. This is often the 
+          field or value that triggered the error.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <AllCalls/>
+            <Details>outputSelector: none</Details>
+            <Returned>Conditionally</Returned>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+			 
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information regarding an error or warning that occurred when eBay processed
+        the request. Not returned when the ack value is Success. Run-time errors are
+        not reported here, but are instead reported as part of a SOAP fault.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!--
+					<xs:sequence> <xs:any maxOccurs="unbounded" minOccurs="0"
+					processContents="lax" /> </xs:sequence>
+				-->
+				<xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+        type="tns:ErrorData">
+        <xs:annotation>
+         <xs:documentation>
+          A container for error details.
+         </xs:documentation>
+         <xs:appinfo>
+
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual data associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional">
+             <xs:annotation>
+               <xs:documentation>
+               Error parameter name.
+               </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a fatal error (causing the request to fail)
+        or a less severe error (a warning) that should be communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for future use.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+       <xs:element name="id" type="xs:positiveInteger">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo>         
+           <default/>
+           <min/>
+           <max/>                   
+          <CallInfo>
+            <NoCalls/>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element name="version" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <NoCalls/>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element name="contentType" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <NoCalls/>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+       <xs:element name="value" type="xs:string">
+        <xs:annotation>
+         <xs:documentation>
+          Reserved for future use.
+         </xs:documentation>
+         <xs:appinfo> 
+          <CallInfo>
+            <NoCalls/>
+          </CallInfo>
+         </xs:appinfo>
+        </xs:annotation>
+       </xs:element>
+					<xs:any maxOccurs="unbounded" minOccurs="0" processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Gets the version of this service and the current timestamp.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Gets the version of this service and the current timestamp.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getCurrencyConversionRateRequest" type="tns:GetCurrencyConversionRateRequest" />
+				<xs:complexType name="GetCurrencyConversionRateRequest">
+					<xs:annotation>
+						<xs:documentation>
+							Defines the structure of the input for the getCurrencyConversionRate
+							operation. Specify an ISO Currency ID for the currency to convert from and to. 
+							Refer to 
+							&lt;a href=&quot;http://wiki2.arch.ebay.com/display/apdoc/CurrencyRateService_3.0&quot;&gt;CurrencyRateService_3.0&lt;/a&gt;
+							for a list of currencies that this operation supports. 
+							The dateOfConversion is optional, and is set to the current date if not specified. 
+							This operation can't request a conversion rate for a future date, or for dates older than 7 days.
+    				</xs:documentation>
+						<xs:appinfo>
+							<relatedCalls>getCurrencyConversionRate</relatedCalls>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseRequest">
+
+							<xs:sequence>
+								<xs:element name="fromCurrency"
+									type="tns:IsoCurrencyCode" maxOccurs="1" minOccurs="1" nillable="false">
+									<xs:annotation>
+										<xs:documentation>
+											ISO Currency ID of the
+											source currency.
+										</xs:documentation>
+										<xs:appinfo>
+											<min>1</min>
+											<callInfo>
+												<callName>
+													getCurrencyConversionRate
+												</callName>
+												<requiredInput>
+													Yes
+												</requiredInput>
+											</callInfo>
+											<seeLink>
+												<url>
+													http://wiki2.arch.ebay.com/display/apdoc/CurrencyRateService_3.0
+												</url>
+												<title>
+													ISO Currency ID
+													Details
+												</title>
+												<for>
+													Finds details
+													about an ISO
+													Currency ID for a
+													currency and whether
+													the currency is
+													allowed in this
+													operation.
+												</for>
+											</seeLink>
+
+										</xs:appinfo>
+									</xs:annotation>
+
+								</xs:element>
+								<xs:element name="toCurrency"
+									type="tns:IsoCurrencyCode" maxOccurs="1" minOccurs="1" nillable="false">
+									<xs:annotation>
+										<xs:documentation>
+											ISO Currency ID of the
+											target currency.
+										</xs:documentation>
+										<xs:appinfo>
+											<min>1</min>
+											<callInfo>
+												<callName>
+													getCurrencyConversionRate
+												</callName>
+												<requiredInput>
+													Yes
+												</requiredInput>
+											</callInfo>
+											<seeLink>
+												<url>
+													http://wiki2.arch.ebay.com/display/apdoc/CurrencyRateService_3.0
+												</url>
+												<title>
+													ISO Currency ID
+													Details
+												</title>
+												<for>
+													Finds details
+													about an ISO
+													Currency ID for a
+													currency and whether
+													the currency is
+													allowed in this
+													operation.
+												</for>
+											</seeLink>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								
+								<xs:element name="conversionDate"
+									type="xs:dateTime" maxOccurs="1" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>
+											Date on which currency conversion rate is required. This is an optional parameter, 
+											If not specified, the default is the current time.
+										</xs:documentation>
+										<xs:appinfo>
+											<min>0</min>
+											<callInfo>
+												<callName>
+													getCurrencyConversionRate
+												</callName>
+												<requiredInput>
+													No
+												</requiredInput>
+											</callInfo>											
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			
+			<xs:element name="getCurrencyConversionRateResponse" type="tns:GetCurrencyConversionRateResponse" />
+				<xs:complexType name="GetCurrencyConversionRateResponse">
+					<xs:annotation>
+						<xs:documentation>
+							Response to the getCurrencyConversionRate.
+							Defines the structure of the output for the getCurrencyConversionRate
+							operation. The response contains the currency conversion rate and the 
+							time on which the conversion was applied. 
+    				</xs:documentation>
+						<xs:appinfo>
+							<relatedCalls>getCurrencyConversionRate</relatedCalls>
+						</xs:appinfo>
+					</xs:annotation>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseResponse">
+							<xs:sequence>
+								<xs:element name="currencyConversionRate" type="xs:string"
+									maxOccurs="1" minOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											Currency conversion rate X, represents 1
+											Source Currency = X times the Target Currency 
+        								</xs:documentation>
+										<xs:appinfo>
+											<callInfo>
+												<callName>getCurrencyConversionRate</callName>
+												<returned>Always</returned>
+											</callInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="conversionDate" type="xs:dateTime"
+									maxOccurs="1" minOccurs="1">
+									<xs:annotation>
+										<xs:documentation>
+											The Date for which the conversion rate applies. 
+        								</xs:documentation>
+										<xs:appinfo>
+											<callInfo>
+												<callName>getCurrencyConversionRate</callName>
+												<returned>Always</returned>
+											</callInfo>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			
+
+			
+		<xs:simpleType name="IsoCurrencyCode">
+        <xs:annotation>
+            <xs:documentation>
+             Currency representation based on ISO 4217 Standard: http://www.iso.org/iso/currency_codes_list-1
+             Every currency has the following attributes: &lt;br&gt; 
+                  Numeric Code    - 3 Digits Zero Padded Numeric Code, which uniquely identifies a currency. &lt;br&gt; 
+                  Alphabetic Code - 3 Letter Alphabetic Code, which uniquely identifies a currency.  &lt;br&gt; 
+                  Currency        - The name of the currency. &lt;br&gt; 
+                  Antity          - The country/Entity, which uses this currency. &lt;br&gt;  &lt;br&gt; 
+
+              This type exposes only a sub-set of ISO 4217. &lt;br&gt; 
+              The enumeration represents the Alphabetic Code. Comments are included for quick reference.
+            </xs:documentation>
+        <xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+        <xs:restriction base="xs:token">   <!-- Currency,                         Entity                          ISO Currency Code -->
+            <xs:enumeration value="USD"></xs:enumeration> <!-- U.S. Dollar                       United States                   840               -->
+            <xs:enumeration value="CAD"></xs:enumeration> <!-- Canadian Dollar                   Canada                          124               -->
+            <xs:enumeration value="GBP"></xs:enumeration> <!-- Pound Sterling                    United Kingdom                  826               -->
+            <xs:enumeration value="DEM"></xs:enumeration> <!-- German Mark                       Germany                         276               -->
+            <xs:enumeration value="AUD"></xs:enumeration> <!-- Australian Dollar                 Australia                       036               -->
+            <xs:enumeration value="JPY"></xs:enumeration> <!-- Japanese Yen                      Japanese Yen                    392               -->
+            <xs:enumeration value="EUR"></xs:enumeration> <!-- Euro                              European Union                  978               -->
+            <xs:enumeration value="FRF"></xs:enumeration> <!-- French Franc                      France                          250               -->
+            <xs:enumeration value="ATS"></xs:enumeration> <!-- Austrian Schilling                Austria                         040               -->
+            <xs:enumeration value="BEF"></xs:enumeration> <!-- Belgian Franc                     Belgium                         056               -->
+            <xs:enumeration value="CHF"></xs:enumeration> <!-- Swiss Franc                       Switzerland                     756               -->
+            <xs:enumeration value="CNY"></xs:enumeration> <!-- Chinese Yuan Renminbi             China                           156               -->
+            <xs:enumeration value="CZK"></xs:enumeration> <!-- Czech Koruna                      Czech Republic                  203               -->
+            <xs:enumeration value="DKK"></xs:enumeration> <!-- Danish Krone                      Denmark                         208               -->
+            <xs:enumeration value="ESP"></xs:enumeration> <!-- Spanish Peseta                    Spain                           724               -->
+            <xs:enumeration value="FIM"></xs:enumeration> <!-- Finnish Markka                    Finland                         246               -->
+            <xs:enumeration value="GRD"></xs:enumeration> <!-- Greek Drachma                     Greece                          300               -->
+            <xs:enumeration value="HKD"></xs:enumeration> <!-- Hong Kong Dollar                  Hong Kong                       344               -->
+            <xs:enumeration value="HUF"></xs:enumeration> <!-- Hungarian Forint                  Hungary                         348               -->
+            <xs:enumeration value="IDR"></xs:enumeration> <!-- Indonesian Rupiah                 Indonesia                       360               -->
+            <xs:enumeration value="IEP"></xs:enumeration> <!-- Irish Pound                       Ireland                         372               -->
+            <xs:enumeration value="ILS"></xs:enumeration> <!-- Israeli new Shekel                Israel                          376               -->
+            <xs:enumeration value="ITL"></xs:enumeration> <!-- Italian Lira                      Italy                           380               -->
+            <xs:enumeration value="NLG"></xs:enumeration> <!-- Dutch Guilder                     Netherlands                     528               -->
+            <xs:enumeration value="NOK"></xs:enumeration> <!-- Norwegian Krone                   Norway                          578               -->
+            <xs:enumeration value="NZD"></xs:enumeration> <!-- New Zealand Dollar                New Zealand                     554               -->
+            <xs:enumeration value="PHP"></xs:enumeration> <!-- Philippine Peso                   Philippines                     608               -->
+            <xs:enumeration value="PLN"></xs:enumeration> <!-- Polish New Zloty                  Poland                          985               -->
+            <xs:enumeration value="PTE"></xs:enumeration> <!-- Portuguese Escudo                 Portugal                        620               -->
+            <xs:enumeration value="RUR"></xs:enumeration> <!-- Russian Ruble                     Russian Federation              810               -->
+            <xs:enumeration value="SEK"></xs:enumeration> <!-- Swedish Krona                     Sweden                          752               -->
+            <xs:enumeration value="SGD"></xs:enumeration> <!-- Singapore Dollar                  Singapore                       702               -->
+            <xs:enumeration value="THB"></xs:enumeration> <!-- Thai Baht                         Thailand                        764               -->
+            <xs:enumeration value="TWD"></xs:enumeration> <!-- New Taiwan dollar                 Taiwan                          901               -->
+            <xs:enumeration value="ZAR"></xs:enumeration> <!-- South African Rand                South Africa                    710               -->
+            <xs:enumeration value="INR"></xs:enumeration> <!-- Indian Rupee                      India                           356               -->
+            <xs:enumeration value="PEN"></xs:enumeration> <!-- Peruvian New Sol                  Peru                            604               -->
+            <xs:enumeration value="MYR"></xs:enumeration> <!-- Malaysian Ringgit                 Malaysia                        458               -->
+            <xs:enumeration value="VND"></xs:enumeration> <!-- Vietnamese New Dong               Vietnam                         704               -->
+            <xs:enumeration value="KRW"></xs:enumeration> <!-- South Korean Won                  South Korea                     410               -->
+            <xs:enumeration value="TRY"></xs:enumeration> <!-- New Turkish Lira                  Turkey                          949               -->
+            <xs:enumeration value="ANG"></xs:enumeration> <!-- Antillian Guilder                 Netherlands Antilles            532               -->
+            <xs:enumeration value="AWG"></xs:enumeration> <!-- Aruban Guilder                    Aruba                           533               -->
+            <xs:enumeration value="BMD"></xs:enumeration> <!-- Bermudan Dollar                   Bermudan Dollar                 060               -->
+            <xs:enumeration value="CRC"></xs:enumeration> <!-- Costa Rican Colon                 Costa Rica                      188               -->
+            <xs:enumeration value="RON"></xs:enumeration> <!-- Romanian New Leu                  Romania                         946               -->
+            <xs:enumeration value="VEF"></xs:enumeration> <!-- Venezuelan Bolivar Fuerte         Venezuela                       937               -->
+            <xs:enumeration value="BBD"></xs:enumeration> <!-- Barbados Dollar                   Barbados                        052               -->
+            <xs:enumeration value="BGN"></xs:enumeration> <!-- Bulgarian Lev                     Bulgaria                        975               -->
+            <xs:enumeration value="BND"></xs:enumeration> <!-- Brunei Dollar                     Brunei                          096               -->
+            <xs:enumeration value="BSD"></xs:enumeration> <!-- Bahamian Dollar                   Bahamas                         044               -->
+            <xs:enumeration value="COP"></xs:enumeration> <!-- Colombian Peso                    Columbia                        170               -->
+            <xs:enumeration value="DOP"></xs:enumeration> <!-- Dominican Peso                    Dominican Republic              214               -->
+
+            <xs:enumeration value="GTQ"></xs:enumeration> <!-- Guatemalan Quetzal                Guatemala                       320               -->
+            <xs:enumeration value="KYD"></xs:enumeration> <!-- Cayman Isles Dollar               Cayman Islands                  136               -->
+            <xs:enumeration value="MVR"></xs:enumeration> <!-- Maldivian Rufiyaa                 Maldives                        462               -->
+            <xs:enumeration value="QAR"></xs:enumeration> <!-- Qatari Rial                       Qatar                           634               -->
+            <xs:enumeration value="SAR"></xs:enumeration> <!-- Saudi Riyal                       Saudi Arabia                    682               -->
+            <xs:enumeration value="TTD"></xs:enumeration> <!-- Trinidadian and Tobagonian Dollar Trinidad and Tobago             780               -->
+            <xs:enumeration value="UAH"></xs:enumeration> <!-- Ukrainian hryvnia                 Ukraine                         980               -->
+            <xs:enumeration value="UYU"></xs:enumeration> <!-- Peso Uruguayo                     Uruguay                         858               -->
+            <xs:enumeration value="XCD"></xs:enumeration> <!-- East Caribbean Dollar             East Caribbean Currency Area    951               -->
+            <xs:enumeration value="XPF"></xs:enumeration> <!-- French Polynesian Franc           French Polynesia                953               -->
+            <xs:enumeration value="JMD"></xs:enumeration> <!-- Jamaican Dollar                   Jamaica                         388               -->
+
+        </xs:restriction>
+    </xs:simpleType></xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getCurrencyConversionRateRequest">
+		<wsdl:part name="params" element="tns:getCurrencyConversionRateRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCurrencyConversionRateResponse">
+		<wsdl:part name="params" element="tns:getCurrencyConversionRateResponse"></wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:portType name="CurrencyRateServicePort">	
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Gets the service version and a timestamp.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getCurrencyConversionRate">
+			<wsdl:documentation>
+				Returns the conversion rate between a source and target currency.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getCurrencyConversionRateRequest"></wsdl:input>
+			<wsdl:output message="tns:getCurrencyConversionRateResponse"></wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:portType>
+	<wsdl:binding name="CurrencyRateServiceHttpBinding" type="tns:CurrencyRateServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCurrencyConversionRate">
+			<http:operation location="getCurrencyConversionRate" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="CurrencyRateServiceSOAPBinding"
+		type="tns:CurrencyRateServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/billing/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCurrencyConversionRate">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/billing/v1/services/getCurrencyConversionRate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+
+	<wsdl:service name="CurrencyRateService">
+		<wsdl:documentation>
+			<version>1.0.0</version>
+			This service provides operations for currencyconversion.
+		</wsdl:documentation>
+		<wsdl:port binding="tns:CurrencyRateServiceHttpBinding"
+			name="CurrencyRateServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/billing/v1/CurrencyRateService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:CurrencyRateServiceSOAPBinding"
+			name="CurrencyRateServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/billing/v1/CurrencyRateService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

@@ -1,0 +1,1082 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="UserIncentivesService"
+	targetNamespace="http://www.ebay.com/marketplace/incentives/v1/UserIncentives/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://www.ebay.com/marketplace/incentives/v1/UserIncentives/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/incentives/v1/UserIncentives/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but
+								something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not
+								processed successfully. When a
+								serious application-level error
+								occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain" type="xs:string" />
+					<xs:element name="severity" type="tns:ErrorSeverity" />
+					<xs:element name="category" type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+						type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!--
+
+					processContents="lax" /> </xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getItemIncentivesRequest" type="tns:GetItemIncentivesRequest" />
+			<xs:complexType name="GetItemIncentivesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is a request container for the
+						getUserIncentives operation.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseIncentivesRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="userDetails" type="tns:UserDetails" />
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="items"
+								type="tns:Item" />
+							<xs:element maxOccurs="1" minOccurs="1" name="requester"
+								type="xs:string"/>
+							<xs:element name="flowType" type="tns:FlowType" />
+							<xs:element name="includeRewards" type="xs:boolean" />
+							<xs:element name="includeBML" type="xs:boolean" />
+							<xs:element name="includeCoupon" type="xs:boolean" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseIncentivesRequest">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="logId" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Item">
+				<xs:annotation>
+					<xs:documentation />
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="itemId"
+						type="xs:long" />
+					<xs:element maxOccurs="1" minOccurs="1" name="transactionId"
+						type="xs:long" />
+					<xs:element maxOccurs="1" minOccurs="1" name="itemVariationId"
+						type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="1" name="entityType"
+						type="tns:EntitiesType" />
+					<xs:element maxOccurs="1" minOccurs="0" name="itemDetails"
+						type="tns:ItemDetails" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+     </xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+     </xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemDetails">
+				<xs:annotation>
+					<xs:documentation>
+						It contains all attributes of a item
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="saleEndTime"
+						type="xs:dateTime" />
+					<xs:element maxOccurs="1" minOccurs="1" name="shippingFee"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="1" name="itemPrice"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="1" name="itemSellerId"
+						type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="1" name="categoryIdList"
+						type="tns:CategoryIdList" />
+					<xs:element maxOccurs="1" minOccurs="1" name="binAvailable"
+						type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="1" name="saleType"
+						type="xs:int" />
+					<xs:element maxOccurs="1" minOccurs="1" name="quantity"
+						type="xs:int" />
+					<xs:element maxOccurs="1" minOccurs="1" name="worldOfGoodItem"
+						type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="1" name="givingWorksItem"
+						type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="1" name="transactionDate"
+						type="xs:dateTime" />
+					<xs:element maxOccurs="1" minOccurs="1" name="transactionAmount"
+						type="tns:Amount" />
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="paymentMethodsComplete" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="UserDetails">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="rewardsMemberId"
+						type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="rewardsTestUser"
+						type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="rewardsUserSegments" type="xs:int">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name="CategoryIdList">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="categoryId"
+						type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemBMLIncentive">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="itemApplicableIncentives" type="tns:ItemApplicableIncentives">
+					</xs:element>
+					<xs:element name="logId" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseIncentivesResponse">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="errors" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+										If true, errors occurred when
+										the request was
+										processed and
+										there is error or warning
+										information to process
+										in the
+										response. Information for an
+										individual error and warning
+										is
+										returned in errorMessage.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<AllCalls />
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="logId" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+       </xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Campaign">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="country" type="xs:string" />
+					<xs:element name="adjacencyId" type="xs:string" />
+					<xs:element name="programCode" type="xs:string" />
+					<xs:element name="incentiveType" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: GiftCertificate,
+								Voucher,
+								GiftCard, Coupon, Reward.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="externalId" type="xs:long" />
+					<xs:element minOccurs="0" name="displayMessage" type="xs:string">
+					</xs:element>
+					<xs:element name="language" type="xs:string" />
+					<xs:element minOccurs="0" name="FAQURL" type="xs:string">
+					</xs:element>
+					<xs:element name="campaignStatus" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: Inactive, Active,
+								Suspend,
+								Cancelled, Expired, Deleted.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="campaignStartTime" type="xs:dateTime">
+					</xs:element>
+					<xs:element name="campaignExpirationTime" type="xs:dateTime">
+					</xs:element>
+					<xs:element minOccurs="0" name="budgetAmount" type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="redeemedTotalAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="redeemedTotalCount"
+						type="xs:long">
+					</xs:element>
+					<xs:element name="currency" type="xs:string" />
+					<xs:element minOccurs="0" name="maxUsageCount" type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignId" type="xs:long">
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignCreationTime"
+						type="xs:dateTime">
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignLastModifiedTime"
+						type="xs:dateTime">
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignDeletionTime"
+						type="xs:dateTime">
+					</xs:element>
+					<xs:element name="campaignDiscountType" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: Percent, AmountType.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignDiscountPercent"
+						type="xs:double">
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignDiscountAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element name="campaignValueType" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: Inflow, Targeted_Fixed,
+								Targeted_Variable.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignMinPurchaseAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="campaignMaxDiscountAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="categoryIdList" type="tns:CategoryIdList">
+					</xs:element>
+					<xs:element minOccurs="0" name="categoryFlag" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: Inclusive, Exclusive.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="incentiveApplicationType" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: SingleItem, SubTotal,
+								EntireTransaction, Shipping.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemCouponIncentive">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="itemApplicableIncentives" type="tns:ItemApplicableIncentives">
+					</xs:element>
+					<xs:element name="logId" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getItemIncentivesResponse" type="tns:GetItemIncentivesResponse" />
+			<xs:complexType name="Incentive">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="campaignId" type="xs:long" />
+					<xs:element name="userId" type="xs:string" />
+					<xs:element minOccurs="0" name="incentiveId" type="xs:long">
+					</xs:element>
+					<xs:element name="incentiveStatus" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: Prequalified, Active,
+								Redeemed, Deleted, Cancelled
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="incentiveExpirationTime" type="xs:dateTime">
+					</xs:element>
+					<xs:element minOccurs="0" name="userUsedCount" type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="userMaxUsageCount" type="xs:int">
+					</xs:element>
+					<xs:element name="redemptionCode" type="xs:string">
+					</xs:element>
+					<xs:element name="isoCurrencyCode" type="xs:string">
+					</xs:element>
+					<xs:element name="isoCountryCode" type="xs:string">
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveDiscountPercent"
+						type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveDiscountAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveDiscountType"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Possible values: Percent, AmountType.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveMinPurchaseAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveMaxPurchaseAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveMaxDiscountAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveAppliedDiscountAmount"
+						type="tns:Amount">
+					</xs:element>
+					<xs:element minOccurs="0" name="displayMessage" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveCreationTime"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveLastModifiedTime"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="incentiveDeletionTime"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="originalDiscountAmount"
+						type="tns:Amount">
+					</xs:element>
+					<!--Based on interface definition table, the reqired is not clear-->
+					<xs:element minOccurs="0" name="parentCampaign" type="tns:Campaign">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="incentiveUsageList" type="tns:IncentiveUsageList">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="IncentiveUsage">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="incentiveUsageId" type="xs:long">
+					</xs:element>
+					<xs:element name="incentiveUsageType" type="tns:IncentiveUsageType">
+					</xs:element>
+					<xs:element name="incentiveUsageCode" type="xs:string">
+					</xs:element>
+					<xs:element name="incentiveUsageTime" type="xs:dateTime">
+					</xs:element>
+					<xs:element name="incentiveUsageAmount" type="tns:Amount">
+					</xs:element>
+					<xs:element name="incentiveUsageCreationTime" type="xs:dateTime">
+					</xs:element>
+					<xs:element name="incentiveUsageLastModifiedTime" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="IncentiveUsageList">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="IncentiveUsage" type="tns:IncentiveUsage">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="IncentiveUsageType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Redeemed" />
+					<xs:enumeration value="Refunded" />
+					<xs:enumeration value="Invalid" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ItemApplicableIncentives">
+				<xs:annotation>
+					<xs:documentation>
+						This data type contains an eBay item number and
+						list of incentives that apply to this item.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemId" type="xs:long" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="applicableIncentives" type="tns:Incentive">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="PromotionType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GlobalPref" />
+					<xs:enumeration value="BaseOffer" />
+					<xs:enumeration value="BoosterOffer" />
+					<xs:enumeration value="ForcedOffer" />
+					<xs:enumeration value="NonStackableBoosterOffer" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="RewardsAmountType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="programCurrencyId" type="xs:long">
+					</xs:element>
+					<xs:element name="rewardsAmount" type="xs:double" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="RewardsEnrollmentType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Active" />
+					<xs:enumeration value="Suspended" />
+					<xs:enumeration value="Banned" />
+					<xs:enumeration value="Closed" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="RewardsTransactionReasonCodeType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="UNKNOWN" />
+					<xs:enumeration value="MAX_SPEND_REACHED" />
+					<xs:enumeration value="PAID_IN_NEXT_CYCLE" />
+					<xs:enumeration value="DISABLED_CYCLE" />
+					<xs:enumeration value="REFUND_FROM_PREVIOUS_CYCLE">
+					</xs:enumeration>
+					<xs:enumeration value="MAX_EARN_REACHED" />
+					<xs:enumeration value="REFUNDED" />
+					<xs:enumeration value="USER_BANNED" />
+					<xs:enumeration value="DISABLED_PROGRAM" />
+					<xs:enumeration value="USER_SUSPENDED" />
+					<xs:enumeration value="GLOBAL_PREF" />
+					<xs:enumeration value="INVALID_CATEGORY" />
+					<xs:enumeration value="TNS_PENDING" />
+					<xs:enumeration value="USER_OPTEDOUT" />
+					<xs:enumeration value="BASE_UNAVAILABLE" />
+					<xs:enumeration value="INVALID_LISTINGTYPE" />
+					<xs:enumeration value="AMOUNT_REDUCED" />
+					<xs:enumeration value="INVALID_PAYMENTTYPE" />
+					<xs:enumeration value="EARN_REDUCED" />
+					<xs:enumeration value="CS_CANCELLED" />
+					<xs:enumeration value="EARN_LESS_THAN_ONE" />
+					<xs:enumeration value="USER_NOT_ENROLLED" />
+					<xs:enumeration value="PURCHASE_SITE_MISMATCH" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="RewardsDetailType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="rewardsDetailList" type="tns:RewardsResultDetailType"
+						maxOccurs="unbounded" minOccurs="0" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RewardsResultType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="payloadIdentifier" type="xs:long">
+					</xs:element>
+					<xs:element name="rewardsAmount" type="tns:RewardsAmountType">
+					</xs:element>
+					<xs:element name="reasonCode" type="tns:RewardsTransactionReasonCodeType">
+					</xs:element>
+					<xs:element name="transactionId" type="xs:long"></xs:element>
+					<xs:element name="ruleDescription" type="xs:string">
+					</xs:element>
+					<xs:element name="includesBooster" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="rewardsDetailList"
+						type="tns:RewardsDetailType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetItemIncentivesResponse">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseIncentivesResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="itemRewardsIncentive" type="tns:ItemRewardsIncentive">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="itemBMLIncentive"
+								type="tns:ItemBMLIncentive">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="itemCouponIncentive" type="tns:ItemCouponIncentive">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RewardsIncentiveListType">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+			
+		<xs:appinfo>
+				<typeLibrarySource library="IncentivesTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+				</typeLibrarySource>
+			</xs:appinfo></xs:annotation>
+		<xs:sequence>		
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="rewardsIncentive" type="tns:RewardsIncentive">
+			</xs:element>		
+		</xs:sequence>
+	</xs:complexType>
+			<xs:complexType name="ItemRewardsIncentive">
+				<xs:annotation>
+					<xs:documentation />
+
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="enrollmentStatus" type="tns:RewardsEnrollmentType">
+			</xs:element>
+			<xs:element name="logId" type="xs:string" />
+			<xs:element maxOccurs="1" minOccurs="0" name="rewardsIncentiveList" type="tns:RewardsIncentiveListType">
+			</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RewardsResultDetailType">
+				<xs:annotation>
+					<xs:documentation />
+
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="promotionName" type="xs:string"></xs:element>
+					<xs:element name="promotionDescription" type="xs:string">
+					</xs:element>
+					<xs:element name="promotionAmount" type="xs:double">
+					</xs:element>
+					<xs:element name="promotionType" type="tns:PromotionType">
+					</xs:element>
+					<xs:element name="promotionEndDate" type="xs:dateTime">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="RewardsIncentive">
+				<xs:annotation>
+					<xs:documentation />
+
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="itemId"
+						type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="transactionId"
+						type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="itemVariationId"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="entityType"
+						type="tns:EntitiesType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="rewardsResult"
+						type="tns:RewardsResultType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="EntitiesType">
+				<xs:annotation>
+					<xs:documentation>
+						It's value will tell how to uniquely identify an
+						item
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="IncentivesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ITEM" />
+					<xs:enumeration value="ITEM_VARIATION" />
+					<xs:enumeration value="ITEM_TRANSACTION" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="FlowType">
+				<xs:annotation>
+					<xs:documentation>
+						It's value will tell how to determine ItemPrice
+						taking
+						into account if the item is an Auction/MSKU/BIN
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="VIEWITEM_FLOW" />
+					<xs:enumeration value="BIN_FLOW" />
+					<xs:enumeration value="BID_FLOW" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</types>
+	<message name="getItemIncentivesRequest">
+		<part name="params" element="tns:getItemIncentivesRequest">
+		</part>
+	</message>
+	<message name="getItemIncentivesResponse">
+		<part name="params" element="tns:getItemIncentivesResponse">
+		</part>
+	</message>
+	<portType name="UserIncentivesServicePort">
+		<operation name="getItemIncentives">
+			<input message="tns:getItemIncentivesRequest">
+			</input>
+			<output message="tns:getItemIncentivesResponse">
+			</output>
+		</operation>
+	</portType>
+	<binding name="UserIncentivesServiceHttpBinding" type="tns:UserIncentivesServicePort">
+		<http:binding verb="POST" />
+		<operation name="getItemIncentives">
+			<http:operation location="/getItemIncentives" />
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded" />
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml" />
+			</output>
+		</operation>
+	</binding>
+	<binding name="UserIncentivesServiceSOAPBinding" type="tns:UserIncentivesServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="getItemIncentives">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/incentives/v1/UserIncentives/services/getItemIncentives" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+	<service name="UserIncentivesService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<port name="UserIncentivesServiceHttp" binding="tns:UserIncentivesServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/incentives/v1/UserIncentivesService" />
+		</port>
+		<port name="UserIncentivesServiceSOAP" binding="tns:UserIncentivesServiceSOAPBinding">
+			<soap12:address
+				location="https://svcs.ebay.com/services/incentives/v1/UserIncentivesService" />
+		</port>
+	</service>
+</definitions>

@@ -1,0 +1,652 @@
+package com.ebay.marketplace.search.v1.services.proto;
+
+option java_package = "com.ebay.marketplace.search.v1.services.proto";
+option java_outer_classname = "FindItemsService";
+
+message ItemSearchScopeEnumEnum{
+	enum ItemSearchScopeEnum {
+	ACTIVE_TITLE = 1;
+	ACTIVE_TITLE_AND_DESCRIPTION = 2;
+	COMPLETED_TITLE = 3;
+	IMAGE_SEARCH_ACTIVE = 4;
+	}
+}
+
+message ItemSortTypeEnumEnum{
+	enum ItemSortTypeEnum{
+	CURRENT_PRICE = 1;
+	BIN_PRICE = 2;
+	END_TIME = 3;
+	START_TIME = 4;
+	BUCKET = 5;
+	RANDOM = 6;
+	}
+}
+
+message DigestTypeEnumEnum{
+	enum DigestTypeEnum{
+	COLOR = 1;
+	EDGE = 2;
+	TEXTURE = 3;
+	}
+}
+
+message AckValueEnum{
+	enum AckValue {
+	SUCCESS = 1;
+	FAILURE = 2;
+	WARNING = 3;
+	PARTIAL_FAILURE = 4;	
+	}
+}
+
+message ErrorCategoryEnum{
+	enum ErrorCategory{
+	SYSTEM = 1;
+	APPLICATION = 2;
+	REQUEST = 3;
+	}
+}
+
+message ErrorSeverityEnum{
+	enum ErrorSeverity{
+	ERROR = 1;
+	WARNING = 2;
+	}
+}
+
+message AggregateNumericOperatorEnum{
+	enum AggregateNumericOperator{
+	MIN = 1;
+	MAX = 2;
+	SUM = 3;
+	COUNT = 4;
+	UNIQUE = 5;
+	PROJECT = 6;
+	}
+}
+
+message AtomicOperatorEnum{
+	enum AtomicOperator{
+	EQ = 1;
+	NEQ = 2;
+	GT = 3;
+	GEQ = 4;
+	LT = 5;
+	LEQ = 6;
+	HAS_ATTR = 7;
+	}
+}
+
+message DistributionSortTypeEnum{
+	enum DistributionSortType{
+	BY_FIELD = 1;
+	BY_VALUE = 2;
+	}
+}
+
+message KeywordOperatorEnum{
+	enum KeywordOperator{
+	CONTAINS = 1;
+	CONTAINS_PHRASE = 2;
+	}
+}
+
+message SortOrderEnum{
+	enum SortOrder{
+	INCREASING = 1;
+	DECREASING = 2;
+	}
+}
+
+message DFNSortTypeEnum{
+	enum DFNSortType{
+	DEMAND_SUPPLY_COVERAGE = 1;
+	SUPPLY = 2;
+	DEMAND = 3;
+	}
+}
+
+message DistributionSortStrategyEnum{
+	enum DistributionSortStrategy{
+	DEMAND_SUPPLY_COVERAGE = 1;
+	SUPPLY = 2;
+	DEMAND = 3;
+	}
+}
+
+message CompositeOperatorEnum{
+	enum CompositeOperator{
+	AND = 1;
+	OR = 2;
+	NOT = 3;
+	IF = 4;
+	SIMILAR = 5;
+	SET_FIND = 6;
+	}
+}
+
+message FitmentTypeEnum{
+	enum FitmentType{
+	NONE = 1;
+	BY_APPLICATION = 2;
+	BY_SPECIFICATION = 3;
+	}
+}
+
+message SimpleNumericOperatorEnum{
+	enum SimpleNumericOperator{
+	ADD = 1;
+	SUBTRACT = 2;
+	MULTIPLY = 3;
+	DIVIDE = 4;
+	UNIQUE_BY_HASH =5;
+	CONST = 6;
+	BITAND = 7;
+	BITOR = 8;
+	BITXOR = 9;
+	}
+}
+
+message DigestTypeData{
+	optional DigestTypeEnumEnum.DigestTypeEnum digestType = 1;
+	optional int32 weight = 2;
+}
+
+message DigestValueData{
+	optional DigestTypeEnumEnum.DigestTypeEnum digestType = 1;
+	optional string digestValue = 2;
+	optional int32 weight = 3;
+}
+
+message ColorDimensionWeight{
+	optional int32 hueWeight = 1;
+	optional int32 satWeight = 2;
+	optional int32 lumWeight = 3;
+}
+
+message BaseImageSimilaritySortTypeBase{
+	optional int32 colorVersion = 1;
+	optional int32 edgeVersion = 2;
+	optional int32 textureVersion = 3;
+	optional ColorDimensionWeight colorDimensionWeight = 4;
+	optional int32 profileId = 5;
+	optional int32 shiptocty = 6;
+	optional string zipcode = 7;
+	repeated Property config = 8;
+}
+
+message BestMatchSortTypeBase{
+	optional int32 profileId = 1;
+	optional int32 shiptocty = 2;
+	optional string zipcode = 3;
+	repeated Property config = 4;
+}
+
+message SortTypeBase{
+}
+
+message BaseImageSimilaritySortType{
+	optional ImageSimilaritySortTypeByItem imageSimilaritySortTypeByItem = 1;
+	optional ImageSimilaritySortTypeBySignature imageSimilaritySortTypeBySignature = 2;
+}
+
+message ImageSimilaritySortTypeByItem{
+	optional int64 itemId = 1;
+	repeated DigestTypeData digestTypeData = 2;
+	optional int32 colorVersion = 3;
+	optional int32 edgeVersion = 4;
+	optional int32 textureVersion = 5;
+	optional ColorDimensionWeight colorDimensionWeight = 6;
+	optional int32 profileId = 7;
+	optional int32 shiptocty = 8;
+	optional string zipcode = 9;
+	repeated Property config = 10;
+	
+}
+
+message ImageSimilaritySortTypeBySignature{
+	repeated DigestValueData digestValueData = 1;
+	optional int32 colorVersion = 2;
+	optional int32 edgeVersion = 3;
+	optional int32 textureVersion = 4;
+	optional ColorDimensionWeight colorDimensionWeight = 5;
+	optional int32 profileId = 6;
+	optional int32 shiptocty = 7;
+	optional string zipcode = 8;
+	repeated Property config = 9;
+}
+message BaseServiceRequest{
+}
+message GetVersionRequest{
+}
+message BaseServiceResponse{
+	optional AckValueEnum.AckValue ack = 1;
+	optional ErrorMessage errorMessage = 2;
+	optional string version = 3;
+	optional int64 timestamp =4;
+}
+message GetVersionResponse{
+	optional AckValueEnum.AckValue ack = 1;
+	optional ErrorMessage errorMessage = 2;
+	optional string version = 3;
+	optional int64 timestamp =4;
+}
+
+message FindItemsRequest{
+	optional ServiceContext serviceContext = 1;
+	optional ItemSearchScopeEnumEnum.ItemSearchScopeEnum itemSearchScope = 2;
+	optional int32 fetchOffset = 3;
+	optional int32 fetchSize = 4;
+	repeated Field readSet = 5;
+	repeated Constraint constraint = 6;
+	repeated SortBy sortBy = 7;
+	repeated AbstractDistributionRequest distribution = 8;
+	repeated BucketRequest bucket = 9;
+	optional PermutationRequest permutation = 10;
+	optional UniqueBy uniqueBy = 11;
+	repeated BlendBy blendBy = 12;
+	optional bool includeDiagnosticInfo = 13;
+	optional DominantProductTypeRequest dfn = 14;
+}
+message FindItemsResponse{
+	optional ResultSummaryInfo resultSummaryInfo = 1;
+	repeated SearchRecord searchResultSet = 2;
+	repeated AbstractDistributionResponse distributionResultSet = 3;
+	repeated BucketResponse bucketResultSet = 4;
+	optional PermutationResponse permutationResult= 5;
+	optional FitmentResponse fitmentResult = 6;
+	repeated DiagnosticInfo diagnosticInfo = 7;
+	optional int64 executionTime = 8;
+	optional DominantProductTypeResponse dfnResponse = 9;
+	optional AckValueEnum.AckValue ack = 10;
+	optional ErrorMessage errorMessage = 11;
+	optional string version = 12;
+	optional int64 timestamp =13;
+}
+
+message FindItemsByIdsRequest{
+	optional ServiceContext serviceContext =1;
+	optional ItemSearchScopeEnumEnum.ItemSearchScopeEnum itemSearchScope = 2;
+	repeated Field readSet = 3;
+	repeated int64 id = 4;
+	optional bool includeDiagnosticInfo = 5;
+}
+
+message FindItemsByIdsResponse{
+	optional int32 matchCount = 1;
+	repeated SearchRecord itemResults = 2;
+	repeated DiagnosticInfo diagnosticInfo = 3;
+	optional int64 executionTime = 4;
+	optional AckValueEnum.AckValue ack = 5;
+	optional ErrorMessage errorMessage = 6;
+	optional string version = 7;
+	optional int64 timestamp = 8;
+}
+
+message ItemSortType{
+	optional ItemSortTypeEnumEnum.ItemSortTypeEnum sortTypeEnum = 1;
+}
+
+message BestMatchSortType{
+	optional BaseImageSimilaritySortType baseImageSimilaritySortType = 1;
+}
+
+message DistanceSortType{
+	optional string postalCode = 1;
+	optional int32 shiptocty = 2;
+}
+
+message PricePlusShippingSortType{
+	optional string postalCode = 1;
+	optional int32 shiptocty = 2;
+}
+message FieldValueBase{
+}
+message ShippingCostFieldValue{
+	optional double shipCost = 1;
+	optional double insuranceCost = 2;
+	optional int32 mailClass = 3;
+	optional int32 errorCode = 4;
+	optional double shipCostWithInsurance = 5;
+	optional int32 shippingZone = 6;
+}
+message TraitFieldValue{
+	optional string logicalName = 1;
+	optional string displayName = 2;
+	optional string nameSpace = 3;
+	optional int32 index = 4;
+}
+message SellerLogoFieldValue{
+	optional string imageUrl = 1;
+	optional int32 imageType = 2;
+}
+message ErrorData{
+	optional int64 errorId = 1;
+	optional string domain = 2;
+	optional string subdomain = 3;
+	optional ErrorSeverityEnum.ErrorSeverity severity = 4;
+	optional ErrorCategoryEnum.ErrorCategory category = 5;
+	optional string message = 6;
+	optional string exceptionId = 7;
+	repeated ErrorParameter parameter = 8;
+}
+
+message ErrorMessage{
+	repeated ErrorData  error=1;
+}
+message ErrorParameter{
+	optional string value = 1;
+	optional string name = 2;
+}
+message AbstractDistributionRequestBase{
+	optional string name = 1;
+	optional int32 fetchOffset = 2;
+	optional int32 fetchSize = 3;
+}
+message AbstractDistributionRequest{
+	optional SimpleCountDistributionRequest simpleCountDistributionRequest = 1;
+	optional DistributionRequest distributionRequest = 2;
+}
+message AbstractDistributionResponseBase{
+	optional string name = 1;
+}
+message AbstractDistributionResponse{
+	optional SimpleCountDistributionResponse simpleCountDistributionResponse = 1;
+	optional DistributionResponse distributionResponse = 2;
+}
+message FieldBase{
+}
+message ExpressionBase{
+	optional string name = 1;
+}
+message NumericExpressionBase{
+	optional string name = 1;
+}
+message AggregateNumericExpression{
+	optional AggregateNumericOperatorEnum.AggregateNumericOperator operator = 1;
+	repeated Operand operand = 2;
+	optional string name = 3;
+}
+message BaseServiceContext{
+	optional string globalId = 1;
+	optional int32 partnerId = 2;
+}
+message BlendBy{
+	optional Member dimension = 1;
+}
+message BooleanFieldValue{
+	optional bool value = 1;
+}
+message BucketRequest{
+	optional string name = 1;
+	repeated Constraint constraint = 2;
+	optional int32 fetchCount = 3;
+}
+message BucketResponse{
+	optional string name = 1;
+	optional int32 totalCount = 2;
+	repeated SearchRecord items = 3;
+}
+message LogicalExpressionBase{
+	optional string name = 1;
+}
+message CompositeLogicalExpression{
+	optional CompositeOperatorEnum.CompositeOperator operator = 1;
+	repeated Operand operand = 2;
+	optional string name = 3;
+}
+message Constraint{
+	optional LogicalExpression internalExpression = 1;
+}
+message DateFieldValue{
+	optional int64 value = 1;
+}
+message OperandBase{
+}
+message DateOperand{
+	optional bool now = 1;
+	optional int64 operand = 2;
+}
+message DiagnosticInfo{
+	optional string sender = 1;
+	optional string log = 2;
+	repeated Property record = 3;
+}
+message DistributionField{
+	optional Field field = 1;
+	repeated RangeValue range = 2;
+	repeated EnumerationValue enumeration = 3;
+	optional bool includeOtherValues = 4;
+}
+message DistributionRecord{
+	repeated string valueId = 1;
+	repeated FieldValue aggregationValue = 2;
+}
+message DistributionRequest{
+	repeated DistributionField distributionFields = 1;
+	repeated AggregateNumericExpression aggregateFunction = 2;
+	optional DistributionSortBy distributionSort = 3;
+	optional bool requestHeader = 4;
+	 optional string name = 5;
+	optional int32 fetchOffset = 6;
+	optional int32 fetchSize = 7;
+}
+message DistributionResponse{
+	repeated DistributionRecord result = 1;
+	optional string name = 2;
+}
+message DistributionSortBy{
+	optional DistributionSortStrategyEnum.DistributionSortStrategy sortStrategy = 1;
+	optional DistributionSortTypeEnum.DistributionSortType sortType = 2;
+	optional SortOrderEnum.SortOrder sortOrder = 3;
+	optional bool sortbyvalue = 4;
+}
+message DoubleFieldValue{
+	optional double value = 1;
+}
+message DoubleOperand{
+	optional double operand = 1;
+}
+message EnumerationValue{
+	repeated string enumValue = 1;
+}
+message Expression{
+	optional CompositeLogicalExpression compositeLogicalExpression = 1;
+	optional KeywordLogicalExpression keywordLogicalExpression = 2;
+	optional SimpleLogicalExpression simpleLogicalExpression = 3;
+	optional StrategyLogicalExpression strategyLogicalExpression = 4;
+	optional AggregateNumericExpression aggregateNumericExpression = 5;
+	optional SimpleNumericExpression simpleNumericExpression = 6;
+}
+message Field{
+	optional Member member = 1;
+	optional CompositeLogicalExpression compositeLogicalExpression = 2;
+	optional KeywordLogicalExpression keywordLogicalExpression = 3;
+	optional SimpleLogicalExpression simpleLogicalExpression = 4;
+	optional StrategyLogicalExpression strategyLogicalExpression = 5;
+	optional AggregateNumericExpression aggregatenumericExpression = 6;
+	optional SimpleNumericExpression simplenumericExpression = 7;
+}
+message FieldOperand{
+	optional Field operand = 1;
+}
+message FieldValue{
+	optional ShippingCostFieldValue shippingCostFieldValue = 1;
+	optional TraitFieldValue traitFieldValue = 2;
+	optional SellerLogoFieldValue sellerLogoFieldValue = 3;
+	optional BooleanFieldValue booleanFieldValue = 4;
+	optional DateFieldValue dateFieldValue = 5;
+	optional DoubleFieldValue doubleFieldValue = 6;
+	optional LongFieldValue longFieldValue = 7;
+	optional MoneyFieldValue moneyFieldValue = 8;
+	optional StringFieldValue stringFieldValue = 9;
+	optional FitmentFieldValue fitmentFieldValue = 10;
+}
+message FieldValuesPair{
+	optional Field field = 1;
+	repeated FieldValue fieldValue = 2;
+}
+message KeywordLogicalExpression{
+	optional KeywordOperatorEnum.KeywordOperator operator= 1;
+	optional Member member = 2;
+	repeated TokenOperand operand = 3;
+	optional string name = 4;	
+}
+message LogicalExpression{
+	optional CompositeLogicalExpression compositeLogicalExpression = 1;
+	optional KeywordLogicalExpression keywordLogicalExpression = 2;
+	optional SimpleLogicalExpression simpleLogicalExpression = 3;
+	optional StrategyLogicalExpression strategyLogicalExpression = 4;
+}
+message LongFieldValue{
+	optional int64 value = 1;
+}
+message LongOperand{
+	optional int64 operand = 1;
+}
+message Member{
+	optional string namespace = 1;
+	optional string name = 2;
+	repeated Property property = 3;
+}
+message MoneyFieldValue{
+	optional double value = 1;
+	optional string currency = 2;
+}
+message MoneyOperand{
+	optional double value = 1;
+	optional string currency = 2;
+}
+message NumericExpression{
+	optional AggregateNumericExpression aggregatenumericExpression = 1; 
+	optional SimpleNumericExpression simplenumericExpression = 2;
+}
+message Operand{
+	optional DateOperand dateOperand = 1;
+	optional DoubleOperand doubleOperand = 2;
+	optional FieldOperand fieldOperand = 3;
+	optional LongOperand longOperand = 4;
+	optional MoneyOperand moneyOperand = 5;
+	optional TokenOperand tokenOperand = 6;
+}
+message PermutationRequest{
+	optional string name =	1;
+	repeated Constraint constraint = 2;
+}
+message PermutationResponse{
+	repeated int32 count = 1;
+}
+message Property{
+	optional string name = 1;
+	repeated string value = 2;
+}
+message ResultSummaryInfo{
+	optional int32 matchCount = 1;
+	optional int32 abridgedMatchCount = 2;
+}
+message SearchRecord{
+	repeated FieldValuesPair mapping = 1;
+}
+message ServiceContext{
+	optional string locale = 1;
+	optional string timeZone = 2;
+	optional string currency = 3;
+	optional string globalId = 4;
+	optional int32 partnerId = 5;
+}
+message SimpleCountDistributionRecord{
+	optional string valueId = 1;
+	optional int32 count = 2;
+}
+message SimpleCountDistributionRequest{
+	optional Field field = 1;
+	optional SortOrderEnum.SortOrder sortOrder = 2;
+	optional DistributionSortTypeEnum.DistributionSortType sortType = 3;
+	optional string name = 4;
+	optional int32 fetchOffset = 5;
+	optional int32 fetchSize = 6;
+}
+message SimpleCountDistributionResponse{
+	repeated SimpleCountDistributionRecord result = 1;
+	optional string name = 2;
+}
+message SimpleLogicalExpression{
+	optional AtomicOperatorEnum.AtomicOperator operator = 1;
+	optional Member member = 2;
+	optional LongOperand longOperand = 3;
+	optional DoubleOperand doubleOperand = 4;
+	optional MoneyOperand moneyOperand = 5;
+	optional TokenOperand tokenOperand = 6;
+	optional DateOperand dateOperand = 7;
+	optional SimpleNumericExpression expressionOperand = 8;
+	optional string name = 9;
+}
+message SimpleNumericExpression{
+	optional SimpleNumericOperatorEnum.SimpleNumericOperator operator  = 1;
+	optional Operand operand = 2;
+	optional string name = 3;
+}
+message SortType{
+	optional BestMatchSortType bestMatchSortType = 1;
+	optional DistanceSortType distanceSortType = 2; 
+	optional ItemSortType itemSortType = 3;
+	optional PricePlusShippingSortType pricePlusShippingSortType = 4;
+	optional ImageSimilaritySortTypeByItem imageSimilaritySortTypeByItem = 5;
+	optional ImageSimilaritySortTypeBySignature imageSimilaritySortTypeBySignature = 6;
+}
+message StrategyLogicalExpression{
+	optional Member member = 1;
+	optional string name = 2;
+}
+message StringFieldValue{
+	optional string value = 1;
+}
+message TokenOperand{
+	optional string operand = 1;
+}
+message UniqueBy{
+	optional string name = 1;
+	optional Field field = 2;
+	optional Expression excuseExpression = 3;
+}
+message DominantProductTypeRequest{
+	optional DFNSortTypeEnum.DFNSortType sort = 1;
+	optional int32 fetchSize = 2;
+	optional float coverageThreshold = 3;
+}
+message DominantProductTypeResponse{
+	repeated ProductTypeCoverage productTypeCoverage = 1;
+}
+message ProductTypeCoverage{
+	optional string name = 1;
+	optional double supplyScore = 2;
+	optional double demandScore = 3;
+	optional double aggregateScore = 4;
+}
+message RangeValue{
+	optional double lowerBound = 1;
+	optional double upperBound = 2;
+}
+message FitmentResponse{
+	optional FitmentTypeEnum.FitmentType type = 1;
+	repeated FitmentParameter parameter = 2;
+	optional bool runSpec = 3;
+	optional bool hasSpec = 4;
+	optional bool truncateSpec = 5;
+	optional bool truncateApp = 6;
+}
+message FitmentParameter{
+	optional string name = 1;
+	optional Field field = 2;
+	repeated Property property = 3;
+}
+message FitmentFieldValue{
+	repeated BooleanFieldValue fitmentMatch = 1;
+}
+message SortBy{
+	optional Member sortMember = 1;
+	optional Expression sortExpression = 2;
+	optional SortType sortType =3;
+	optional SortOrderEnum.SortOrder sortOrder = 4;
+}

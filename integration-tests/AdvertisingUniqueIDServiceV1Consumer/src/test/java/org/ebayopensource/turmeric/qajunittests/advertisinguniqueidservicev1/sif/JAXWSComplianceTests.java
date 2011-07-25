@@ -23,7 +23,8 @@ public class JAXWSComplianceTests {
 		System.out.println(client.testJAXWSCompliance1(param0).getOut());
 		} catch (Exception se) {
 //			System.out.println(se.getMessage());
-			Assert.assertEquals("Exception from Server", se.getMessage());
+  			se.printStackTrace();
+			Assert.assertEquals("Exception from Server",true );
 		}
 		*/
 		System.out.println(" ** testJAXWSComplianceWithException ** ");

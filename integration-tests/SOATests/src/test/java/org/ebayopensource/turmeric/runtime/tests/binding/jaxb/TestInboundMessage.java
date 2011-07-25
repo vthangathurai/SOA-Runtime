@@ -73,6 +73,8 @@ public class TestInboundMessage implements InboundMessage {
     public void setInputStream(InputStream is) throws ServiceException {
     }
 
+	public void setInputStream(InputStream is, Integer inMemoryAttachmentLimit) throws ServiceException {
+	}
     public void setXMLStreamReader(XMLStreamReader reader) {
         m_streamReader = reader;
     }

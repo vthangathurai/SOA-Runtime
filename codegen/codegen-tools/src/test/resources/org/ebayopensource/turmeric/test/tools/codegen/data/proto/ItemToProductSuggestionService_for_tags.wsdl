@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/marketplacecatalog/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	name="ItemToProductSuggestionService"
+	targetNamespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services"
+	xmlns:coretype="http://www.ebay.com/marketplace/marketplacecatalog/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/marketplacecatalog/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of errors: request
+						errors, application errors, and system errors.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning
+						occurred as part of service call. Any run time
+						error will not be reported here, but will be
+						reported as part of soap fault.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Some warning and error messages return one or
+						more variables that contain contextual
+						information about the error. This is often the
+						field or value that triggered the error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error caused the request
+						to fail (Error) or not (Warning).
+						&lt;br&gt;&lt;br&gt; If the request fails and
+						the source of the problem is within the
+						application (such as a missing required
+						element), please change the application before
+						you retry the request. If the problem is due to
+						end-user input data, please alert the end-user
+						to the problem and provide the means for them to
+						correct the data. Once the problem in the
+						application or data is resolved, you can attempt
+						to re-send the request to eBay.
+						&lt;br&gt;&lt;br&gt; If the source of the
+						problem is on eBay's side, you can retry the
+						request as-is a reasonable number of times (eBay
+						recommends twice). If the error persists,
+						contact Developer Technical Support. Once the
+						problem has been resolved, the request may be
+						resent in its original form.
+						&lt;br&gt;&lt;br&gt; When a warning occurs, the
+						error is returned in addition to the business
+						data. In this case, you do not need to retry the
+						request (as the original request was
+						successful). However, depending on the cause or
+						nature of the warning, you might need to contact
+						either the end user or eBay to effect a long
+						term solution to the problem to prevent it from
+						reoccurring in the future.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="output" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="in" type="xs:string"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getSuggestedProductsByItemIdsRequest" type="tns:GetSuggestedProductByItemIdsRequest"/>
+    	<xs:complexType name="GetSuggestedProductByItemIdsRequest">
+    	    <xs:annotation>
+    	       <xs:documentation>
+    	       Represents input to the getSuggestedProductByItemIds operation.
+    	       </xs:documentation>
+    	    </xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseRequest">
+    				<xs:sequence>
+    					<xs:element maxOccurs="unbounded" minOccurs="1" name="getSuggestedProductByItemIdRequest" type="tns:GetSuggestedProductByItemIdRequest">
+							<xs:annotation>
+								<xs:documentation>
+                                A list of GetSuggestedProductByItemIdRequests for batch operation.
+								</xs:documentation>
+							</xs:annotation>
+    					</xs:element>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:complexType name="GetSuggestedProductByItemIdRequest">
+            <xs:annotation>
+               <xs:documentation>
+               Represents one item request in the getSuggestedProductByItemIds operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:sequence>
+    			<xs:element maxOccurs="1" minOccurs="1" name="itemId" type="xs:string">
+    			<xs:annotation>
+						<xs:documentation>
+						eBay Item Id.
+						</xs:documentation>
+					</xs:annotation>
+    			</xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+		<xs:element name="getSuggestedProductsByItemIdsResponse"  type="tns:GetSuggestedProductByItemIdsResponse"/>
+    	<xs:complexType name="GetSuggestedProductByItemIdsResponse">
+            <xs:annotation>
+               <xs:documentation>
+               Represents output to the getSuggestedProductByItemIds operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseResponse">
+    				<xs:sequence>
+    					<xs:element maxOccurs="unbounded" minOccurs="1" name="getSuggestedProductByItemIdResponse" type="tns:GetSuggestedProductByItemIdResponse">
+                            <xs:annotation>
+                                <xs:documentation>
+                                A list of GetSuggestedProductByItemIdResponses for batch operation.
+                                </xs:documentation>
+                            </xs:annotation>
+    					</xs:element>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:complexType name="GetSuggestedProductByItemIdResponse">
+            <xs:annotation>
+               <xs:documentation>
+               Represents one item output in the getSuggestedProductByItemIds operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="itemId" type="xs:string">
+                     <xs:annotation>
+                         <xs:documentation>
+                         eBay Item Id.
+                         </xs:documentation>
+                     </xs:annotation>
+    			</xs:element>
+    			<xs:element maxOccurs="unbounded" minOccurs="0" name="productReferenceIdWithScoreInfo" type="tns:ProductReferenceIdWithScoreInfo">
+                     <xs:annotation>
+                         <xs:documentation>
+                         One or more suggested product reference id and its
+                         confidence score for this item.
+                         </xs:documentation>
+                     </xs:annotation>
+    			</xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:element name="getSuggestedProductsByItemDetailsRequest" type="tns:GetSuggestedProductByItemDetailsRequest"/>
+    	<xs:complexType name="GetSuggestedProductByItemDetailsRequest">
+            <xs:annotation>
+               <xs:documentation>
+               Represents input to the getSuggestedProductByItemDetails operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseRequest">
+    				<xs:sequence>
+    					<xs:element maxOccurs="unbounded" minOccurs="1" name="getSuggestedProductByItemDetailRequest" type="tns:GetSuggestedProductByItemDetailRequest">
+                            <xs:annotation>
+                                <xs:documentation>
+                                A list of GetSuggestedProductByItemDetailsRequests for batch operation.
+                                </xs:documentation>
+                            </xs:annotation>
+    					</xs:element>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:complexType name="GetSuggestedProductByItemDetailRequest">
+            <xs:annotation>
+               <xs:documentation>
+               Represents one item request in the getSuggestedProductByItemDetails operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:sequence>
+    			<xs:element maxOccurs="1" minOccurs="1" name="invocationId" type="xs:string">
+                     <xs:annotation>
+                         <xs:documentation>
+                         A unique ID assigned to each request by client within
+                         the context of this service call. This ID is sent back
+                         to client in service response so that client can
+                         correlate response with request in batch processing mode. 
+                         </xs:documentation>
+                     </xs:annotation>
+                </xs:element>
+    			<xs:element maxOccurs="1" minOccurs="1" name="itemDetails" type="tns:ItemDetails">
+                     <xs:annotation>
+                         <xs:documentation>
+                         Item details.
+                         </xs:documentation>
+                     </xs:annotation>
+                </xs:element>    			
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:element name="getSuggestedProductsByItemDetailsResponse" type="tns:GetSuggestedProductByItemDetailsResponse"/>
+    	<xs:complexType name="GetSuggestedProductByItemDetailsResponse">
+            <xs:annotation>
+               <xs:documentation>
+               Represents output to the getSuggestedProductByItemDetails operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseResponse">
+    				<xs:sequence>
+    					<xs:element maxOccurs="unbounded" minOccurs="1" name="getSuggestedProductByItemDetailResponse" type="tns:GetSuggestedProductByItemDetailResponse">
+                            <xs:annotation>
+                                <xs:documentation>
+                                A list of GetSuggestedProductByItemDetailsResponses for batch operation.
+                                </xs:documentation>
+                            </xs:annotation>
+    					</xs:element>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:complexType name="GetSuggestedProductByItemDetailResponse">
+            <xs:annotation>
+               <xs:documentation>
+               Represents one item output in the getSuggestedProductByItemDetails operation.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="invocationId" type="xs:string">
+                     <xs:annotation>
+                         <xs:documentation>
+                         A unique ID assigned to each request by client. This ID
+                         is sent back to client in service response so that
+                         client can correlate response with request in batch
+                         processing mode.
+                         </xs:documentation>
+                     </xs:annotation>
+                </xs:element>    			
+    			<xs:element maxOccurs="unbounded" minOccurs="0" name="productReferenceIdWithScoreInfo" type="tns:ProductReferenceIdWithScoreInfo">
+                     <xs:annotation>
+                         <xs:documentation>
+                         One or more suggested product reference id and its
+                         confidence score for this item.
+                         </xs:documentation>
+                     </xs:annotation>
+    			</xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+   	   	<xs:complexType name="ItemDetails">
+            <xs:annotation>
+               <xs:documentation>
+               Represents a set of item details.
+               </xs:documentation>
+            </xs:annotation>
+            <xs:complexContent>
+	            <xs:extension base="coretype:BaseRequest">
+		    		<xs:sequence>
+		    			<xs:element maxOccurs="1" minOccurs="1" name="title" type="xs:string">
+		    			     <xs:annotation>
+		    			         <xs:documentation>
+		    			         Item title.
+		    			         </xs:documentation>
+		    			     </xs:annotation>
+		    			</xs:element>
+		    			<xs:element maxOccurs="2" minOccurs="1" name="category" type="xs:string">
+		    			     <xs:annotation>
+		                         <xs:documentation>
+		                         Category Id.  Can be specified twice to indicate a second category id where this item is listed.
+		                         </xs:documentation>
+		                     </xs:annotation>
+		                </xs:element>    			
+		    			<xs:element maxOccurs="1" minOccurs="1" name="siteId" type="xs:token">
+		                     <xs:annotation>
+		                         <xs:documentation>
+		                         Site Id.
+		                         </xs:documentation>
+		                     </xs:annotation>
+		                </xs:element>    			
+		    			<xs:element maxOccurs="1" minOccurs="0" name="binPrice" type="coretype:Money">
+		                     <xs:annotation>
+		                         <xs:documentation>
+		                         Buy It Now price.
+		                         </xs:documentation>
+		                     </xs:annotation>
+		                </xs:element>
+		    			<xs:element maxOccurs="1" minOccurs="0" name="bidPrice" type="coretype:Money">
+		                     <xs:annotation>
+		                         <xs:documentation>
+		                         Current bid price.
+		                         </xs:documentation>
+		                     </xs:annotation>
+		                </xs:element>
+		    			<xs:element maxOccurs="1" minOccurs="0" name="startPrice" type="coretype:Money">
+		                     <xs:annotation>
+		                         <xs:documentation>
+		                         Start price.
+		                         </xs:documentation>
+		                     </xs:annotation>
+		                </xs:element>
+		    		</xs:sequence>
+		    	</xs:extension>
+			</xs:complexContent>		   
+    	</xs:complexType>
+    	<xs:complexType name="Money">
+        	<xs:simpleContent>
+            	<xs:extension base="xs:decimal">
+                	<xs:attribute name="currencyCode" type="coretype:IsoCurrencyCode" use="required" />
+				</xs:extension>
+			</xs:simpleContent>
+        </xs:complexType>
+        <xs:simpleType name="IsoCurrencyCode">
+                <xs:annotation>
+                    <xs:documentation>
+                        This is a type for ISO currency code
+                    </xs:documentation>
+                </xs:annotation>
+				<xs:restriction base="xs:token">
+                	<xs:enumeration value="USD"></xs:enumeration>
+                    <xs:enumeration value="CAD"></xs:enumeration>
+                    <xs:enumeration value="GBP"></xs:enumeration>
+                    <xs:enumeration value="DEM"></xs:enumeration>
+                    <xs:enumeration value="AUD"></xs:enumeration>
+                    <xs:enumeration value="FRF"></xs:enumeration>
+                    <xs:enumeration value="SEK"></xs:enumeration>
+                    <xs:enumeration value="CNY"></xs:enumeration>
+                    <xs:enumeration value="ESP"></xs:enumeration>
+                    <xs:enumeration value="NOK"></xs:enumeration>
+                    <xs:enumeration value="JPY"></xs:enumeration>
+                    <xs:enumeration value="EUR"></xs:enumeration>
+                    <xs:enumeration value="DKK"></xs:enumeration>
+                    <xs:enumeration value="FIM"></xs:enumeration>
+                    <xs:enumeration value="ITL"></xs:enumeration>
+                    <xs:enumeration value="ATS"></xs:enumeration>
+                    <xs:enumeration value="HKD"></xs:enumeration>
+                    <xs:enumeration value="NLG"></xs:enumeration>
+                    <xs:enumeration value="CHF"></xs:enumeration>
+                    <xs:enumeration value="TWD"></xs:enumeration>
+                    <xs:enumeration value="SGD"></xs:enumeration>
+                    <xs:enumeration value="BEF"></xs:enumeration>
+                    <xs:enumeration value="IEP"></xs:enumeration>
+                    <xs:enumeration value="PTE"></xs:enumeration>
+                    <xs:enumeration value="CZK"></xs:enumeration>
+                    <xs:enumeration value="GRD"></xs:enumeration>
+                    <xs:enumeration value="HUF"></xs:enumeration>
+                    <xs:enumeration value="IDR"></xs:enumeration>
+                    <xs:enumeration value="ILS"></xs:enumeration>
+                    <xs:enumeration value="NZD"></xs:enumeration>
+                    <xs:enumeration value="PHP"></xs:enumeration>
+                    <xs:enumeration value="PLN"></xs:enumeration>
+                    <xs:enumeration value="RUR"></xs:enumeration>
+                    <xs:enumeration value="THB"></xs:enumeration>
+                    <xs:enumeration value="ZAR"></xs:enumeration>
+                    <xs:enumeration value="INR"></xs:enumeration>
+                    <xs:enumeration value="PEN"></xs:enumeration>
+                    <xs:enumeration value="MYR"></xs:enumeration>
+                    <xs:enumeration value="VND"></xs:enumeration>
+                    <xs:enumeration value="KRW"></xs:enumeration>
+                    <xs:enumeration value="TRY"></xs:enumeration>
+                    <xs:enumeration value="ANG"></xs:enumeration>
+                    <xs:enumeration value="AWG"></xs:enumeration>
+                    <xs:enumeration value="BMD"></xs:enumeration>
+                    <xs:enumeration value="CRC"></xs:enumeration>
+                    <xs:enumeration value="RON"></xs:enumeration>
+                    <xs:enumeration value="VEF"></xs:enumeration>
+                    <xs:enumeration value="BBD"></xs:enumeration>
+                    <xs:enumeration value="BGN"></xs:enumeration>
+                    <xs:enumeration value="BND"></xs:enumeration>
+                    <xs:enumeration value="BSD"></xs:enumeration>
+                    <xs:enumeration value="COP"></xs:enumeration>
+                    <xs:enumeration value="DOP"></xs:enumeration>
+                    <xs:enumeration value="GTQ"></xs:enumeration>
+                    <xs:enumeration value="KYD"></xs:enumeration>
+                    <xs:enumeration value="MVR"></xs:enumeration>
+                    <xs:enumeration value="QAR"></xs:enumeration>
+                    <xs:enumeration value="SAR"></xs:enumeration>
+                    <xs:enumeration value="TTD"></xs:enumeration>
+                    <xs:enumeration value="UAH"></xs:enumeration>
+                    <xs:enumeration value="UYU"></xs:enumeration>
+                    <xs:enumeration value="XCD"></xs:enumeration>
+                    <xs:enumeration value="XPF"></xs:enumeration>
+                    <xs:enumeration value="JMD"></xs:enumeration>
+			</xs:restriction>
+        </xs:simpleType>
+    	<xs:complexType name="ProductReferenceIdWithScoreInfo">
+            <xs:annotation>
+               <xs:documentation>
+               Represents suggested product reference id information.
+               </xs:documentation>
+            </xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="productReferenceId" type="xs:string">
+                     <xs:annotation>
+                         <xs:documentation>
+                         Suggested product reference id for this item.
+                         </xs:documentation>
+                     </xs:annotation>
+    			</xs:element>
+    			<xs:element name="confidenceScore" type="xs:double">
+                     <xs:annotation>
+                         <xs:documentation>
+                         Confidence score of this suggestion, between 0.0 and 1.0.
+                         </xs:documentation>
+                     </xs:annotation>
+    			</xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="parameters" element="tns:getVersionRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSuggestedProductsByItemIdsRequest">
+		<wsdl:part name="parameters" element="tns:getSuggestedProductsByItemIdsRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSuggestedProductsByItemIdsResponse">
+		<wsdl:part name="parameters" element="tns:getSuggestedProductsByItemIdsResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSuggestedProductsByItemDetailsRequest">
+		<wsdl:part name="parameters" element="tns:getSuggestedProductsByItemDetailsRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSuggestedProductsByItemDetailsResponse">
+		<wsdl:part name="parameters" element="tns:getSuggestedProductsByItemDetailsResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ItemToProductSuggestionServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				<Version>1.0.0</Version>
+				Used for ensuring that a service is available (availability monitoring), and
+				ensuring that the metrics relating to a service can be accessed for monitoring.
+			</wsdl:documentation>
+            <wsdl:input message="tns:getVersionRequest"></wsdl:input>
+            <wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getSuggestedProductsByItemIds">
+			<wsdl:documentation>
+				This operation is used to get eBay suggested product reference id,
+				given an eBay item id.  The implementation of this service will query
+				eBay Item database to get the item title, category id, start price,
+				current price, and buy it now price, and use these item details
+				as inputs to the ItemToProductSuggestion algorithm.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSuggestedProductsByItemIdsRequest"></wsdl:input>
+			<wsdl:output message="tns:getSuggestedProductsByItemIdsResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSuggestedProductsByItemDetails">
+			<wsdl:documentation>
+				This operation is used to get eBay suggested product reference id, given a set
+				of item details which include title, category id, start price, current price,
+				and buy it now price.  Additionally, a debug flag and environment type can also
+				be specified.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSuggestedProductsByItemDetailsRequest"></wsdl:input>
+			<wsdl:output message="tns:getSuggestedProductsByItemDetailsResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ItemToProductSuggestionServiceHttpBinding"
+		type="tns:ItemToProductSuggestionServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSuggestedProductsByItemIds">
+			<http:operation location="/getSuggestedProductByItemIds" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSuggestedProductsByItemDetails">
+			<http:operation
+				location="/getSuggestedProductByItemDetails" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ItemToProductSuggestionServiceSOAPBinding"
+		type="tns:ItemToProductSuggestionServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/marketplacecatalog/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSuggestedProductsByItemIds">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/marketplacecatalog/v1/services/getSuggestedProductByItemIds" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSuggestedProductsByItemDetails">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/marketplacecatalog/v1/services/getSuggestedProductByItemDetails" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ItemToProductSuggestionService">
+		<wsdl:documentation>
+		    ItemToProductSuggestionService is a service that can suggest one or more eBay Product Reference Id (EPID),
+		    based on a set of item details, such as item title, category id, start price, current price,
+		    and buy it now price.  The implementation of this service is based on a machine learning algorithm.  
+		</wsdl:documentation>
+		<wsdl:port
+			binding="tns:ItemToProductSuggestionServiceHttpBinding"
+			name="ItemToProductSuggestionServiceHttp">
+			<http:address
+				location="http://svcs.ebay.com/services/marketplacecatalog/v1/ItemToProductSuggestionService" />
+		</wsdl:port>
+		<wsdl:port
+			binding="tns:ItemToProductSuggestionServiceSOAPBinding"
+			name="ItemToProductSuggestionServiceSOAP">
+			<soap12:address
+				location="http://svcs.ebay.com/services/marketplacecatalog/v1/ItemToProductSuggestionService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

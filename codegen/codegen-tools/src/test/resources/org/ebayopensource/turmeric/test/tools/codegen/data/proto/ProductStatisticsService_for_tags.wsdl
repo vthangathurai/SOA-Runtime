@@ -1,0 +1,960 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ProductStatisticsService" targetNamespace="http://www.ebay.com/marketplace/search/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/search/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/search/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getProductStatisticsRequest" type="tns:GetProductStatisticsRequest"/>
+			<xs:complexType name="GetProductStatisticsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This operation provides functionality to inquiry product statistics data. The data include buy box price, min BIN and price trend.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded"
+								minOccurs="1" name="productId" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										eBay Product ID. eBay's global
+										reference ID for a catalog
+										product. On the eBay Web site,
+										this is known as the "ePID". A
+										reference ID is a fixed
+										reference to a product
+										(regardless of version). You
+										just need to specify the numeric
+										value here, for example, if you
+										find one ePID is "EPID30971438",
+										you only need to specify
+										30971438.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="buyBoxPriceRequest"
+								type="tns:ProductBuyBoxPriceRequest">
+								<xs:annotation>
+									<xs:documentation>
+										The buy box price request
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="inventoryCountRequest" type="tns:InventoryCountRequest">
+								<xs:annotation>
+									<xs:documentation>
+										The inventory count request
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="priceTrendRequest" type="tns:ProductPriceTrendRequest">
+								<xs:annotation>
+									<xs:documentation>
+										The price trend request
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="globalId" type="xs:string"
+								maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										The unique identifier for a
+										combination of site, language,
+										and territory. For example,
+										EBAY-US (the default) is the
+										global ID that corresponds to
+										the eBay US site. The global ID
+										you specify must correspond to
+										an eBay site with a valid site
+										ID. Refer to eBay Site ID to
+										Global ID Mapping. In addition,
+										Global ID Values contains a
+										complete list of the eBay global
+										IDs.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="minBINPriceRequest"
+								type="tns:ProductMinBINPriceRequest" maxOccurs="1"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										The minimum BIN price request
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="shipToLocation"
+								type="tns:ShipToLocation" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Specify the country and postcode
+										here
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="endingSoonestPrice"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getProductStatisticsResponse" type="tns:GetProductStatisticsResponse"/>
+			<xs:complexType name="GetProductStatisticsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The product statistics response
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="productStatistics" type="tns:ProductStatisticsResult"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		
+			<xs:complexType name="ProductBuyBoxPriceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the buy box price request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="condition" type="tns:ConditionType">
+						<xs:annotation>
+							<xs:documentation>
+								The condition value of the buy box price request. You can add multiple conditions. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="includeAllConditions" type="xs:boolean" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Return the buy box price for all conditions if setting to true.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ConditionType">
+				<xs:annotation>
+					<xs:documentation>
+						The condition type which could be media product condition or default condition
+					</xs:documentation>
+				</xs:annotation>
+				<xs:choice>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="defaultCondition" type="tns:DefaultCondition">
+						<xs:annotation>
+							<xs:documentation>
+								The condition value for products. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="mediaCondition" type="tns:MediaCondition">
+						<xs:annotation>
+							<xs:documentation>
+								The condition value for media products. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+			</xs:complexType>
+
+			<xs:simpleType name="DefaultCondition">
+				<xs:annotation>
+					<xs:documentation>
+						It defines all the conditions available to products.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NEW">
+						<xs:annotation>
+							<xs:documentation>
+								The NEW condition for non-media product.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="REFURBISHED">
+						<xs:annotation>
+							<xs:documentation>
+								The REFURBISHED condition for non-media product. It includes manufacture refurbished and seller refurbished.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NEW_OTHER">
+						<xs:annotation>
+							<xs:documentation>
+								The NEW_OTHER condition for non-media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="USED">
+						<xs:annotation>
+							<xs:documentation>
+								The USED condition for non-media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="FOR_PARTS">
+					<xs:annotation>
+							<xs:documentation>
+								The FOR_PARTS condition for non-media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="MediaCondition">
+				<xs:annotation>
+					<xs:documentation>
+						It defines all the conditions available to media products. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="BRAND_NEW">
+						<xs:annotation>
+							<xs:documentation>
+								The BRAND_NEW condition for media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LIKE_NEW">
+						<xs:annotation>
+							<xs:documentation>
+								The LIKE_NEW condition for media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="VERY_GOOD">
+						<xs:annotation>
+							<xs:documentation>
+								The VERY_GOOD condition for media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="GOOD">
+						<xs:annotation>
+							<xs:documentation>
+								The GOOD condition for media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ACCEPTABLE">
+						<xs:annotation>
+							<xs:documentation>
+								The ACCEPTABLE condition for media product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		
+			<xs:complexType name="InventoryCountRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the inventory count request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="condition" type="tns:ConditionType">
+						<xs:annotation>
+							<xs:documentation>
+								The condition value of the inventory count request. You can add multiple conditions. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="includeAllConditions" type="xs:boolean" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Return the inventory count for all conditions if setting to true.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ProductPriceTrendRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the price trend request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="priceTrendType" type="tns:ProductPriceTrendType">
+						<xs:annotation>
+							<xs:documentation>
+								Specify the price trend type you want return. You can add multiple types.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:simpleType name="ProductPriceTrendType">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the price trend the operation supports 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="BinPriceTrendForNewItems"/>
+					<xs:enumeration value="AuctionPriceTrendForNewItems"/>
+					<xs:enumeration value="BinPriceTrendForUsedItems"/>
+					<xs:enumeration value="AuctionPriceTrendForUsedItems"/>
+				</xs:restriction>
+			</xs:simpleType>
+		
+			<xs:complexType name="ProductStatisticsResult">
+				<xs:annotation>
+					<xs:documentation>
+						The product statistics result. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="productId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Product Id  
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="buyBoxPriceResponse"
+						type="tns:ProductBuyBoxPriceResponse">
+						<xs:annotation>
+							<xs:documentation>
+								Buy box price response 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="inventoryCountResponse" type="tns:InventoryCountResponse">
+						<xs:annotation>
+							<xs:documentation>
+								Inventory count response 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="priceTrendResponse" type="tns:ProductPriceTrendResponse">
+						<xs:annotation>
+							<xs:documentation>
+								Price trend response 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+						
+					<xs:element name="minBINPriceResponse"
+						type="tns:ProductMinBINPriceResponse" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Minimum BIN price response 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="endingSoonestItemPrice" type="tns:Amount" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The price of ending soonest item in this product. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ProductPriceRecord">
+				<xs:annotation>
+					<xs:documentation>
+						This defines the price of each condition.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="condition" type="tns:ConditionType">
+						<xs:annotation>
+							<xs:documentation>
+								The condition value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="amount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								The amount of the price.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="InventoryCountResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is the inventory count response.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="inventoryCountRecord" type="tns:InventoryCountRecord">
+						<xs:annotation>
+							<xs:documentation>
+								This is the inventory count response.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="totalCount" type="xs:int" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The total item count of one product.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="InventoryCountRecord">
+				<xs:annotation>
+					<xs:documentation>
+						This defines the inventory count for each condition.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="condition" type="tns:ConditionType">
+						<xs:annotation>
+							<xs:documentation>
+								The condition value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="count" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The inventory count.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ProductPriceTrendResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Price trend response
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="priceTrendRecord" type="tns:ProductPriceTrendRecord">
+						<xs:annotation>
+							<xs:documentation>
+								The price trend record.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ProductPriceTrendRecord">
+				<xs:annotation>
+					<xs:documentation>
+						This defines the price trend for differnt item formats and conditons.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="priceTrendType" type="tns:ProductPriceTrendType">
+						<xs:annotation>
+							<xs:documentation>
+								The price trend type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="priceTrend" type="tns:ProductPriceTrend">
+						<xs:annotation>
+							<xs:documentation>
+								The price for a specific day.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ProductPriceTrend">
+				<xs:annotation>
+					<xs:documentation>
+						The product price for a specific day.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="date" type="xs:date">
+						<xs:annotation>
+							<xs:documentation>
+								The date.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="price" type="tns:Amount">
+					<xs:annotation>
+						<xs:documentation>
+							The product price.
+						</xs:documentation>
+					</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+<xs:complexType name="Amount">
+                  <xs:annotation><xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+        <xs:simpleContent>
+                  <xs:extension base="xs:double">
+                      <xs:attribute name="currencyId" type="xs:string" use="required"></xs:attribute>
+                  </xs:extension>
+           </xs:simpleContent>
+       </xs:complexType>
+
+
+            <xs:complexType name="ProductMinBINPriceRequest">
+            	<xs:annotation>
+					<xs:documentation>
+						This is the minimum BIN price request. It gives the minimum BIN price of each condition.
+					</xs:documentation>
+				</xs:annotation>
+            	<xs:sequence>
+            		<xs:element name="condition"
+            			type="tns:ConditionType" maxOccurs="unbounded" minOccurs="0">
+            			<xs:annotation>
+							<xs:documentation>
+								The condition value.
+							</xs:documentation>
+						</xs:annotation>
+            		</xs:element>
+            		<xs:element name="includeAllConditions" type="xs:boolean" maxOccurs="1" minOccurs="1">
+            			<xs:annotation>
+							<xs:documentation>
+								Set true to return the price for all condtions.
+							</xs:documentation>
+						</xs:annotation>
+            		</xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="ProductBuyBoxPriceResponse">
+            	<xs:annotation>
+					<xs:documentation>
+						The buy box price response.
+					</xs:documentation>
+				</xs:annotation>
+            	<xs:sequence>
+            		<xs:element name="buyBoxPrice" type="tns:ProductPriceRecord" maxOccurs="unbounded" minOccurs="0">
+            			<xs:annotation>
+							<xs:documentation>
+								The buy box price record.
+							</xs:documentation>
+						</xs:annotation>
+            		</xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="ProductMinBINPriceResponse">
+            	<xs:sequence>
+            		<xs:element name="minBINPrice" type="tns:ProductPriceRecord" maxOccurs="unbounded" minOccurs="0">
+            			<xs:annotation>
+							<xs:documentation>
+								The minimum BIN price record.
+							</xs:documentation>
+						</xs:annotation>
+            		</xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    
+            <xs:complexType name="ShipToLocation">
+            	<xs:annotation>
+					<xs:documentation>
+						The shipping cost may impact the buy box price. Please specify the country and postcode to see the exact price.
+					</xs:documentation>
+				</xs:annotation>
+            	<xs:sequence>
+            		<xs:element name="country" type="xs:string" maxOccurs="1" minOccurs="0">
+            			<xs:annotation>
+							<xs:documentation>
+								Two-letter ISO 3166 country code to indicate the country where the item is located (e.g., "US" for the United States or "GB" for the United Kingdom). 
+							</xs:documentation>
+						</xs:annotation>
+            		</xs:element>
+            		<xs:element name="postalCode" type="xs:string" maxOccurs="1" minOccurs="0">
+            			<xs:annotation>
+							<xs:documentation>
+								The postal code. 
+							</xs:documentation>
+						</xs:annotation>
+            		</xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="getProductStatisticsResponse">
+    <part name="params" element="tns:getProductStatisticsResponse">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="getProductStatisticsRequest">
+    <part name="params" element="tns:getProductStatisticsRequest">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <portType name="ProductStatisticsServicePort">
+    <operation name="getVersion">
+<wsdl:documentation>
+				This operation will return the version of this service.
+			</wsdl:documentation>
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="getProductStatistics">
+<wsdl:documentation>
+				This operation provides functionality to inquiry product statistics data. The data include buy box price, min BIN and price trend.
+			</wsdl:documentation>
+      <input message="tns:getProductStatisticsRequest">
+    </input>
+      <output message="tns:getProductStatisticsResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="ProductStatisticsServiceHttpBinding" type="tns:ProductStatisticsServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getProductStatistics">
+      <http:operation location="/getProductStatistics"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="ProductStatisticsServiceSOAPBinding"
+  	type="tns:ProductStatisticsServicePort">
+
+  	<soap:binding style="document"
+  		transport="http://schemas.xmlsoap.org/soap/http" />
+  	<operation name="getVersion">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/search/v1/services/getVersion" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  	<operation name="getProductStatistics">
+
+  		<soap:operation
+  			soapAction="http://www.ebay.com/marketplace/search/v1/services/getProductStatistics" />
+  		<input>
+
+  			<soap:body use="literal" />
+  		</input>
+  		<output>
+
+  			<soap:body use="literal" />
+  		</output>
+  	</operation>
+  </binding>
+  <service name="ProductStatisticsService">
+<wsdl:documentation>
+			<version>1.0.0</version>
+		</wsdl:documentation>
+    <port name="ProductStatisticsServiceHttpPort" binding="tns:ProductStatisticsServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/search/v1/ProductStatisticsService"/>
+    </port>
+    <port name="ProductStatisticsServiceSOAPPort" binding="tns:ProductStatisticsServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/search/v1/ProductStatisticsService"/>
+    </port>
+  </service>
+</definitions>

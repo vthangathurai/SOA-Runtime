@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="TextGenomicsATORiskInfoService" targetNamespace="http://www.ebay.com/marketplace/security/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/security/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified"
+    	elementFormDefault="qualified"
+    	targetNamespace="http://www.ebay.com/marketplace/security/v1/services">
+    	<xs:simpleType name="AckValue">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Indicates whether the error is a severe error
+    				(causing the request to fail) or an informational
+    				error (a warning) that should be communicated to the
+    				user.
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource
+    					library="MarketPlaceServiceCommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:restriction base="xs:string">
+    			<xs:enumeration value="Success">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The request was processed successfully, but
+    						something occurred that may affect your
+    						application or the user.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:enumeration>
+    			<xs:enumeration value="Failure">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The request that triggered the error was not
+    						processed successfully. When a serious
+    						application-level error occurs, the error is
+    						returned instead of the business data.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:enumeration>
+    			<xs:enumeration value="Warning">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The request that triggered the error was
+    						processed successfully but with some
+    						warnings.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:enumeration>
+    			<xs:enumeration value="PartialFailure">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The request that triggered the error was
+    						processed successfully but with some
+    						warnings.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:enumeration>
+    		</xs:restriction>
+    	</xs:simpleType>
+    	<xs:complexType abstract="true" name="BaseRequest">
+    		<xs:annotation>
+    			<xs:documentation>
+    				This is the base class for request container for all
+    				service operations.
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource
+    					library="MarketPlaceServiceCommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="extension" type="tns:ExtensionType"  
+    			minOccurs="0" maxOccurs="unbounded"/>
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:complexType abstract="true" name="BaseResponse">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Base response container for all service operations.
+    				Contains error information associated with the
+    				request.
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource
+    					library="MarketPlaceServiceCommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="ack" type="tns:AckValue">
+    				<xs:annotation>
+    					<xs:documentation />
+    					<xs:appinfo>
+    						<CallInfo>
+    							<AllCalls />
+    							<Returned>Always</Returned>
+    						</CallInfo>
+    					</xs:appinfo>
+    				</xs:annotation>
+    			</xs:element>
+    			<xs:element name="errorMessage"	type="tns:ErrorMessage" minOccurs="0">
+    				<xs:annotation>
+    					<xs:documentation>
+    						Information for an error or warning that
+    						occurred when eBay processed the request.
+    					</xs:documentation>
+    					<xs:appinfo>
+    						<CallInfo>
+    							<AllCalls />
+    							<Returned>Conditionally</Returned>
+    						</CallInfo>
+    					</xs:appinfo>
+    				</xs:annotation>
+    			</xs:element>
+    			<xs:element name="version" type="xs:string"  minOccurs="0">
+    				<xs:annotation>
+    					<xs:documentation />
+    					<xs:appinfo>
+    						<CallInfo>
+    							<AllCalls />
+    							<Returned>Always</Returned>
+    						</CallInfo>
+    					</xs:appinfo>
+    				</xs:annotation>
+    			</xs:element>
+    			<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+    				<xs:annotation>
+    					<xs:documentation />
+    					<xs:appinfo>
+    						<CallInfo>
+    							<AllCalls />
+    							<Returned>Always</Returned>
+    						</CallInfo>
+    					</xs:appinfo>
+    				</xs:annotation>
+    			</xs:element>
+    			<xs:element name="extension" type="tns:ExtensionType"
+    			  minOccurs="0" maxOccurs="unbounded"/>
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:simpleType name="ErrorCategory">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here.
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource library="SOACommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:restriction base="xs:token">
+    			<xs:enumeration value="System" />
+    			<xs:enumeration value="Application" />
+    			<xs:enumeration value="Request" />
+    		</xs:restriction>
+    	</xs:simpleType>
+    	<xs:complexType name="ErrorData">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource library="SOACommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="errorId" type="xs:long" />
+    			<xs:element name="domain" type="xs:string" />
+    			<xs:element name="subdomain" type="xs:string" minOccurs="0"/>
+    			<xs:element name="severity" type="tns:ErrorSeverity" />
+    			<xs:element name="category" type="tns:ErrorCategory" />
+    			<xs:element name="message" type="xs:string" />
+    			<xs:element name="exceptionId" type="xs:token" minOccurs="0"/>
+    			<xs:element	name="parameter" type="tns:ErrorParameter"  minOccurs="0" maxOccurs="unbounded"/>
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:complexType name="ErrorMessage">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource library="SOACommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<!-- 
+    			<xs:sequence>
+
+    			processContents="lax" />
+    			</xs:sequence>
+    		-->
+    		<xs:sequence>
+    			<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded"/>
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:complexType name="ErrorParameter">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource library="SOACommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:simpleContent>
+    			<xs:extension base="xs:string">
+    				<xs:attribute name="name" type="xs:string"
+    					use="optional" />
+    			</xs:extension>
+    		</xs:simpleContent>
+    	</xs:complexType>
+    	<xs:simpleType name="ErrorSeverity">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here.
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource library="SOACommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:restriction base="xs:token">
+    			<xs:enumeration value="Error" />
+    			<xs:enumeration value="Warning" />
+    		</xs:restriction>
+    	</xs:simpleType>
+    	<xs:complexType name="ExtensionType">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here
+    			</xs:documentation>
+    			<xs:appinfo>
+    				<typeLibrarySource
+    					library="MarketPlaceServiceCommonTypeLibrary"
+    					namespace="http://www.ebay.com/marketplace/services" />
+    			</xs:appinfo>
+    		</xs:annotation>
+    		<xs:sequence>
+    			<xs:element name="id" type="xs:positiveInteger" />
+    			<xs:element name="version" type="xs:string" />
+    			<xs:element name="contentType" type="xs:string" />
+    			<xs:element name="value" type="xs:string" />
+
+    				processContents="lax" />
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:complexType name="TextGenomicsATORiskInfo">
+    		<xs:sequence>
+    			<xs:element name="matchingItemId" type="xs:long"  minOccurs="1"/>
+    			<xs:element name="textGenomicsRiskScore" type="xs:int"  minOccurs="1" />
+    		</xs:sequence>
+    	</xs:complexType>
+    	<xs:element name="getVersionRequest"
+    		type="tns:GetVersionRequest" />
+    	<xs:complexType name="GetVersionRequest">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here.
+    			</xs:documentation>
+    		</xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseRequest">
+    				<xs:sequence />
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:element name="getVersionResponse"
+    		type="tns:GetVersionResponse" />
+    	<xs:complexType name="GetVersionResponse">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here.
+    			</xs:documentation>
+    		</xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseResponse">
+    				<xs:sequence>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:element name="getTextGenomicsATORiskInfoRequest"
+    		type="tns:GetTextGenomicsATORiskInfoRequest" />
+    	<xs:complexType name="GetTextGenomicsATORiskInfoRequest">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here.
+    			</xs:documentation>
+    		</xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseRequest">
+    				<xs:sequence>
+    					<xs:element name="itemTitle" type="xs:string" 
+    						 minOccurs="1"/>
+    					<xs:element name="itemDescription" type="xs:string" 
+    						 minOccurs="1"/>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    	<xs:element name="getTextGenomicsATORiskInfoResponse"
+    		type="tns:GetTextGenomicsATORiskInfoResponse" />
+    	<xs:complexType name="GetTextGenomicsATORiskInfoResponse">
+    		<xs:annotation>
+    			<xs:documentation>
+    				Documentation goes here.
+    			</xs:documentation>
+    		</xs:annotation>
+    		<xs:complexContent>
+    			<xs:extension base="tns:BaseResponse">
+    				<xs:sequence>
+    					<xs:element name="textGenomicsATORiskInfoResponse"
+    						type="tns:TextGenomicsATORiskInfo" minOccurs="1" />
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="getTextGenomicsATORiskInfoRequest">
+    <part name="params" element="tns:getTextGenomicsATORiskInfoRequest">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="getTextGenomicsATORiskInfoResponse">
+    <part name="params" element="tns:getTextGenomicsATORiskInfoResponse">
+    </part>
+  </message>
+  
+  <portType name="TextGenomicsATORiskInfoServicePort">
+    <operation name="getVersion">
+		<wsdl:documentation>
+    		Returns the version number of the service. 
+		</wsdl:documentation>
+       <wsdl:input message="tns:getVersionRequest"></wsdl:input>
+       <output message="tns:getVersionResponse"></output>
+    </operation>
+    <operation name="getTextGenomicsATORiskInfo">
+<wsdl:documentation>
+    	Returns the ATO risk info associated with an item title and description.  
+    </wsdl:documentation>
+      <input message="tns:getTextGenomicsATORiskInfoRequest">
+    </input>
+      <output message="tns:getTextGenomicsATORiskInfoResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="TextGenomicsATORiskInfoServiceSOAPBinding" type="tns:TextGenomicsATORiskInfoServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getTextGenomicsATORiskInfo">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/getTextGenomicsATORiskInfo"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="TextGenomicsATORiskInfoServiceHttpBinding" type="tns:TextGenomicsATORiskInfoServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getTextGenomicsATORiskInfo">
+      <http:operation location="/getTextGenomicsATORiskInfo"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="TextGenomicsATORiskInfoService">
+<wsdl:documentation>
+		<Version>1.0</Version>
+			The TextGenomics ATO Risk Service provides the ATO risk information for a given item.
+	</wsdl:documentation>
+    <port name="TextGenomicsATORiskInfoServiceHttpPort" binding="tns:TextGenomicsATORiskInfoServiceHttpBinding">
+      <http:address location="http://svcs.ebay.com/services/security/v1/TextGenomicsATORiskInfoService"/>
+    </port>
+    <port name="TextGenomicsATORiskInfoServiceSOAPPort" binding="tns:TextGenomicsATORiskInfoServiceSOAPBinding">
+      <soap12:address location="http://svcs.ebay.com/services/security/v1/TextGenomicsATORiskInfoService"/>
+    </port>
+  </service>
+</definitions>

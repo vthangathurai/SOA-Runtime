@@ -1,0 +1,2954 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/buying/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ViewItemService"
+	targetNamespace="http://www.ebay.com/marketplace/buying/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/buying/v1/services">
+			
+			<xs:complexType name="ItemSummary">
+	 			<xs:sequence>
+	 				<xs:element minOccurs="0" maxOccurs="1" name="startTime" type="xs:dateTime" />
+	 				<xs:element minOccurs="0" maxOccurs="1" name="endTime" type="xs:dateTime" />
+	 				<xs:element minOccurs="0" maxOccurs="1" name="timeLeftInSeconds" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="conditionDisplayName" type="xs:string" /> 
+					<xs:element minOccurs="0" maxOccurs="1" name="format" type="tns:ListingFormat" />					
+					<xs:element minOccurs="0" maxOccurs="1" name="quantity" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="lotSize" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="title" type="xs:string" /> 
+					<xs:element minOccurs="0" maxOccurs="1" name="description" type="xs:string" /> 
+					<xs:element minOccurs="0" maxOccurs="1" name="subTitle" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="itemId" type="xs:long" /> 
+  					<xs:element minOccurs="0" maxOccurs="1" name="listingSiteId" type="xs:int" />
+  					<xs:element minOccurs="0" maxOccurs="1" name="sellerComment" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="startPrice" type="tns:Amount" />	
+					<xs:element minOccurs="0" maxOccurs="1" name="binPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="convertedBINPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="convertedStartPrice" type="tns:Amount" />					
+					<xs:element minOccurs="0" maxOccurs="1" name="netBINPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="convertedNetBINPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="netStartPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="convertedNetStartPrice" type="tns:Amount" />					
+					<xs:element minOccurs="0" maxOccurs="1" name="netPriceAvailable" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="vatApplicable" type="xs:boolean" />												 
+					<xs:element minOccurs="0" maxOccurs="1" name="netSalePrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="vatRate" type="xs:double" ></xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="convertedNetSalePrice" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="1" name="scheduledListing" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="privateListing" type="xs:boolean" ></xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="goodTillCancelled" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="bestOfferEnabled" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="giftIcon" type="xs:string" ></xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="counterStyle" type="tns:HitCounterCodeType" />
+					<xs:element minOccurs="0" maxOccurs="1" name="promotionalDetails" type="tns:PromotionDetail" />
+					<xs:element minOccurs="0" maxOccurs="1" name="charity" type="tns:Charity" />
+					<xs:element minOccurs="0" maxOccurs="1" name="autoVehicle" type="xs:boolean" >
+						<xs:annotation>
+							<xs:documentation>
+								Return true if item is auto vehicle such as 
+								AutosCar, AutosMotorcycle, AutosOtherVehicles, AutosPowersports.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element> 																					
+					<!-- SELLER ONLY start --> 
+					<xs:element minOccurs="0" name="auctionReservePrice" type="tns:Amount" >
+						<xs:annotation>
+							<xs:documentation>
+								This field will return for seller only.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>												
+					<!-- SELLER ONLY end -->
+					
+  					<xs:element minOccurs="0" maxOccurs="1" name="itemLocation" type="tns:ItemLocation" />
+					<xs:element minOccurs="0" maxOccurs="1" name="paymentInfo" type="tns:PaymentInfo" />
+					<xs:element minOccurs="0" maxOccurs="1" name="shippingdetail" type="tns:ShippingDetail" />
+					<xs:element minOccurs="0" maxOccurs="1" name="returnPolicy" type="tns:ReturnPolicy" />
+					<xs:element minOccurs="0" maxOccurs="1" name="buyerProtection" type="tns:BuyerProtection" />										
+					<xs:element minOccurs="0" maxOccurs="1" name="itemVariation" type="tns:ItemVariation" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="salesTax" type="tns:SalesTaxInfo"	/>
+					<xs:element minOccurs="0" maxOccurs="1" name="pictures" type="tns:ViewItemPicture"/>							
+					<xs:element minOccurs="0" maxOccurs="1" name="paymentAdditionalDetails" type="tns:PaymentAdditionalDetail" />
+					<xs:element minOccurs="0" maxOccurs="1" name="itemAttributes" type="tns:ItemAttribute" />
+					<xs:element minOccurs="0" maxOccurs="1" name="itemData" type="tns:ViewItemData" />
+					<xs:element minOccurs="0" maxOccurs="1" name="primary" type="tns:Category">
+						<xs:annotation>
+							<xs:documentation>
+								Primary (leaf) category    								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>						
+					<xs:element minOccurs="0" maxOccurs="1" name="secondary" type="tns:Category" >
+						<xs:annotation>
+							<xs:documentation>
+								Secondary(leaf) category   								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>				
+			</xs:complexType>			
+           
+			<xs:complexType name="ViewItemSitePolicy">
+				<xs:annotation>
+					<xs:documentation>
+						Configuration data.   								
+					</xs:documentation>					
+				</xs:annotation>
+				<xs:sequence>
+					<!-- AutoRefresh/QucikBid -->
+					<!-- TBD	
+					<xs:element minOccurs="0" maxOccurs="1" name="slowRefreshDurationInMins" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								To be used by ViewItem page only. Config data for AutoRefresh and MakeQuickBid.  
+								If you want to leverage, please consult DL-eBay-PD-ViewItem for capacity. 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="slowRefreshIntervalInSecs" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								To be used by ViewItem page only. Config data for AutoRefresh and MakeQuickBid.  
+								If you want to leverage, please consult DL-eBay-PD-ViewItem for capacity. 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="fastRefreshDurationInMins" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								To be used by ViewItem page only. Config data for AutoRefresh and MakeQuickBid.  
+								If you want to leverage, please consult DL-eBay-PD-ViewItem for capacity. 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>					
+					<xs:element minOccurs="0" maxOccurs="1" name="fastRefreshIntervalInSecs" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								To be used by ViewItem page only. Config data for AutoRefresh and MakeQuickBid.  
+								If you want to leverage, please consult DL-eBay-PD-ViewItem for capacity. 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>					
+					<xs:element minOccurs="0" maxOccurs="1" name="timeLeftToAuctionEndInSecs" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								To be used by ViewItem page only. Config data for AutoRefresh and MakeQuickBid.  
+								If you want to leverage, please consult DL-eBay-PD-ViewItem for capacity. 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>					
+					<xs:element minOccurs="0" maxOccurs="1" name="autoRefreshDurationInMins" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								To be used by ViewItem page only. Config data for AutoRefresh and MakeQuickBid.  
+								If you want to leverage, please consult DL-eBay-PD-ViewItem for capacity. 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>					
+					<xs:element minOccurs="0" maxOccurs="1" name="viewerItemRelationIdParamName" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="lastAccessedDateParamName" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="viewerItemRelationId" type="xs:int" />					
+					<xs:element minOccurs="0" maxOccurs="1" name="autoRefreshParamValue" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="manualRefreshParamValue" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="refreshTypeParamName" type="xs:string" />					
+					<xs:element minOccurs="0" maxOccurs="1" name="acceleratingRefreshDurationInMins" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="acceleratingRefreshIntervalRatio" type="xs:double" />
+					<xs:element minOccurs="0" maxOccurs="1" name="acceleratingRefreshIntervalBase" type="xs:double" />
+					-->
+					<xs:element minOccurs="0" maxOccurs="1" name="maxAllowedQuantity" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								Max allowed quantity can be purchased for Daily Deal items.   								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>					 
+					<xs:element minOccurs="0" maxOccurs="1" name="shouldSuppressQty" type="xs:boolean" >
+						<xs:annotation>
+							<xs:documentation>
+								Indicate this is Daily Deal or CSA item and we should suppress the quantity to be displayed.    								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>	
+					<xs:element minOccurs="0" maxOccurs="1" name="quantityAvailableThreshold" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								Indicate what quantity to be displayed if this is Daily Deal or CSA item 
+								and we should suppress the actual quantity to be displayed.    								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>			
+			
+			<xs:complexType name="ViewItemControlData">
+				<xs:annotation>
+					<xs:documentation>
+						Control data to control presentation layout.       								
+					</xs:documentation>					
+				</xs:annotation>			
+	 			<xs:sequence>	 				
+	 				<xs:element minOccurs="0" name="showBrandedSellerLogo" type="xs:boolean" >
+	 					<xs:annotation>
+							<xs:documentation>
+								Only display branded seller logo when PC is on.    								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+	 				<xs:element minOccurs="0" name="showContextualInfo" type="xs:boolean" >
+	 					<xs:annotation>
+							<xs:documentation>
+								Show contextual text in ViewItem if the category flag is enabled
+								Eg: Show disclaimer for salvage/parts car categories    								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+	 				<xs:element minOccurs="0" name="showContextualHelp" type="xs:boolean" >
+	 					<xs:annotation>
+							<xs:documentation>
+								Show contextual help in ViewItem.    								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>	 				
+	 				<xs:element minOccurs="0" name="showVatIncluded" type="xs:boolean" >
+	 					<xs:annotation>
+							<xs:documentation>
+								Show included VAT value for DE, AT, CH site when Net price is available.   								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+	 				<xs:element minOccurs="0" name="showVatExcluded" type="xs:boolean" >
+	 					<xs:annotation>
+							<xs:documentation>
+								Show excluded VAT value for DE, AT, CH site when Net price is available.   								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+	 				<xs:element minOccurs="0" name="showQuantityPurchased" type="xs:boolean" >
+	 					<xs:annotation>
+							<xs:documentation>
+								Only show quanaity purchased for Seller View or Flash sale and PC is on.   								
+							</xs:documentation>					
+						</xs:annotation>	
+					</xs:element>		 				
+					<xs:element minOccurs="0" name="bidModuleEnabled" type="xs:boolean" >
+						<xs:annotation>
+							<xs:documentation>
+								Bidding Module is enabled when auction is NOT ended.  								
+							</xs:documentation>					
+						</xs:annotation>	 
+					</xs:element>	
+					<xs:element minOccurs="0" name="oneClickEnabled" type="xs:boolean" /> 
+					<xs:element minOccurs="0" name="autoRefreshEnabled" type="xs:boolean" />
+					<xs:element minOccurs="0" name="manualRefreshEnabled" type="xs:boolean" />
+					<xs:element minOccurs="0" name="biddingAvailable" type="xs:boolean" />							
+					<xs:element minOccurs="0" name="showBidMore" type="xs:boolean" />
+					<xs:element minOccurs="0" name="showFeedbackToolbar" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="buyAnother" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="showBusinessSellerFramework" type="xs:boolean" />
+					<xs:element minOccurs="0" name="hideSIFItemsForStoreVacationHold" type="xs:boolean" />
+					<xs:element minOccurs="0" name="showStoreVacationHoldMessage" type="xs:boolean" />		
+					<xs:element minOccurs="0" name="showStockPhotoLabel" type="xs:boolean" />								
+				</xs:sequence>						
+			</xs:complexType>
+			
+			 <xs:complexType name="PaymentAdditionalDetail">            	
+				<xs:sequence>
+					<xs:element minOccurs="0" name="depositAmount" type="tns:Amount" />
+					<xs:element minOccurs="0" name="immediatePaymentAmount" type="tns:Amount" />					
+					<xs:element minOccurs="0" name="paisaPayOnlyNoOtherPayments" type="xs:boolean" />										
+					<xs:element minOccurs="0" name="paymentPaisaPayEscrow" type="xs:boolean" />
+					<xs:element minOccurs="0" name="paisaPay" type="xs:boolean" />
+					<xs:element minOccurs="0" name="depositDuration" type="xs:int" />
+					<xs:element minOccurs="0" name="fullPaymentDuration" type="xs:int" />					
+					<xs:element minOccurs="0" name="paypalPrefered" type="xs:boolean" />
+				</xs:sequence>
+            </xs:complexType>
+            
+			<xs:complexType name="Charity">
+				<xs:annotation>
+					<xs:documentation>
+						Identifies a Giving Works listing and benefiting nonprofit charity organization. 
+						Currently supported through the US and eBay Motors sites only. The Ad Format and Mature Audiences categories are not supported. 
+						Not applicable for US eBay Motors, international, Real Estate, and Tickets.       								
+					</xs:documentation>					
+				</xs:annotation>			
+				<xs:sequence>
+					<xs:element minOccurs="0" name="charityName" type="xs:string" />
+					<xs:element minOccurs="0" name="charityID" type="xs:string" >
+						<xs:annotation>
+							<xs:documentation>
+							    A unique identification number assigned by eBay to registered nonprofit charity organizations. 
+							    Required input when listing Giving Works items.					
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="charityNumber" type="xs:string" >
+						<xs:annotation>
+							<xs:documentation>
+							     A unique identification number assigned to a nonprofit charity organization by the dedicated provider of eBay Giving Works. 
+							     Being superseded by CharityID. Max 10 digits.  								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>					
+					<xs:element minOccurs="0" name="status" type="xs:string" >
+						<xs:annotation>
+							<xs:documentation>
+							     The status of the nonprofit charity organization.							
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="mission" type="xs:string" >
+						<xs:annotation>
+							<xs:documentation>
+							     The stated mission of the nonprofit charity organization. 
+							     This mission is displayed in the Giving Works item listing 								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>			
+					<xs:element minOccurs="0" name="logoURL" type="xs:string" />					
+					<xs:element minOccurs="0" name="donationPercentage" type="xs:float" >
+						<xs:annotation>
+							<xs:documentation>
+							     The percentage of the purchase price that the seller chooses to donate to the selected nonprofit organization. 
+							     This percentage is displayed in the Giving Works item listing. Possible values: 10.0 to 100.0. 
+							     Percentages must increment by 5.0. Minimum donation percentages may be required for Giving Works listings, 
+							     see http://pages.ebay.com/help/sell/selling-nonprofit.html for details. 
+							     DonationPercent is required input when listing Giving Works items.					
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>							
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="StoreInfo">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="storeName" type="xs:string" />
+					<xs:element minOccurs="0" name="storeId" type="xs:long" />
+					<xs:element minOccurs="0" name="customLogo" type="xs:string" />
+					<xs:element minOccurs="0" name="colorSchemeId" type="xs:int" />
+					<xs:element minOccurs="0" name="storeGraphic" type="xs:int" />					
+					<xs:element minOccurs="0" name="subscriptionLevel" type="xs:int" />
+					<xs:element minOccurs="0" name="lightColor" type="xs:string" />
+					<xs:element minOccurs="0" name="darkColor" type="xs:string" />
+					<xs:element minOccurs="0" name="colorId" type="xs:int" />
+					<xs:element minOccurs="0" name="colorForeGround" type="xs:string" />
+					<xs:element minOccurs="0" name="colorBackGround" type="xs:string" />
+					<xs:element minOccurs="0" name="colorText" type="xs:string" />
+					<xs:element minOccurs="0" name="vacationReturnDate" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="onVacation" type="xs:boolean" />
+					<xs:element minOccurs="0" name="displayType" type="xs:int" />
+					<xs:element minOccurs="0" name="includeLogo" type="xs:boolean" />
+					<xs:element minOccurs="0" name="includeSearch" type="xs:boolean" />
+					<xs:element minOccurs="0" name="includeFavoriteStore" type="xs:boolean" />
+					<xs:element minOccurs="0" name="includeNewsletterSignup" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="categoryLinks" type="tns:StoreCustomListingHeaderLink" />
+					<xs:element minOccurs="0" name="marketingMessageType" type="xs:token" />
+					<xs:element minOccurs="0" name="customMessage" type="xs:string" />					
+					<xs:element minOccurs="0" name="includeLeftNav" type="xs:boolean" />
+					<xs:element minOccurs="0" name="includeItemsOnSale" type="xs:boolean" />										
+					<xs:element minOccurs="0" name="primaryColor" type="xs:string" />
+					<xs:element minOccurs="0" name="secondaryColor" type="xs:string" />
+					<xs:element minOccurs="0" name="storeNameFontFace" type="xs:string" />
+					<xs:element minOccurs="0" name="storeNameFontSize" type="xs:string" />
+					<xs:element minOccurs="0" name="storeNameFontColor" type="xs:string" />									
+					<xs:element minOccurs="0" name="oldPreferenceComaptible" type="xs:boolean" />
+					<xs:element minOccurs="0" name="storeHeaderCustomLinks" type="xs:boolean" />					
+
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="StoreCustomListingHeaderLink">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="id" type="xs:long" />
+					<xs:element minOccurs="0" name="text" type="xs:string" />
+
+					<xs:element minOccurs="0" name="position" type="xs:int" />
+					<xs:element minOccurs="0" name="count" type="xs:int" />
+					<xs:element minOccurs="0" name="dropDown" type="xs:boolean" />
+					<xs:element minOccurs="0" name="storeCustomListingHeaderLinkEnumId" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="BottomToolBar">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="bottomActionLegalText" type="xs:boolean" />
+					<xs:element minOccurs="0" name="bottomActionPrivateListing" type="xs:boolean" />
+					<xs:element minOccurs="0" name="truncatedProductTitle" type="xs:string" />						
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="Epseo">
+				<xs:sequence>					
+					<xs:element minOccurs="0" name="editableHtml" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaDescription" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaKwds" type="xs:string"/>
+					<xs:element minOccurs="0" name="editableLinks" type="xs:string"/>
+					<xs:element minOccurs="0" name="titleTag" type="xs:string"/>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="externalFooterLinks" type="tns:FooterLink" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="internalFooterLinks" type="tns:FooterLink" />
+					<xs:element minOccurs="0" name="metaGoogleVerificationCode" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaYahooVerificationCode" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaMSNVerificationCode" type="xs:string"/>					
+					<xs:element minOccurs="0" name="metaOpenGraphTitle" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaOpenGraphType" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaOpenGraphUrl" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaOpenGraphImage" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaOpenGraphSiteName" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaOpenGraphDescription" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaExpires" type="xs:string"/>
+					<xs:element minOccurs="0" name="metaFacebookAppId" type="xs:string"/>					
+				</xs:sequence>					
+			</xs:complexType>
+						
+			<xs:complexType name="FooterLink">
+				<xs:sequence>					
+					<xs:element minOccurs="0" name="linkName" type="xs:string"/>
+
+				</xs:sequence>					
+			</xs:complexType>
+			
+			<xs:complexType name="ItemAttribute">
+				<xs:annotation>
+					<xs:documentation>
+						A group of item specifics with Presentation Instruction applied
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>			
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="itemAttributeGroup" type="tns:ItemSpecificGroupType" />
+					<xs:element minOccurs="0" name="name" type="xs:string" />				
+
+					<xs:element minOccurs="0" name="itemConditionDefinition" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ItemSpecificGroupType">
+				<xs:annotation>
+					<xs:documentation>
+						A group of item specifics - consists of one or more attribute sections.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" name="itemSpecificSection" type="tns:ItemSpecificSectionType" />
+					<xs:element name="name" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemSpecificSectionType">
+				<xs:annotation>
+					<xs:documentation>
+						Item Specifics. An item specific section has a
+						title and a list of name-value attributes.
+						Sometimes, the
+						attributes could be value-Only,
+						indicated by the isValueOnly flag.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" name="itemSpecificNameValue"	type="tns:ItemSpecificNameValueType" />
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="valueOnly" type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemSpecificNameValueType">
+				<xs:annotation>
+					<xs:documentation>
+						Item Specific Name-Value property. An item
+						specific has a name, value. If the attribute is value-only, the
+						name
+						is empty.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="nameAvailable" type="xs:boolean" />
+					<xs:element name="name" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="QuestionAnswerType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="question"	type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="1" name="questionId"	type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="1" name="questionTruncated" type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="1" name="answer" type="xs:string" />					
+					<xs:element maxOccurs="1" minOccurs="1" name="answerId" type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="1" name="answerDate" type="xs:dateTime" />
+					<xs:element maxOccurs="1" minOccurs="1" name="answerTruncated"	type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="QuestionAnswersType">
+				<xs:sequence>					
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"	name="questionAnswersSet" type="tns:QuestionAnswerType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PromotionDetail">				
+				<xs:sequence>
+					<xs:element minOccurs="0" name="promotionalSaleOn" type="xs:boolean" />
+					<xs:element minOccurs="0" name="promotionalSaleTimeLeftInSeconds" type="xs:long" />
+					<xs:element minOccurs="0" name="discountedPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="originalPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="discountPercentage" type="xs:int" />			
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="StatusMessageContainer">
+				<xs:sequence>					
+					<xs:element minOccurs="0" name="viewerStatusMessage" type="tns:StatusMessage" />					
+					<xs:element minOccurs="0" name="privateListingMessage" type="tns:StatusMessage" />
+					<xs:element minOccurs="0" name="preApprovedListingMessage" type="tns:StatusMessage" />
+					<xs:element minOccurs="0" name="vacationSettingMessage" type="tns:StatusMessage" />
+					<xs:element minOccurs="0" name="infoMessage" type="tns:StatusMessage" />
+					
+					<!-- e713 commented out    
+					xs:element minOccurs="0" name="addToCartMessage" type="tns:StatusMessage" />
+					<xs:element minOccurs="0" name="nonJsStatusMessage" type="tns:StatusMessage" /
+					-->					
+				</xs:sequence>			
+			</xs:complexType>
+			
+			<xs:complexType name="StatusMessage">
+				<xs:sequence>					
+					<!-- e713 commented out  
+					xs:element minOccurs="0" maxOccurs="unbounded" name="statusMessageActions" type="xs:string" />
+					<xs:element minOccurs="0" name="primaryLineAction" type="tns:LineAction" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="secondaryLineAction" type="tns:LineAction" />
+					<xs:element minOccurs="0" name="orderStatusData" type="tns:OrderStatusData" />
+					<xs:element minOccurs="0" name="PCCEOrderStatusMessageEnum" type="xs:string" />
+					<xs:element minOccurs="0" name="urls" type="tns:StatusMessageURL" />
+					-->					
+					<xs:element minOccurs="0" name="status" type="tns:Status" />										
+					<xs:element minOccurs="0" name="bestOfferFormat" type="tns:BestOfferFormatStatusMessage" />
+					<xs:element minOccurs="0" name="secondChanceOfferexpiration" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="buyerUserLoginName" type="xs:string" />
+					<xs:element minOccurs="0" name="itemVariation" type="tns:StatusMessageItemVariation" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:simpleType name="Status">				
+				<xs:restriction base="xs:string" >
+					<xs:enumeration value="CHINESE_BUYER_FIRST_BID" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction first bidder, current high bidder.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_HIGH_BIDDER" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction current high bidder.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_HIGH_BIDDER_ONE_MAX_BID_AWAY" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction High bidder, 1 max bid away.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>					
+					<xs:enumeration value="CHINESE_BUYER_HIGH_BIDDER_LESSTHAN_60_MIN_LEFT" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction High bidder, less than 60 minutes to end of auction							
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_HIGH_BIDDER_RESERVE_NOT_MET_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction High bidder but reserve is not met, item is ended.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_OUTBIDDER" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction buyer Outbid on an item.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_WINNER" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction Winner, item ended.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_WINNER_IN_LAST_FEW_MINUTES" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction Winner in the last few minutes.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_WINNER_WITH_ONE_BID" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction Winner with an early and only bid.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_DID_NOT_WIN" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction item ended but didn't win.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_SELLER_HAS_BIDS_AND_NO_RESERVE_OR_RESERVE_MET" >
+						<xs:annotation>
+							<xs:documentation>
+								For Seller login, Chinese Auction Item has bids. Reserve is not met.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_SELLER_HAS_BIDS_AND_RESERVE_NOT_MET" >
+						<xs:annotation>
+							<xs:documentation>
+								For Seller login, Item has bids. Reserve is not met.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_SELLER_WINNING_BIDDER_AND_NO_RESERVE_OR_RESERVE_MET" >
+						<xs:annotation>
+							<xs:documentation>
+								For Seller login, Winning bidder. No reserve or reserve is met.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_SELLER_NO_BIDS_AND_DID_NOT_SELL" >
+						<xs:annotation>
+							<xs:documentation>
+								For Seller login, No bids received. Item did not sell.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AUCTION_SELLER_NO_BIDS_AND_NO_RESEVRE_OR_RESERVE_NOT_MET" >
+						<xs:annotation>
+							<xs:documentation>
+								For Seller login, No bids. Reserve not met or item has no reserve.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_SELLER_HAS_BIDS_AND_RESERVE_NOT_MET_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								For Seller login, Bids received, but reserve is not met, item ended.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CHINESE_BUYER_HIGH_BIDDER_RESERVE_NOT_MET" >
+						<xs:annotation>
+							<xs:documentation>
+								Current Highbidder but reserve not met.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="AUCTION_NO_RELATION_CLOSED" />
+					<xs:enumeration value="FIXED_PRICE_NO_RELATION_CLOSED" />						
+					<xs:enumeration value="AUCTION_NO_RELATION_CLOSED_THROUGH_FIXED_PRICE" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction sold as BIN.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>					 
+					<xs:enumeration value="FIXED_PRICE_BUYER_MULTI_TRANSACTIONS" >
+						<xs:annotation>
+							<xs:documentation>
+								This login user bought multi quantity of this item already.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SELLER_ACTIVE_ITEM_DEFAULT_MESSAGE" />						
+					
+					<xs:enumeration value="CHINESE_BIN_BUYER" >
+						<xs:annotation>
+							<xs:documentation>
+								Chinese Auction Highbidder bought the item as Buy It Now. Item is ended.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_SELLER_REFUSED_FIRST_OFFER" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller refused 1st offer.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_SELLER_REFUSED_OFFER_AND_NO_MORE_OFFERS" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller refused offer. No more offers can be sent because buyer has exceeded the
+								limit for sending offers.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_SENT_TO_SELLER_AND_PENDING" >
+						<xs:annotation>
+							<xs:documentation>
+								Offer sent to the seller. Answer pending.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_SELLER_SENT_COUNTEROFFER" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller sent a counteroffer.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_ACCEPTED_BY_SELLER_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller accepted buyer's offer.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_REJECTED_BY_SELLER_AND_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller rejected buyer's offer. Item is closed.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_REJECTED_SELLER_OFFER_AND_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Buyer rejected seller's offer. Item is closed.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_SELLER_NO_OFFER_RECEIVED_SINGLE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, no offers received.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>	
+					<xs:enumeration value="BESTOFFER_SELLER_ACCEPTED_BUYER_OFFER_AND_SOLD_SINGLE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, Accepted buyer's best offer. Single quantity sold.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>	
+					<xs:enumeration value="BESTOFFER_SELLER_ACCEPTED_BUYER_OFFER_AND_SOLD_PARTIAL" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, Accepted buyer's best offer. Partial quantity sold.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>					
+					<xs:enumeration value="BESTOFFER_SELLER_ACCEPTED_BUYER_OFFER_AND_SOLD_ALL" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, Accepted buyer's best offer. Full quantity sold.								
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>					
+					<xs:enumeration value="BESTOFFER_SELLER_BESTOFFER_ACTIVITY" />
+					<xs:enumeration value="BESTOFFER_BUYER_BUYER_SENT_COUNTEROFFER" />
+					<xs:enumeration value="BESTOFFER_BUYER_BUYER_DECLINED_COUNTEROFFER" />										
+					<xs:enumeration value="BESTOFFER_BUYER_SELLER_REFUSED_OFFER_AND_NO_MORE_OFFERS_WITH_QTY" />					 
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_ACCEPTED_BY_SELLER" />
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_ACCEPTED_BY_BUYER" />
+					<xs:enumeration value="BESTOFFER_BUYER_BUYER_REFUSED_OFFER_AND_NO_MORE_OFFERS" />
+					<xs:enumeration value="BESTOFFER_BUYER_BUYER_REFUSED_OFFER_AND_NO_MORE_OFFERS_WITH_QTY" />					
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_REJECTED_CLOSED_BY_BIN" />
+					<xs:enumeration value="BESTOFFER_SELLER_BESTOFFER_ACTIVITY_SOLD" />						
+					<xs:enumeration value="SCO_BUYER_RECEIVED_SECOND_CHANCE_OFFER" >
+						<xs:annotation>
+							<xs:documentation>
+								Buyer received a second chance offer.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>	
+					<xs:enumeration value="SCO_BUYER_WINNER_SINGLE">
+						<xs:annotation>
+							<xs:documentation>
+								Second chance offer's Winner. Single quantity.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					
+					<xs:enumeration value="SCO_BUYER_SECOND_CHANCE_OFFER_EXPIRED" >
+					<xs:annotation>
+							<xs:documentation>
+								Second chance offer expired.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SCO_SELLER_SENT_SECOND_CHANCE_OFFER_SINGLE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, second chance offer sent.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SCO_SELLER_BUYER_ACCEPTED_SECOND_CHANCE_OFFER_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, second chance offer accepted by buyer. Item ended.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SCO_SELLER_BUYER_NOT_ACCEPTED_SECOND_CHANCE_OFFER_OR_EXPIRED" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, second chance offer not accepted by buyer or SCO expired.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BIN_BUYER_CLOSED_SINGLE" >
+						<xs:annotation>
+							<xs:documentation>
+								Buying bought a single item.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BIN_SELLER_SOLD_SINGLE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller sold a single BIN item.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BIN_SELLER_SOLD_MULTI" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller sold multiple BIN items.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BIN_SELLER_NOT_SOLD" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, items not sold. Item ended.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					 
+					<xs:enumeration value="ANY_FORMAT_LISTING_SCHEDULED" />
+					<xs:enumeration value="BUYER_PURCHASE_MORE_THAN_ONE_ITEMS" />
+					<xs:enumeration value="ANY_FORMAT_GALLERY_FAILURE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller login, gallery pics failure.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>																	 
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_EXPIRED_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Best offer buyer login, offer expired, item ended.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BESTOFFER_BUYER_OFFER_PENDING_CLOSED" >
+						<xs:annotation>
+							<xs:documentation>
+								Best offer buyer login, pending offer expired, item ended.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="VACATION_MESSAGE_SHOWSIF" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller is on vacation. Show Store Inventory items in search results.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration> 
+					<xs:enumeration value="VACATION_MESSAGE_SHOWSIF_RETURNDATE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller is on vacation. Show Store Inventory in search results and return date.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>				
+					<xs:enumeration value="VACATION_MESSAGE_HIDESIF" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller is on vacation. Hide Store Inventory items from search results.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration> 
+					<xs:enumeration value="VACATION_MESSAGE_HIDESIF_RETURNDATE" >
+						<xs:annotation>
+							<xs:documentation>
+								Seller is on vacation. Hide Store Inventory from search results and show return date.																
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ANY" />				
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<!-- TBH
+			<xs:complexType name="StatusMessageURL">
+				<xs:sequence>					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+			-->
+			<xs:complexType name="BestOfferFormatStatusMessage">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="acceptedOfferAmount" type="tns:Amount" />
+					<xs:element minOccurs="0" name="counterOfferAmount" type="tns:Amount" />
+					<xs:element minOccurs="0" name="daysLeftForOffer" type="xs:int" />
+					<xs:element minOccurs="0" name="expiration" type="xs:dateTime" />
+					<xs:element minOccurs="0" name="hoursLeftForOffer" type="xs:int" />
+					<xs:element minOccurs="0" name="minsLeftForOffer" type="xs:int" />
+					<xs:element minOccurs="0" name="offerAmount" type="tns:Amount" />
+					<xs:element minOccurs="0" name="numberOfItemsSold" type="xs:int" />
+					<xs:element minOccurs="0" name="numberOfOffersReceived" type="xs:int" />
+					<xs:element minOccurs="0" name="numberOfOffersSent" type="xs:int" />
+					<xs:element minOccurs="0" name="offerQuantity" type="xs:int" />
+					<xs:element minOccurs="0" name="offerUnitAmount" type="tns:Amount" />
+					<xs:element minOccurs="0" name="binUnitAmount" type="tns:Amount" />
+					<xs:element minOccurs="0" name="savingsPercentage" type="xs:double" />
+					<xs:element minOccurs="0" name="hoursLeftToRespondToOffer" type="xs:int" />
+					<xs:element minOccurs="0" name="showWinnerBOActivity" type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="StatusMessageItemVariation">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="price" type="tns:Amount" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="traitNameValuePairs" type="xs:string" />					
+					<xs:element minOccurs="0" name="quantity" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>			
+			
+			<!-- 
+			<xs:complexType name="LineAction">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="PCCELineActionsEnum" type="xs:string" />
+					<xs:element minOccurs="0" name="url" type="xs:string" />					
+				</xs:sequence>
+			</xs:complexType>
+			-->
+			
+			<!-- 
+			<xs:complexType name="OrderStatusData">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="closingPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="total" type="tns:Amount" />
+					<xs:element minOccurs="0" name="email" type="xs:string" />
+					<xs:element minOccurs="0" name="invoiceSentDate" type="xs:string" />
+					<xs:element minOccurs="0" name="paymentDate" type="xs:string" />
+					<xs:element minOccurs="0" name="receivedDate" type="xs:string" />
+					<xs:element minOccurs="0" name="totalRequestedDate" type="xs:string" />
+					<xs:element minOccurs="0" name="latestShipperUpdateDate" type="xs:string" />
+					<xs:element minOccurs="0" name="shippedDate" type="xs:string" />					
+					<xs:element minOccurs="0" name="legalInvoice" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="transactionLevelHoldHoldTime" type="xs:string" /> 
+					<xs:element minOccurs="0" name="PCCEPaymentHoldStatusEnum" type="xs:string" />
+					<xs:element minOccurs="0" name="PCCEOrderStatusMessageEnum" type="xs:string" />
+					<xs:element minOccurs="0" name="paisaPayId" type="xs:string" />
+					<xs:element minOccurs="0" name="escrowTimeOutDaysLeft" type="xs:int" />
+					<xs:element minOccurs="0" name="escrowTimeOutHoursLeft" type="xs:int" />
+					<xs:element minOccurs="0" name="escrowTimeOutMinutesLeft" type="xs:int" />
+					<xs:element minOccurs="0" name="escrowId" type="xs:string" />					
+					<xs:element minOccurs="0" name="receiveDate" type="xs:dateTime" />
+				</xs:sequence>
+			</xs:complexType>
+			-->
+			
+			<xs:complexType name="ItemVariation">
+				<xs:annotation>
+					<xs:documentation>
+						This field will return MSKU items data in ViewItem.  In order to adopt these data,
+						please consult ViewItem that how to integrate the data with presentation logic. 								
+					</xs:documentation>					
+				</xs:annotation>
+				<xs:sequence>				
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="availableVariations" type="tns:ItemVariationTraitCombination" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="traits" type="tns:ItemVariationTrait" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="unAvailableVariations" type="tns:TraitCombination" />
+					<xs:element minOccurs="0" name="variationPriceIdentical" type="xs:boolean" />
+					<xs:element minOccurs="0" name="selectedVariationId" type="xs:long" />					
+					<xs:element minOccurs="0" name="preSelOutOfStockTraitValues" type="xs:string" />					
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="traitPictureIndex" type="tns:TraitPictureIndexMap" />
+					<xs:element minOccurs="0" name="buyerOfSelectedVariation" type="xs:boolean" />
+					<xs:element minOccurs="0" name="titleId" type="xs:string" />					 
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ItemVariationTraitCombination">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="originalPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="price" type="tns:Amount" />			
+					<xs:element minOccurs="0" name="convertedPrice" type="tns:Amount" />		
+					<xs:element minOccurs="0" name="vatPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="convertedVatPrice" type="tns:Amount" />					
+					<xs:element minOccurs="0" name="quantity" type="xs:int" />
+					<xs:element minOccurs="0" name="quantitySold" type="xs:int" />
+					<xs:element minOccurs="0" name="quantityAvailable" type="xs:int" />
+					<xs:element minOccurs="0" name="traitCombination" type="tns:TraitCombination" />
+					<xs:element minOccurs="0" name="variationId" type="xs:long" />
+					<xs:element minOccurs="0" name="maxQuantity" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TraitCombination">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="matchingValue" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="traitValues" type="tns:ItemVariationTraitValue" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemVariationTraitValue">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="traitValueName" type="xs:string" />
+					<xs:element minOccurs="0" name="matchingValue" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemVariationTrait">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="traitName" type="xs:string" />
+					<xs:element minOccurs="0" name="matchingMask" type="xs:int" />
+					<xs:element minOccurs="0" name="selectedValue" type="xs:int" />
+					<xs:element minOccurs="0" name="primaryTrait" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="traitValues" type="tns:ItemVariationTraitValue" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TraitPictureIndexMap">
+				<xs:sequence>				
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="varTraitMatchingValue" type="xs:int" />
+					<xs:element minOccurs="0" name="index" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			
+			<xs:simpleType name="CompatibilityType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PROD_BY_APPLICATION" />
+					<xs:enumeration value="MANUAL_BY_APPLICATION" />
+					<xs:enumeration value="PROD_BY_SPECIFICATION" />
+					<xs:enumeration value="MANUAL_BY_SPECIFICATION" />
+					<xs:enumeration value="MDDS_CALL" />					
+					<xs:enumeration value="INVALID" />
+				</xs:restriction>
+			</xs:simpleType>
+						
+			<xs:complexType name="Breadcrumb">
+				<xs:sequence>				
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="category" type="tns:Category" />
+				</xs:sequence>
+			</xs:complexType>			
+			<xs:complexType name="Category">
+				<xs:sequence>				
+					<xs:element minOccurs="0" name="name" type="xs:string" />
+					<xs:element minOccurs="0" name="id" type="xs:int" />
+
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ViewItemURL">
+				<xs:sequence>				
+
+
+
+
+
+
+
+
+					<!-- emit only for isRedesignedShipping and isContactSellerAvailable?? -->
+
+
+
+
+					<!-- ItemSummary -->
+
+
+
+
+
+					<!-- Bid >
+
+
+
+
+
+
+
+						<xs:annotation>
+							<xs:documentation>
+								This require a valid client GUID as input field. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					-->
+					<!-- VI counter -->	
+
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="ViewItemProductInfo">				
+				<xs:sequence>					
+					<xs:element name="productId" type="xs:token"></xs:element>
+					<xs:element name="productReferenceId" type="xs:token"></xs:element>	
+					<xs:element minOccurs="0" name="productDescription" type="xs:string" />
+					<xs:element minOccurs="0" name="copyright" type="xs:string" />				
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="ViewItemData">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="currentPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="convertedCurrentPrice" type="tns:Amount" />
+					<xs:element minOccurs="0" name="bidIncrement" type="tns:Amount" />
+					<xs:element minOccurs="0" name="ended" type="xs:boolean" />
+					<xs:element minOccurs="0" name="bidCount" type="xs:int" />																				
+					<xs:element minOccurs="0" name="minBidPrice" type="tns:Amount" />					
+					<xs:element minOccurs="0" name="quantitySold" type="xs:int" />
+					<xs:element minOccurs="0" name="reserveMet" type="xs:boolean" />
+					<xs:element minOccurs="0" name="bestOfferCount" type="xs:int" />
+					<xs:element minOccurs="0" name="remainingQuantity" type="xs:int" />
+					<xs:element minOccurs="0" name="uniqueBidCount" type="xs:int" />					
+					<xs:element minOccurs="0" name="BINAvailable" type="xs:boolean" />
+					<xs:element minOccurs="0" name="auctionSuccessful" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="publicQuestionAnswerSetCount" type="xs:int" />
+					<xs:element minOccurs="0" name="soldAsBIN" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="adminEnded" type="xs:boolean" />
+					<xs:element minOccurs="0" name="viewCount" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Only returned for getViewItem only.						
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element> 			
+					<xs:element minOccurs="0" name="revisionDate"	type="xs:dateTime" />					
+					<!-- xs:element minOccurs="0" name="lastAccessedDate" type="xs:dateTime" /-->						
+				</xs:sequence>
+			</xs:complexType>
+						
+			<xs:complexType name="BuyerItemData">
+				<xs:sequence>			
+					<xs:element minOccurs="0" name="maxBidPrice" type="tns:Amount" />										
+				</xs:sequence>
+			</xs:complexType>
+			
+<!-- incentive start --> 
+   			<xs:complexType name="IncentiveDetail">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="rewards" type="tns:Rewards" /> 
+					<xs:element maxOccurs="1" minOccurs="0" name="billMeLater" type="tns:BillMeLater" /> 
+					<xs:element maxOccurs="1" minOccurs="0" name="coupon" type="tns:Coupon" /> 
+				</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="Coupon">
+				<xs:sequence>					
+					<xs:element maxOccurs="1" minOccurs="0" name="incentiveDiscountMessage" type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="0" name="savedAmount" type="tns:Amount" />					
+					<xs:element maxOccurs="1" minOccurs="0" name="maxRedemptionValue" type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="incentiveDiscountPercent" type="xs:double" />
+					<xs:element maxOccurs="1" minOccurs="0" name="incentiveDiscountAmount" type="tns:Amount" />
+				</xs:sequence>
+			</xs:complexType>
+            
+			<xs:complexType name="BillMeLater">
+				<xs:sequence>					 
+					<xs:element maxOccurs="1" minOccurs="0" name="displayMessage" type="xs:string" /> 
+
+				</xs:sequence>
+			</xs:complexType>
+           
+            <xs:complexType name="Rewards">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="rewardsAmount" type="xs:double" />
+				</xs:sequence>
+			</xs:complexType>
+						
+<!-- incentive end -->	
+ 
+            <xs:complexType name="BuyerProtection">            	
+				<xs:sequence>
+					<!-- RTM -->
+					<xs:element minOccurs="0" name="qualifiedElectronicPaymentMethodForBuyerProtection" type="xs:boolean" />					
+					<!-- 
+
+
+
+
+
+
+					-->
+					<xs:element minOccurs="0" name="buyerProtectionStaticContent" type="xs:string" />
+					<xs:element minOccurs="0" name="payPalBuyerProtectionEligible" type="xs:boolean" />
+					<!-- buyer guarantee -->
+					<xs:element minOccurs="0" name="buyerGuaranteeAvailable" type="xs:boolean" />
+					<xs:element minOccurs="0" name="buyerGuaranteeUnavailabilityReason" type="xs:string" />
+															
+					<!-- TODO to support motors -->										
+					<!-- dispalying vehicle protection info -->
+					<!--  xs:element minOccurs="0" name="sellerGuarantee" type="xs:long" /-->
+					<xs:element minOccurs="0" name="vehicleProtectionProgramAvailable" type="xs:boolean" />	
+				</xs:sequence>
+            </xs:complexType>
+        	
+		
+		<xs:complexType name="SalesTaxInfo">
+			<xs:annotation>					
+				<xs:appinfo>
+ 					<typeLibrarySource library="ListingTypeLibrary" namespace="http://www.ebay.com/marketplace/listing/services" /> 
+ 				</xs:appinfo>					
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="taxRate" type="xs:double" maxOccurs="1" minOccurs="0" />
+				<xs:element name="state" type="xs:token" maxOccurs="1" minOccurs="0" />
+				<xs:element name="taxRegion" type="xs:token" maxOccurs="1" minOccurs="0" />
+				<xs:element name="applySalesTaxToShipping" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+				<xs:element name="useSalesTaxTable" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+				<xs:element name="salesTaxCategoryCode" type="xs:token" maxOccurs="1" minOccurs="0" />				
+			</xs:sequence>
+		</xs:complexType>
+        <xs:simpleType name="HitCounterCodeType">
+        	<xs:annotation>					
+				<xs:documentation>	
+					HitCounterCodeType - Type declaration to be used by other schema. 
+					Indicates whether a hit counter is used for the item's listing page and, if so, what type.				
+				</xs:documentation>								
+			</xs:annotation>        
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="NoHitCounter" />
+				<xs:enumeration value="HonestyStyle" />
+				<xs:enumeration value="GreenLED" />
+				<xs:enumeration value="Hidden" />
+				<xs:enumeration value="BasicStyle" />					
+				<xs:enumeration value="RetroStyle" />
+				<xs:enumeration value="HiddenStyle" />
+			</xs:restriction>
+		</xs:simpleType>    
+
+			<xs:complexType name="ItemShippingCostDetail">
+				<xs:annotation>					
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services" /> 
+							</xs:appinfo>					
+				</xs:annotation>	
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="shippingFee" type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="insuranceFee"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="xFeeInsuranceCost"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="shippingXFee"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="packageHandlingCost"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="surchargeFee"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="overrideFee"
+						type="tns:Amount" />
+					<xs:element maxOccurs="1" minOccurs="0" name="additionalFee"
+						type="tns:Amount" />
+					<xs:element name="codFee" type="tns:Amount" minOccurs="0" maxOccurs="1"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="eBayAPISoapServiceCode"
+						type="xs:string" />
+					<xs:element name="getItFast" type="xs:boolean" minOccurs="0" maxOccurs="1"/>											
+					<xs:element maxOccurs="1" minOccurs="0" name="promoShipping"
+						type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="0" name="insuranceError"
+						type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="0" name="insuranceOption"
+						type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="0" name="insuranceStatus"
+						type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="0" name="freightShipping"
+						type="xs:boolean" />
+					<xs:element maxOccurs="1" minOccurs="0" name="sortOrderId"
+						type="xs:int" />
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="domestic" type="xs:boolean" />
+					<xs:element name="shipToLocation" type="xs:token" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="standardizedServiceName" type="xs:string" minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="genericType" type="xs:token">
+					</xs:element>
+					<xs:element name="deliveryEstimate" type="tns:DeliveryEstimate" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								This carries Shipping information related to the order and would ideally present 
+							for orders whose payment is cleared.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>		
+				</xs:sequence>
+			</xs:complexType>
+
+		<xs:complexType name="DeliveryEstimate">				
+			<xs:annotation>
+				<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services" /> 
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="maxDelivery" type="xs:int"
+							minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Max business days that will be taken to deliver item. 
+							</xs:documentation>
+						</xs:annotation>
+			</xs:element>
+			<xs:element name="minDelivery" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+							<xs:documentation>
+								Min business days that will be taken to deliver item. 
+							</xs:documentation>
+						</xs:annotation>
+			</xs:element>
+			<xs:element name="maxDeliveryDate" type="xs:dateTime"
+						minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+							<xs:documentation>
+								Max estimated delivery date[considering site holidays/week ends]. 
+							</xs:documentation>
+						</xs:annotation>
+			</xs:element>
+			<xs:element name="minDeliveryDate" type="xs:dateTime"
+						minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+							<xs:documentation>
+								Min estimated delivery date[considering site holidays/week ends]. 
+							</xs:documentation>
+						</xs:annotation>
+			</xs:element>			
+		</xs:sequence>
+	</xs:complexType> 
+	
+			<xs:complexType name="ShippingDetail">
+				<xs:annotation>
+					<xs:documentation>					
+					</xs:documentation>
+				</xs:annotation>							
+				<xs:sequence>
+					<xs:element name="shippingCostInfo" type="tns:ItemShippingCostDetail"	maxOccurs="unbounded" minOccurs="0" />
+					
+					<xs:element maxOccurs="1" minOccurs="0"	name="shippingServiceType" type="xs:string" >
+						<xs:annotation>
+								<xs:documentation>
+									Display name of shipping service type.
+									NOT_SPECIFIED, FLAT, CALCULATED
+								</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="localPickUp" type="xs:boolean" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+								<xs:documentation>
+									This will be set if the item was listed with local pick up option.
+								</xs:documentation>
+						</xs:annotation>
+					</xs:element>		
+					<xs:element name="shippingTo" type="xs:string" maxOccurs="unbounded" minOccurs="0" >
+						<xs:annotation>
+							<xs:documentation>
+								Ship to locations that seller specified on Item level. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="excludeShipTo" type="xs:string" maxOccurs="unbounded" minOccurs="0" />
+					<xs:element minOccurs="0" name="handlingTime" type="xs:int" >
+						<xs:annotation>
+							<xs:documentation>
+								Handling time in days. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>								
+
+
+				</xs:sequence>				
+			</xs:complexType>
+		 
+			<xs:complexType name="ItemLocation">
+				<xs:annotation>	
+					<xs:documentation>
+						Location of the item.
+					</xs:documentation>				
+					<xs:appinfo>
+						<typeLibrarySource library="ListingTypeLibrary" namespace="http://www.ebay.com/marketplace/listing/services" />  
+  					</xs:appinfo>  										
+				</xs:annotation>							
+				<xs:sequence>
+		            <xs:element maxOccurs="1" minOccurs="0" name="cityState" type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="0" name="zipCode" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="0" name="countryCode" type="xs:token" />
+		        </xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ViewItemUserInfo">
+				<xs:sequence>					
+					<xs:element minOccurs="0" name="username" type="xs:string" />					
+
+
+					<xs:element minOccurs="0" name="feedbackScore" type="xs:int" /> 
+					<xs:element minOccurs="0" name="traderLevel" type="xs:int" />
+					<xs:element minOccurs="0" name="powerSeller" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="feedbackPrivate" type="xs:boolean" /> 
+					<xs:element minOccurs="0" name="hasAboutMe" type="xs:boolean" /> 
+					<xs:element minOccurs="0" name="motorsSeller" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="topRatedSeller" type="xs:boolean" />
+					<xs:element minOccurs="0" name="storeOwner" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="storeName" type="xs:string" /> 
+
+					<xs:element minOccurs="0" name="businessSeller" type="xs:boolean" />
+					<xs:element minOccurs="0" name="privateSeller" type="xs:boolean" />
+					<xs:element minOccurs="0" name="brandedSeller" type="xs:boolean" />
+
+					<xs:element minOccurs="0" name="positiveFeedbackPercent" type="xs:double" />
+					<xs:element minOccurs="0" name="businessSellerInfoDetails" type="tns:ViewItemBusinessSellerInfoDetails" />										
+					<xs:element minOccurs="0" name="paisaPayEscrowRegistered" type="xs:boolean" />
+					<xs:element minOccurs="0" name="halfSellerOnVacation" type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ViewItemBusinessSellerInfoDetails">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="businessName" type="xs:string" />
+					<xs:element minOccurs="0" name="businessfirstName" type="xs:string" />
+					<xs:element minOccurs="0" name="businesslastName" type="xs:string" />
+					<xs:element minOccurs="0" name="businessAddress1" type="xs:string" />
+					<xs:element minOccurs="0" name="businessAddress2" type="xs:string" />
+					<xs:element minOccurs="0" name="zipCode" type="xs:string" />
+					<xs:element minOccurs="0" name="city" type="xs:string" />
+					<xs:element minOccurs="0" name="state" type="xs:string" />
+					<xs:element minOccurs="0" name="country" type="xs:string" />
+					<xs:element minOccurs="0" name="phone" type="xs:string" />
+					<xs:element minOccurs="0" name="fax" type="xs:string" />
+					<xs:element minOccurs="0" name="emailAddress" type="xs:string" />
+					<xs:element minOccurs="0" name="additionalContactInformation" type="xs:string" />
+					<xs:element minOccurs="0" name="tradeRegistrationNumber" type="xs:string" />
+					<xs:element minOccurs="0" name="vatSiteId" type="xs:string" />
+					<xs:element minOccurs="0" name="vatId" type="xs:string" />
+					<xs:element minOccurs="0" name="hasLegalInvoice" type="xs:boolean" />
+					<xs:element minOccurs="0" name="termsAndConditions" type="xs:string" />					
+					<xs:element minOccurs="0" name="userItemPropertyKey" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>			
+			
+			<xs:complexType name="PaymentInfo">
+				<xs:annotation>
+					<xs:documentation />				
+					<xs:appinfo>
+	  					<typeLibrarySource library="ListingTypeLibrary" namespace="http://www.ebay.com/marketplace/listing/services" /> 
+	  				</xs:appinfo>
+  				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="acceptedPaymentMethod" type="xs:token">
+						<xs:annotation>
+						<xs:documentation>
+							PAYPAL, AM_EX, DISCOVER, VISA_MASTER, CASH_ON_PICKUP 
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="paypalEmailAddress" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="0"	name="paymentInstructions" type="xs:string" />
+					<xs:element maxOccurs="1" minOccurs="0"	name="immediatePay" type="xs:boolean" />					
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ViewItemPicture">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"	name="pictureDetail" type="tns:ViewItemPictureDetailsType" />
+					<xs:element minOccurs="0" name="enlargePicture" type="xs:boolean" />
+					<xs:element minOccurs="0" name="superSize" type="xs:boolean" />
+					<xs:element minOccurs="0" name="resizeImage" type="xs:boolean" />
+
+					<xs:element minOccurs="0" name="selfHosted" type="xs:boolean" />					
+					<xs:element minOccurs="0" name="zoomEnabled" type="xs:boolean" />
+					<xs:element minOccurs="0" name="stockPhoto" type="xs:boolean" />					
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ViewItemPictureDetailsType">
+				<xs:annotation>
+					<xs:documentation>
+						Picture details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>					
+
+
+
+
+					<xs:element minOccurs="0" name="imageAlt" type="xs:string" />
+					<xs:element minOccurs="0" name="zoomable" type="xs:boolean" />															
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="NameValuePair">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the property.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Value of the property.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="ReturnPolicy">	
+				<xs:annotation>					
+					<xs:appinfo>
+  						<typeLibrarySource library="ListingTypeLibrary" namespace="http://www.ebay.com/marketplace/listing/services" /> 
+  					</xs:appinfo>					
+				</xs:annotation>			
+				<xs:sequence>
+		            <xs:element maxOccurs="1" minOccurs="0" name="policyDetails" type="xs:string" />
+		            <xs:element maxOccurs="1" minOccurs="0" name="returnsAccepted" type="xs:token" />
+		            <xs:element maxOccurs="1" minOccurs="0" name="refundMethod" type="xs:token" />
+		            <xs:element maxOccurs="1" minOccurs="0" name="refundBy" type="xs:token" />
+		            <xs:element maxOccurs="1" minOccurs="0" name="refundShipmentPayee" type="xs:token" />
+		            <xs:element maxOccurs="1" minOccurs="0" name="returnPeriod" type="xs:token" />
+		            <xs:element maxOccurs="1" minOccurs="0" name="warrantyDurationOption" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="0" name="warrantyTypeOption" type="xs:token" />
+					<xs:element maxOccurs="1" minOccurs="0"	name="warrantyOfferedOption" type="xs:token" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:simpleType name="ListingFormat">
+				<xs:annotation>					
+					<xs:appinfo>
+  						<typeLibrarySource library="ListingTypeLibrary" namespace="http://www.ebay.com/marketplace/listing/services" /> 
+  					</xs:appinfo>					
+				</xs:annotation>
+				<xs:restriction base="xs:token" >
+					<xs:enumeration value="Advertisement" />
+					<xs:enumeration value="ChineseAuction" />
+					<xs:enumeration value="FixedPrice" />
+					<xs:enumeration value="Half" />
+					<xs:enumeration value="ClassfiedAd" />					
+					<xs:enumeration value="PersonalOffer" />
+					<xs:enumeration value="StoresFixedPrice" />
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="ItemCompatibilityListType">
+				<xs:sequence>					
+					<xs:element name="compatibility" type="tns:ItemCompatibilityType" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element minOccurs="0" name="totalCount" type="xs:int" />
+					<xs:element minOccurs="0" name="requestType" type="tns:CompatibilityType" />
+					<xs:element minOccurs="0" name="recordsPerPage" type="xs:int" />							
+					<xs:element minOccurs="0" name="showAllThreshold"	type="xs:int" />	
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemCompatibilityType">
+				<xs:sequence>					
+					<xs:element name="nameValuePair" type="tns:NameValuePair" minOccurs="0" maxOccurs="unbounded" />				
+					<xs:element name="compatibilityNotes" type="xs:string" minOccurs="0" />					
+				</xs:sequence>
+			</xs:complexType>		
+	
+			<xs:simpleType name="IsoCurrencyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Currency representation based on ISO 4217
+						Standard:
+						http://www.iso.org/iso/currency_codes_list-1
+						Every
+						currency has the following attributs:
+						Numeric Code - 3 Digits Zero
+						Padded Numeric
+						Code, which uniquely identifies a currency.
+						Alphabetic Code - 3 Letter Alphabetic Code,
+						which uniquely
+						identifies a currency. Currency -
+						The name of the currency Antity -
+						The
+						country/Entity, which uses this currency.
+
+						This type exposes only
+						a sub-set of ISO 4217.
+						The enumeration represents the Alphabetic
+						Code.
+						Comments are included for quick reference.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<!--
+						Currency, Entity ISO Currency Code
+					-->
+					<xs:enumeration value="USD" />
+					<!--
+						U.S. Dollar United States 840
+					-->
+					<xs:enumeration value="CAD" />
+					<!--
+						Canadian Dollar Canada 124
+					-->
+					<xs:enumeration value="GBP" />
+					<!--
+						Pound Sterling United Kingdom 826
+					-->
+					<xs:enumeration value="DEM" />
+					<!--
+						German Mark Germany 276
+					-->
+					<xs:enumeration value="AUD" />
+					<!--
+						Australian Dollar Australia 036
+					-->
+					<xs:enumeration value="JPY" />
+					<!--
+						Japanese Yen Japanese Yen 392
+					-->
+					<xs:enumeration value="EUR" />
+					<!--
+						Euro European Union 978
+					-->
+					<xs:enumeration value="FRF" />
+					<!--
+						French Franc France 250
+					-->
+					<xs:enumeration value="ATS" />
+					<!--
+						Austrian Schilling Austria 040
+					-->
+					<xs:enumeration value="BEF" />
+					<!--
+						Belgian Franc Belgium 056
+					-->
+					<xs:enumeration value="CHF" />
+					<!--
+						Swiss Franc Switzerland 756
+					-->
+					<xs:enumeration value="CNY" />
+					<!--
+						Chinese Yuan Renminbi China 156
+					-->
+					<xs:enumeration value="CZK" />
+					<!--
+						Czech Koruna Czech Republic 203
+					-->
+					<xs:enumeration value="DKK" />
+					<!--
+						Danish Krone Denmark 208
+					-->
+					<xs:enumeration value="ESP" />
+					<!--
+						Spanish Peseta Spain 724
+					-->
+					<xs:enumeration value="FIM" />
+					<!--
+						Finnish Markka Finland 246
+					-->
+					<xs:enumeration value="GRD" />
+					<!--
+						Greek Drachma Greece 300
+					-->
+					<xs:enumeration value="HKD" />
+					<!--
+						Hong Kong Dollar Hong Kong 344
+					-->
+					<xs:enumeration value="HUF" />
+					<!--
+						Hungarian Forint Hungary 348
+					-->
+					<xs:enumeration value="IDR" />
+					<!--
+						Indonesian Rupiah Indonesia 360
+					-->
+					<xs:enumeration value="IEP" />
+					<!--
+						Irish Pound Ireland 372
+					-->
+					<xs:enumeration value="ILS" />
+					<!--
+						Israeli new Shekel Israel 376
+					-->
+					<xs:enumeration value="ITL" />
+					<!--
+						Italian Lira Italy 380
+					-->
+					<xs:enumeration value="NLG" />
+					<!--
+						Dutch Guilder Netherlands 528
+					-->
+					<xs:enumeration value="NOK" />
+					<!--
+						Norwegian Krone Norway 578
+					-->
+					<xs:enumeration value="NZD" />
+					<!--
+						New Zealand Dollar New Zealand 554
+					-->
+					<xs:enumeration value="PHP" />
+					<!--
+						Philippine Peso Philippines 608
+					-->
+					<xs:enumeration value="PLN" />
+					<!--
+						Polish New Zloty Poland 985
+					-->
+					<xs:enumeration value="PTE" />
+					<!--
+						Portuguese Escudo Portugal 620
+					-->
+					<xs:enumeration value="RUR" />
+					<!--
+						Russian Ruble Russian Federation 810
+					-->
+					<xs:enumeration value="SEK" />
+					<!--
+						Swedish Krona Sweden 752
+					-->
+					<xs:enumeration value="SGD" />
+					<!--
+						Singapore Dollar Singapore 702
+					-->
+					<xs:enumeration value="THB" />
+					<!--
+						Thai Baht Thailand 764
+					-->
+					<xs:enumeration value="TWD" />
+					<!--
+						New Taiwan dollar Taiwan 901
+					-->
+					<xs:enumeration value="ZAR" />
+					<!--
+						South African Rand South Africa 710
+					-->
+					<xs:enumeration value="INR" />
+					<!--
+						Indian Rupee India 356
+					-->
+					<xs:enumeration value="PEN" />
+					<!--
+						Peruvian New Sol Peru 604
+					-->
+					<xs:enumeration value="MYR" />
+					<!--
+						Malaysian Ringgit Malaysia 458
+					-->
+					<xs:enumeration value="VND" />
+					<!--
+						Vietnamese New Dong Vietnam 704
+					-->
+					<xs:enumeration value="KRW" />
+					<!--
+						South Korean Won South Korea 410
+					-->
+					<xs:enumeration value="TRY" />
+					<!--
+						New Turkish Lira Turkey 949
+					-->
+					<xs:enumeration value="ANG" />
+					<!--
+						Antillian Guilder Netherlands Antilles 532
+					-->
+					<xs:enumeration value="AWG" />
+					<!--
+						Aruban Guilder Aruba 533
+					-->
+					<xs:enumeration value="BMD" />
+					<!--
+						Bermudan Dollar Bermudan Dollar 060
+					-->
+					<xs:enumeration value="CRC" />
+					<!--
+						Costa Rican Colon Costa Rica 188
+					-->
+					<xs:enumeration value="RON" />
+					<!--
+						Romanian New Leu Romania 946
+					-->
+					<xs:enumeration value="VEF" />
+					<!--
+						Venezuelan Bolivar Fuerte Venezuela 937
+					-->
+					<xs:enumeration value="BBD" />
+					<!--
+						Barbados Dollar Barbados 052
+					-->
+					<xs:enumeration value="BGN" />
+					<!--
+						Bulgarian Lev Bulgaria 975
+					-->
+					<xs:enumeration value="BND" />
+					<!--
+						Brunei Dollar Brunei 096
+					-->
+					<xs:enumeration value="BSD" />
+					<!--
+						Bahamian Dollar Bahamas 044
+					-->
+					<xs:enumeration value="COP" />
+					<!--
+						Colombian Peso Columbia 170
+					-->
+					<xs:enumeration value="DOP" />
+					<!--
+						Dominican Peso Dominican Republic 214
+					-->
+					<xs:enumeration value="GTQ" />
+					<!--
+						Guatemalan Quetzal Guatemala 320
+					-->
+					<xs:enumeration value="KYD" />
+					<!--
+						Cayman Isles Dollar Cayman Islands 136
+					-->
+					<xs:enumeration value="MVR" />
+					<!--
+						Maldivian Rufiyaa Maldives 462
+					-->
+					<xs:enumeration value="QAR" />
+					<!--
+						Qatari Rial Qatar 634
+					-->
+					<xs:enumeration value="SAR" />
+					<!--
+						Saudi Riyal Saudi Arabia 682
+					-->
+					<xs:enumeration value="TTD" />
+					<!--
+						Trinidadian and Tobagonian Dollar Trinidad and Tobago 780
+					-->
+					<xs:enumeration value="UAH" />
+					<!--
+						Ukrainian hryvnia Ukraine 980
+					-->
+					<xs:enumeration value="UYU" />
+					<!--
+						Peso Uruguayo Uruguay 858
+					-->
+					<xs:enumeration value="XCD" />
+					<!--
+						East Caribbean Dollar East Caribbean Currency Area 951
+					-->
+					<xs:enumeration value="XPF" />
+					<!--
+						French Polynesian Franc French Polynesia 953
+					-->
+					<xs:enumeration value="JMD" />
+					<!--
+						Jamaican Dollar Jamaica 388
+					-->
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Amount">
+				<xs:annotation>					
+					<xs:appinfo>
+  						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services" />
+  					</xs:appinfo>					
+				</xs:annotation>
+          		<xs:simpleContent>
+                  <xs:extension base="xs:double">
+                      <xs:attribute name="currencyId" type="xs:string" use="required"/>
+                  </xs:extension>
+           		</xs:simpleContent>
+      		</xs:complexType>
+      		
+      		
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType abstract="true" name="BaseViewItemServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all operations in Item Service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="logId" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			
+			<xs:complexType abstract="true" name="BaseViewItemServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations in Item Service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element name="logId" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Get the current versioin of ViewItemService.  
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Get the current versioin of ViewItemService.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<xs:complexType name="IncludeSelector"> 
+				<xs:sequence>			
+					<xs:element maxOccurs="1" minOccurs="0" name="shippingInfo" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field helps to optimize the response time of this service call.
+								This IncludeSelector applies to getViewItem and getItemSummary.  										
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>	
+					<xs:element maxOccurs="1" minOccurs="0" name="incentiveDetails" type="xs:boolean" default="false" >
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to get incentive data for an user.
+								Data included Rewards (bucks), Bill Me Later, and Coupons.
+								This IncludeSelector applies to getViewItem.   										
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>						
+					<xs:element maxOccurs="1" minOccurs="0" name="description" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to retrieve item description.
+								This IncludeSelector applies to getViewItem and getItemSummary.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>	
+					<xs:element maxOccurs="1" minOccurs="0" name="textDescription" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return text version of item description.
+								This IncludeSelector applies to getViewItem and getItemSummary.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="itemSpecific" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to retrieve item specific.
+								This IncludeSelector applies to getViewItem and getItemSummary.								 										
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="itemCompatibilityInfo" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to retrieve Parts Compatiblity information.
+								By retrieving ItemCompatibilityInfo, it might increase the response time of this service call.								 							</xs:documentation>
+								This IncludeSelector applies to getViewItem. 					
+						</xs:annotation>
+					</xs:element> 
+					<xs:element maxOccurs="1" minOccurs="0" name="statusMessage" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to retrieve Status Message 
+								for the signed-in user. 			
+								This IncludeSelector applies to getViewItem.					 										
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="productInfo" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to retrieve 
+								Product info.								
+								This IncludeSelector applies to getViewItem and getItemSummary.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="viewItemCount" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return
+								viewitemCount
+								This IncludeSelector applies to getViewItem only.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="charity" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return
+								charity
+								This IncludeSelector applies to getViewItem and getItemSummary.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="buyerProtection" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return
+								buyer protection
+								This IncludeSelector applies to getViewItem and getItemSummary.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="itemPicture" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return
+								ItemPicture
+								This IncludeSelector applies to getViewItem and getItemSummary.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="sellerInfo" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return selelrInfo								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>      		  			 					
+					<xs:element maxOccurs="1" minOccurs="0" name="siteConfig" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return siteConfig								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="controlData" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return controlData								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="epseo" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return epseo								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="breadcrumbs" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return breadcrumbs.								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="urls" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return urls								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="questionAnswer" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return questionAnswer								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="storeInfo" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return storeInfo								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="bottomToolbar" type="xs:boolean" default="false">
+						<xs:annotation>
+							<xs:documentation>
+								An optional field is used to specify whether or not to return bottomtoolbar								
+								This IncludeSelector applies to getViewItem.
+							</xs:documentation>					
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<!-- getViewItem -->
+			<xs:element name="getViewItemRequest" type="tns:GetViewItemRequest" />
+			<xs:complexType name="GetViewItemRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Use this call to retrieve full ViewItem data for an item we used to build View item page internally on an eBay site. 
+						GetViewItem returns the data in an ViewItem object.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceRequest">
+						<xs:sequence>							
+							<xs:element maxOccurs="1" minOccurs="1" name="itemId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										Item ID is the required field. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>							
+							<xs:element maxOccurs="1" minOccurs="0" name="quantity" type="xs:int" default="1">
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.
+										By default is 1.
+									</xs:documentation>					
+								</xs:annotation>	
+							</xs:element>	
+							<xs:element maxOccurs="1" minOccurs="0" name="itemDestinationCountryId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.
+										If the input country ID is not valid, shipping error will be returned.
+										For country ID, please refer to 
+										http://developer.ebay.com/DevZone/XML/docs/Reference/eBay/types/CountryCodeType.html
+									</xs:documentation>					
+								</xs:annotation>	
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"	name="itemDestinationZipCode" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"	name="includeSelector" type="tns:IncludeSelector" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field is used to specify whether or not to retrieve additional information about the item. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>		
+							<!-- TODO:  add variation traitInfo, variationId
+								isPrint,versionView,printView,guid,isItemWatched,isItemShoppingCartable,
+								isItemInShippingCart,isShowRequestTotal,trkSid,isShowContextHelper -->													
+							<!-- ELI - load version sale -->
+							<!-- xs:element maxOccurs="1" minOccurs="0"	name="transactionId" type="xs:string" / -->
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getViewItemResponse"
+				type="tns:GetViewItemResponse" />
+			<xs:complexType name="GetViewItemResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceResponse">
+						<xs:sequence>
+							<xs:element name="viewItem" type="tns:ViewItem" maxOccurs="1" minOccurs="0" />							
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<!-- getItemSummary -->
+			<xs:element name="getItemSummaryRequest" type="tns:GetItemSummaryRequest" />
+			<xs:complexType name="GetItemSummaryRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Use this call to retrieve the data for an item we used to build View item page internally on an eBay site. 
+						GetViewItem returns the data in an ViewItem object.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceRequest">
+						<xs:sequence>							
+							<xs:element maxOccurs="1" minOccurs="1" name="itemId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										Item ID is the required field. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="quantity" type="xs:int" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.
+										By default is 1.
+									</xs:documentation>					
+								</xs:annotation>	
+							</xs:element>	
+							<xs:element maxOccurs="1" minOccurs="0" name="itemDestinationCountryId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.
+										If the input country ID is not valid, shipping error will be returned.
+										For country ID, please refer to 
+										http://developer.ebay.com/DevZone/XML/docs/Reference/eBay/types/CountryCodeType.html
+									</xs:documentation>					
+								</xs:annotation>	
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"	name="itemDestinationZipCode" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"	name="includeSelector" type="tns:IncludeSelector" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field is used to specify whether or not to retrieve additional information about the item. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>	
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getItemSummaryResponse" type="tns:GetItemSummaryResponse" />
+			<xs:complexType name="GetItemSummaryResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceResponse">
+						<xs:sequence>
+							<xs:element name="itemSummary" type="tns:ItemSummary" maxOccurs="1" minOccurs="0" />							
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>			
+			
+			<!-- getStatusMessage -->
+			<xs:element name="getStatusMessageRequest" type="tns:GetStatusMessageRequest" />
+			<xs:complexType name="GetStatusMessageRequest">
+				<xs:annotation>
+					<xs:documentation>
+						StatusMessage
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceRequest">
+						<xs:sequence>							
+							<xs:element maxOccurs="1" minOccurs="1" name="itemId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										Item ID is the required field. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>		
+							<!--  ****************** TODO ******************  
+							<xs:element maxOccurs="1" minOccurs="0" name="relationship" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation> 
+										For better optimization, you may provide these optional fields										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>										
+							-->
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getStatusMessageResponse" type="tns:GetStatusMessageResponse" />
+			<xs:complexType name="GetStatusMessageResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceResponse">
+						<xs:sequence>
+							<xs:element name="statusMessageContainer" type="tns:StatusMessageContainer" maxOccurs="1" minOccurs="0" />							
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			
+			<!-- getQuestionAnswer -->
+			<xs:element name="getQuestionAnswerRequest" type="tns:GetQuestionAnswerRequest" />
+			<xs:complexType name="GetQuestionAnswerRequest">
+				<xs:annotation>
+					<xs:documentation>
+						QuestionAnswer
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceRequest">
+						<xs:sequence>							
+							<xs:element maxOccurs="1" minOccurs="1" name="itemId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										Item ID is the required field. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="sellerId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										Provide Seller ID for better optimization. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>				
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getQuestionAnswerResponse" type="tns:GetQuestionAnswerResponse" />
+			<xs:complexType name="GetQuestionAnswerResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceResponse">
+						<xs:sequence>
+							<xs:element name="questionAnswer" type="tns:QuestionAnswersType" maxOccurs="1" minOccurs="0" />							
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+														
+			<!-- getShippingInfo -->
+			<xs:element name="getShippingInfoRequest" type="tns:GetShippingInfoRequest" />
+			<xs:complexType name="GetShippingInfoRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Shipping Info
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceRequest">
+						<xs:sequence>							
+							<xs:element maxOccurs="1" minOccurs="1" name="itemId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										Item ID is the required field. 										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>	
+							<xs:element maxOccurs="1" minOccurs="0" name="quantity" type="xs:int" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.
+										By default is 1.
+									</xs:documentation>					
+								</xs:annotation>	
+							</xs:element>	
+							<xs:element maxOccurs="1" minOccurs="0" name="itemDestinationCountryId" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.
+										If the input country ID is not valid, it will set default to US.
+										For country ID, please refer to 
+										http://developer.ebay.com/DevZone/XML/docs/Reference/eBay/types/CountryCodeType.html
+									</xs:documentation>					
+								</xs:annotation>	
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0"	name="itemDestinationZipCode" type="xs:string" >
+								<xs:annotation>
+									<xs:documentation>
+										An optional field that used for calculated shipping.										
+									</xs:documentation>					
+								</xs:annotation>
+							</xs:element>		
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getShippingInfoResponse" type="tns:GetShippingInfoResponse" />
+			<xs:complexType name="GetShippingInfoResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseViewItemServiceResponse">
+						<xs:sequence>
+							<xs:element name="shippingDetail" type="tns:ShippingDetail" maxOccurs="1" minOccurs="0" />							
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+						
+			<xs:complexType name="ViewItem">
+				<xs:sequence>										
+					<xs:element name="itemSummary" type="tns:ItemSummary" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="sellerInfo" type="tns:ViewItemUserInfo" maxOccurs="1" minOccurs="0"	/>							
+					<xs:element name="siteConfig" type="tns:ViewItemSitePolicy" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="controlData" type="tns:ViewItemControlData" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="buyerItemData" type="tns:BuyerItemData" maxOccurs="1" minOccurs="0"	/>																																	
+					<xs:element name="storeInfo" type="tns:StoreInfo" maxOccurs="1" minOccurs="0"	/>														
+					<xs:element name="bottomToolBar" type="tns:BottomToolBar" maxOccurs="1" minOccurs="0"	/>														
+					<xs:element name="epseo" type="tns:Epseo" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="questionAnswers" type="tns:QuestionAnswersType" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="statusMessageContainer" type="tns:StatusMessageContainer" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="urls" type="tns:ViewItemURL" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="breadcrumbs" type="tns:Breadcrumb" minOccurs="0" maxOccurs="unbounded"  />							
+					<xs:element name="incentiveDetails"	type="tns:IncentiveDetail" maxOccurs="1" minOccurs="0"	/>
+					<xs:element name="itemCompatibilityInfo" type="tns:ItemCompatibilityListType" maxOccurs="1" minOccurs="0" />
+					<xs:element name="productInfo" minOccurs="0" maxOccurs="1" type="tns:ViewItemProductInfo" />																																
+				</xs:sequence>
+			</xs:complexType>	
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getViewItemRequest">
+		<wsdl:part name="params" element="tns:getViewItemRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getViewItemResponse">
+		<wsdl:part name="params" element="tns:getViewItemResponse"></wsdl:part>
+	</wsdl:message>	
+	<wsdl:message name="getItemSummaryRequest">
+		<wsdl:part name="params" element="tns:getItemSummaryRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getItemSummaryResponse">
+		<wsdl:part name="params" element="tns:getItemSummaryResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getStatusMessageRequest">
+		<wsdl:part name="params" element="tns:getStatusMessageRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getStatusMessageResponse">
+		<wsdl:part name="params" element="tns:getStatusMessageResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQuestionAnswerRequest">
+		<wsdl:part name="params" element="tns:getQuestionAnswerRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQuestionAnswerResponse">
+		<wsdl:part name="params" element="tns:getQuestionAnswerResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingInfoRequest">
+		<wsdl:part name="params" element="tns:getShippingInfoRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShippingInfoResponse">
+		<wsdl:part name="params" element="tns:getShippingInfoResponse"></wsdl:part>
+	</wsdl:message>	
+	<wsdl:portType name="ViewItemServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getViewItem">
+			<wsdl:documentation>
+				Full version of ViewItem
+			</wsdl:documentation>
+			<wsdl:input message="tns:getViewItemRequest" />
+			<wsdl:output message="tns:getViewItemResponse" />
+		</wsdl:operation>		
+		<wsdl:operation name="getItemSummary">
+			<wsdl:documentation>
+				Item Summary of ViewItem
+			</wsdl:documentation>
+			<wsdl:input message="tns:getItemSummaryRequest" />
+			<wsdl:output message="tns:getItemSummaryResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getStatusMessage">
+			<wsdl:documentation>
+				Status Message of ViewItem
+			</wsdl:documentation>
+			<wsdl:input message="tns:getStatusMessageRequest" />
+			<wsdl:output message="tns:getStatusMessageResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getQuestionAnswer">
+			<wsdl:documentation>
+				QuestionAnswer of ViewItem
+			</wsdl:documentation>
+			<wsdl:input message="tns:getQuestionAnswerRequest" />
+			<wsdl:output message="tns:getQuestionAnswerResponse" />
+		</wsdl:operation>		
+		<wsdl:operation name="getShippingInfo">
+			<wsdl:documentation>
+				Stores Info of ViewItem
+			</wsdl:documentation>
+			<wsdl:input message="tns:getShippingInfoRequest" />
+			<wsdl:output message="tns:getShippingInfoResponse" />
+		</wsdl:operation>				
+	</wsdl:portType>
+	<wsdl:binding name="ViewItemServiceHttpBinding"
+		type="tns:ViewItemServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getViewItem">
+			<http:operation location="/getViewItem" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="getItemSummary">
+			<http:operation location="/getItemSummary" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="getStatusMessage">
+			<http:operation location="/getStatusMessage" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getQuestionAnswer">
+			<http:operation location="/getQuestionAnswer" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="getShippingInfo">
+			<http:operation location="/getShippingInfo" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:binding>
+	<wsdl:binding name="ViewItemServiceSOAPBinding"
+		type="tns:ViewItemServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/buying/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getViewItem">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/buying/v1/services/getViewItem" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="getItemSummary">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/buying/v1/services/getItemSummary" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getStatusMessage">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/buying/v1/services/getStatusMessage" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getQuestionAnswer">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/buying/v1/services/getQuestionAnswer" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="getShippingInfo">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/buying/v1/services/getShippingInfo" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:binding>
+	<wsdl:service name="ViewItemService">
+		<wsdl:documentation>
+			<Version>1.1.1</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:ViewItemServiceHttpBinding"
+			name="ViewItemServiceHttpPort">
+			<http:address
+				location="http://svcs.ebay.com/services/buying/v1/ViewItemService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:ViewItemServiceSOAPBinding"
+			name="ViewItemServiceSOAPPort">
+			<soap12:address
+				location="http://svcs.ebay.com/services/buying/v1/ViewItemService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

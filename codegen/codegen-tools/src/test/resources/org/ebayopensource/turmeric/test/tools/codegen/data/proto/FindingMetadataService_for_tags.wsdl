@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="FindingMetadataService"
+	targetNamespace="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+	<wsdl:types>
+
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/search/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/search/v1/services">
+
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest" />
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse" />
+			<xs:element name="getProductTypesByNamesRequest" type="tns:GetProductTypesByNamesRequest" />
+			<xs:element name="getProductTypesByNamesResponse" type="tns:GetProductTypesByNamesResponse" />
+			<xs:element name="getCategoryPropertiesRequest" type="tns:GetCategoryPropertiesRequest" />
+			<xs:element name="getCategoryPropertiesResponse" type="tns:GetCategoryPropertiesResponse" />
+			<xs:element name="getCatalogPropertiesRequest" type="tns:GetCatalogPropertiesRequest" />
+			<xs:element name="getCatalogPropertiesResponse" type="tns:GetCatalogPropertiesResponse" />
+			<xs:element name="getGlobalDomainRequest" type="tns:GetGlobalDomainRequest" />
+			<xs:element name="getGlobalDomainResponse" type="tns:GetGlobalDomainResponse" />
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="output"
+								type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProductTypesByNamesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="context"
+								type="tns:ServiceContext">
+								<xs:annotation>
+								   <xs:documentation>
+									   Contextual information used by Search services. The information
+									   is regarding the environment in which a service is running,
+									   such as site, cobrand, locale, timezone, and currency.
+								   </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="name"
+								type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="loadProperties"
+								type="xs:boolean">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProductTypesByNamesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="executionTime"
+								type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="productType" type="tns:ProductType">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+								type="tns:Property">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetCategoryPropertiesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="context"
+								type="tns:ServiceContext">
+								<xs:annotation>
+								   <xs:documentation>
+									   Contextual information used by Search services. The information
+									   is regarding the environment in which a service is running,
+									   such as site, cobrand, locale, timezone, and currency.
+								   </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="category"
+								type="tns:CategoryKey">
+								<xs:annotation>
+									<xs:documentation>
+										The category of a product, represented by a unique category key (id).
+									</xs:documentation>
+								</xs:annotation>
+								</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetCategoryPropertiesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="executionTime"
+								type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Time (in milliseconds) taken to execute the request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="categoryProperty" type="tns:CategoryProperty">
+								<xs:annotation>
+									<xs:documentation>
+										Property related to the specified category.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetCatalogPropertiesRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Retrieves catalog properties for the specified
+						catalodId(s), usecase and dataset(s).
+						If dataset(s) is/are not specifed, then all
+						datasets associated with the usecase and the catalogId
+						applicable for the site and the partner are returned.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="context" type="tns:ServiceContext"
+								maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										Contextual information used by Search services. The information
+										is regarding the environment in which a service is running,
+										such as site, cobrand, locale, timezone, and currency.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="catalogId"
+								type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Catalog id.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="usecase" type="xs:string" maxOccurs="1"
+								minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										Name of usecase	(as defined in UsecaseEnum).
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="dataset" type="xs:string" maxOccurs="unbounded"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Name of the dataset	that the property belongs to(as defined in DatasetEnum).
+										If it is not specified, then the properties for all the data sets are returned.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetCatalogPropertiesResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response containing the list of catalog properties.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="executionDuration"
+								type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Time taken to execute GetCatalogPropertiesRequest.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="catalogPropertyList" type="tns:CatalogProperties">
+								<xs:annotation>
+									<xs:documentation>
+										Catalog properties for the specified
+										catalodId(s), usecase and dataset(s).
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetGlobalDomainRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="context"
+								type="tns:ServiceContext">
+								<xs:annotation>
+								   <xs:documentation>
+									   Contextual information used by Search services. The information
+									   is regarding the environment in which a service is running,
+									   such as site, cobrand, locale, timezone, and currency.
+								   </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="loadProperties"
+								type="xs:boolean">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetGlobalDomainResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="executionTime"
+								type="xs:long">
+								<xs:annotation>
+									<xs:documentation>Time (in milliseconds)taken to execute the request.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="globalDomain"
+								type="tns:GlobalDomain">
+								<xs:annotation>
+									<xs:documentation>
+										A collection of all the eBay site offices.
+								    </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<xs:complexType abstract="true" name="Domain">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="displayName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="seoName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="id" type="xs:long">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+
+			<xs:complexType name="CategoryKey">
+				<xs:annotation>
+					<xs:documentation>The category of a product, represented by a unique category key (id). </xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Key">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="categoryId"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Unique identifier for the category.</xs:documentation>
+								</xs:annotation>		
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="CategoryProperty">
+				<xs:annotation>
+					<xs:documentation>Container for the property related to the category.</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="category"
+						type="tns:CategoryKey">
+						<xs:annotation>
+							<xs:documentation>Unique category key as specified in the request.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+						type="tns:Property">
+						<xs:annotation>
+							<xs:documentation>Property of the category.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AspectValue">
+				<xs:annotation>
+					<xs:documentation>
+						
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A value name for a given aspect. 
+								For example, "Point and Shoot" is a value name for the "Product Type" aspect in the "Digital Cameras" domain.
+							</xs:documentation>
+						</xs:annotation>	
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="displayName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="rank"
+						type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+						type="tns:Property">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GlobalDomain">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Domain">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="aspect"
+								type="tns:GlobalAspect">
+								<xs:annotation>
+									<xs:documentation>
+										A characteristic of an item in the global domain.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+								type="tns:Property">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="AspectDependency">
+				<xs:annotation>
+					<xs:documentation>
+						This is the type for AspectDependency as defined
+						in Magellan domain metadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parentValue" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="parentAspectName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="childAspectName"
+						type="xs:string">
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DomainAspect">
+				<xs:annotation>
+					<xs:documentation>
+						This is the type for Aspect as defined in
+						Magellan domain metadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="namespace"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="displayName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="pluralDisplayName"
+						type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="rank"
+						type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="aspectValue" type="tns:AspectValue">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+						type="tns:Property">
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="childDependency" type="tns:AspectDependency">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parentDependency" type="tns:AspectDependency">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProductType">
+				<xs:annotation>
+					<xs:documentation>
+						This is the type for the Product Type in Magellan
+						Domain Metadata.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Domain">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="aspect"
+								type="tns:DomainAspect"></xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+								type="tns:Property"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GlobalAspect">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:DomainAspect">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="exclusiveGroup" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="inclusiveGroup" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="parentInclusiveGroup" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="siblingOrGroup" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="killExclusiveGroup" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ServiceContext">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information used by Search Services.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceContext">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="locale"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Locale in the format of &quot;language,country,variant&quot;. Check
+										java.util.Locale
+					</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="timeZone"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Time zone in the format of &quot;GMT+/-hh:mm&quot;
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="currency"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Money currency. Check com.ebay.af.common.types.Currency for the
+										available values.		
+					</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Property">
+				<xs:annotation>
+					<xs:documentation>
+						Name value pair for defining properties associated with entities.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name of the property.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="value"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The values of the property.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error (causing the request to fail)
+						or an informational error (a warning) that should be communicated
+						to the
+						user.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully.				
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was not processed
+								successfully.
+								When a serious application-level error occurs, the error is returned
+								instead of the business data.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was processed successfully but
+								with some warnings.
+					</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully, but something occurred that
+								may affect your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service operations.
+						Contains error information associated with the request.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether or not errors or warnings were generated during the processing of the request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the request.Not returned if the ack value is Success.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The release version that eBay used to process the request. 
+								Developer Technical Support may ask you for the version value 
+							    if you work with them to troubleshoot issues.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time when eBay processed the request. This value is returned in GMT, the ISO 8601 date and time format (YYYY- MM- DDTHH:MM:SS.SSSZ).
+								See the "dateTime" type for information about the time format, and for details on converting to and from the GMT time zone.
+								Note: The version in use is normally the latest release version, as specified in the release notes.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls></AllCalls>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of error: request errors, application errors, and system errors. Request and application errors are often caused by passing invalid data in the request. System errors are primarily caused by application failures and cannot be corrected by changing request values.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"></xs:enumeration>
+					<xs:enumeration value="Application"></xs:enumeration>
+					<xs:enumeration value="Request"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>A container for error details. </xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the particular error condition that occurred. 
+							    Your application can use error codes as identifiers in your customized error-handling algorithms. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain in which the error occurred.<br></br>
+								
+								domain values:<br></br>
+								1)Marketplace - A business or validation error occurred in the service.<br></br>
+								2)SOA - An exception occurred in the Service Oriented Architecture (SOA) framework.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain in which the error occurred.
+								subdomain values:
+								1)MarketplaceCatalog - The error is specific to the Marketplace Catalog subdomain.
+								2)MarketplaceCommon - The error is common to all Marketplace services.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the reported problem is fatal (an error) or is less- severe (a warning). 
+								Review the error message details for information on the cause.
+
+								If the request fails and the application is the source of the error (for example, a required element is missing), 
+								update the application before you retry the request. If the problem is due to incorrect user data, 
+								alert the end-user to the problem and provide the means for them to correct the data. 
+								Once the problem in the application or data is resolved, re-send the request to eBay.
+
+								If the source of the problem is on eBay's side, 
+								you can retry the request a reasonable number of times (eBay recommends you try the request twice). 
+								If the error persists, contact Developer Technical Support. Once the problem has been resolved, 
+								you can resend the request in its original form.
+
+								If a warning occurs, warning information is returned in addition to the business data. 
+								Normally, you do not need to resend the request (as the original request was successful). 
+								However, depending on the cause of the warning, you might need to contact the end user, or eBay, to effect a long term solution to the problem.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>There are three categories of errors: request errors, application errors, and system errors.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>A detailed description of the condition that caused in the error.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>Unique identifier for an exception associated with an error.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+						type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								Various warning and error messages return one or more variables 
+								that contain contextual information about the error. This is often the field or value that triggered the error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+
+
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information regarding an error or warning that occurred when eBay processed the request. 
+					    Not returned when the ack value is Success. 
+					    Run-time errors are not reported here, but are instead reported as part of a SOAP fault. 
+				</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<!--
+
+					processContents="lax" /> </xs:sequence>
+				-->
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual data associated with an error.
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional">
+							<xs:annotation>
+								<xs:documentation>
+									The name of the input parameter returned with the error. 
+									Inspecting the parameter (or its input value) will often aid in understanding the cause of the error. 
+									Not all error messages contain this value.
+								</xs:documentation>
+								<xs:appinfo>
+									<callInfo>
+										<AllCalls/>
+										<Returned>Always</Returned>
+									</callInfo>
+								</xs:appinfo>
+
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a fatal error (causing the request to fail) or a less severe error (a warning) that should be communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"></xs:enumeration>
+					<xs:enumeration value="Warning"></xs:enumeration>
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for all service
+						operations.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="Key">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BaseServiceContext">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="globalId"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The id of the site against which the search is performed. The id is defined in SOA platform e.g. EBAY-US.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="partnerId"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Cobrand id against which the search is performed. The partner id is defined in PartnerEnum. In most cases its value
+								should be 2 (ebay).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType><xs:complexType name="DatasetProperties">
+		<xs:annotation>
+			<xs:documentation>
+				Properties associated with a Catalog's dataset.
+				Properties are grouped by dataset(s) 
+				(associated with Catalog and usecase for a site and partner). 
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="dataset" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						Name of dataset	(as defined in DatasetEnum). 
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="catalogProperty" type="tns:CatalogProperty">
+				<xs:annotation>
+					<xs:documentation>
+						Information about the property.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="CatalogProperties">
+		<xs:annotation>
+			<xs:documentation>
+				Properties associated with a Catalog.
+				Properties are grouped by dataset(s) 
+				(associated with Catalog and usecase for a site and partner). 				
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="catalogId" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>
+						Catalog id.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="datasetPropertyList" type="tns:DatasetProperties">
+				<xs:annotation>
+					<xs:documentation>
+						Properties associated with a Catalog's dataset.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="CatalogProperty">
+		<xs:annotation>
+			<xs:documentation>
+				Catalog property information.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="id" type="xs:long">
+				<xs:annotation>
+					<xs:documentation>
+						Id of the property. 
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		
+			<xs:element maxOccurs="1" minOccurs="1" name="propertyName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Canonical name of the property. Used
+						to identify a property within a catalog.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element maxOccurs="1" minOccurs="0" name="propertyDisplayName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Display name of the property
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element maxOccurs="1" minOccurs="1" name="propertyType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Enumerations of Property types: Enum, Numeric, Text, Characteristic, etc. 
+						The type determines how Property Values are interpreted.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element maxOccurs="1" minOccurs="1" name="reserved" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>
+						Flag indicating if this property is reserved. If true, the property can be found
+						in ReservedPropertyEnum. In this case, the propertyName maybe empty and you can used
+						id by instead. 
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element maxOccurs="1" minOccurs="1" name="required" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>
+						Is this a required property.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element maxOccurs="1" minOccurs="0" name="displaySequence" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						A numeric value indicating the ordering position for the property.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType></xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getProductTypesByNamesRequest">
+		<wsdl:part name="params" element="tns:getProductTypesByNamesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductTypesByNamesResponse">
+		<wsdl:part name="params" element="tns:getProductTypesByNamesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCategoryPropertiesRequest">
+		<wsdl:part name="params" element="tns:getCategoryPropertiesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCategoryPropertiesResponse">
+		<wsdl:part name="params" element="tns:getCategoryPropertiesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCatalogPropertiesRequest">
+		<wsdl:part name="params" element="tns:getCatalogPropertiesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCatalogPropertiesResponse">
+		<wsdl:part name="params" element="tns:getCatalogPropertiesResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getGlobalDomainRequest">
+		<wsdl:part name="params" element="tns:getGlobalDomainRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getGlobalDomainResponse">
+		<wsdl:part name="params" element="tns:getGlobalDomainResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="FindingMetadataServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Returns the current version of
+				the service.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getProductTypesByNames">
+			<wsdl:documentation>
+				Returns a list of product types,
+				each with their aspects, aspect values and properties,
+				based on input list of product type names.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getProductTypesByNamesRequest"></wsdl:input>
+			<wsdl:output message="tns:getProductTypesByNamesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCategoryProperties">
+			<wsdl:documentation>
+				Returns a list of category
+				property collections, based on input list of category
+				keys.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getCategoryPropertiesRequest"></wsdl:input>
+			<wsdl:output message="tns:getCategoryPropertiesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCatalogProperties">
+			<wsdl:documentation>
+				Returns a list of catalog
+				property collections, based on input list of catalog / product
+				keys.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getCatalogPropertiesRequest"></wsdl:input>
+			<wsdl:output message="tns:getCatalogPropertiesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGlobalDomain">
+			<wsdl:documentation>
+				Returns the global domain with
+				its global aspects/filters and properties, based on the input 
+				site id and partner id.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getGlobalDomainRequest"></wsdl:input>
+			<wsdl:output message="tns:getGlobalDomainResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="FindingMetadataServiceHttpBinding"
+		type="tns:FindingMetadataServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:output>
+				<mime:content part="params" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="FindingMetadataServiceSOAPBinding"
+		type="tns:FindingMetadataServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/getVersion" />
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductTypesByNames">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/getProductTypesByNames" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCategoryProperties">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/getCategoryProperties" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCatalogProperties">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/getCatalogProperties" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getGlobalDomain">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/getGlobalDomain" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="FindingMetadataService">
+		<wsdl:documentation>
+			<Version>1.1.0</Version>
+			FindingMetadataService is a intermediate SOA service to get
+			Product
+			Types, Aspects, Aspect Values, Global Domains,
+			Global Aspects/Filters,
+			and their properties from
+			Lighthouse. It also gets Category and
+			Product properties from
+			LH as well.
+		</wsdl:documentation>
+		<wsdl:port name="FindingMetadataServiceHttpPort" binding="tns:FindingMetadataServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/search/FindingMetadataService/v1" />
+		</wsdl:port>
+		<wsdl:port name="FindingMetadataServiceSOAPPort" binding="tns:FindingMetadataServiceSOAPBinding">
+			<soap12:address xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				location="https://svcs.ebay.com/services/search/FindingMetadataService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>
+

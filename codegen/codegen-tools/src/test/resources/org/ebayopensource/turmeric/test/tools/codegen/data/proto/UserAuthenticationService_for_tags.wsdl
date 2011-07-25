@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="UserAuthenticationService"
+	targetNamespace="http://www.ebay.com/marketplace/security/v1/services"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.ebay.com/marketplace/security/v1/services"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/security/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/security/v1/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+			<xs:element name="authenticateRequest"
+				type="tns:AuthenticateRequest">
+			</xs:element>
+			<xs:element name="authenticateResponse"
+				type="tns:AuthenticateResponse">
+			</xs:element>
+			<xs:element name="logoutRequest" type="tns:LogoutRequest">
+			</xs:element>
+			<xs:element name="logoutResponse"
+				type="tns:LogoutResponse">
+			</xs:element>
+
+			<xs:complexType name="AuthenticateRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="credentials"
+								type="tns:Credentials" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										The credentials of the client or
+										application
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="options"
+								type="tns:Options">
+								<xs:annotation>
+									<xs:documentation>
+										The additional options to be
+										used to generate the token
+									</xs:documentation>
+
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="Credentials">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Represents the requirements to verify the user
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="userId" type="xs:string"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								This is the userid of the client or
+								application
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								the domain of the application for whom
+								the application is requesting an IAF
+								token
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="password" type="xs:string"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								This is password of the client or
+								application
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" type="tns:SecretType"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								This indicates the password type like if
+								it is PIN,PASSWORD etc
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="AuthenticateResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="token" type="xs:string"
+								minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										This is token returned after
+										checking credentials
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="LogoutRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+
+							<xs:element name="userId" type="xs:string"
+								minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										This is the userid of the client
+										or application
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="domain" type="xs:string"
+								minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										the domain of the application
+										for whom the application is
+										requesting an IAF token
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="LogoutResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation>
+								A token representing the
+								application-level acknowledgment code
+								that indicates the response status
+								(e.g., success). Applicable values:
+								CustomCode, Failure, Success, Warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage"
+						type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation>
+								The version of the response payload
+								schema. Indicates the version of the
+								schema that eBay used to process the
+								request. See "Standard Data for All
+								Calls" in the eBay Web Services Guide
+								for information on using the response
+								version when troubleshooting
+								"CustomCode" values that appear in the
+								response.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+							<xs:documentation>
+								This value represents the date and time
+								when eBay processed the request. The
+								time zone of this value is GMT and the
+								format is the ISO 8601 date and time
+								format (YYYY-MM-DDTHH:MM:SS.SSSZ). See
+								Time Values in the eBay Web Services
+								guide for information about this time
+								format and converting to and from the
+								GMT time zone.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Represents the error message obtained during
+						logging.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Represents the error message obtained while
+						processing the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:appinfo />
+					<xs:documentation>
+						Represents the error message contents.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								Represents the ID which is associated
+								with an error message.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the domain to which this error
+								message is to be associated.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subdomain" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the sub-domain to which this
+								error message is to be associated.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity"
+						type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the severity of this error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category"
+						type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes the category to which this error
+								belongs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the error message which needs to be
+								returned.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="exceptionId" type="xs:token"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								In case of exceptions, this denotes the
+								exception id and the same will be used
+								for tracking this error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="parameter"
+						type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Denotes a list of string values which
+								will be appended to the error message.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:restriction base="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Represents the Severity of an error message
+							obtained during logging.
+						</xs:documentation>
+					</xs:annotation>
+
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								eBay encountered a fatal error during
+								the processing of the request, causing
+								the request to fail. When eBay
+								encounters an error, it returns error
+								data instead of the requested business
+								data. Inspect the error details and
+								resolve the problem before resubmitting
+								the request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was successfully processed,
+								but eBay encountered a non-fatal error
+								during the processing that could affect
+								the data returned. For example, eBay
+								might have changed the value of an input
+								field. In this case, eBay returns a
+								successful response, but it also returns
+								a warning. For best results, requests
+								should return without warnings. Inspect
+								the warning details and resolve the
+								problem before resubmitting the request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:restriction base="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							Indicates the error category of an error.
+							Typical values are
+							&quot;System&quot;,&quot;Application&quot;,
+							and &quot;Request&quot;
+						</xs:documentation>
+					</xs:annotation>
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on
+								the eBay system side. For example, a
+								database or server could be down.
+								Inspect the error message to find the
+								cause of the problem. If the problem is
+								on the eBay side, an application can
+								retry the request as-is a reasonable
+								number of times (eBay recommends twice).
+								If the error persists, contact Developer
+								Technical Support. Once the problem has
+								been resolved, the request may be resent
+								in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, with the most likely source
+								being the application sending the
+								request. For example, the request is
+								missing a required data element or it
+								contains an invalid field. The problem
+								must be corrected before the request can
+								be resent. Inspect the error message to
+								find the cause of the problem. If the
+								problem is due to an application error,
+								modify the application and resend the
+								request. If the error is due to invalid
+								data, the source of the data must be
+								corrected before you resend the resend
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with
+								the request, with the most likely source
+								being missing or invalid data in the
+								request. The problem must be corrected
+								before the request can be retried.
+								Inspect the error message to find the
+								cause of the problem. If the problem is
+								a result of end-user data, alert the
+								end-user to the problem and provide the
+								means for them to correct the problem.
+								Once the problem is resolved, resend the
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="Options">
+				<xs:sequence>
+					<xs:element name="tokenType" type="tns:TokenType">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the token short or long
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="TokenType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SHORT">
+						<xs:annotation>
+							<xs:documentation>
+								Represents token reference
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LONG">
+						<xs:annotation>
+							<xs:documentation>
+								Represents token
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getVersionRequest"
+				type="tns:GetVersionRequest" />
+			<xs:element name="getVersionResponse"
+				type="tns:GetVersionResponse" />
+
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest" />
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="isValidForRequest"
+				type="tns:IsValidForRequest" />
+			<xs:element name="isValidForResponse"
+				type="tns:IsValidForResponse" />
+
+
+
+
+
+
+
+
+			<xs:complexType name="IsValidForRequest">
+
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+
+						<xs:sequence>
+
+							<xs:element name="hours" type="xs:int"
+								minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates input given to know if
+										token is valid for given hours
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<xs:simpleType name="SecretType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="HASHED" />
+					<xs:enumeration value="HASHED-SIGNED" />
+					<xs:enumeration value="PLAINTEXT" />
+					<xs:enumeration value="PIN" />
+					<xs:enumeration value="PASSWORD" />
+					<xs:enumeration value="APPID" />
+					<xs:enumeration value="DEVID" />
+					<xs:enumeration value="CERTID" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="IsValidForResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="status"
+								type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+										Returns true if token is valid
+										else false
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="authenticateRequest">
+		<wsdl:part name="parameters"
+			element="tns:authenticateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="logoutResponse">
+		<wsdl:part name="parameters" element="tns:logoutResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="isValidForResponse">
+		<wsdl:part name="parameters" element="tns:isValidForResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="isValidForRequest">
+		<wsdl:part name="parameters" element="tns:isValidForRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part name="parameters" element="tns:getVersionRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part name="parameters" element="tns:getVersionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="authenticateResponse">
+		<wsdl:part name="parameters"
+			element="tns:authenticateResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="logoutRequest">
+		<wsdl:part name="parameters" element="tns:logoutRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="UserAuthenticationServicePort">
+		<wsdl:documentation>
+
+		</wsdl:documentation>
+		<wsdl:operation name="authenticate">
+			<wsdl:documentation>
+				This returns a token as requested per the authenticate
+				options.
+			</wsdl:documentation>
+			<wsdl:input message="tns:authenticateRequest"></wsdl:input>
+			<wsdl:output message="tns:authenticateResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="logout">
+			<wsdl:documentation>
+				This invalidate the token corresponding to the token
+				provided by the caller.
+			</wsdl:documentation>
+			<wsdl:input message="tns:logoutRequest"></wsdl:input>
+			<wsdl:output message="tns:logoutResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				This returns the version of the application.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest"></wsdl:input>
+			<wsdl:output message="tns:getVersionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="isValidFor">
+			<wsdl:documentation>
+				Returns if token will be still valid for the given hours
+			</wsdl:documentation>
+			<wsdl:input message="tns:isValidForRequest"></wsdl:input>
+			<wsdl:output message="tns:isValidForResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="UserAuthenticationServiceHttpBinding"
+		type="tns:UserAuthenticationServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="authenticate">
+			<http:operation location="/authenticate" />
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="logout">
+			<http:operation location="/logout" />
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion" />
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="isValidFor">
+			<http:operation location="/validateToken" />
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="UserAuthenticationServiceSOAPBinding"
+		type="tns:UserAuthenticationServicePort">
+		<wsdl:documentation />
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="authenticate">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/security/v1/services/authenticate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="logout">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/security/v1/services/logout" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/security/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="isValidFor">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/security/v1/services/validateToken" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="UserAuthenticationService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+			In mobile or for other client devices,this service is used
+			to authenticate. This service in turn calls IAF to provide
+			the credentials.
+		</wsdl:documentation>
+		<wsdl:port name="UserAuthenticationServiceSOAPPort"
+			binding="tns:UserAuthenticationServiceSOAPBinding">
+			<soap12:address
+				location="https://svcs.ebay.com/services/security/UserAuthenticationService/v1" />
+		</wsdl:port>
+		<wsdl:port name="UserAuthenticationServiceHttpPort"
+			binding="tns:UserAuthenticationServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/security/UserAuthenticationService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

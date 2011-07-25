@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="PackageInsuranceService"
+	targetNamespace="http://www.ebay.com/marketplace/shipping/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://www.ebay.com/marketplace/shipping/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/shipping/v1/services"
+			xmlns:tns1="http://www.ebay.com/marketplace/shipping/v1/services">
+			<xs:element name="createClaimResponse" type="tns:CreateClaimResponse" />
+			<xs:element name="createClaimRequest" type="tns:CreateClaimRequest" />
+			<xs:element name="confirmClaimResponse" type="tns:ConfirmClaimResponse" />
+			<xs:element name="confirmClaimRequest" type="tns:ConfirmClaimRequest" />
+			<xs:element name="purchaseResponse" type="tns:PurchaseResponse" />
+			<xs:element name="purchaseRequest" type="tns:PurchaseRequest" />
+			<xs:element name="purchaseInitResponse" type="tns:PurchaseInitResponse" />
+			<xs:element name="purchaseInitRequest" type="tns:PurchaseInitRequest" />
+			<xs:element name="getClaimResponse" type="tns:GetClaimResponse" />
+			<xs:element name="getClaimRequest" type="tns:GetClaimRequest" />
+			<xs:element name="getQuoteResponse" type="tns:GetQuoteResponse" />
+			<xs:element name="getQuoteRequest" type="tns:GetQuoteRequest" />
+			<xs:simpleType name="AddressType">
+				<xs:annotation>
+					<xs:documentation>
+						RESIDENTIAL,COMMERCIAL,UNKNOWN - Default
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token"></xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string" use="required"></xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all
+						service operations.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ClaimDetail">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="claimCreationDate" type="xs:dateTime"></xs:element>
+					<xs:element minOccurs="0" name="claimId" type="xs:long"></xs:element>
+					<xs:element minOccurs="0" name="providerClaimId" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="providerClaimDate" type="xs:dateTime"></xs:element>
+					<xs:element minOccurs="0" name="claimReason" type="xs:integer"></xs:element>
+					<xs:element minOccurs="0" name="claimStatus" type="xs:token"></xs:element>
+					<xs:element minOccurs="0" name="claimSettlementAmount"
+						type="tns:Amount"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ConfirmClaimRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:PackageInsuranceBaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="insuranceId" type="xs:long"></xs:element>
+							<xs:element minOccurs="1" name="claimId" type="xs:long"></xs:element>
+							<xs:element minOccurs="0" name="confirmReason" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										aka: buyerClaimType.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="subReason" type="xs:token"></xs:element>
+							<!--
+								discuss with Maulin, delete <xs:element name="consigneeAddress"
+								type="xs:consigneeAddress" minOccurs="0" />
+							-->
+							<xs:element minOccurs="0" name="confirmMethod" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										aka: verificationTypeEnum.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ConfirmClaimResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="insuranceId" type="xs:long"></xs:element>
+							<xs:element minOccurs="0" name="confirmationId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										TP_CLAIM_INFO.CLAIM_VERIFICATION_ID
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="confirmationDate"
+								type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>
+										TP_CLAIM_INFO.CLAIM_VERIFICATION_DATE
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ContactAddress">
+				<xs:annotation>
+					<xs:documentation>Postal mail address</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="addressLine1" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="addressLine2" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="addressLine3" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="suiteOrApt" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="city" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="stateOrProvince" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="postalCode" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="additionalPostalCode"
+						type="xs:string"></xs:element>
+					<xs:element minOccurs="1" name="country" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="urbancode" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ContactInfo">
+				<xs:annotation>
+					<xs:documentation>
+						Detailed Contact information - Contact name,
+						address and
+						phone number
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="firstName" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="middleName" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="lastName" type="xs:string"></xs:element>
+					<xs:element minOccurs="1" name="contactAddress" type="tns:ContactAddress"></xs:element>
+					<xs:element minOccurs="0" name="companyName" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="phone" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="extension" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="emailAddress" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="phone2" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="fax" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CostBreakUp">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:token"></xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="value"
+						type="xs:string"></xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="cost"
+						type="tns:Amount"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CreateClaimRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:PackageInsuranceBaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="insuranceId" type="xs:long"></xs:element>
+							<xs:element minOccurs="0" name="insurancePolicyId"
+								type="xs:string"></xs:element>
+							<xs:element minOccurs="0" name="claimReason" type="xs:token"></xs:element>
+							<xs:element minOccurs="0" name="trackingNumber" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										In create claim they need to have this,
+										in
+										case of eBay, we can derive.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="paypalEmail" type="xs:string"></xs:element>
+							<xs:element minOccurs="0" name="claimAmount" type="tns:Amount">
+								<xs:annotation>
+									<xs:documentation>
+										Default value is insured value.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetClaimRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This call will return all claims for a given
+						tpInsuranceId, if claimId is not provided, it will
+						return all
+						claims.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:PackageInsuranceBaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="insuranceId" type="xs:long"></xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="claimId"
+								type="xs:string"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetClaimResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="insuranceId" type="xs:long"></xs:element>
+							<xs:element maxOccurs="unbounded" name="claimDetail"
+								type="tns:ClaimDetail"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetQuoteRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="insuranceProvider" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Override the base to make it required.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="insuredAmount" type="tns:Amount"></xs:element>
+							<xs:element minOccurs="0" name="effectiveDate" type="xs:dateTime"></xs:element>
+							<xs:element maxOccurs="unbounded" name="additionalOption"
+								type="tns:ShippingOption">
+								<xs:annotation>
+									<xs:documentation>
+										eBay specific name value pairs, eg:
+										quantity.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetQuoteResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="quote" type="tns:Quote"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PackageInsuranceBaseRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<!--
+								tbd: madhu to decide how the auth container should look like
+								<xs:element name="ieClientEnum" type="xs:token" minOccurs="1"
+								maxOccurs="1" /> <xs:element name="userName" type="xs:string"
+								minOccurs="0" /> <xs:element name="password" type="xs:string"
+								minOccurs="0" /> <xs:element name="userId" type="xs:long"
+								minOccurs="0" />
+							-->
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="insuranceProvider" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Not required (minOccurs=&quot;0&quot;) if
+										Create.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="externalRefId" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Also called clientTxnId, caller's reference
+										ID,
+										in label it is
+										the Shipment ID.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<!--
+								we need to figure out how to make this an option only ebay
+								client will provide <xs:element name="thirdPartySiteId"
+								type="xs:long" minOccurs="0" />
+							-->
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="additionalOption" type="tns:ShippingOption">
+								<xs:annotation>
+									<xs:documentation>
+										eBay specific name value pairs, eg:
+										thirdPartySiteId, transationTime.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PackageInsuranceContent">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="referenceId" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="description" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="categoryPath" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="accessUrl" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="price" type="tns:Amount"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PackageInsuranceInfo">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="insuranceId" type="xs:long"></xs:element>
+					<!-- tbd -->
+					<xs:element minOccurs="0" name="shippingCarrier" type="xs:token"></xs:element>
+					<!-- tbd -->
+					<xs:element minOccurs="0" name="shippingService" type="tns:ShippingService"></xs:element>
+					<xs:element minOccurs="0" name="shippingDate" type="xs:dateTime"></xs:element>
+					<!-- tbd -->
+					<xs:element minOccurs="0" name="legalPolicyHolderInfo"
+						type="tns:ContactInfo"></xs:element>
+					<xs:element maxOccurs="unbounded" name="packageInsuranceContent"
+						type="tns:PackageInsuranceContent"></xs:element>
+					<xs:element minOccurs="0" name="shipToAddress" type="tns:ContactAddress"></xs:element>
+					<xs:element minOccurs="0" name="shipFromAddress" type="tns:ContactAddress"></xs:element>
+					<xs:element minOccurs="0" name="quote" type="tns:Quote"></xs:element>
+					<!-- tbd -->
+					<xs:element minOccurs="0" name="insuredValue" type="tns:Amount"></xs:element>
+					<xs:element minOccurs="0" name="orderValue" type="tns:Amount"></xs:element>
+					<xs:element minOccurs="0" name="policyID" type="xs:string"></xs:element>
+					<xs:element minOccurs="0" name="policyDate" type="xs:dateTime"></xs:element>
+					<xs:element minOccurs="0" name="fromZipCode" type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PurchaseInitRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:PackageInsuranceBaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="transactionTime" type="xs:dateTime"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PurchaseInitResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="tpInsuranceId" type="xs:long"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PurchaseRequest">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:PackageInsuranceBaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="insuranceId" type="xs:long"></xs:element>
+							<xs:element minOccurs="0" name="trackingNumber" type="xs:string"></xs:element>
+							<xs:element minOccurs="1" name="insuranceInfo"
+								type="tns:PackageInsuranceInfo"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="PurchaseResponse">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="tpInsuranceId" type="xs:long"></xs:element>
+							<xs:element minOccurs="0" name="policyID" type="xs:string"></xs:element>
+							<xs:element minOccurs="0" name="policyDate" type="xs:dateTime"></xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Quote">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="PackageInsuranceTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="quoteId" type="xs:long"></xs:element>
+					<xs:element minOccurs="1" name="totalPremium" type="tns:Amount"></xs:element>
+					<xs:element maxOccurs="unbounded" name="costBreakup"
+						type="tns:CostBreakUp"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingOption">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="optionValue"
+						type="xs:token"></xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="optionName"
+						type="xs:token"></xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShippingService">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="ShippingDomainTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="1" name="shippingServiceName"
+						type="xs:token">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+	
+			<xs:enumeration value="Success">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Failure">
+				<xs:annotation>
+	
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+	
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PartialFailure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+	
+		</xs:restriction>
+	</xs:simpleType><xs:complexType abstract="true" name="BaseResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Base response container for all service operations.
+				Contains error information associated with the request.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="ack" type="tns:AckValue">
+				<xs:annotation>
+					<xs:documentation>
+
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information for an error or warning that
+						occurred when eBay processed the request.
+					</xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element minOccurs="0" name="version" type="xs:string">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+
+			</xs:element>
+			<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="CreateClaimResponse">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		<xs:appinfo><typeLibrarySource library="PackageInsuranceTypeLibrary" namespace="http://www.ebay.com/marketplace/shipping/v1/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:BaseResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="insuranceId" type="xs:long"></xs:element>
+					<xs:element minOccurs="0" name="claimId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								External facing claim ID, eBay's claim ID,
+								TP_CLAIM_INFO.TP_CLAIM_INFO_ID.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="providerClaimId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								For internal use, given by provider.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="providerClaimDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								For internal use, given by provider.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType><xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="System"></xs:enumeration>
+        <xs:enumeration value="Application"></xs:enumeration>
+        <xs:enumeration value="Request"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+	
+	  <xs:sequence>
+        	<xs:element name="errorId" type="xs:long"></xs:element>
+		  	<xs:element name="domain" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="subdomain" type="xs:string"></xs:element>
+			<xs:element name="severity" type="tns:ErrorSeverity"></xs:element>
+	  		<xs:element name="category" type="tns:ErrorCategory"></xs:element>
+	  		<xs:element name="message" type="xs:string"></xs:element>
+	  		<xs:element minOccurs="0" name="exceptionId" type="xs:token"></xs:element>
+	  		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"></xs:element>
+		</xs:sequence>
+	
+	
+	</xs:complexType><xs:complexType name="ErrorMessage">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		
+		<!-- 
+		<xs:sequence>
+
+				processContents="lax" />
+		</xs:sequence>
+		-->
+		
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+    		</xs:element>
+    	</xs:sequence>
+		
+	</xs:complexType><xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:simpleContent>
+		  <xs:extension base="xs:string">
+		    <xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
+		  </xs:extension>
+		</xs:simpleContent>
+	</xs:complexType><xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="Error"></xs:enumeration>
+        <xs:enumeration value="Warning"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ExtensionType">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element name="id" type="xs:positiveInteger"></xs:element>
+			<xs:element name="version" type="xs:string"></xs:element>
+			<xs:element name="contentType" type="xs:string"></xs:element>
+			<xs:element name="value" type="xs:string"></xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns1:GetVersionRequest">
+			</xs:element>
+			<xs:element name="getVersionResponse" type="tns1:GetVersionResponse">
+			</xs:element>
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"></xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"></xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			</xs:schema>
+   </types>
+   <message name="confirmClaimRequest">
+      <part name="params" element="tns:confirmClaimRequest">
+      </part>
+   </message>
+   <message name="purchaseInitResponse">
+      <part name="params" element="tns:purchaseInitResponse">
+      </part>
+   </message>
+   <message name="purchaseResponse">
+      <part name="params" element="tns:purchaseResponse">
+      </part>
+   </message>
+   <message name="createClaimResponse">
+      <part name="params" element="tns:createClaimResponse">
+      </part>
+   </message>
+   <message name="getQuoteResponse">
+      <part name="params" element="tns:getQuoteResponse">
+      </part>
+   </message>
+   <message name="getClaimResponse">
+      <part name="params" element="tns:getClaimResponse">
+      </part>
+   </message>
+   <message name="getQuoteRequest">
+      <part name="params" element="tns:getQuoteRequest">
+      </part>
+   </message>
+   <message name="getClaimRequest">
+      <part name="params" element="tns:getClaimRequest">
+      </part>
+   </message>
+   <message name="createClaimRequest">
+      <part name="params" element="tns:createClaimRequest">
+      </part>
+   </message>
+   <message name="purchaseInitRequest">
+      <part name="params" element="tns:purchaseInitRequest">
+      </part>
+   </message>
+   <message name="purchaseRequest">
+      <part name="params" element="tns:purchaseRequest">
+      </part>
+   </message>
+   <message name="confirmClaimResponse">
+      <part name="params" element="tns:confirmClaimResponse">
+      </part>
+   </message>
+   <wsdl:message name="getVersionRequest">
+   	<wsdl:part name="params" element="tns:getVersionRequest"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getVersionResponse">
+   	<wsdl:part name="params" element="tns:getVersionResponse"></wsdl:part>
+   </wsdl:message>
+   <portType name="PackageInsuranceServicePort">
+      <operation name="createClaim">
+         <input message="tns:createClaimRequest">
+         </input>
+         <output message="tns:createClaimResponse">
+         </output>
+      </operation>
+      <operation name="confirmClaim">
+         <input message="tns:confirmClaimRequest">
+         </input>
+         <output message="tns:confirmClaimResponse">
+         </output>
+      </operation>
+      <operation name="purchase">
+         <input message="tns:purchaseRequest">
+         </input>
+         <output message="tns:purchaseResponse">
+         </output>
+      </operation>
+      <operation name="purchaseInit">
+         <input message="tns:purchaseInitRequest">
+         </input>
+         <output message="tns:purchaseInitResponse">
+         </output>
+      </operation>
+      <operation name="getClaim">
+         <input message="tns:getClaimRequest">
+         </input>
+         <output message="tns:getClaimResponse">
+         </output>
+      </operation>
+      <operation name="getQuote">
+         <input message="tns:getQuoteRequest">
+         </input>
+         <output message="tns:getQuoteResponse">
+         </output>
+      </operation>
+      <wsdl:operation name="getVersion">
+      	<wsdl:input message="tns:getVersionRequest"></wsdl:input>
+      	<wsdl:output message="tns:getVersionResponse"></wsdl:output>
+      </wsdl:operation>
+   </portType>
+   <binding name="PackageInsuranceServiceSOAPBinding"
+   	type="tns:PackageInsuranceServicePort">
+
+   	<soap:binding style="document"
+   		transport="http://schemas.xmlsoap.org/soap/http" />
+   	<operation name="createClaim">
+
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/createClaim" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<output>
+
+   			<soap:body use="literal" />
+   		</output>
+   	</operation>
+   	<wsdl:operation name="confirmClaim">
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/confirmClaim" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<soap:body use="literal" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="purchase">
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/purchase" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<soap:body use="literal" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="purchaseInit">
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/purchaseInit" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<soap:body use="literal" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="getClaim">
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/getClaim" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<soap:body use="literal" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="getQuote">
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/getQuote" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<soap:body use="literal" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="getVersion">
+   		<soap:operation
+   			soapAction="http://www.ebay.com/marketplace/shipping/v1/services/getVersion" />
+   		<wsdl:input>
+   			<soap:body use="literal" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<soap:body use="literal" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   </binding>
+   <binding name="PackageInsuranceServiceHttpBinding"
+   	type="tns:PackageInsuranceServicePort">
+
+   	<http:binding verb="POST" />
+   	<operation name="createClaim">
+
+   		<http:operation location="/createClaim" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<output>
+   			<mime:content type="text/xml" />
+
+   		</output>
+   	</operation>
+   	<wsdl:operation name="confirmClaim">
+   		<http:operation location="/confirmClaim" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<mime:content type="text/xml" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="purchase">
+   		<http:operation location="/purchase" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<mime:content type="text/xml" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="purchaseInit">
+   		<http:operation location="/purchaseInit" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<mime:content type="text/xml" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="getClaim">
+   		<http:operation location="/getClaim" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<mime:content type="text/xml" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="getQuote">
+   		<http:operation location="/getQuote" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<mime:content type="text/xml" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   	<wsdl:operation name="getVersion">
+   		<http:operation location="/getVersion" />
+   		<wsdl:input>
+   			<mime:content type="application/x-www-form-urlencoded" />
+   		</wsdl:input>
+   		<wsdl:output>
+   			<mime:content type="text/xml" />
+   		</wsdl:output>
+   	</wsdl:operation>
+   </binding>
+   <service name="PackageInsuranceService">
+   		<documentation>
+			<Version>1.0.0</Version>
+		</documentation>
+      <port name="PackageInsuranceServiceHttpPort" binding="tns:PackageInsuranceServiceHttpBinding">
+         <http:address
+            location="http://svcs.ebay.com/services/shipping/PackageInsuranceService/v1" />
+      </port>
+      <port name="PackageInsuranceServiceSOAPPort" binding="tns:PackageInsuranceServiceSOAPBinding">
+         <soap12:address
+            location="http://svcs.ebay.com/services/shipping/PackageInsuranceService/v1" />
+      </port>
+   </service>
+</definitions>

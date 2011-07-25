@@ -12,12 +12,15 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
+import java.io.ByteArrayInputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.ws.Response;
 
+import org.ebayopensource.turmeric.runtime.common.impl.internal.pipeline.InboundMessageImpl;
+import org.ebayopensource.turmeric.runtime.sif.impl.internal.pipeline.AsyncResponse;
 import org.ebayopensource.turmeric.runtime.sif.service.Service;
 import org.ebayopensource.turmeric.runtime.sif.service.ServiceFactory;
 import org.ebayopensource.turmeric.runtime.tests.common.jetty.AbstractWithServerTest;
@@ -152,8 +155,23 @@ public class AsyncPollBlockingTest extends AbstractWithServerTest {
 		
 		debug(responseList);
 
-		Assert.assertThat("ReponseList.size", responseList.size(), lessThanOrEqualTo(2));
-	}
+    }
+    @Test
+    @SuppressWarnings("unchecked")
+    public void servicePoll_clientStreaming_blocking() throws Exception {
+        Service service = ServiceFactory.create("test1", "clientStreaming", null);
+        service.createDispatch("echoString").invokeAsync(ECHO_STRING + "service1");
+        List<Response<?>> responseList = service.poll(true, true);
+        for (Response element : responseList) {
+            AsyncResponse asyncResponse = (AsyncResponse) element;
+            System.out.println("element.get()=" + element.get());
+            Assert.assertFalse("Response input stream should not be ByteArrayInputStream when clientStreaming is on", 
+                    ByteArrayInputStream.class.isAssignableFrom(
+                            ((InboundMessageImpl) asyncResponse.getMessageContext()
+                                    .getResponseMessage()).getInputStreamClass()));
+        }
+        Assert.assertEquals("Unexpected response list size", 1, responseList.size());
+    }
 
 	static List<Response<?>> getResponseList(
 			Map<Service, List<Response<?>>> respMap) {

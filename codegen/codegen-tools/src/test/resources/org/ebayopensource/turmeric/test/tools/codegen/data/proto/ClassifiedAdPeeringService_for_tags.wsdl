@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.ebay.com/classifiedad/v1/services" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns="http://schemas.xmlsoap.org/wsdl/" name="ClassifiedAdPeeringService" targetNamespace="http://www.ebay.com/classifiedad/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/classifiedad/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getBinItemsRequest" type="tns:GetBinItemsRequest"/>
+			<xs:element name="getBinItemsResponse" type="tns:GetBinItemsResponse"/>
+			<xs:element name="getAuctionItemsRequest" type="tns:GetAuctionItemsRequest"/>
+			<xs:element name="getAuctionItemsResponse" type="tns:GetAuctionItemsResponse"/>
+			<xs:element name="getItemsCountRequest" type="tns:GetItemsCountRequest"/>
+			<xs:element name="getItemsCountResponse" type="tns:GetItemsCountResponse"/>
+			<xs:element name="getSaleDetailsRequest" type="tns:GetSaleDetailsRequest"/>
+			<xs:element name="getSaleDetailsResponse" type="tns:GetSaleDetailsResponse"/>
+			<xs:element name="getUserDetailsRequest" type="tns:GetUserDetailsRequest"/>
+			<xs:element name="getUserDetailsResponse" type="tns:GetUserDetailsResponse"/>
+			
+			
+		<xs:complexType abstract="true" name="BaseServiceRequest">			
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+
+				</xs:sequence>
+		</xs:complexType>
+			
+		<xs:complexType name="BaseItemsSearchRequest">
+		<xs:annotation>
+					<xs:documentation>
+						BaseItemsSearchRequest for all getBinItemsRequest, getAuctionItemsRequest
+						operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="keywords" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="debugEnable" type="xs:boolean">
+							</xs:element>
+							<xs:element maxOccurs= "1" minOccurs="0" name="categoryId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs= "unbounded" minOccurs="0" name="eBayCategoryId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="maxPrice" type="tns:Amount">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="minPrice" type="tns:Amount">
+							</xs:element>		
+							<xs:element maxOccurs="1" minOccurs="0" name="pictureAvailable" type="xs:boolean">
+							</xs:element>					
+							<xs:element maxOccurs="1" minOccurs="0" name="sortOptions" type="tns:SortCriteria">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="histogramRequired" type="xs:boolean">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="paginationInput" type="tns:PaginationInput">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="BaseItemsSearchResponse">
+			<xs:annotation>
+					<xs:documentation>
+						BaseItemsSearchResponse for all getBinItemsResponse, getAuctionItemsResponse.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="items" type="tns:Item">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="histogram" type="tns:HistogramDetails">
+							</xs:element>							
+							<xs:element name="paginationOutput" type="tns:PaginationOutput">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="debugInfo" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>			
+			
+		<xs:complexType name="GetBinItemsRequest">		
+		<xs:annotation>
+					<xs:documentation>
+						GetBinItemsRequest for getBinItems operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseItemsSearchRequest">
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>			
+			
+		 <xs:complexType name="GetBinItemsResponse">
+		<xs:annotation>
+					<xs:documentation>
+						GetBinItemsResponse for getBinItems operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseItemsSearchResponse">						
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		 <xs:complexType name="GetAuctionItemsRequest">
+		 <xs:annotation>
+					<xs:documentation>
+						GetAuctionItemsRequest for getAuctionItems operations.
+					</xs:documentation>
+		</xs:annotation>			
+				<xs:complexContent>
+					<xs:extension base="tns:BaseItemsSearchRequest">
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		 <xs:complexType name="GetAuctionItemsResponse">
+		 <xs:annotation>
+					<xs:documentation>
+						GetAuctionItemsResponse for getAuctionItems operations.
+					</xs:documentation>
+		</xs:annotation>		
+				<xs:complexContent>
+					<xs:extension base="tns:BaseItemsSearchResponse">						
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		<xs:complexType name="GetItemsCountRequest">
+		 <xs:annotation>
+					<xs:documentation>
+						GetItemsCountRequest for getItemsCount operations.
+					</xs:documentation>
+		</xs:annotation>	
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="keywords" type="xs:string">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="debugEnable" type="xs:boolean">
+							</xs:element>
+							<xs:element maxOccurs= "unbounded" minOccurs="0" name="eBayCategoryId" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="maxPrice" type="tns:Amount">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="minPrice" type="tns:Amount">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		<xs:complexType name="GetItemsCountResponse">
+		<xs:annotation>
+					<xs:documentation>
+						GetItemsCountResponse for getItemsCount operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="count" type="xs:long">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="debugInfo" type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		 <xs:complexType name="GetSaleDetailsRequest">
+		 <xs:annotation>
+					<xs:documentation>
+						GetSaleDetailsRequest for getSaleDetails operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs= "unbounded" minOccurs="0" name="itemIds" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		<xs:complexType name="GetSaleDetailsResponse">
+		<xs:annotation>
+					<xs:documentation>
+						GetSaleDetailsResponse for getSaleDetails operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="items" type="tns:Item">
+							</xs:element>														
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>			
+			
+		 <xs:complexType name="GetUserDetailsRequest">
+		 <xs:annotation>
+					<xs:documentation>
+						GetUserDetailsRequest for getUserDetails operations.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs= "1" minOccurs="1" name="userId" type="xs:long"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+		
+		<xs:complexType name="GetUserDetailsResponse">
+		 <xs:annotation>
+					<xs:documentation>
+						GetUserDetailsResponse for getUserDetails operations.
+					</xs:documentation>
+		</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+					<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="user" type="tns:User">
+							</xs:element>														
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+		</xs:complexType>
+			
+		<xs:complexType name="PaginationOutput">
+			<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="totalPages" type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="totalEntries" type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+	
+			<xs:complexType name="PaginationInput">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="pageNumber" type="xs:int">
+					</xs:element>
+					<xs:element minOccurs="0" name="entriesPerPage" type="xs:int">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SortCriteria">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="ApplicationCatalogDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="field" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Field based on which the response has to
+								be sorted
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="order" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Order in which the result has to be
+								sorted
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+	
+			<xs:complexType name="User">
+				<xs:annotation>User Details
+					<xs:documentation/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="name" type="xs:string">					
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="emailAddress" type="xs:string">					
+				   </xs:element>
+				   	<xs:element maxOccurs="1" minOccurs="0" name="phoneNumber" type="xs:string">					
+				   </xs:element>
+				   	<xs:element maxOccurs="1" minOccurs="0" name="countryId" type="xs:int">					
+				   </xs:element>
+				   <xs:element minOccurs="0" name="userAddress" type="tns:AddressType" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								User Address details
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				    <xs:element maxOccurs="1" minOccurs="0" name="userType" type="tns:UserType">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+				
+			<xs:complexType name="Amount">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyId" type="xs:string" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+				   
+		   <xs:complexType name="Item">
+		   		<xs:annotation> Item Details.
+					<xs:documentation/>		
+				</xs:annotation>
+				<xs:sequence>
+				    <xs:element maxOccurs="1" minOccurs="0" name="itemId" type="xs:long">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="categoryId" type="xs:long">
+					</xs:element>			
+					<xs:element maxOccurs="1" minOccurs="0" name="ebayL1CategoryId" type="xs:long">
+					</xs:element>		
+					<xs:element maxOccurs="1" minOccurs="0" name="ebayL2CategoryId" type="xs:long">
+					</xs:element>				
+					<xs:element maxOccurs="1" minOccurs="0" name="itemTitle" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="startTime" type="xs:date">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="safeStartTime" type="xs:date">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="endTime" type="xs:date">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="eBayGallery" type="xs:boolean">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="pictureUrl" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="description" type="xs:string">
+					</xs:element>					
+					<xs:element maxOccurs="1" minOccurs="0" name="bidsCount" type="xs:int">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="currentPrice" type="tns:Amount">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="binPrice" type="tns:Amount">
+					</xs:element>					
+					<xs:element maxOccurs="1" minOccurs="0" name="userDesignation" type="tns:UserDesignationType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="saleType" type="tns:SaleType">
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+				
+		   <xs:simpleType name="UserDesignationType">
+				<xs:annotation>User Designation
+					<xs:documentation/>					
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PRIVATE">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BUSINESS">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="UNKNOWN">
+						<xs:annotation>
+							<xs:documentation>
+								Description
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="SaleType">
+				<xs:annotation>SaleType.
+					<xs:documentation/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="saleType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Field based on which the response has to
+								be  values can be any of , CHINESE_AUCTION, DUTCH_AUCTION, LIVE_AUCTION, 
+								AD, STORE_FIXED_PRICE, BASIC_FIXED_PRICE, EBAY_AD
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="UserType">
+				<xs:annotation>User Type.
+					<xs:documentation/>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="userType" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Field based on which the response has to
+								be values can be any of , CONFIRMED, UNCONFIRMED, GUEST, 
+								VISITOR, UNKNOWN
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:sequence>
+			</xs:complexType>
+		
+		
+<xs:complexType name="AddressType">
+				<xs:annotation>
+					<xs:documentation>
+						Address details for a given User
+						
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="addressOne" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Address1
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="addressTwo" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Address2
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="city" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>city</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="state" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>State</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="zip" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Zip code
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="countryName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Country</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+
+<xs:complexType name="HistogramDetails">
+<xs:annotation>
+<xs:documentation/>
+</xs:annotation>
+<xs:sequence>
+<xs:element maxOccurs="1" minOccurs="0" name="count" type="xs:long">
+					</xs:element>
+<xs:element maxOccurs="1" minOccurs="0" name="name" type="xs:string">
+					</xs:element>
+
+
+</xs:sequence>
+</xs:complexType>
+	
+  </xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="getBinItemsRequest">
+		<wsdl:part name="parameters" element="tns:getBinItemsRequest">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getBinItemsResponse">
+		<wsdl:part name="findAdsByLocationRequest" element="tns:getBinItemsResponse">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAuctionItemsRequest">
+		<wsdl:part name="parameters" element="tns:getAuctionItemsRequest">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAuctionItemsResponse">
+		<wsdl:part name="params" element="tns:getAuctionItemsResponse">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getItemsCountRequest">
+		<wsdl:part name="parameters" element="tns:getItemsCountRequest">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getItemsCountResponse">
+		<wsdl:part name="parameters" element="tns:getItemsCountResponse">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSaleDetailsRequest">
+		<wsdl:part name="getSaleDetailsRequest" element="tns:getSaleDetailsRequest">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSaleDetailsResponse">
+		<wsdl:part name="parameters" element="tns:getSaleDetailsResponse">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserDetailsRequest">
+		<wsdl:part name="parameters" element="tns:getUserDetailsRequest">
+    </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserDetailsResponse">
+		<wsdl:part name="params" element="tns:getUserDetailsResponse">
+    </wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="ClassifiedAdPeeringServicePort">
+		<wsdl:operation name="getBinItems">
+		<xs:annotation>
+					<xs:documentation>
+						getBinItems will retrieve the date for Bin items
+					</xs:documentation>
+		</xs:annotation>
+			<wsdl:input message="tns:getBinItemsRequest">
+    </wsdl:input>
+			<wsdl:output message="tns:getBinItemsResponse">
+    </wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAuctionItems">
+		<xs:annotation>
+					<xs:documentation>
+						getAuctionItems will retrieve the date for Auction items
+					</xs:documentation>
+		</xs:annotation>
+			<wsdl:input message="tns:getAuctionItemsRequest">
+    </wsdl:input>
+			<wsdl:output message="tns:getAuctionItemsResponse">
+    </wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getItemsCount">
+		<xs:annotation>
+					<xs:documentation>
+						getItemsCount will retrieve the items count
+					</xs:documentation>
+		</xs:annotation>
+			<wsdl:input message="tns:getItemsCountRequest">
+    </wsdl:input>
+			<wsdl:output message="tns:getItemsCountResponse">
+    </wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSaleDetails">
+		<xs:annotation>
+					<xs:documentation>
+						getSaleDetails will retrieve the sale details
+					</xs:documentation>
+		</xs:annotation>
+			<wsdl:input message="tns:getSaleDetailsRequest">
+    </wsdl:input>
+			<wsdl:output message="tns:getSaleDetailsResponse">
+    </wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserDetails">
+		<xs:annotation>
+					<xs:documentation>
+						getUserDetails will retrieve the user details
+					</xs:documentation>
+		</xs:annotation>
+			<wsdl:input message="tns:getUserDetailsRequest">
+    </wsdl:input>
+			<wsdl:output message="tns:getUserDetailsResponse">
+    </wsdl:output>	
+    </wsdl:operation>	
+	</wsdl:portType>
+	<wsdl:binding name="ClassifiedAdPeeringServiceSOAPBinding" type="tns:ClassifiedAdPeeringServicePort">
+		<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getBinItems">
+			<soap12:operation soapAction="urn:getBinItems" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAuctionItems">
+			<soap12:operation soapAction="urn:getAuctionItems" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getItemsCount">
+			<soap12:operation soapAction="urn:getItemsCount" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSaleDetails">
+			<soap12:operation soapAction="urn:getSaleDetails" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserDetails">
+			<soap12:operation soapAction="urn:getUserDetails" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>		
+	</wsdl:binding>
+	<wsdl:binding name="ClassifiedAdPeeringServiceHttpBinding" type="tns:ClassifiedAdPeeringServicePort">
+		<http:binding verb="POST"/>
+		<wsdl:operation name="getBinItems">
+			<http:operation location="/getBinItems"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAuctionItems">
+			<http:operation location="/getAuctionItems"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getItemsCount">
+			<http:operation location="/getItemsCount"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSaleDetails">
+			<http:operation location="/getSaleDetails"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getUserDetails">
+			<http:operation location="/getUserDetails"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ClassifiedAdPeeringService">
+	 <wsdl:documentation>
+		<Version>1.0.0</Version>
+		The ClasifiedAdPeeringService will serve for the CalsifiedAds - Sale, User, and Searchbackend related calls.		
+	</wsdl:documentation>   
+		<wsdl:port name="ClassifiedAdPeeringServiceHttp" binding="tns:ClassifiedAdPeeringServiceHttpBinding">
+			<http:address location="http://svcs.ebay.com/services/classifiedad/ClassifiedAdPeeringService/v1"/>
+		</wsdl:port>
+		<wsdl:port name="ClassifiedAdPeeringServiceSOAP" binding="tns:ClassifiedAdPeeringServiceSOAPBinding">
+			<soap12:address location="http://svcs.ebay.com/services/classifiedad/ClassifiedAdPeeringService/v1"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

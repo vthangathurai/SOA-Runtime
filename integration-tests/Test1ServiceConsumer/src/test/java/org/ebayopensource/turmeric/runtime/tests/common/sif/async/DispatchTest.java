@@ -115,6 +115,25 @@ public class DispatchTest extends AbstractWithServerTest {
 		Assert.assertEquals(ECHO_STRING, outMessage);
 		Assert.assertTrue(handler.getRequest() == request);
 	}
+    @Test
+    @SuppressWarnings("unchecked")
+    public void dispatchClientStreamingAsyncPush() throws Exception {
+        Service service = ServiceFactory.create("test1", "clientStreaming", null);
+
+        Handler handler = new Handler();
+        String request = new String(ECHO_STRING);
+
+        Future<?> status = service.createDispatch("echoString").invokeAsync(
+                request, handler);
+
+        while (!status.isDone()) {
+            Thread.sleep(200);
+        }
+
+        String outMessage = handler.getRespString();
+        Assert.assertEquals(ECHO_STRING, outMessage);
+        Assert.assertTrue(handler.getRequest() == request);
+    }
 
 	@Test
 	public void dispatchRemoteSync_InvalidUrl() throws Exception {

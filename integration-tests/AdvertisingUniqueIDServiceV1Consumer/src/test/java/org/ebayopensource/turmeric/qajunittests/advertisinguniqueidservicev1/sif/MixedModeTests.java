@@ -132,6 +132,25 @@ public class MixedModeTests extends AbstractWithServerQETest {
 		System.out.println(client.testEnhancedRest(param0).getOut());
 		Assert.assertEquals(client.testEnhancedRest(param0).getOut(),"MixedMode" );
 	}
+	
+	@Test
+	public void testMixedModePositiveCaseOtherOperationREST() throws ServiceException {
+		queryParams.put("X-TURMERIC-SOA-OPERATION-NAME","testEnhancedRest");
+		queryParams.put("in","Foo");	
+		String response = http.getResponse(serverUri.toASCIIString() + "/services/advertise/UniqueIDService/v1", queryParams);
+//		System.out.println(response);
+		Assert.assertTrue(response.contains("<out>Foo</out>"));
+	}
+	@Test
+	public void testMixedModePositiveCaseOtherOperationREST_WSPSF() throws ServiceException {
+		queryParams.put("X-TURMERIC-SOA-OPERATION-NAME","testEnhancedRest");
+		queryParams.put("X-TURMERIC-SOA-SERVICE-NAME","AdvertisingUniqueIDServiceV1");
+		queryParams.put("in","Foo");	
+		String response = http.getResponse(serverUri.toASCIIString() +"/ws/spf", queryParams);
+//		System.out.println(response);
+		Assert.assertTrue(response.contains("<out>Foo</out>"));
+	}
+	
 //	@Test
 //	public void testMixedModePositiveCaseOtherOperationREST() throws ServiceException {
 //		http.port = serverUri.toASCIIString().substring(17);

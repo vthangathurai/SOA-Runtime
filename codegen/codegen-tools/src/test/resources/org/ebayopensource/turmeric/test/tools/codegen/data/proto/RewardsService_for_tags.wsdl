@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+	targetNamespace="http://www.ebay.com/marketplace/rewards/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:ns0="http://www.ebay.com/marketplace/rewards/v1/services"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/rewards/v1/services"
+			xmlns:tns="http://www.ebay.com/marketplace/rewards/v1/services"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+			<xs:element name="grantRewardsRequest" 
+				type="tns:GrantRewardsRequest" />
+			<xs:element name="grantRewardsResponse" 
+				type="tns:GrantRewardsResponse" />
+			<xs:element name="revokeRewardsRequest" 
+				type="tns:RevokeRewardsRequest" />
+			<xs:element name="revokeRewardsResponse" 
+				type="tns:RevokeRewardsResponse" />
+			<xs:element name="getRewardsTransactionsRequest"
+				 type="tns:GetRewardsTransactionsRequest" />
+			<xs:element name="getRewardsTransactionsResponse"
+				 type="tns:GetRewardsTransactionsResponse" />
+
+			<!-- Grant Rewards Request starts -->
+			<xs:complexType name="GrantRewardsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						To grant 3rd party reward earn for an enrolled
+						member
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="partnerName" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The 3rd party partner name
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="rewardsTransactionInputList"
+								type="tns:RewardsTransactionInputList">
+								<xs:annotation>
+									<xs:documentation>
+										List of Grant Transactions
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- Grant Rewards Request ends -->
+
+			<!-- Revoke Rewards Request starts -->
+			<xs:complexType name="RevokeRewardsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						To revoke 3rd party reward earn for an enrolled
+						member
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="partnerName" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The 3rd party partner name
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="rewardsTransactionInputList"
+								type="tns:RewardsTransactionInputList">
+								<xs:annotation>
+									<xs:documentation>
+										List of Reversal Transactions
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- Revoke Rewards Request ends -->
+
+			<!-- Common type for Grant and Revoke -->
+			<xs:complexType name="RewardsTransactionInputList">
+				<xs:annotation>
+					<xs:documentation>
+						List of Grant or Reversal Transactions
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="rewardsTransactionInput"
+						type="tns:RewardsTransactionInput">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RewardsTransactionInput">
+				<xs:annotation>
+					<xs:documentation>
+						Grant or Reversal Transaction
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="rewardsTransaction" type="tns:RewardsTransaction" />
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="rewardsTransactionDescriptionData"
+						type="tns:RewardsTransactionDescriptionData" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RewardsTransaction">
+				<xs:annotation>
+					<xs:documentation>
+						This represents a grant or revoke transaction
+						for a given Reward Member
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="rewardsTransactionId" type="tns:RewardsTransactionId">
+						<xs:annotation>
+							<xs:documentation>
+								Rewards Transaction Identifier comprises
+								of Rewards Memberid and unique
+								transaction date
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="campaignCode" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The unique code for the partner's
+								campaign
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="grantAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								This contains the amount to be granted
+								for the current transaction if campaign
+								grant type is calculated or pass
+								through. Not applicable for predefined.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="externalTransactionAmount" type="tns:Amount">
+						<xs:annotation>
+							<xs:documentation>
+								This contains the external transaction
+								amount.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="grantDescription" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								This contains the actual grant
+								description for the current transaction.
+								Required if Campaign Description type is
+								PassThrough
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="transactionType" type="tns:TransactionType">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output. This indictaes whether
+								a Grant or Reversal is performed for the
+								rewards member
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="transactionDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								Only for output. This contains the
+								actual reward earned date for the
+								current transaction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RewardsTransactionId">
+				<xs:annotation>
+					<xs:documentation>
+						Rewards Transaction Identifier comprises of
+						Rewards Memberid and unique transaction date
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="rewardsMemberId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The rewards member for whom the rewards
+								is currently being granted by the 3rd
+								party
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="externalTransactionId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								This is provided by the partner as a
+								unique identifier of this transaction of
+								this grant type so that if another
+								service invocation was provided with
+								same transactionId and same grant type
+								exact parameters, this service call
+								would error out as a duplicate record.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RewardsTransactionDescriptionData">
+				<xs:annotation>
+					<xs:documentation>
+						Additional data to embed in Transaction
+						Description
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="externalTransactionDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This contains the external transaction
+								date. It is used in Description display
+								purposes when wild card logic is used to
+								display transaction date within the
+								description.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="additionalText1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								added description1
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="additionalText2" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								added description2
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="additionalText3" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								added description3
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<!-- Simple Type(s) for Rewards Request -->
+			<xs:simpleType name="TransactionType">
+				<xs:annotation>
+					<xs:documentation>
+						The action to be performed on the rewards
+						member, either grant or reversal
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Grant" />
+					<xs:enumeration value="Reversal" />
+				</xs:restriction>
+			</xs:simpleType>
+
+			<!-- Grant Rewards Response Starts -->
+			<xs:complexType name="GrantRewardsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a response container for the grant
+						rewards service operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="rewardsTransactionStatusList"
+								type="tns:RewardsTransactionStatusList" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- Grant Rewards Response Ends -->
+
+			<!-- Revoke Rewards Response Starts -->
+			<xs:complexType name="RevokeRewardsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is a response container for the revoke
+						rewards service operation
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="rewardsTransactionStatusList"
+								type="tns:RewardsTransactionStatusList" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- Revoke Rewards Response Ends -->
+
+			<!-- Common type for both Grant and Revoke Response -->
+			<xs:complexType name="RewardsTransactionStatusList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="rewardsTransactionStatus"
+						type="tns:RewardsTransactionStatus" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="RewardsTransactionStatus">
+				<xs:annotation>
+					<xs:documentation>
+						The response for rewards service will have the
+						acknowledgement value , transaction id and error
+						message if any
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="ack"
+						type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether there are any errors
+								or warnings associated with the
+								processing of the request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="rewardsTransactionId" type="tns:RewardsTransactionId">
+						<xs:annotation>
+							<xs:documentation>
+								Rewards Transaction Identifier comprises
+								of Rewards Memberid and unique
+								transaction date
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0"
+						name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- Grant Rewards Response Ends -->
+
+			<!-- getTransaction Request starts -->
+			<xs:complexType name="GetRewardsTransactionsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						To Get earn and reversal data for a given
+						rewards member with in given time range.
+					</xs:documentation>
+				</xs:annotation>
+
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:annotation>
+							<xs:documentation>
+								This holds the request parameters for
+								getTransaction operation
+							</xs:documentation>
+						</xs:annotation>
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="partnerName" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										This identifies partner Name
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="rewardsMemberId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										This uniquely identifies an
+										enrolled reward member
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="dateRange" type="tns:TimeRange">
+								<xs:annotation>
+									<xs:documentation>
+										Start and end date range for
+										which the transactions have to
+										be fetched
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- getTransaction Request ends -->
+
+			<!-- getTransaction Response starts -->
+			<xs:complexType name="GetRewardsTransactionsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0"
+								name="rewardsTransactions" type="tns:RewardsTransactionList" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- getTransaction Response ends -->
+
+			<!-- Common type for both Grant and Revoke Response -->
+			<xs:complexType name="RewardsTransactionList">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="rewardsTransaction" type="tns:RewardsTransaction" />
+				</xs:sequence>
+			</xs:complexType>
+
+<xs:simpleType name="AckValue">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates whether the error is a severe error (causing the request to fail)
+				or an informational error (a warning) that should be communicated to the
+				user.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:restriction base="xs:string">
+	
+			<xs:enumeration value="Success">
+				<xs:annotation>
+					<xs:documentation>
+						The request was processed successfully, but something occurred that may
+						affect your application or the user.				
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Failure">
+				<xs:annotation>
+	
+					<xs:documentation>
+						The request that triggered the error was not processed successfully.
+						When a serious application-level error occurs, the error is returned
+						instead of the business data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Warning">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.
+					</xs:documentation>
+	
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PartialFailure">
+				<xs:annotation>
+					<xs:documentation>
+						The request that triggered the error was processed successfully but with some warnings.				</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+	
+		</xs:restriction>
+	</xs:simpleType><xs:complexType name="Amount">
+        <xs:annotation><xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+        <xs:simpleContent>
+                  <xs:extension base="xs:double">
+                      <xs:attribute name="currencyId" type="xs:string" use="required"></xs:attribute>
+                  </xs:extension>
+           </xs:simpleContent>
+       </xs:complexType><xs:complexType abstract="true" name="BaseRequest">
+		<xs:annotation>
+			<xs:documentation>
+				This is the base class for request container for all
+				service operations.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="ns0:ExtensionType"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType abstract="true" name="BaseResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Base response container for all service operations.
+				Contains error information associated with the request.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="ack" type="ns0:AckValue">
+				<xs:annotation>
+					<xs:documentation>
+
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="errorMessage" type="ns0:ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information for an error or warning that
+						occurred when eBay processed the request.
+					</xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Conditionally</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element minOccurs="0" name="version" type="xs:string">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+
+			</xs:element>
+			<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+
+					<xs:appinfo>
+						<CallInfo>
+							<AllCalls></AllCalls>
+							<Returned>Always</Returned>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="ns0:ExtensionType"></xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:simpleType name="ErrorCategory">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="System"></xs:enumeration>
+        <xs:enumeration value="Application"></xs:enumeration>
+        <xs:enumeration value="Request"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ErrorData">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+	
+	  <xs:sequence>
+        	<xs:element name="errorId" type="xs:long"></xs:element>
+		  	<xs:element name="domain" type="xs:string"></xs:element>
+			<xs:element minOccurs="0" name="subdomain" type="xs:string"></xs:element>
+			<xs:element name="severity" type="ns0:ErrorSeverity"></xs:element>
+	  		<xs:element name="category" type="ns0:ErrorCategory"></xs:element>
+	  		<xs:element name="message" type="xs:string"></xs:element>
+	  		<xs:element minOccurs="0" name="exceptionId" type="xs:token"></xs:element>
+	  		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="ns0:ErrorParameter"></xs:element>
+		</xs:sequence>
+	
+	
+	</xs:complexType><xs:complexType name="ErrorMessage">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		
+		<!-- 
+		<xs:sequence>
+
+				processContents="lax" />
+		</xs:sequence>
+		-->
+		
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="ns0:ErrorData">
+    		</xs:element>
+    	</xs:sequence>
+		
+	</xs:complexType><xs:complexType name="ErrorParameter">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+		<xs:simpleContent>
+		  <xs:extension base="xs:string">
+		    <xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
+		  </xs:extension>
+		</xs:simpleContent>
+	</xs:complexType><xs:simpleType name="ErrorSeverity">
+		<xs:annotation>
+			<xs:documentation>
+				Documentation goes here.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="Error"></xs:enumeration>
+        <xs:enumeration value="Warning"></xs:enumeration>
+      </xs:restriction>
+
+	</xs:simpleType><xs:complexType name="ExtensionType">
+		<xs:annotation>
+			<xs:documentation>Documentation goes here</xs:documentation>
+			
+		<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element name="id" type="xs:positiveInteger"></xs:element>
+			<xs:element name="version" type="xs:string"></xs:element>
+			<xs:element name="contentType" type="xs:string"></xs:element>
+			<xs:element name="value" type="xs:string"></xs:element>
+
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="TimeRange">
+        <xs:annotation><xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" name="timeFrom" type="xs:dateTime"></xs:element>
+            <xs:element minOccurs="0" name="timeTo" type="xs:dateTime"></xs:element>
+
+        </xs:sequence>
+    </xs:complexType></xs:schema>
+	</types>
+	<message name="getRewardsTransactionsResponse">
+		<part name="params"
+			element="ns0:getRewardsTransactionsResponse">
+		</part>
+	</message>
+	<message name="grantRewardsRequest">
+		<part name="params" element="ns0:grantRewardsRequest"></part>
+	</message>
+	<message name="revokeRewardsRequest">
+		<part name="params" element="ns0:revokeRewardsRequest"></part>
+	</message>
+	<message name="getRewardsTransactionsRequest">
+		<part name="params"
+			element="ns0:getRewardsTransactionsRequest">
+		</part>
+	</message>
+	<message name="revokeRewardsResponse">
+		<part name="params" element="ns0:revokeRewardsResponse"></part>
+	</message>
+	<message name="grantRewardsResponse">
+		<part name="params" element="ns0:grantRewardsResponse"></part>
+	</message>
+	<portType name="RewardsServicePort">
+		<operation name="grantRewards">
+			<input message="ns0:grantRewardsRequest"></input>
+			<output message="ns0:grantRewardsResponse"></output>
+		</operation>
+		<operation name="revokeRewards">
+			<input message="ns0:revokeRewardsRequest"></input>
+			<output message="ns0:revokeRewardsResponse"></output>
+		</operation>
+		<operation name="getRewardsTransactions">
+			<input message="ns0:getRewardsTransactionsRequest"></input>
+			<output message="ns0:getRewardsTransactionsResponse">
+			</output>
+		</operation>
+	</portType>
+	<binding name="RewardsServiceHttpBinding"
+		type="ns0:RewardsServicePort">
+		<http:binding verb="POST" />
+		<operation name="grantRewards">
+			<http:operation location="RewardsService/grantRewards" />
+			<input>
+				<mime:content part="grantRewards" type="text/xml" />
+			</input>
+			<output>
+				<mime:content part="grantRewards" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="revokeRewards">
+			<http:operation location="RewardsService/revokeRewards" />
+			<input>
+				<mime:content part="revokeRewards" type="text/xml" />
+			</input>
+			<output>
+				<mime:content part="revokeRewards" type="text/xml" />
+			</output>
+		</operation>
+		<operation name="getRewardsTransactions">
+			<http:operation
+				location="RewardsService/getRewardsTransactions" />
+			<input>
+				<mime:content part="getRewardsTransactions"
+					type="text/xml" />
+			</input>
+			<output>
+				<mime:content part="getRewardsTransactions"
+					type="text/xml" />
+			</output>
+		</operation>
+	</binding>
+	<binding name="RewardsServiceSOAPBinding"
+		type="ns0:RewardsServicePort">
+		<soap12:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="grantRewards">
+			<soap12:operation soapAction="urn:grantRewards"
+				style="document" />
+			<input>
+				<soap12:body use="literal" />
+			</input>
+			<output>
+				<soap12:body use="literal" />
+			</output>
+		</operation>
+		<operation name="revokeRewards">
+			<soap12:operation soapAction="urn:revokeRewards"
+				style="document" />
+			<input>
+				<soap12:body use="literal" />
+			</input>
+			<output>
+				<soap12:body use="literal" />
+			</output>
+		</operation>
+		<operation name="getRewardsTransactions">
+			<soap12:operation soapAction="urn:getRewardsTransactions"
+				style="document" />
+			<input>
+				<soap12:body use="literal" />
+			</input>
+			<output>
+				<soap12:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+	<service name="RewardsService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<port name="RewardsServiceHttpPort"
+			binding="ns0:RewardsServiceHttpBinding">
+			<http:address
+				location="https://svcs.ebay.com/services/rewards/RewardsService/v1" />
+		</port>
+		<port name="RewardsServiceSOAPPort"
+			binding="ns0:RewardsServiceSOAPBinding">
+			<soap12:address
+				location="https://svcs.ebay.com/services/rewards/RewardsService/v1" />
+		</port>
+	</service>
+</definitions>

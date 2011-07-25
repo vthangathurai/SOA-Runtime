@@ -1,0 +1,505 @@
+<definitions name="ItemClassificationPersistenceService" targetNamespace="http://www.ebay.com/marketplace/classification/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/classification/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/classification/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="persistItemsClassificationResultsRequest" type="tns:PersistItemsClassificationResultsRequest">
+				<xs:annotation>
+					<xs:documentation>
+					Batch operation for persisting the classification results in item_attr_info for multiple items, given each item's ItemId and the result of running one or more classifiers on them.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:complexType name="PersistItemsClassificationResultsRequest">
+				<xs:annotation>
+					<xs:documentation>
+					A list of PersistItemClassificationResultsRequest
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="persistItemClassificationResultsRequest" type="tns:PersistItemClassificationResultsRequest">
+								<xs:annotation>
+									<xs:documentation>
+									A list of PersistItemClassificationResultsRequest
+
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="persistItemsClassificationResultsResponse" type="tns:PersistItemsClassificationResultsResponse">
+				<xs:annotation>
+					<xs:documentation>
+					The error information for the items that have failed are contained in ErrorMessage--&gt;ErrorData-&gt;. ErrorParameter contains the ItemId which is used to identify the items that failed.                	
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:complexType name="PersistItemsClassificationResultsResponse">
+				<xs:annotation>
+					<xs:documentation>
+					The error information for the items that have failed are contained in ErrorMessage--&gt;ErrorData-&gt;. ErrorParameter contains the ItemId which is used to identify the items that failed.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="PersistItemClassificationResultsRequest">
+				<xs:annotation>
+					<xs:documentation>
+					Persistence request for a single item
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemId" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+							The eBay ItemId for which the classification results are being persisted
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="classificationResults" type="tns:ClassifierResultList">
+						<xs:annotation>
+							<xs:documentation>
+							The results from running one or more classifiers on the item
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+		
+		
+		
+		<xs:complexType name="ClassifierResult">
+		<xs:annotation>
+			<xs:documentation>
+				The classification result from a classifier
+			</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+			<xs:element name="classifierName" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>The name of the classifier</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+
+			<xs:element name="result" type="tns:NameValuePairs">
+				<xs:annotation>
+					<xs:documentation>The classification results in Name=Value format</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="ClassifierResultList">
+		<xs:annotation>
+			<xs:documentation>
+				A list of ClassifierResult
+			</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="classifierResult" type="tns:ClassifierResult">
+				<xs:annotation>
+					<xs:documentation>A list of classification results from one or more classifiers</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="NameValuePair">
+		<xs:annotation>
+			<xs:documentation>
+				An entity to hold a name and its value(s)
+			</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+            <xs:element name="name" type="xs:string">
+            	<xs:annotation>
+            		<xs:documentation>The name</xs:documentation>
+            	</xs:annotation>
+                    </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="value" type="xs:string">
+            	<xs:annotation>
+            		<xs:documentation>The value(s) for the name</xs:documentation>
+            	</xs:annotation>
+                    </xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+            <xs:complexType name="NameValuePairs">
+		<xs:annotation>
+			<xs:documentation>A list of NameValuePair</xs:documentation>
+		<xs:appinfo>
+                        <typeLibrarySource library="ClassificationDomainTypeLibrary" namespace="http://www.ebay.com/marketplace/classification/v1/types"/>
+                    </xs:appinfo>
+                </xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="nameValuePair" type="tns:NameValuePair">
+				<xs:annotation>
+					<xs:documentation>A list of NameValuePair</xs:documentation>
+				</xs:annotation>
+                    </xs:element>
+		</xs:sequence>
+	</xs:complexType>
+        </xs:schema>
+  </types>
+  <message name="persistItemsClassificationResultsRequest">
+    <part element="tns:persistItemsClassificationResultsRequest" name="params">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part element="tns:getVersionRequest" name="params">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part element="tns:getVersionResponse" name="params">
+    </part>
+  </message>
+  <message name="persistItemsClassificationResultsResponse">
+    <part element="tns:persistItemsClassificationResultsResponse" name="params">
+    </part>
+  </message>
+  <portType name="ItemClassificationPersistenceServicePort">
+    <operation name="getVersion">
+<wsdl:documentation>
+			Used for ensuring that a service is available (availability monitoring), and ensuring that the metrics relating to a service can be accessed for monitoring. 
+			</wsdl:documentation>
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="persistItemsClassificationResults">
+<wsdl:documentation>
+			This operation is used to persist the classification results in item_attr_info for one or more items
+			</wsdl:documentation>
+      <input message="tns:persistItemsClassificationResultsRequest">
+    </input>
+      <output message="tns:persistItemsClassificationResultsResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="ItemClassificationPersistenceServiceSOAPBinding" type="tns:ItemClassificationPersistenceServicePort">
+  	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  	<operation name="getVersion">
+  		<soap:operation soapAction="http://www.ebay.com/marketplace/classification/v1/services/getVersion"/>
+  		<input>
+  			<soap:body use="literal"/>
+  		</input>
+  		<output>
+  			<soap:body use="literal"/>
+  		</output>
+  	</operation>
+  	<operation name="persistItemsClassificationResults">
+  		<soap:operation soapAction="http://www.ebay.com/marketplace/classification/v1/services/persistItemClassificationResults"/>
+  		<input>
+  			<soap:body use="literal"/>
+  		</input>
+  		<output>
+  			<soap:body use="literal"/>
+  		</output>
+  	</operation>
+  </binding>
+  <binding name="ItemClassificationPersistenceServiceHttpBinding" type="tns:ItemClassificationPersistenceServicePort">
+  	<http:binding verb="POST"/>
+  	<operation name="getVersion">
+  		<http:operation location="/getVersion"/>
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded"/>
+  		</input>
+  		<output>
+  			<mime:content type="text/xml"/>
+  		</output>
+  	</operation>
+  	<operation name="persistItemsClassificationResults">
+  		<http:operation location="/persistItemClassificationResults"/>
+  		<input>
+  			<mime:content type="application/x-www-form-urlencoded"/>
+  		</input>
+  		<output>
+  			<mime:content type="text/xml"/>
+  		</output>
+  	</operation>
+  </binding>
+  <service name="ItemClassificationPersistenceService">
+<wsdl:documentation>
+			<Version>1.0.0</Version>
+			ItemClassificationPersistenceService is used to persist the results from running one or more classifiers on eBay items back to the item_attr_info table
+		</wsdl:documentation>
+    <port binding="tns:ItemClassificationPersistenceServiceHttpBinding" name="ItemClassificationPersistenceServiceHttpPort">
+      <http:address location="https://svcs.ebay.com/services/classification/v1/ItemClassificationPersistenceService"/>
+    </port>
+    <port binding="tns:ItemClassificationPersistenceServiceSOAPBinding" name="ItemClassificationPersistenceServiceSOAPPort">
+      <soap12:address location="https://svcs.ebay.com/services/classification/v1/ItemClassificationPersistenceService"/>
+    </port>
+  </service>
+</definitions>

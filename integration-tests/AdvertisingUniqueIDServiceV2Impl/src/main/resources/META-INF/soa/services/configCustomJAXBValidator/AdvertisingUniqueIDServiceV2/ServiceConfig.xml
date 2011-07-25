@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<service-config service-name="{http://www.ebay.com/marketplace/advertising/v1/services}AdvertisingUniqueIDServiceV2" xmlns="http://www.ebay.com/soaframework/common/config">
+    <service-impl-class-name>com.ebay.marketplace.services.advertisinguniqueidservicev2.impl.AdvertisingUniqueIDServiceV2Impl</service-impl-class-name>
+    <service-interface-class-name>com.ebay.marketplace.services.advertisinguniqueidservicev2.AdvertisingUniqueIDServiceV2</service-interface-class-name>
+    <service-instance-config>
+        <pipeline-config>
+            <logging-handler>
+                <class-name>com.ebay.soaframework.spf.impl.pipeline.ServerLoggingHandler</class-name>
+                <options>
+                    <option name="log-level-call-event">INFO</option>
+                    <option name="payload-log-level">WARNING</option>
+                    <option name="request-payload-log-level">OFF</option>
+                </options>
+            </logging-handler>
+            <logging-handler>
+                <class-name>com.ebay.soaframework.spf.impl.pipeline.ServerCalLoggingHandler</class-name>
+                <options>
+                    <option name="cal-request-trans-type">URL</option>
+                </options>
+            </logging-handler>
+        </pipeline-config>
+        <protocol-processor version="1.1" name="SOAP11">
+            <indicator>
+                <transport-header name="X-EBAY-SOA-MESSAGE-PROTOCOL">SOAP11</transport-header>
+            </indicator>
+            <class-name>com.ebay.soaframework.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+        <protocol-processor version="1.2" name="SOAP12">
+            <indicator>
+                <transport-header name="X-EBAY-SOA-MESSAGE-PROTOCOL">SOAP12</transport-header>
+            </indicator>
+            <class-name>com.ebay.soaframework.spf.impl.protocolprocessor.soap.ServerSOAPProtocolProcessor</class-name>
+        </protocol-processor>
+                <data-binding-config>
+            <data-binding name="XML">
+                <mime-type>text/xml</mime-type>
+                <serializer-factory-class-name>
+                    com.ebay.soaframework.common.impl.binding.jaxb.xml.JAXBXMLSerializerFactory
+                </serializer-factory-class-name>
+                <deserializer-factory-class-name>
+                    com.ebay.soaframework.common.impl.binding.jaxb.xml.JAXBXMLDeserializerFactory
+                </deserializer-factory-class-name>
+                <options>
+                    <option name="validatePayLoad"></option>
+                    <option name="schemaValidationListenerClass">
+                    	com.ebay.marketplace.services.advertisinguniqueidservicev2.TestJAXBValidationEventHandler
+                    </option>
+                </options>
+            </data-binding>
+            <data-binding name="JSON">
+                <mime-type>application/json</mime-type>
+                <serializer-factory-class-name>com.ebay.soaframework.common.impl.binding.jaxb.json.JAXBJSONSerializerFactory</serializer-factory-class-name>
+                <deserializer-factory-class-name>com.ebay.soaframework.common.impl.binding.jaxb.json.JAXBJSONDeserializerFactory</deserializer-factory-class-name>
+                <options>
+                    <option name="schemaValidationLevel">STRICT</option>
+                    <option name="schemaValidationListenerClass">
+                    	com.ebay.marketplace.services.mobilemobile_newservicev1v1.impl.MobileJAXBValidationEventHandler
+                    </option>
+                </options>
+            </data-binding>
+            <data-binding name="NV">
+            	<mime-type>text/plain</mime-type>
+            	<serializer-factory-class-name>
+            		com.ebay.soaframework.common.impl.binding.jaxb.nv.JAXBNVSerializerFactory
+            	</serializer-factory-class-name>
+            	<deserializer-factory-class-name>
+            		com.ebay.soaframework.common.impl.binding.jaxb.nv.JAXBNVDeserializerFactory
+            	</deserializer-factory-class-name>
+            	<options>
+            		<option name="schemaValidationLevel">STRICT</option>
+            	</options>
+            </data-binding>
+        </data-binding-config>
+        
+    </service-instance-config>
+</service-config>

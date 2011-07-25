@@ -1,0 +1,981 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ItemService" targetNamespace="http://www.ebay.com/marketplace/buying/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ebay.com/marketplace/buying/v1/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+	<types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/buying/v1/services" xmlns:tns="http://www.ebay.com/marketplace/buying/v1/services">
+
+			<xs:complexType name="ListingType">
+				<xs:annotation>
+					<xs:documentation>
+						This is the main container for all details of
+						the Item. It consists of Item Attributes, Seller
+						details, Picture details, an optional list of
+						one or more variations for multi SKU Items,
+						shipping details and features related to the
+						listing.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="productDetails" type="tns:ItemType"/>
+					<xs:element name="listingDetails" type="tns:ListingDetailsType"/>
+					<xs:element name="sellerInfo" type="tns:SellerInfoType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemType">
+				<xs:annotation>
+					<xs:documentation>
+						This is the main container for all details of
+						the Item. It consists of Item Attributes, Seller
+						details, Picture details, an optional list of
+						one or more variations for multi SKU Items,
+						shipping details and features related to the
+						listing.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemId" type="xs:long"/>
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="subtitle" type="xs:string"/>
+					<xs:element name="itemCondition" type="xs:string"/>
+					<xs:element name="itemLocation" type="xs:string"/>
+					<xs:element name="leafCategoryId" type="xs:string"/>
+					<xs:element name="productRefId" type="xs:string"/>
+					<xs:element name="shipToLocation" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>					
+					<xs:element name="itemSpecifics" type="tns:ItemSpecificsType"/>
+					<xs:element name="pictureDetails" type="tns:PicturesType"/>
+					<xs:element name="variations" type="tns:VariationsType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ListingDetailsType">
+				<xs:annotation>
+					<xs:documentation>
+						Container for listing details for all sale formats.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="giftIcon" type="tns:GiftIconType"/>
+					<xs:element name="charityItem" type="xs:boolean"/>
+					<xs:element name="startTime" type="xs:dateTime"/>
+					<xs:element name="endTime" type="xs:dateTime"/>
+					<xs:element name="daysLeft" type="xs:long"/>
+					<xs:element name="hoursLeft" type="xs:long"/>
+					<xs:element name="minutesLeft" type="xs:long"/>
+					<xs:element name="secondsLeft" type="xs:long"/>
+					<xs:element name="timeLeftInSeconds" type="xs:long"/>
+                    <xs:element name="reserveMet" type="xs:boolean"/>
+					<xs:element name="startPrice" type="tns:Money"/>
+					<xs:element name="convertedStartPrice" type="tns:Money"/>
+					<xs:element name="currentPrice" type="tns:Money"/>
+					<xs:element name="convertedCurrentPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="BINPrice" type="tns:Money"/>
+					<xs:element name="convertedBINPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="bestOfferPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="convertedBestOfferPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="discountedPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="originalPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="bidIncrement" type="tns:Money"/>
+					<xs:element name="bidCount" type="xs:int"/>
+					<xs:element name="minBidPrice" type="tns:Money"/>
+					<xs:element name="listedAsBIN" type="xs:boolean"/>
+					<xs:element name="listedAsAd" type="xs:boolean"/>
+					<xs:element name="soldAsBIN" type="xs:boolean"/>
+					<xs:element name="supportsBidding" type="xs:boolean"/>
+					<xs:element name="BINAvailable" type="xs:boolean"/>
+					<xs:element name="bestOfferEnabled" type="xs:boolean"/>
+					<xs:element name="bestOfferSupported" type="xs:boolean"/>
+					<xs:element name="bestOfferCount" type="xs:int"/>
+					<xs:element name="quantity" type="xs:int"/>
+					<xs:element name="quantitySold" type="xs:int"/>
+					<xs:element name="ended" type="xs:boolean"/>
+					<xs:element name="scheduled" type="xs:boolean"/>
+					<xs:element name="successful" type="xs:boolean"/>
+					<xs:element name="pendingSale" type="xs:boolean"/>
+					<xs:element name="autoVehicle" type="xs:boolean"/>
+					<xs:element name="FSBO" type="xs:boolean"/>
+					<xs:element name="displayEmbeddedLeadForm" type="xs:boolean"/>
+					<xs:element name="GTC" type="xs:boolean"/>
+					<xs:element name="HalfOnCore" type="xs:boolean"/>
+					<xs:element name="promotionalSaleOn" type="xs:boolean"/>
+					<xs:element name="promotionalSaleTimeLeftInSeconds" type="xs:long"/>
+					<!--  an enumerated type -->
+					<xs:element name="listingFormat" type="tns:ListingFormatType"/>
+					<xs:element name="returnPolicy" type="tns:ReturnPolicyType"/>
+					<xs:element name="paymentMethodsCode" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>	
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:simpleType name="GiftIconType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="FATHERSDAY"/>
+					<xs:enumeration value="BIRTHDAY"/>
+					<xs:enumeration value="EASTER"/>
+					<xs:enumeration value="GRADUATION"/>
+					<xs:enumeration value="HALLOWEEN"/>
+					<xs:enumeration value="THANKSGIVING"/>
+					<xs:enumeration value="VALENTINE"/>
+					<xs:enumeration value="WEDDING"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="ShippingServiceType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Flat"/>
+					<xs:enumeration value="Calculated"/>
+					<xs:enumeration value="FreightQuote"/>
+					<xs:enumeration value="FreightRate"/>
+					<xs:enumeration value="NonSpecified"/>
+					<xs:enumeration value="LocalPickup"/>
+				
+					<!-- the below are not used by QuickLook -->
+					<xs:enumeration value="CalculatedDomesticFlatInternational"/>
+					<xs:enumeration value="FlatDomesticCalculatedInternational"/>
+					<xs:enumeration value="Free"/>
+					<xs:enumeration value="SeeDescription"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="ShippingDetailsType">
+				<xs:annotation>
+					<xs:documentation>
+						Shipping details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="shippingCostValue" type="tns:Money"/>
+					<xs:element name="shippingService" type="tns:ShippingServiceType"/>
+					<xs:element name="localPickup" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="ItemSpecificsType">
+				<xs:annotation>
+					<xs:documentation>
+						Container for the item attributes - divided into
+						one or more attribute groups, each of which may
+						have several sections. Each section has a
+						property list of name-value pairs.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemSpecificGroup" type="tns:ItemSpecificGroupType" maxOccurs="unbounded"/>
+					<xs:element name="name" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemSpecificGroupType">
+				<xs:annotation>
+					<xs:documentation>
+						A group of item specifics - consists of one or
+						more attribute sections.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemSpecificSection" type="tns:ItemSpecificSectionType" maxOccurs="unbounded"/>
+					<xs:element name="name" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemSpecificSectionType">
+				<xs:annotation>
+					<xs:documentation>
+						Item Specifics. An item specific section has a
+						title and a list of name-value attributes.
+						Sometimes, the attributes could be value-Only,
+						indicated by the isValueOnly flag.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="itemSpecificNameValue" type="tns:ItemSpecificNameValueType" maxOccurs="unbounded"/>
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="valueOnly" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ItemSpecificNameValueType">
+				<xs:annotation>
+					<xs:documentation>
+						Item Specific Name-Value property. An item
+						specific has a name, value. If the attribute is value-only, the name
+						is empty.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="nameAvailable" type="xs:boolean"/>
+					<xs:element name="name" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="SellerInfoType">
+				<xs:annotation>
+					<xs:documentation>
+						Information about the User.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="email" type="xs:string" minOccurs="0"/>
+					<xs:element name="feedbackScore" type="xs:int" minOccurs="0"/>
+					<xs:element name="positiveFeedbackPercent" type="xs:float" minOccurs="0"/>
+					<xs:element name="feedbackPrivate" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="traderLevel" type="xs:int" minOccurs="0"/>
+					<xs:element name="userID" type="xs:long" minOccurs="0"/>	
+					<xs:element name="memberName" type="xs:string" minOccurs="0"/>
+					<xs:element name="memberDisplayName" type="xs:string" minOccurs="0"/>					
+					 <xs:element name="powerSellerOptIn" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="powerSeller" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="topRatedSeller" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="brandedSeller" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="brandedSellerLogoUrl" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="PicturesType">
+				<xs:annotation>
+					<xs:documentation>
+						Pictures.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="pictureDetail" type="tns:PictureDetailsType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="PictureDetailsType">
+				<xs:annotation>
+					<xs:documentation>
+						Picture details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+
+
+
+
+
+					<xs:element name="galleryImageSource" type="tns:GalleryImageSourceCodeType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="GalleryImageSourceCodeType">
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Uploaded"/>
+					<xs:enumeration value="UserHosted"/>
+					<xs:enumeration value="Stock"/>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType name="VariationsType">
+				<xs:sequence>
+					<xs:element name="variation" type="tns:VariationType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="pictures" type="tns:VariationPicturesType" minOccurs="0"/>
+					<xs:element name="variationSpecificsSet" type="tns:NameValueListArrayType" minOccurs="0"/>
+					<xs:element name="variationPriceIdentical" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="VariationType">
+				<xs:annotation>
+					<xs:documentation>
+						Container of variation properties.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="variationId" type="xs:long"/>
+					<xs:element name="price" type="tns:Money"/>
+					<xs:element name="convertedPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="originalPrice" type="tns:Money" minOccurs="0"/>
+					<xs:element name="quantity" type="xs:int"/>
+					<xs:element name="quantitySold" type="xs:int"/>					
+					<xs:element name="variationSpecifics" type="tns:NameValueListArrayType">
+						<xs:annotation>
+							<xs:documentation>
+								List of variation specific properties.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="VariationPicturesType">
+				<xs:sequence>
+					<xs:element name="variationSpecificName" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Variation specific name for the
+								pictures.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="variationSpecificPictureSet" type="tns:VariationSpecificPictureSetType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="VariationSpecificPictureSetType">
+				<xs:sequence>
+					<xs:element name="variationSpecificValue" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Variation specific picture set value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="pictureDetail" type="tns:PicturesType" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Variation specific picture details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="NameValueListArrayType">
+				<xs:sequence>
+					<xs:element name="nameValueList" type="tns:NameValueList" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of Name-Value pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="NameValueList">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the property.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="value" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Value of the property.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ReturnPolicyType">
+				<xs:sequence>
+					<xs:element name="returnsWithinInDays" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies the length of time in which
+								the item must be returned under the
+								return policy.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="details" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Description of the return policy.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="returnType" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies how a refund will be made,
+								EXCHANGE, MERCHANDISE_CREDIT or
+								MONEY_BACK.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="returnsAccepted" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Whether returns are accepted or not.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="returnsPaidBy" type="xs:string" minOccurs="0"/>
+					<xs:element name="returnsNotSpecified" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="warrantyOffered" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Is warranty offered.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="warrantyType" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The length of the warranty offered.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="warrantyDuration" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The length of the warranty offered.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="returnShippingCostPaidBy" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								The party who pays the cost of shipping
+								for a returned item.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>			
+			<xs:element name="getItemRequest" type="tns:GetItemRequest"/>
+			<xs:complexType name="GetItemRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseItemServiceRequest">
+						<xs:sequence>
+							<xs:element name="itemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="itemDestinationCountryId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+							<xs:element name="itemDestinationZipCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getItemResponse" type="tns:GetItemResponse"/>
+			<xs:complexType name="GetItemResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseItemServiceResponse">
+						<xs:sequence>
+							<xs:element name="productDetails" type="tns:ItemType"/>
+							<xs:element name="listingDetails" type="tns:ListingDetailsType"/>
+							<xs:element name="sellerInfo" type="tns:SellerInfoType"/>
+							<xs:element name="shippingDetails" type="tns:ShippingDetailsType"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest" />
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType abstract="true"
+				name="BaseItemServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all operations in Item Service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+							<xs:sequence>
+									<xs:element name="logId" type="xs:string">
+									</xs:element>
+							</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage" type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType abstract="true"
+				name="BaseItemServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations in Item Service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+							<xs:sequence>
+									<xs:element name="logId" type="xs:string">
+									</xs:element>
+							</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element name="subdomain" type="xs:string" minOccurs="0"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element name="exceptionId" type="xs:token" minOccurs="0"/>
+					<xs:element name="parameter" type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ListingFormatType">
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Auction"/>
+					<xs:enumeration value="FixedPrice"/>
+					<xs:enumeration value="ClassifiedAd"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="IsoCurrencyCode">
+				<xs:annotation>
+					<xs:documentation>
+						Currency representation based on ISO 4217
+						Standard:
+						http://www.iso.org/iso/currency_codes_list-1
+						Every currency has the following attributs:
+						Numeric Code - 3 Digits Zero Padded Numeric
+						Code, which uniquely identifies a currency.
+						Alphabetic Code - 3 Letter Alphabetic Code,
+						which uniquely identifies a currency. Currency -
+						The name of the currency Antity - The
+						country/Entity, which uses this currency.
+
+						This type exposes only a sub-set of ISO 4217.
+						The enumeration represents the Alphabetic Code.
+						Comments are included for quick reference.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<!-- Currency,                         Entity                          ISO Currency Code -->
+					<xs:enumeration value="USD"/>
+					<!-- U.S. Dollar                       United States                   840               -->
+					<xs:enumeration value="CAD"/>
+					<!-- Canadian Dollar                   Canada                          124               -->
+					<xs:enumeration value="GBP"/>
+					<!-- Pound Sterling                    United Kingdom                  826               -->
+					<xs:enumeration value="DEM"/>
+					<!-- German Mark                       Germany                         276               -->
+					<xs:enumeration value="AUD"/>
+					<!-- Australian Dollar                 Australia                       036               -->
+					<xs:enumeration value="JPY"/>
+					<!-- Japanese Yen                      Japanese Yen                    392               -->
+					<xs:enumeration value="EUR"/>
+					<!-- Euro                              European Union                  978               -->
+					<xs:enumeration value="FRF"/>
+					<!-- French Franc                      France                          250               -->
+					<xs:enumeration value="ATS"/>
+					<!-- Austrian Schilling                Austria                         040               -->
+					<xs:enumeration value="BEF"/>
+					<!-- Belgian Franc                     Belgium                         056               -->
+					<xs:enumeration value="CHF"/>
+					<!-- Swiss Franc                       Switzerland                     756               -->
+					<xs:enumeration value="CNY"/>
+					<!-- Chinese Yuan Renminbi             China                           156               -->
+					<xs:enumeration value="CZK"/>
+					<!-- Czech Koruna                      Czech Republic                  203               -->
+					<xs:enumeration value="DKK"/>
+					<!-- Danish Krone                      Denmark                         208               -->
+					<xs:enumeration value="ESP"/>
+					<!-- Spanish Peseta                    Spain                           724               -->
+					<xs:enumeration value="FIM"/>
+					<!-- Finnish Markka                    Finland                         246               -->
+					<xs:enumeration value="GRD"/>
+					<!-- Greek Drachma                     Greece                          300               -->
+					<xs:enumeration value="HKD"/>
+					<!-- Hong Kong Dollar                  Hong Kong                       344               -->
+					<xs:enumeration value="HUF"/>
+					<!-- Hungarian Forint                  Hungary                         348               -->
+					<xs:enumeration value="IDR"/>
+					<!-- Indonesian Rupiah                 Indonesia                       360               -->
+					<xs:enumeration value="IEP"/>
+					<!-- Irish Pound                       Ireland                         372               -->
+					<xs:enumeration value="ILS"/>
+					<!-- Israeli new Shekel                Israel                          376               -->
+					<xs:enumeration value="ITL"/>
+					<!-- Italian Lira                      Italy                           380               -->
+					<xs:enumeration value="NLG"/>
+					<!-- Dutch Guilder                     Netherlands                     528               -->
+					<xs:enumeration value="NOK"/>
+					<!-- Norwegian Krone                   Norway                          578               -->
+					<xs:enumeration value="NZD"/>
+					<!-- New Zealand Dollar                New Zealand                     554               -->
+					<xs:enumeration value="PHP"/>
+					<!-- Philippine Peso                   Philippines                     608               -->
+					<xs:enumeration value="PLN"/>
+					<!-- Polish New Zloty                  Poland                          985               -->
+					<xs:enumeration value="PTE"/>
+					<!-- Portuguese Escudo                 Portugal                        620               -->
+					<xs:enumeration value="RUR"/>
+					<!-- Russian Ruble                     Russian Federation              810               -->
+					<xs:enumeration value="SEK"/>
+					<!-- Swedish Krona                     Sweden                          752               -->
+					<xs:enumeration value="SGD"/>
+					<!-- Singapore Dollar                  Singapore                       702               -->
+					<xs:enumeration value="THB"/>
+					<!-- Thai Baht                         Thailand                        764               -->
+					<xs:enumeration value="TWD"/>
+					<!-- New Taiwan dollar                 Taiwan                          901               -->
+					<xs:enumeration value="ZAR"/>
+					<!-- South African Rand                South Africa                    710               -->
+					<xs:enumeration value="INR"/>
+					<!-- Indian Rupee                      India                           356               -->
+					<xs:enumeration value="PEN"/>
+					<!-- Peruvian New Sol                  Peru                            604               -->
+					<xs:enumeration value="MYR"/>
+					<!-- Malaysian Ringgit                 Malaysia                        458               -->
+					<xs:enumeration value="VND"/>
+					<!-- Vietnamese New Dong               Vietnam                         704               -->
+					<xs:enumeration value="KRW"/>
+					<!-- South Korean Won                  South Korea                     410               -->
+					<xs:enumeration value="TRY"/>
+					<!-- New Turkish Lira                  Turkey                          949               -->
+					<xs:enumeration value="ANG"/>
+					<!-- Antillian Guilder                 Netherlands Antilles            532               -->
+					<xs:enumeration value="AWG"/>
+					<!-- Aruban Guilder                    Aruba                           533               -->
+					<xs:enumeration value="BMD"/>
+					<!-- Bermudan Dollar                   Bermudan Dollar                 060               -->
+					<xs:enumeration value="CRC"/>
+					<!-- Costa Rican Colon                 Costa Rica                      188               -->
+					<xs:enumeration value="RON"/>
+					<!-- Romanian New Leu                  Romania                         946               -->
+					<xs:enumeration value="VEF"/>
+					<!-- Venezuelan Bolivar Fuerte         Venezuela                       937               -->
+					<xs:enumeration value="BBD"/>
+					<!-- Barbados Dollar                   Barbados                        052               -->
+					<xs:enumeration value="BGN"/>
+					<!-- Bulgarian Lev                     Bulgaria                        975               -->
+					<xs:enumeration value="BND"/>
+					<!-- Brunei Dollar                     Brunei                          096               -->
+					<xs:enumeration value="BSD"/>
+					<!-- Bahamian Dollar                   Bahamas                         044               -->
+					<xs:enumeration value="COP"/>
+					<!-- Colombian Peso                    Columbia                        170               -->
+					<xs:enumeration value="DOP"/>
+					<!-- Dominican Peso                    Dominican Republic              214               -->
+					<xs:enumeration value="GTQ"/>
+					<!-- Guatemalan Quetzal                Guatemala                       320               -->
+					<xs:enumeration value="KYD"/>
+					<!-- Cayman Isles Dollar               Cayman Islands                  136               -->
+					<xs:enumeration value="MVR"/>
+					<!-- Maldivian Rufiyaa                 Maldives                        462               -->
+					<xs:enumeration value="QAR"/>
+					<!-- Qatari Rial                       Qatar                           634               -->
+					<xs:enumeration value="SAR"/>
+					<!-- Saudi Riyal                       Saudi Arabia                    682               -->
+					<xs:enumeration value="TTD"/>
+					<!-- Trinidadian and Tobagonian Dollar Trinidad and Tobago             780               -->
+					<xs:enumeration value="UAH"/>
+					<!-- Ukrainian hryvnia                 Ukraine                         980               -->
+					<xs:enumeration value="UYU"/>
+					<!-- Peso Uruguayo                     Uruguay                         858               -->
+					<xs:enumeration value="XCD"/>
+					<!-- East Caribbean Dollar             East Caribbean Currency Area    951               -->
+					<xs:enumeration value="XPF"/>
+					<!-- French Polynesian Franc           French Polynesia                953               -->
+					<xs:enumeration value="JMD"/>
+					<!-- Jamaican Dollar                   Jamaica                         388               -->
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Money">
+				<xs:annotation>
+					<xs:documentation>
+						This type is used to represent Money. It should
+						be used by any WSDL, which needs to send/receive
+						Money information.
+					</xs:documentation>					
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyCode" type="tns:IsoCurrencyCode" use="required">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+		</xs:schema>
+	</types>
+	<message name="getItemRequest">
+		<part name="params" element="tns:getItemRequest"/>
+	</message>
+	<message name="getItemResponse">
+		<part name="params" element="tns:getItemResponse"/>
+	</message>
+	<message name="getVersionRequest">
+		<part name="params" element="tns:getVersionRequest"/>
+	</message>
+	<message name="getVersionResponse">
+		<part name="params" element="tns:getVersionResponse"/>
+	</message>
+	<portType name="ItemServicePort">
+		<operation name="getItem">
+			<documentation>
+       Retrieves item information such as listing (Sale) details, current state, variation info (if any), shipping details 
+			</documentation>
+			<input message="tns:getItemRequest"/>
+			<output message="tns:getItemResponse"/>
+		</operation>
+		<operation name="getVersion">
+			<documentation>
+                        Retrieves current version. 
+	                </documentation>
+			<input message="tns:getVersionRequest"/>
+			<output message="tns:getVersionResponse"/>
+		</operation>
+	</portType>
+	<binding name="ItemServiceSOAPBinding" type="tns:ItemServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="getItem">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/v1/services/getItem"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getVersion">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/v1/services/getVersion"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="ItemServiceHttpBinding" type="tns:ItemServicePort">
+		<http:binding verb="POST"/>
+		<operation name="getItem">
+			<http:operation location="/getItem"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+		<operation name="getVersion">
+			<http:operation location="/getVersion"/>
+			<input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output>
+				<mime:content part="params" type="text/xml"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="ItemService">
+		<documentation>
+			<Version>1.0</Version>
+                 Has read only operations on a listed Item. Currently, it supports a getItem operation that retrieves details of the item.
+		</documentation>
+		<port name="ItemServiceHttpPort" binding="tns:ItemServiceHttpBinding">
+			<http:address location="https://svcs.ebay.com/services/buying/ItemService/v1"/>
+		</port>
+		<port name="ItemServiceSOAPPort" binding="tns:ItemServiceSOAPBinding">
+			<soap12:address location="https://svcs.ebay.com/services/buying/ItemService/v1"/>
+		</port>
+	</service>
+</definitions>

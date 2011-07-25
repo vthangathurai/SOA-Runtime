@@ -174,22 +174,22 @@ public class JSONParserTest {
 
 	
 	private static final String GOLD_JSON_INPUT_PAYPAL_ISSUE = 
-		"root:{\n" +
-		"	actionType:PAY\n" +
-		"	currencyCode:USD\n" +
-		"	receiverList:{\n" +
-		"		receiver:{\n" +
-		"			amount:1.00\n" +
-		"			email:seller_1288085303_biz@gmail.com\n" +
-		"		}\n" +
-		"	}\n" +
-		"	returnUrl:http://apigee.com/console/-1/handlePaypalReturn\n" +
-		"	cancelUrl:http://apigee.com/console/-1/handlePaypalCancel?\n" +
-		"	requestEnvelope:{\n" +
-		"		errorLanguage:en_US\n" +
-		"		detailLevel:ReturnAll\n" +
-		"	}\n" +
-		"}\n";
+    		 	                 "root:{\n" +
+    		 	                 "\tactionType:PAY\n" +
+    		 	                 "\tcurrencyCode:USD\n" +
+    		 	                 "\treceiverList:{\n" +
+    		 	                 "\t\treceiver:{\n" +
+    		 	                 "\t\t\tamount:1.00\n" +
+    		 	                 "\t\t\temail:seller_1288085303_biz@gmail.com\n" +
+    		 	                 "\t\t}\n" +
+    		 	                 "\t}\n" +
+    		 	                 "\treturnUrl:http://apigee.com/console/-1/handlePaypalReturn\n" +
+    		 	                 "\tcancelUrl:http://apigee.com/console/-1/handlePaypalCancel?\n" +
+    		 	                 "\trequestEnvelope:{\n" +
+    		 	                 "\t\terrorLanguage:en_US\n" +
+    		 	                 "\t\tdetailLevel:ReturnAll\n" +
+    		 	                 "\t}\n" +
+    		 	                 "}\n";
 	@Test
 	public void jSONParserPayPalSpaceIssue() throws Exception {
 		String JSON_INPUT_PAYPAL_ISSUE = 
@@ -499,7 +499,7 @@ public class JSONParserTest {
 	/**
 	 * @check  Exceptions need to be handled
 	 */
-	@Test
+	@Test(expected=com.ebay.binding.impl.parser.ParseException.class)
 	public void jSONParserWithBadInput1() throws Exception {
 		
 		System.out.println("**** Starting testJSONParserWithBadInput1");
@@ -507,13 +507,8 @@ public class JSONParserTest {
 		NamespaceConvention convention = DataBindingFacade.createDeserializationNSConvention(null);
 		JSONStreamReadContext ctx = new JSONStreamReadContext(is, convention, Charset.forName("ASCII"));
 		JSONStreamObjectNodeImpl root = new JSONStreamObjectNodeImpl(ctx);
-		try {
 			root.getChildNodes();
 			fail("ParseException not thrown as expected");
-		}
-		catch (ParseException pe) {
-			pe.printStackTrace();
-		}
 
 		System.out.println("**** Ending testJSONParserWithBadInput1");
 	}
@@ -521,7 +516,7 @@ public class JSONParserTest {
 	/**
 	 * @check  Exceptions need to be handled
 	 */
-	@Test
+	@Test(expected=com.ebay.binding.impl.parser.ParseException.class)
 	public void jSONParserWithBadInput2() throws Exception {
 		
 		class MyBAInputStream extends InputStream {
@@ -543,16 +538,11 @@ public class JSONParserTest {
 		System.out.println("**** Starting testJSONParserWithBadInput2");
 		MyBAInputStream is = new MyBAInputStream(JSON_BAD_INPUT_WITH_ARRAY.getBytes());
 		NamespaceConvention convention = DataBindingFacade.createDeserializationNSConvention(null);
-		try {
 			JSONStreamReadContext ctx = new JSONStreamReadContext(is, convention, Charset.forName("ASCII"));
 			JSONStreamObjectNodeImpl root = new JSONStreamObjectNodeImpl(ctx);
 		
 			root.getChildNodes();
 			fail("ParseException not thrown as expected");
-		}
-		catch (ParseException pe) {
-			pe.printStackTrace();
-		}
 
 		System.out.println("**** Ending testJSONParserWithBadInput2");
 	}

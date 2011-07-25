@@ -1,0 +1,1807 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" name="AddressBookService" targetNamespace="http://www.ebay.com/marketplace/checkout/v1/services" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ebay.com/marketplace/checkout/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/checkout/v1/services">
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:element name="addAddressRequest"  type="tns:AddAddressRequest"/>
+			<xs:element name="addAddressResponse"  type="tns:AddAddressResponse"/>
+			<xs:element name="updateAddressRequest"  type="tns:UpdateAddressRequest"/>
+			<xs:element name="updateAddressResponse"  type="tns:UpdateAddressResponse"/>
+			<xs:element name="removeAddressRequest"  type="tns:RemoveAddressRequest"/>
+			<xs:element name="removeAddressResponse"  type="tns:RemoveAddressResponse"/>
+			<xs:element name="getAddressesRequest"  type="tns:GetAddressesRequest"/>
+			<xs:element name="getAddressesResponse"  type="tns:GetAddressesResponse"/>
+			<xs:element name="setPrimaryAddressRequest"  type="tns:SetPrimaryAddressRequest"/>
+			<xs:element name="setPrimaryAddressResponse"  type="tns:SetPrimaryAddressResponse"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Returns the current version of this service. Use this simple call to 
+						monitor the service for availability. This call has no input parameters and 
+						the response contains the version and the timestamp for when the request processes. 
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Returns the current service version.
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response container for the getVersion call. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for the request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+					<xs:annotation><xs:documentation>Reserved for future use.</xs:documentation></xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>Reserved for future use.</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger">
+					  <xs:annotation>
+					    <xs:documentation>
+					    Reserved for future use.
+					    </xs:documentation>
+					  </xs:annotation>
+					</xs:element>
+					<xs:element name="version" type="xs:string">
+					  <xs:annotation>
+					    <xs:documentation>
+					    Reserved for future use.
+					    </xs:documentation>
+					  </xs:annotation>
+					</xs:element>
+					<xs:element name="contentType" type="xs:string">
+					  <xs:annotation>
+					    <xs:documentation>
+					    Reserved for future use.
+					    </xs:documentation>
+					  </xs:annotation>
+					</xs:element>
+					<xs:element name="value" type="xs:string">
+					  <xs:annotation>
+					    <xs:documentation>
+					    Reserved for future use.
+					    </xs:documentation>
+					  </xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+					  <xs:annotation>
+					    <xs:documentation>
+						Indicates whether an error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					    </xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+						  <xs:documentation>
+						  The released version of this service that eBay uses to process the request.
+						  The version in use is normally the latest release version,
+						  as specified in the service documentation.
+						  </xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								This value represents the date and time when eBay processed the request.
+								This value is returned in GMT, the ISO 8601 date and time format (YYYY-
+								MM- DDTHH:MM:SS.SSSZ). See the &quot;dateTime&quot; type for information about the
+								time format, and for details on converting to and from the GMT time zone.
+							</xs:documentation> 
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType">
+						<xs:annotation>
+							<xs:documentation>
+								Reserved for future use.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						There are three categories of errors: request errors, application 
+						errors, and system errors.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								System error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								Application error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								Request error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						A container for error details.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+					<xs:sequence>
+						<xs:element name="errorId" type="xs:long">
+							<xs:annotation>
+								<xs:documentation>
+									A unique code that identifies the particular error condition that
+									occurred. Your application can use error codes as identifiers in your
+									customized error-handling algorithms.
+								</xs:documentation>
+								<xs:appinfo> 							
+								   	<default/>
+								   	<min/>
+								   	<max/>							   								
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="domain" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the domain in which the error occurred.
+									&lt;dl&gt;
+									&lt;dt&gt;
+										&lt;strong&gt;domain values:&lt;/strong&gt;
+									&lt;/dt&gt;
+									&lt;dt&gt;
+										Marketplace
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										A business or validation error occurred in the service.
+									&lt;/dd&gt;
+									&lt;dt&gt;
+										SOA 
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										An exception occurred in the SOA (Service Oriented Architecture)
+										framework.
+									&lt;/dd&gt;
+									&lt;/dl&gt;
+								</xs:documentation>
+								<xs:appinfo> 
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="subdomain" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the subdomain in which the error occurred:
+									&lt;dl&gt;
+									&lt;dt&gt;
+										Subdomain values:&lt;/dt&gt;
+									&lt;dt&gt;&lt;i&gt;ServiceDomain&lt;/i&gt;&lt;/dt&gt;
+									&lt;dd&gt;
+										 The error is specific to this service.
+									&lt;/dd&gt;
+									&lt;dt&gt;
+										MarketplaceCommon
+									&lt;/dt&gt;
+									&lt;dd&gt;
+										The error is common to all Marketplace services.
+									&lt;/dd&gt;
+									&lt;/dl&gt;
+								</xs:documentation>
+								<xs:appinfo> 
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+	
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="severity" type="tns:ErrorSeverity">
+							<xs:annotation>
+								<xs:documentation>
+									Indicates whether the reported problem is fatal (an error) or is less-
+									severe (a warning). Review the error message details for information on
+									the cause.
+									&lt;br&gt;&lt;br&gt;
+									If the request fails and the application is the source of the error (for
+									example, a required element is missing), update the application before
+									you retry the request. If the problem is due to incorrect user data,
+									alert the end-user to the problem and provide the means for them to
+									correct the data. 
+									&lt;br&gt;&lt;br&gt;
+									If the source of the problem is in the service, you can retry the request
+									a reasonable number of times (try the request twice).
+									After the problem is resolved, you can resend the request in its original
+									form.
+									&lt;br&gt;&lt;br&gt;
+									If a warning occurs, warning information is returned in addition to the
+									business data. Normally, you do not need to resend the request (as the
+									original request was successful). 
+								</xs:documentation>
+								<xs:appinfo> 
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="category" type="tns:ErrorCategory">
+							<xs:annotation>
+								<xs:documentation>
+									There are three categories of errors: Request errors, Application 
+									errors, and System errors.
+								</xs:documentation>
+								<xs:appinfo> 
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="message" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									A detailed description of the condition that caused the error.
+								</xs:documentation>
+								<xs:appinfo> 
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+							<xs:annotation>
+								<xs:documentation>
+									Unique identifier for an exception associated with an error.
+								</xs:documentation>
+								<xs:appinfo> 
+									<ListBasedOn/>
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+							type="tns:ErrorParameter">
+							<xs:annotation>
+								<xs:documentation>
+									Various warning and error messages that return one or more variables that 
+									contain contextual information about the error. This is often the 
+									field or value that triggered the error.
+								</xs:documentation>
+								<xs:appinfo> 
+									<CallInfo>
+										<AllCalls/>
+										<Details>outputSelector: none</Details>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Information regarding an error or warning that occurred when eBay processed
+						the request. A message is not returned when the ack value is Success. 
+						Run-time errors are not reported here, but are instead reported as part 
+						of a SOAP fault.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								Unbounded error.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual data associated with an error.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>
+								Error parameter name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a fatal error (causing the request to fail)
+						or a less severe error (a warning) that should be communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								Fatal error that causes a request to fail.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								Warning that should be communicated to the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Address">
+				<xs:annotation>
+					<xs:documentation>
+						Details of an address.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="BuyingCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/buying/v1/services/types">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element minOccurs="0" name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name associated with address, if such
+								exists.
+							</xs:documentation>
+							<xs:appinfo>
+							 <maxLength>65</maxLength>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="street1" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Street details, line 1.
+							</xs:documentation>
+							<xs:appinfo>
+							 <maxLength>181</maxLength>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="street2" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Street details, line 2, if any.
+							</xs:documentation>
+							<xs:appinfo>
+							 <maxLength>181</maxLength>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="city" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>City</xs:documentation>
+							<xs:appinfo>
+							 <maxLength>65</maxLength>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="county" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								County
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="stateOrProvince" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								State or province. Returned only if
+								applicable.
+							</xs:documentation>
+							<xs:appinfo>
+							 <maxLength>65</maxLength>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="country" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Country
+							</xs:documentation>
+							<xs:appinfo>
+								<ListBasedOn>
+									CountryCodeList
+								</ListBasedOn>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="postalCode" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Zip code or postal code.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="phone" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								User's primary phone number. This may
+								return a value of &quot;Invalid
+								Request&quot; if you are not authorized
+								to see a user's phone number.
+							</xs:documentation>
+							<xs:appinfo>
+							 <maxLength>34</maxLength>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="AddressType">
+				<xs:annotation>
+					<xs:documentation>
+						AddressType, which is based on the UserAddressEnum class.   
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="None">
+					  <xs:annotation><xs:documentation>
+						No address type.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Shipping">
+					  <xs:annotation><xs:documentation>
+						Shipping address.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Return">
+					  <xs:annotation><xs:documentation>
+						Return address.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Seller">
+					  <xs:annotation><xs:documentation>
+						Seller's address.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Shipment_To_Residential">
+					  <xs:annotation><xs:documentation>
+						Ship to a residence.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Shipment_To_Business">
+					  <xs:annotation><xs:documentation>
+						Ship to a business.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Shipment_From">
+					  <xs:annotation><xs:documentation>
+						Ship from an address.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Egw_Gift_Aid">
+					  <xs:annotation><xs:documentation>
+						eBay Giving Works (eBay for charity).
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Num_Types">
+					  <xs:annotation><xs:documentation>
+						Number of address types.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="Invalid">
+					  <xs:annotation><xs:documentation>
+						Invalid address type.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+					<xs:enumeration value="CustomCode">
+					  <xs:annotation><xs:documentation>
+						Custom code for the address type.
+						</xs:documentation></xs:annotation>
+					 </xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="UserAddress">
+				<xs:annotation>
+					<xs:documentation>
+						1. AddressId (Mandatory).&lt;br&gt;
+						2. AddressType (Mandatory).&lt;br&gt;
+						3. AddressStatus (Mandatory) - Can be Default, Visible, or Hidden.&lt;br&gt;
+						4. AddressFields (Mandatory) - Address information for the user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+				   <xs:element name="addressId" type="xs:long"  minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Unique AddressId present in the Ebay_User_Addresses table.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					 <xs:element name="addressType" type="tns:AddressType" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Type of an address. Same as the UserAddressEnum class.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					 <xs:element name="addressStatus" type="xs:string" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Status of the the address (Visible, Default, Hidden).
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					 <xs:element name="addressFields" type="tns:Address" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Address information. Contains the Name, Street1, Street2, City, State, Country, Postal Code, and Phone Number.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ModifiedFields">
+				<xs:annotation>
+					<xs:documentation>
+						Set of field flags that indicate that a third party Pitney Bowes 
+						application corrects. The flags appear in the response.
+					</xs:documentation>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:sequence>
+				  <xs:element minOccurs="0" name="contactNameChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the contactName changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="addressLine1Changed" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when addressLine1 changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="addressLine2Changed" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when addressLine2 changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="addressLine3Changed" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when addressLine3 changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="cityChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the city value changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="stateChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the state value changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="postalCodeChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the postalCode changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="additionalPostalCodeChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the additionalPostalCode changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="phoneNoChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables enabled when the phoneNo changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="countryChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the country value changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="urbanCodeChanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								This flag enables when the urbanCode changes.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AddAddressRequest">
+				<xs:annotation>
+					<xs:documentation>
+				Adds a new address to the table. Addresses are eBay addresses. Mark the address as 
+				Primary by enabling the MakePrimary tag. To enable third party validation, set  
+				the addressvalidationRequired tag to true. To update modified fields in the table,
+				set the userAcceptedThirdPartyValidatedAddress tag to true.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+						 <xs:element name="addressFieldValues" type="tns:Address" minOccurs="1" maxOccurs="1">
+						    <xs:annotation>
+							   <xs:documentation>
+								Address information. Contains the Name, Street1, Street2, 
+								City, State, Country, Postal Code, and Phone Number.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="addressType" type="tns:AddressType" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								Type of an address. Same as the UserAddressEnum class.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="addressvalidationRequired" type="xs:boolean" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								Enable to provide third party validation for US addresses.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="makePrimary" type="xs:boolean" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								If makePrimary=true, then make the added address the default address in the table. 
+								If the previous default address is eBay, reset to visible. 
+								Else reset the PayPal address to hidden.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="userAcceptedThirdPartyValidatedAddress" type="xs:boolean" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								Inserts the address in the table that a third party application modifies.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AddAddressResponse">
+				<xs:annotation>
+					<xs:documentation>
+				1. Returns the  New Address Id. &lt;br&gt;
+				2. Optionally corrects field values by a third party application.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						  <xs:element name="addressID" type="xs:string" minOccurs="1">
+						    <xs:annotation>
+							   <xs:documentation>
+								Unique AddressId present in the Ebay_User_Addresses table.
+							   </xs:documentation>
+							   <xs:appinfo>
+							    <maxLength>19</maxLength>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="addressvalidated" type="xs:boolean" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								Enables when a third party application validates an address.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="addressModified" type="xs:boolean" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								Enables when a third party application modifies an address.
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="modifiedFields" type="tns:ModifiedFields" minOccurs="0">
+						    <xs:annotation>
+							   <xs:documentation>
+								Shows the fields in the response that a third party application modifies. 
+							   </xs:documentation>
+							   <xs:appinfo>
+								  <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								  </CallInfo>
+							   </xs:appinfo>
+						    </xs:annotation>
+					     </xs:element>
+					     <xs:element name="addressFieldValues" type="tns:Address" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Address Information. Contains the Name, Street1, Street2, 
+										 City, State, Country, PostalCode, and PhoneNo.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UpdateAddressRequest">
+				<xs:annotation>
+					<xs:documentation>
+				Updates an address in the table, hides the existing address, and adds a new address 
+				to the table. To mark an address as Primary, enable the MakePrimary tag. 
+				To enable third party validation, set the addressvalidationRequired tag to true.
+				To update modified fields in the table, set the userAcceptedThirdPartyValidatedAddress tag to true.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="addressID" type="xs:string" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Unique AddressId that is present in the Ebay_User_Addresses table.
+							     </xs:documentation>
+							    <xs:appinfo>
+							     <maxLength>19</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="externalID" type="xs:string" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Unique Id that is present in the Ebay_User_Addresses table for PayPal addresses.
+							     </xs:documentation>
+							    <xs:appinfo>
+							     <maxLength>20</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressFieldValues" type="tns:Address" minOccurs="1" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Address information. Contains the Name, Street1, Street2, 
+										 City, State, Country, PostalCode, and PhoneNo.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressType" type="tns:AddressType" minOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Type of an address. Same as the UserAddressEnum class.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressvalidationRequired" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Enable to validate US addresses with a third party application.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="makePrimary" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+									 Set the default address in the table to the address you are adding. 
+								    If the previous default address is eBay, reset to visible. 
+										Else reset the PayPal address to hidden.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="userAcceptedThirdPartyValidatedAddress" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+									 Inserts the address in the table that a third party application modifies.								   
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UpdateAddressResponse">
+				<xs:annotation>
+					<xs:documentation>
+				Returns the updated address ID, validation errors if any, and  
+				field values that were corrected by a third party application.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						   <xs:element name="addressID" type="xs:string" minOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Unique AddressId present in the Ebay_User_Addresses table
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressvalidated" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+									 Enables when a third party application validates an address.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressModified" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+									 Enables when a third party application modifies an address.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="modifiedFields" type="tns:ModifiedFields" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Shows the fields in the response that the a third party application modifies.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					        <xs:element name="addressFieldValues" type="tns:Address" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Address information. Contains the Name, Street1, Street2, 
+										 City, State, Country, PostalCode, and PhoneNo.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveAddressRequest">
+				<xs:annotation>
+					<xs:documentation>
+				Deletes an address. A soft delete is done in the table, which marks the address as Hidden.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+						   <xs:element name="addressID" type="xs:string" minOccurs="1" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Unique AddressId that is present in the Ebay_User_Addresses table.
+							     </xs:documentation>
+							    <xs:appinfo>
+							    <maxLength>19</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RemoveAddressResponse">
+				<xs:annotation>
+					<xs:documentation>
+				Removes the address and shows the acknowledge status in the response.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAddressesRequest">
+				<xs:annotation>
+					<xs:documentation>
+				Fetches the addresses from the table. This request is based on the 
+				AddressId and AddressType, and lists addresses in the response.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="addressID" type="xs:string" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Unique AddressId that is present in the Ebay_User_Addresses table.
+							     </xs:documentation>
+							    <xs:appinfo>
+							    <maxLength>19</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressType" type="tns:AddressType" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Type of an address. Same as the UserAddressEnum class.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="noOfAddressesToBeReturned" type="xs:int" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Number of addresses that are shown in the response. The maximum value is 50.
+								     If the value is greater than 50, the first 50 addresses are shown in the response.
+							     </xs:documentation>
+							    <xs:appinfo>
+							    <Min>1</Min>
+								<Max>50</Max>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetAddressesResponse">
+				<xs:annotation>
+					<xs:documentation>
+				Returns the updated address Id, validation errors if any, and  
+				field values that were corrected by a third party application.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						   <xs:element name="userAddress" type="tns:UserAddress" minOccurs="0" maxOccurs="unbounded">
+							   <xs:annotation>
+							     <xs:documentation>
+								    UserAddress information. Contains AddressId, AddressStatus, and Address field values.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressCount" type="xs:int" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Number of addresses shown in the response.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetPrimaryAddressRequest">
+				<xs:annotation>
+					<xs:documentation>
+				Sets an address as primary. Primary.AddressId/ExternalId should be present in the request.
+				To enable third party validation, set the addressvalidationRequired tag to true.
+				To update modified fields in the table, set the userAcceptedThirdPartyValidatedAddress tag to true.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+						   <xs:element name="addressID" type="xs:string" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Unique AddressId that is present in the Ebay_User_Addresses table.
+							     </xs:documentation>
+							    <xs:appinfo>
+							    <maxLength>19</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="externalID" type="xs:string" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Unique Id that is present in the Ebay_User_Addresses table for PayPal addresses.
+							     </xs:documentation>
+							    <xs:appinfo>
+							    <maxLength>20</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressType" type="tns:AddressType" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Type of an address. Same as the UserAddressEnum class.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressFieldValues" type="tns:Address" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Address information. Contains the Name, Street1, Street2, 
+										 City, State, Country, PostalCode, and PhoneNo.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="addressvalidationRequired" type="xs:boolean" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Enable to validate US addresses by a third party application.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					       <xs:element name="userAcceptedThirdPartyValidatedAddress" type="xs:boolean" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+									 Enable to insert an address in the table that a third party application modifies.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SetPrimaryAddressResponse">
+				<xs:annotation>
+					<xs:documentation>
+				Returns the Updated address ID, validation errors if any, and  
+				field values that were corrected by a third party application.
+				</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+						  <xs:element name="addressID" type="xs:string" minOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Unique AddressId present in the Ebay_User_Addresses table.
+							     </xs:documentation>
+							    <xs:appinfo>
+							    <maxLength>19</maxLength>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					        <xs:element name="addressvalidated" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Enables when a third party application validates an address.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					        <xs:element name="addressModified" type="xs:boolean" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+									 Enables when a third party application modifies an address.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					        <xs:element name="modifiedFields" type="tns:ModifiedFields" minOccurs="0">
+							   <xs:annotation>
+							     <xs:documentation>
+								    Shows the fields in the response that a third party application modifies.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+					        <xs:element name="addressFieldValues" type="tns:Address" minOccurs="0" maxOccurs="1">
+							   <xs:annotation>
+							     <xs:documentation>
+								     Address information. Contains the Name, Street1, Street2, 
+										 City, State, Country, PostalCode, and PhoneNo.
+							     </xs:documentation>
+							    <xs:appinfo>
+								 <CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								 </CallInfo>
+							   </xs:appinfo>
+						     </xs:annotation>
+					       </xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="addAddressRequest">
+		<wsdl:part element="tns:addAddressRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="addAddressResponse">
+		<wsdl:part element="tns:addAddressResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="updateAddressRequest">
+		<wsdl:part element="tns:updateAddressRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="updateAddressResponse">
+		<wsdl:part element="tns:updateAddressResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="removeAddressRequest">
+		<wsdl:part element="tns:removeAddressRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="removeAddressResponse">
+		<wsdl:part element="tns:removeAddressResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="getAddressesRequest">
+		<wsdl:part element="tns:getAddressesRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="getAddressesResponse">
+		<wsdl:part element="tns:getAddressesResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="setPrimaryAddressRequest">
+		<wsdl:part element="tns:setPrimaryAddressRequest" name="params"/>
+	</wsdl:message>
+	<wsdl:message name="setPrimaryAddressResponse">
+		<wsdl:part element="tns:setPrimaryAddressResponse" name="params"/>
+	</wsdl:message>
+	<wsdl:portType name="AddressBookServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:input message="tns:getVersionRequest"/>
+			<wsdl:output message="tns:getVersionResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="addAddress">
+			<wsdl:input message="tns:addAddressRequest"/>
+			<wsdl:output message="tns:addAddressResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="updateAddress">
+			<wsdl:input message="tns:updateAddressRequest"/>
+			<wsdl:output message="tns:updateAddressResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="removeAddress">
+			<wsdl:input message="tns:removeAddressRequest"/>
+			<wsdl:output message="tns:removeAddressResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getAddresses">
+			<wsdl:input message="tns:getAddressesRequest"/>
+			<wsdl:output message="tns:getAddressesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="setPrimaryAddress">
+			<wsdl:input message="tns:setPrimaryAddressRequest"/>
+			<wsdl:output message="tns:setPrimaryAddressResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="AddressBookServiceHttpBinding" type="tns:AddressBookServicePort">
+		<http:binding verb="POST"/>
+		<wsdl:operation name="getVersion">
+			<http:operation location="/getVersion"/>
+			<wsdl:input>
+				<mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addAddress">
+			<http:operation location="/addAddress"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateAddress">
+			<http:operation location="/updateAddress"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeAddress">
+			<http:operation location="/removeAddress"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAddresses">
+			<http:operation location="/getAddresses"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setPrimaryAddress">
+			<http:operation location="/setPrimaryAddress"/>
+			<wsdl:input>
+				<mime:content part="params" type="application/x-www-form-urlencoded"/>
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="params" type="text/xml"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="AddressBookServiceSOAPBinding" type="tns:AddressBookServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getVersion">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/checkout/v1/services/AddressBookService"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addAddress">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/checkout/v1/services/AddressBookService"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateAddress">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/checkout/v1/services/AddressBookService"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeAddress">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/checkout/v1/services/AddressBookService"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAddresses">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/checkout/v1/services/AddressBookService"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setPrimaryAddress">
+			<soap:operation soapAction="http://www.ebay.com/marketplace/checkout/v1/services/AddressBookService"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="AddressBookService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:AddressBookServiceHttpBinding" name="AddressBookServiceHttpPort">
+			<http:address location="http://svcs.ebay.com/services/checkout/v1/AddressBookService"/>
+		</wsdl:port>
+		<wsdl:port binding="tns:AddressBookServiceSOAPBinding" name="AddressBookServiceSOAPPort">
+			<soap:address location="http://svcs.ebay.com/services/checkout/v1/AddressBookService"/>
+		</wsdl:port>		
+	</wsdl:service>
+</wsdl:definitions>

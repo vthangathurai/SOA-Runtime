@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="OCSChannelService" targetNamespace="http://www.ebay.com/marketplace/ocs/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ocs="http://www.ebay.com/marketplace/ocs/v1/services">
+	<types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/ocs/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="ocs:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="ocs:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="ocs:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="ocs:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="ocs:ErrorSeverity"/>
+					<xs:element name="category" type="ocs:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="ocs:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="ocs:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="ocs:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="ocs:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getAvailableOCSContactChannels" type="ocs:GetAvailableChannelsRequest">
+
+			</xs:element>
+			<xs:element name="getAvailableOCSContactChannelsResponse" type="ocs:GetAvailableChannelsResponse">
+
+			</xs:element>
+			<xs:complexType name="GetAvailableChannelsRequest">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="ocsApplication" type="ocs:OCSApplicationType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfo" type="ocs:OCSTrackingInfoType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="ocsContactChannelRequestData" type="ocs:OCSContactChannelRequestDataType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UserIdType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="userId" type="xs:long"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="userLoginId" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="userEmailAddress" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OCSApplicationType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="ocsApplicationTypeEnum" type="ocs:OCSApplicationTypeEnumType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="ocsApplicationId" type="xs:int"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="OCSApplicationTypeEnumType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="OCSApp"/>
+					<xs:enumeration value="EUAApp"/>
+					<xs:enumeration value="MobileApp"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="OCSTrackingInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="trackingGUID" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="sojounrerGUID" type="xs:string"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="ocsTrackingInfoAttribute" type="ocs:OCSTrackingInfoAttributeType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OCSTrackingInfoAttributeType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfoAttributeId" type="xs:int"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfoAttributeName" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfoAttributeValue" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ChannelDataType">
+				<xs:sequence>
+					<xs:choice>
+						<xs:element maxOccurs="1" minOccurs="0" name="emailChannel" type="ocs:EmailChannelDataType">
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0" name="callEbayChannel" type="ocs:CallEbayChannelDataType">
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0" name="chatChannel" type="ocs:ChatChannelDataType">
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0" name="callMemberChannel" type="ocs:CallBackMemberChannelDataType">
+						</xs:element>
+					</xs:choice>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ChannelServiceTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CALL_EBAY"/>
+					<xs:enumeration value="CALL_BACK_MEMBER"/>
+					<xs:enumeration value="CHAT"/>
+					<xs:enumeration value="EMAIL"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getEstimatedWaitTimeForContact" type="ocs:GetEstimatedWaitTimeRequest">
+
+			</xs:element>
+			<xs:element name="getEstimatedWaitTimeForContactResponse" type="ocs:GetEstimatedWaitTimeResponse">
+
+			</xs:element>
+			<xs:element name="addCallBackRequest" type="ocs:AddCallBackRequest">
+
+			</xs:element>
+			<xs:element name="addCallBackRequestResponse" type="ocs:AddCallBackResponse">
+
+			</xs:element>
+			<xs:complexType name="GetEstimatedWaitTimeRequest">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="ocsApplication" type="ocs:OCSApplicationType">
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="channelType" type="ocs:ChannelServiceTypeEnum">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="ocsContactChannelRequestData" type="ocs:OCSContactChannelRequestDataType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfo" type="ocs:OCSTrackingInfoType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="OCSContactChannelRequestDataType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="userIdentifier" type="ocs:UserIdType"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="siteId" type="xs:int"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="ocsTopicId" type="xs:int"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetEstimatedWaitTimeResponse">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="waitTimeByChannel" type="ocs:EstimatedWaitTimePerChannel">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="EstimatedWaitTimePerChannel">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="channelType" type="ocs:ChannelServiceTypeEnum"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="estimatedWaitTimeInSeconds" type="xs:double"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="channelAvailabilityStatus" type="xs:boolean">
+							</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetAvailableChannelsResponse">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseResponse">
+						<xs:sequence>
+							<xs:element name="emailChannel" type="ocs:EmailChannelDataType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="chatChannel" type="ocs:ChatChannelDataType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="callEbayChannel" type="ocs:CallEbayChannelDataType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="callMemberChannel" type="ocs:CallBackMemberChannelDataType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="webformChannel" type="ocs:WebformChannelDataType" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AddCallBackRequest">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="ocsApllication" type="ocs:OCSApplicationType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="callbackRequest" type="ocs:CallbackRequestType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfo" type="ocs:OCSTrackingInfoType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CallbackRequestType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="ocsContactChannelRequestData" type="ocs:OCSContactChannelRequestDataType">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="ocsSessionId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="memberPhoneContactDetails" type="ocs:PhoneContactDetailsType">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="CallBackType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CALLBACK_ON_AVAILABILITY"/>
+					<xs:enumeration value="USER_CALLBACK_SCHEDULE_TYPE"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="LocaleType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="localeCountry" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="localeLanguage" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="PhoneContactDetailsType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="phoneNumberFull" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="areaCode" type="xs:int"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="countryCode" type="xs:int"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="extension" type="xs:int"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="phoneNumber" type="xs:int"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="AddCallBackResponse">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseResponse">
+						<xs:sequence>
+							<xs:element name="status" type="ocs:CallBackStatus" maxOccurs="1" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CallBackResponseType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="status" type="ocs:CallBackStatus"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="callBackScheduleTime" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="CallBackStatus">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CONFIRMED"/>
+					<xs:enumeration value="PENDING"/>
+					<xs:enumeration value="UNKOWN"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getCallBackScheduleDetails" type="ocs:GetUserCallBackScheduleRequest">
+
+			</xs:element>
+			<xs:element name="getCallBackScheduleDetailsResponse" type="ocs:GetUserCallBackScheduleResponse">
+
+			</xs:element>
+			<xs:complexType name="GetUserCallBackScheduleRequest">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="ocsApplication" type="ocs:OCSApplicationType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="userId" type="ocs:UserIdType">
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="ocsTrackingInfo" type="ocs:OCSTrackingInfoType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetUserCallBackScheduleResponse">
+				<xs:complexContent>
+					<xs:extension base="ocs:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="userCallBackScheduleDetail" type="ocs:UserCallBackScheduleType">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="UserCallBackScheduleType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="ocsTopicId" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="scheduleCreationTime" type="xs:dateTime"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="scheduledTime" type="xs:dateTime"/>
+					<xs:element name="callBackType" type="ocs:CallBackType" maxOccurs="1" minOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ChatChannelDataType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="shortOutageMessage" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="longOutageMessage" type="xs:string"/>
+					<xs:element name="chatURL" type="xs:string" maxOccurs="1" minOccurs="1">
+					</xs:element>
+					<xs:element name="hoursOfOperation" type="ocs:OCSChannelHoursOfOperationDataType" maxOccurs="1" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="EmailChannelDataType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="emailSubject" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="postingAddress" type="xs:string">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="CallEbayChannelDataType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="phoneContactDetails" type="ocs:PhoneContactDetailsType"/>
+
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ChannelCommonDataType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="channelName" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="channelType" type="ocs:ChannelTypeEnum"/>
+					<xs:element maxOccurs="1" minOccurs="1" name="iconUrl" type="xs:string"/>
+					<xs:element maxOccurs="1" minOccurs="0" name="landingText" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ChannelTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="TALISMA_CHAT"/>
+					<xs:enumeration value="CCA_CHAT"/>
+					<xs:enumeration value="PHONE1"/>
+					<xs:enumeration value="PHONE2"/>
+					<xs:enumeration value="EMAIL"/>
+					<xs:enumeration value="CALL_BACK_MEMBER"/>
+					<xs:enumeration value="INVALID"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="CallBackMemberChannelDataType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="projectId" type="xs:string">
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="estimatedWaitTime" type="xs:int"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="WebformChannelDataType">
+				<xs:sequence>
+					<xs:element name="webformType" type="xs:int" maxOccurs="1" minOccurs="1"/>
+					<xs:element name="webformRoutingCode" type="xs:int" maxOccurs="1" minOccurs="1">
+					</xs:element>
+					<xs:element name="postingAddress" type="xs:string" maxOccurs="1" minOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OCSChannelHoursOfOperationDataType">
+				<xs:sequence>
+					<xs:element name="timeZone" type="xs:string" maxOccurs="1" minOccurs="1"/>
+					<xs:element name="dayOfOperation" type="ocs:OCSChannelDayOfOperation" maxOccurs="unbounded" minOccurs="0">
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OCSChannelDayOfOperation">
+				<xs:sequence>
+					<xs:element name="dayOfTheWeek" type="ocs:DayOfTheWeekTypeEnum" maxOccurs="1" minOccurs="1"/>
+					<xs:element name="startTimeOfOperation" type="xs:int" maxOccurs="1" minOccurs="1">
+					</xs:element>
+					<xs:element name="endTimeOfOperation" type="xs:int" maxOccurs="1" minOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="OCSPhoneDataType"/>
+		
+			<xs:simpleType name="DayOfTheWeekTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MONDAY"></xs:enumeration>
+					<xs:enumeration value="TUESDAY"></xs:enumeration>
+					<xs:enumeration value="WEDNESDAY"></xs:enumeration>
+					<xs:enumeration value="THURSDAY"></xs:enumeration>
+					<xs:enumeration value="FRIDAY"></xs:enumeration>
+					<xs:enumeration value="SATURDAY"></xs:enumeration>
+					<xs:enumeration value="SUNDAY"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</types>
+	<message name="getCallBackScheduleDetailsResponse">
+		<part name="params" element="ocs:getCallBackScheduleDetailsResponse">
+    </part>
+	</message>
+	<message name="addCallBackRequestRequest">
+		<part name="params" element="ocs:addCallBackRequest">
+    </part>
+	</message>
+	<message name="getAvailableOCSContactChannelsRequest">
+		<part name="params" element="ocs:getAvailableOCSContactChannels">
+    </part>
+	</message>
+	<message name="getVersionResponse">
+		<part name="params" element="ocs:getVersionResponse">
+    </part>
+	</message>
+	<message name="getEstimatedWaitTimeForContactRequest">
+		<part name="params" element="ocs:getEstimatedWaitTimeForContact">
+    </part>
+	</message>
+	<message name="getEstimatedWaitTimeForContactResponse">
+		<part name="params" element="ocs:getEstimatedWaitTimeForContactResponse">
+    </part>
+	</message>
+	<message name="getVersionRequest">
+		<part name="params" element="ocs:getVersionRequest">
+    </part>
+	</message>
+	<message name="addCallBackRequestResponse">
+		<part name="params" element="ocs:addCallBackRequestResponse">
+    </part>
+	</message>
+	<message name="getAvailableOCSContactChannelsResponse">
+		<part name="params" element="ocs:getAvailableOCSContactChannelsResponse">
+    </part>
+	</message>
+	<message name="getCallBackScheduleDetailsRequest">
+		<part name="params" element="ocs:getCallBackScheduleDetails">
+    </part>
+	</message>
+	<portType name="OCSChannelServicePort">
+		<operation name="getVersion">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<input message="ocs:getVersionRequest">
+    </input>
+			<output message="ocs:getVersionResponse">
+    </output>
+		</operation>
+		<operation name="getAvailableOCSContactChannels">
+			<input message="ocs:getAvailableOCSContactChannelsRequest">
+    </input>
+			<output message="ocs:getAvailableOCSContactChannelsResponse">
+    </output>
+		</operation>
+		<operation name="getEstimatedWaitTimeForContact">
+			<input message="ocs:getEstimatedWaitTimeForContactRequest">
+    </input>
+			<output message="ocs:getEstimatedWaitTimeForContactResponse">
+    </output>
+		</operation>
+		<operation name="addCallBackRequest">
+			<input message="ocs:addCallBackRequestRequest">
+    </input>
+			<output message="ocs:addCallBackRequestResponse">
+    </output>
+		</operation>
+		<operation name="getCallBackScheduleDetails">
+			<input message="ocs:getCallBackScheduleDetailsRequest">
+    </input>
+			<output message="ocs:getCallBackScheduleDetailsResponse">
+    </output>
+		</operation>
+	</portType>
+	<binding name="OCSChannelServiceSOAPBinding"
+		type="ocs:OCSChannelServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="getVersion">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ocs/v1/services/getVersion" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="getAvailableOCSContactChannels">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ocs/v1/services/getAvailableContactChannels" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="getEstimatedWaitTimeForContact">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ocs/v1/services/getEstimatedWaitTime" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="addCallBackRequest">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ocs/v1/services/addCallBackRequest" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="getCallBackScheduleDetails">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/ocs/v1/services/getCallBackScheduleDetails" />
+			<input>
+
+				<soap:body use="literal" />
+			</input>
+			<output>
+
+				<soap:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+	<binding name="OCSChannelServiceHttpBinding"
+		type="ocs:OCSChannelServicePort">
+
+		<http:binding verb="POST" />
+		<operation name="getVersion">
+
+			<http:operation location="/getVersion" />
+			<input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</input>
+			<output>
+				<mime:content type="text/xml" />
+
+			</output>
+		</operation>
+		<operation name="getAvailableOCSContactChannels">
+
+			<http:operation location="/getAvailableContactChannels" />
+			<input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</input>
+			<output>
+				<mime:content type="text/xml" />
+
+			</output>
+		</operation>
+		<operation name="getEstimatedWaitTimeForContact">
+
+			<http:operation location="/getEstimatedWaitTime" />
+			<input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</input>
+			<output>
+				<mime:content type="text/xml" />
+
+			</output>
+		</operation>
+		<operation name="addCallBackRequest">
+
+			<http:operation location="/addCallBackRequest" />
+			<input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</input>
+			<output>
+				<mime:content type="text/xml" />
+
+			</output>
+		</operation>
+		<operation name="getCallBackScheduleDetails">
+
+			<http:operation location="/getCallBackScheduleDetails" />
+			<input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</input>
+			<output>
+				<mime:content type="text/xml" />
+
+			</output>
+		</operation>
+	</binding>
+	<service name="OCSChannelService">
+		<wsdl:documentation>
+			<version>1.0.0</version>
+		</wsdl:documentation>
+		<port name="OCSChannelServiceHttpPort" binding="ocs:OCSChannelServiceHttpBinding">
+			<http:address location="https://svcs.ebay.com/services/ocs/v1/OCSChannelService"/>
+		</port>
+		<port name="OCSChannelServiceSOAPPort" binding="ocs:OCSChannelServiceSOAPBinding">
+			<soap12:address location="https://svcs.ebay.com/services/ocs/v1/OCSChannelService"/>
+		</port>
+	</service>
+</definitions>

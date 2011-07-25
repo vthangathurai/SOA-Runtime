@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.ebay.com/marketplace/services" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns0="http://www.ebay.com/marketplace/services" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services" xmlns:tns="http://www.ebay.com/marketplace/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	    	<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for all service operations.
+					</xs:documentation>
+				</xs:annotation>
+		    	<xs:sequence>
+
+		    	</xs:sequence>
+            </xs:complexType>
+
+    		<xs:complexType abstract="true" name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+							 ack value of the call
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="version" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+
+					<xs:element name="timestamp" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+
+
+				</xs:sequence>
+			</xs:complexType>
+
+
+					<xs:complexType abstract="true" name="BaseRateLimiterServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for all operations in RateLimiter
+						Service.
+					</xs:documentation>
+				</xs:annotation>
+		    	<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="resourceName" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										resource name to be rate limited
+									</xs:documentation>
+									<xs:appinfo>
+											<CallInfo>
+												<CallName>isRateLimited</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="operationName" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										operation name to be rate limited
+									</xs:documentation>
+										<xs:appinfo>
+											<CallInfo>
+												<CallName>isRateLimited</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element minOccurs="1" name="resourceType" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										resource type: e.g SERVICE
+									</xs:documentation>
+									<xs:appinfo>
+											<CallInfo>
+												<CallName>isRateLimited</CallName>
+												<RequiredInput>Yes</RequiredInput>
+											</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+				<xs:complexType abstract="true" name="BaseRateLimiterServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service operations in RateLimiter Service.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+					</xs:extension>
+				</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="isRateLimitedRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Contains all the information which related to rate limiting
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							if the requested subject/subjectGroup has been rate limited for the resource/operation
+						</Summary>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRateLimiterServiceRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="subject" type="tns:SubjectType" >
+								<xs:annotation>
+									<xs:documentation>
+										Contains subject information for rate limiting request
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<RequiredInput>Yes</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="resolvedSubjectGroup" type="tns:SubjectGroupType" >
+								<xs:annotation>
+									<xs:documentation>
+									    Contains subject groups which has group membership resolved
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="challengeAnswer" type="tns:ChallengeAnswer"
+								maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										contains information for challenge answer
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="attr" type="tns:NameValuePair" maxOccurs="unbounded" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										contains addition information to do rate limiter
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<RequiredInput>No</RequiredInput>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="isRateLimitedResponse">
+				<xs:annotation>
+					<xs:documentation>
+						contains information of rate limiter status, or challenge information if the status is "Challenge"
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRateLimiterServiceResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="status"
+								type="tns:RateLimiterStatus" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										status of the Rate limiting
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<Returned>Always</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="resolvedSubjectGroup" type="tns:SubjectGroupType" >
+								<xs:annotation>
+									<xs:documentation>
+										contains subject group list which has group membership resolved.
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="challenge" type="tns:Challenge" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										contains information for answering challenge question.
+										Returned only if status is SERVE_GIF
+									</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<CallName>isRateLimited</CallName>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:simpleType name="RateLimiterStatus">
+				<xs:annotation>
+					<xs:documentation>
+						return the Rate Limiter Status
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SERVE_OK">
+						<xs:annotation>
+							<xs:documentation>
+								No Block from Rate Limiter
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="FLAG">
+						<xs:annotation>
+							<xs:documentation>
+								Flaged by Rate Limiter
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SERVE_GIF">
+						<xs:annotation>
+							<xs:documentation>
+								Server Gif by Rate Limiter, to continue the call, the caller need to resolved the Challenge question
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="BLOCK">
+						<xs:annotation>
+							<xs:documentation>
+								Block by Rate Limiter
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="RequestHasBeenServed">
+						<xs:annotation>
+							<xs:documentation>
+								Request Has Been Served by Rate Limiter
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Invalid">
+						<xs:annotation>
+							<xs:documentation>
+								Invalid
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="SubjectType">
+				<xs:annotation>
+					<xs:documentation>
+						contains subject type information. e.g. IP, EBAYAPP
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								subject domain information  e.g EBAYAPP, IP, etc
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+							
+						</xs:annotation>
+						
+					</xs:element>
+
+					<xs:element name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								value of the subject e.g 10.12.13 for IP
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<RequiredInput>Yes</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+            <xs:complexType name="SubjectGroupType">
+				<xs:annotation>
+					<xs:documentation>
+						contains subject group type information. e.g. IP, EBAYAPP  
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="domain" type="xs:string" >
+						<xs:annotation>
+							<xs:documentation>
+								subject group domain information e.g EBAYAPP, IP, etc 
+							</xs:documentation>
+							<xs:appinfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								subject group name
+							</xs:documentation>
+							<xs:appinfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+                <xs:attribute name="calculator" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>
+								calculator's name if a subject group is calculated subject group 
+							</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+						</xs:annotation>
+                </xs:attribute>
+            </xs:complexType>
+
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error (causing the request to fail)
+						or an informational error (a warning) that should be communicated to the
+						user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully, but something occurred that may
+								affect your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was not processed successfully.
+								When a serious application-level error occurs, the error is returned
+								instead of the business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was processed successfully but with some warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was processed successfully but with some warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning occured as part of service call.
+						Any run time error will not be reported here, but will be reported aspart of
+						soap fault.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"  type="tns:ErrorData">
+						<xs:annotation>
+							<xs:documentation>
+								ErrorMessage to indicate any Error/Warning occured as part of service call.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<AllCalls/>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								error Id
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								error domain
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								error serverity
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								error category
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								error message
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								error subdomain
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								exception id
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"  type="tns:ErrorParameter">
+						<xs:annotation>
+							<xs:documentation>
+								error parameter
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						represent contextual data associated with an error.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									represent contextual data associated with an error.
+								</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<AllCalls/>
+										<Returned>Conditionally</Returned>
+									</CallInfo>
+								</xs:appinfo>
+							</xs:annotation>
+							</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Reprents the level of error. E.g. Error/Warning
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								error
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								warning
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Reprents the error catagorization. Request and Application Error are mostly occured due to
+						invalid data passed in request. System Error cannot be fixed by changing request values and
+						mostly occured due to application failure.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								system error
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								application error
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								request error
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:element name="isRateLimitedRequest"  type="tns:isRateLimitedRequest">
+				<xs:annotation>
+					<xs:documentation>
+						request to make isRateLimited call
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="isRateLimitedResponse"  type="tns:isRateLimitedResponse">
+				<xs:annotation>
+					<xs:documentation>
+						response of calling isRateLimited call
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:complexType name="NameValuePair">
+				<xs:annotation>
+					<xs:documentation>
+						contains additional information to rate limting
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								attribute name e.g. sec
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								attribute value e.g sec=1 -> attr name:sec attr value:1
+							</xs:documentation>
+								<xs:appinfo>
+									<CallInfo>
+										<CallName>isRateLimited</CallName>
+										<RequiredInput>No</RequiredInput>
+									</CallInfo>
+								</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="ChallengeAnswer">
+				<xs:annotation>
+					<xs:documentation>
+						Contains caller's Challenge answer information
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>isRateLimited</CallName>
+							<RequiredInput>No</RequiredInput>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="token" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								token which returned by previous isRatelimited response
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userInput" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								text string contains user's input which he has seen from the image from
+								previouse isRateLimited response
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<RequiredInput>No</RequiredInput>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="Challenge">
+				<xs:annotation>
+					<xs:documentation>
+						contains Challenge information
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="token" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								encoded string
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="tokenURL" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								URL which contains token's image
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<CallName>isRateLimited</CallName>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+
+		</xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="isRateLimitedRequest">
+		<wsdl:part name="parameters" element="ns0:isRateLimitedRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="isRateLimitedResponse">
+		<wsdl:part name="parameters" element="ns0:isRateLimitedResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="RateLimiterServicePort">
+		<wsdl:operation name="isRateLimited">
+			<wsdl:input message="ns0:isRateLimitedRequest">
+			</wsdl:input>
+
+			<wsdl:output message="ns0:isRateLimitedResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="RateLimiterServiceSOAP11Binding"
+  		type="ns0:RateLimiterServicePort">
+
+		<soap:binding style="document"
+  			transport="http://schemas.xmlsoap.org/soap/http" />
+  		<wsdl:operation name="isRateLimited">
+  			<soap:operation
+  				soapAction="http://www.ebay.com/marketplace/services/isRateLimited" />
+  			<wsdl:input>
+  				<soap:body use="literal" />
+  			</wsdl:input>
+
+			<wsdl:output>
+  				<soap:body use="literal" />
+  			</wsdl:output>
+  		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="RateLimiterServiceSOAP12Binding"
+  		type="ns0:RateLimiterServicePort">
+  		<soap:binding style="document"
+  			transport="http://schemas.xmlsoap.org/soap/http" />
+  		<wsdl:operation name="isRateLimited">
+		<soap:operation
+  				soapAction="http://www.ebay.com/marketplace/services/isRateLimited" />
+  			<wsdl:input>
+  				<soap:body use="literal" />
+  			</wsdl:input>
+  			<wsdl:output>
+  				<soap:body use="literal" />
+  			</wsdl:output>
+  		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="RateLimiterServiceHttpBinding"
+  		type="ns0:RateLimiterServicePort">
+  		<http:binding verb="GET" />
+  		<wsdl:operation name="isRateLimited">
+  			<http:operation location="/isRateLimited" />
+  			<wsdl:input>
+  				<http:urlEncoded />
+  			</wsdl:input>
+  			<wsdl:output>
+  				<mime:content type="text/xml" />
+  			</wsdl:output>
+  		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="RateLimiterService">
+		<wsdl:port name="RateLimiterServiceSOAP11port_http" binding="ns0:RateLimiterServiceSOAP11Binding">
+		  <soap:address location="http://localhost:8080/RateLimiterService"/>
+		</wsdl:port>
+		<wsdl:port name="RateLimiterServiceSOAP12port_http" binding="ns0:RateLimiterServiceSOAP12Binding">
+		  <soap12:address location="http://localhost:8080/RateLimiterService"/>
+		</wsdl:port>
+		<wsdl:port name="RateLimiterServiceHttpport" binding="ns0:RateLimiterServiceHttpBinding">
+		  <http:address location="http://localhost:8080/RateLimiterService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

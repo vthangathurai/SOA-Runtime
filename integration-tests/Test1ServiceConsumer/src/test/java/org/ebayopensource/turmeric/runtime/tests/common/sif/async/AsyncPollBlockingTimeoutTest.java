@@ -42,6 +42,8 @@ public class AsyncPollBlockingTimeoutTest extends AbstractWithSlowServerTest {
 
 		Assert.assertThat("ReponseList.size", responseList.size(), is(0));
 	}
+	
+	
 
 	@Test
 	@SuppressWarnings("unchecked")
@@ -59,6 +61,8 @@ public class AsyncPollBlockingTimeoutTest extends AbstractWithSlowServerTest {
 
 		Assert.assertThat("ReponseList.size", responseList.size(), lessThan(2));
 	}
+	
+	
 
 	@Test
 	@SuppressWarnings("unchecked")
@@ -71,6 +75,8 @@ public class AsyncPollBlockingTimeoutTest extends AbstractWithSlowServerTest {
 
 		Assert.assertThat("ReponseList.size", responseList.size(), lessThanOrEqualTo(1));
 	}
+	
+	
 
 	@Test
 	@SuppressWarnings("unchecked")
@@ -89,6 +95,8 @@ public class AsyncPollBlockingTimeoutTest extends AbstractWithSlowServerTest {
 
 		Assert.assertThat("ReponseList.size", responseList.size(), lessThanOrEqualTo(2));
 	}
+	
+	
 
 	static List<Response<?>> getResponseList(
 			Map<Service, List<Response<?>>> respMap) {

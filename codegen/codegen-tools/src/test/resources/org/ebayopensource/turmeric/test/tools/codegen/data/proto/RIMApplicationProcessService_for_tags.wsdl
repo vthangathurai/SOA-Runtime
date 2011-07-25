@@ -1,0 +1,1570 @@
+<?xml version="1.0"?>
+<definitions name="RIMApplicationProcessService"
+	targetNamespace="http://www.ebay.com/marketplace/mobile/v1/services"
+	xmlns:tns="http://www.ebay.com/marketplace/mobile/v1/services"
+	xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		TYPE DEFINITION - List of services participating in this BPEL process
+		The default output of the BPEL designer uses strings as input and
+		output to the BPEL Process. But you can define or import any XML
+		Schema type and us them as part of the message types.
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<!-- 
+	first Upper case letter in element name to lower case letter
+	plural to single
+	 -->
+	<types>
+		<schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/mobile/v1/services"
+			xmlns="http://www.w3.org/2001/XMLSchema">
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary" 
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+						Base response container for all service operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+								
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="errorMessage" type="tns:ErrorMessage" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			
+			
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary" 
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+						ErrorMessage to indicate any Error/Warning occured as part of service call.
+						Any run time error will not be reported here, but will be reported aspart of
+						soap fault.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="error" type="tns:ErrorData" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Details about a single error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			
+			
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary" 
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+						This represents error details.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								A unique code that identifies the particular error condition that occurred.
+								Your application can use error codes as identifiers in your customized
+								error-handling algorithms.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the domain upon which the error occurred. 
+								&lt;dl&gt;
+								&lt;lh&gt;Domains include:&lt;/lh&gt;
+								&lt;dt&gt;
+									Marketplace
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									A business or validation error occurred for the Merchandising Service.
+								&lt;/dd&gt;
+								&lt;dt&gt;
+									SOA
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									An exception occurred in the Service Oriented Architecture (SOA) framework.
+								&lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="severity" type="tns:ErrorSeverity">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates whether the error caused the request to fail (Error) or not
+								(Warning).
+								&lt;br&gt;&lt;br&gt;
+								If the request fails and the source of the problem is within the application
+								(such as a missing required element), please change the application before you
+								retry the request. If the problem is due to end-user input data, please alert
+								the end-user to the problem and provide the means for them to correct the data.
+								Once the problem in the application or data is resolved, you can attempt to re-
+								send the request to eBay.
+								&lt;br&gt;&lt;br&gt;
+								If the source of the problem is on eBay's side, you can retry the request as-is
+								a reasonable number of times (eBay recommends twice). If the error persists,
+								contact Developer Technical Support. Once the problem has been resolved, the
+								request may be resent in its original form.
+								&lt;br&gt;&lt;br&gt;
+								When a warning occurs, the error is returned in addition to the business data.
+								In this case, you do not need to retry the request (as the original request was
+								successful). However, depending on the cause or nature of the warning, you
+								might need to contact either the end user or eBay to effect a long term
+								solution to the problem to prevent it from reoccurring in the future.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="category" type="tns:ErrorCategory">
+						<xs:annotation>
+							<xs:documentation>
+								There are three categories of errors: request errors, application errors, and
+								system errors.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="message" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								A detailed description of the condition that resulted in the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="subdomain" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Name of the subdomain upon which the error occurred. 
+								&lt;dl&gt;
+								&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+								&lt;dt&gt;
+									Merchandising
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									The error is specific to the Merchandising service.
+								&lt;/dd&gt;
+								&lt;dt&gt;
+									MarketplaceCommon
+								&lt;/dt&gt;
+								&lt;dd&gt;
+									The error is common to all Marketplace services.
+								&lt;/dd&gt;
+								&lt;/dl&gt;
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="exceptionId" type="xs:token" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Unique identifier for an exception associated with an error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="parameter" type="tns:ErrorParameter" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								Some warning and error messages return one or more variables that contain
+								contextual information about the error. This is often the field or value that
+								triggered the error.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary" 
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+						Contextual information associated with an error.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									The name of the parameter in the list of parameter types returned
+									within the error type.
+								</xs:documentation>
+									<xs:appinfo>
+										<CallInfo>
+											<AllCalls/>
+											<Returned>Conditionally</Returned>
+										</CallInfo>
+									</xs:appinfo>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			
+			
+			
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary" 
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+						Indicates whether the error is a severe error (causing the request to fail)
+						or an informational error (a warning) that should be communicated to the
+						user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully, but something occurred that may
+								affect your application or the user.				
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was not processed successfully.
+								When a serious application-level error occurs, the error is returned
+								instead of the business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was processed successfully but with some warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was processed successfully but with some warnings.				
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary" 
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+						Indicates whether the error is a severe error (causing the request to fail)
+						or an informational error (a warning) that should be communicated to the
+						user.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Error">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was not processed successfully.
+								When a serious application-level error occurs, the error is returned
+								instead of the business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully, but something occurred that may
+								affect your application or the user. For example, eBay may have changed a
+								value the user sent in. In this case, eBay returns a normal, successful
+								response and also returns the warning.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketplaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+					<xs:documentation>
+							There are three categories of error: request errors, application errors,
+							and system errors. Request and application errors are caused primarily by
+							invalid data passed in the request. System errors are caused primarily by
+							application failures and cannot be corrected by changing request values.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="System">
+						<xs:annotation>
+							<xs:documentation>
+								Indicates that an error has occurred on the eBay system side, such as a
+								database or server down. An application can retry the request as-is a
+								reasonable number of times (eBay recommends twice). If the error
+								persists, contact Developer Technical Support. Once the problem has been
+								resolved, the request may be resent in its original form.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Application">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with the request, such as missing or
+								invalid fields. The problem must be corrected before the request can be
+								made again. If the problem is due to something in the application (such
+								as a missing required field), the application must be changed. Once the
+								problem in the application or data is resolved, resend the corrected
+								request to eBay.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Request">
+						<xs:annotation>
+							<xs:documentation>
+								An error occurred due to a problem with the request, such as invalid or
+								missing data. The problem must be corrected before the request can be
+								made again. If the problem is a result of end-user data, the application
+								must alert the end-user to the problem and provide the means for the
+								end-user to correct the data. Once the problem in the data is resolved,
+								resend the request to eBay with the corrected data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for all
+						service operations.
+					</xs:documentation>
+				<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>ExperimentationExecutionService uses extension id 2(Request Opt-in Cookie) and 3(Response Tracking Data) </xs:documentation>
+					
+				<xs:appinfo><typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"></typeLibrarySource></xs:appinfo></xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"></xs:element>
+					<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+	
+            
+                
+                
+        
+                
+      <xs:simpleType name="FeedbackRatingStarCodeType">
+		<xs:annotation>
+			<xs:documentation>
+					 FeedbackRatingStarCodeType - Type declaration to be used by other
+					 schema. The color of a feedback score star visually denotes the
+					 range in which the member's summary feedback score falls. The score
+					 is the net positive feedback minus the net negative feedback left
+					 for the member.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="None">
+				<xs:annotation>
+					<xs:documentation>
+								No graphic displayed, feedback score 0-9.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Yellow">
+				<xs:annotation>
+					<xs:documentation>
+								Yellow Star, feedback score 10-49.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Blue">
+				<xs:annotation>
+					<xs:documentation>
+								Blue Star, feedback score 50-99.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Turquoise">
+				<xs:annotation>
+					<xs:documentation>
+								Turquoise Star, feedback score 100-499.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Purple">
+				<xs:annotation>
+					<xs:documentation>
+								Purple Star, feedback score 500-999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Red">
+				<xs:annotation>
+					<xs:documentation>
+								Red Star, feedback score 1,000-4,999
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Green">
+				<xs:annotation>
+					<xs:documentation>
+								Green Star, feedback score 5,000-9,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="YellowShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Yellow Shooting Star, feedback score 10,000-24,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TurquoiseShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Turquoise Shooting Star, feedback score 25,000-49,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PurpleShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Purple Shooting Star, feedback score 50,000-99,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RedShooting">
+				<xs:annotation>
+					<xs:documentation>
+								Red Shooting Star, feedback score 100,000-499,999.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="GreenShooting">
+				<xs:annotation>
+					<xs:documentation>
+						Green Shooting Star, feedback score 500,000-900,000.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SilverShooting">
+				<xs:annotation>
+					<xs:documentation>
+						Silver Shooting Star, feedback score 1,000,000 and above.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>			
+			
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Placeholder value. See
+						&lt;a href="types/simpleTypes.html#token"&gt;token&lt;/a&gt;.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
+	    <xs:simpleType name="UserIDType">
+                <xs:annotation>
+                    <xs:documentation>
+				An eBay ID that uniquely identifies a user. &lt;br&gt;&lt;br&gt;For GetAllBidders,
+				some bidder information is anonymous, to protect bidders from fraud. If the seller makes this API call, the actual ids of all bidders on the seller's item will be returned. If a bidder makes this API call, the bidder's actual id will be returned, but information for all competing bidders or outside watchers will be returned as anonymized userIDs.
+			</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+           
+			
+		<xs:complexType name="AmountType">
+				<xs:simpleContent>
+					<xs:extension base="xs:double">
+						<xs:attribute name="currencyID" type="xs:token" >
+						</xs:attribute>
+						</xs:extension>
+						</xs:simpleContent>
+		  </xs:complexType>
+		
+	
+	  
+	  
+	  <xs:simpleType name="ListingTypeCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Unknown">
+			</xs:enumeration>
+			<xs:enumeration value="Chinese">
+			</xs:enumeration>
+			<xs:enumeration value="Dutch">
+			</xs:enumeration>
+			<xs:enumeration value="Live">
+			</xs:enumeration>
+			<xs:enumeration value="Auction">
+			</xs:enumeration>
+			<xs:enumeration value="AdType">
+			</xs:enumeration>
+			<xs:enumeration value="StoresFixedPrice">
+			</xs:enumeration>
+			<xs:enumeration value="PersonalOffer">
+			</xs:enumeration>
+			<xs:enumeration value="FixedPriceItem">
+			</xs:enumeration>
+			<xs:enumeration value="Half">
+			</xs:enumeration>
+			<xs:enumeration value="LeadGeneration">
+			</xs:enumeration>
+			<xs:enumeration value="Express">
+			</xs:enumeration>
+			<xs:enumeration value="Shopping">
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
+	<xs:simpleType name="SellerBusinessCodeType">
+			<xs:annotation>
+				<xs:documentation>
+					Type of seller account. This value is returned if the user is a 
+					business seller with a site ID of 77 (Germany), 3 (UK), 205 (Ireland) or 100 (Motors).
+				</xs:documentation>
+			</xs:annotation>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="Undefined">
+					<xs:annotation>
+						<xs:documentation>
+							Type of seller account not defined.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Private">
+					<xs:annotation>
+						<xs:documentation>
+							Private seller account.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="Commercial">
+					<xs:annotation>
+						<xs:documentation>
+							Commercial seller account.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CustomCode">
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType>
+	  
+	  <xs:complexType name="ListingDetailsType">
+		<xs:sequence>
+			<xs:element name="convertedBuyItNowPrice" type="tns:AmountType" minOccurs="1">
+			</xs:element>
+			<xs:element name="reservePrice" type="xs:boolean" minOccurs="1">
+			</xs:element>
+			<xs:element name="startTime" type="xs:dateTime" minOccurs="1">
+			</xs:element>
+			<xs:element name="endTime" type="xs:dateTime" minOccurs="1"></xs:element>
+			<xs:element name="buyItNowAvailable" type="xs:boolean" minOccurs="0">
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+	  
+	  
+	  <xs:simpleType name="ItemIDType">
+		<xs:annotation>
+			<xs:documentation>
+				Type that represents the unique identifier for a single item listing.
+			</xs:documentation>
+			<!-- PRIVATE -->
+			<!-- This is just a string wrapper, so don't insert CallInfo here.
+					Put the CallInfo on the elements that reference this type. -->
+			<!-- PRIVATE -->
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	 <xs:complexType name="ItemType">
+		<xs:sequence>
+			<xs:element name="autoPay" type="xs:boolean" minOccurs="1"></xs:element>
+			<xs:element name="buyItNowPrice" type="tns:AmountType" minOccurs="1">
+			</xs:element>
+			<xs:element name="country" type="xs:token" minOccurs="1"></xs:element>
+			<xs:element name="itemID" type="tns:ItemIDType" minOccurs="1">
+			</xs:element>
+			<xs:element name="itemWatched" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="listingDetails" type="tns:ListingDetailsType" minOccurs="1">
+			</xs:element>
+			<xs:element name="listingDuration" type="xs:token" minOccurs="0"></xs:element>
+			<xs:element name="listingType" type="tns:ListingTypeCodeType" minOccurs="1">
+			</xs:element>
+
+			<xs:element name="location" type="xs:string" minOccurs="1"></xs:element>
+			<xs:element name="myMaxBid" type="tns:AmountType" minOccurs="0"/>
+			<element name="paymentDetails"
+            			type="tns:PaymentDetailsType" minOccurs="0" maxOccurs="1">
+            </element>
+			<xs:element name="paymentMethod" type="xs:token" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="pictureDetails" type="tns:PictureDetailsType" minOccurs="0"></xs:element>
+			
+			<xs:element name="primaryCategory" type="tns:CategoryType" minOccurs="1">
+			</xs:element>
+			<xs:element name="quantity" type="xs:int" minOccurs="1"></xs:element>
+			<xs:element name="seller" type="tns:UserType" minOccurs="1"></xs:element>
+			<xs:element name="sellingStatus" type="tns:SellingStatusType" minOccurs="1"></xs:element>
+			<xs:element name="shippingDetails" type="tns:ShippingDetailsType" minOccurs="0"></xs:element>
+			<xs:element name="shipToLocation" type="xs:string" minOccurs="1" maxOccurs="unbounded"></xs:element>		
+			<xs:element name="site" type="xs:token" minOccurs="1">
+			</xs:element>
+			<xs:element name="startPrice" type="tns:AmountType" minOccurs="1">
+			</xs:element>
+			<xs:element name="subTitle" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="timeLeft" type="xs:duration" minOccurs="1">
+			</xs:element>
+			<xs:element name="title" type="xs:string" minOccurs="1"></xs:element>
+
+
+			<xs:element name="maxBid" type="tns:AmountType" minOccurs="0"/>
+			<xs:element name="convertedMaxBid" type="tns:AmountType" minOccurs="0"/>
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="ShippingDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				Type for the shipping-related details for an item or transaction,
+				including flat and calculated shipping costs.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+				<xs:element name="thirdPartyCheckout" type="xs:boolean" minOccurs="0"></xs:element>
+				<xs:element name="shippingType" type="tns:ShippingTypeCodeType" minOccurs="0"></xs:element>
+				<xs:element name="shippingServiceOption" type="tns:ShippingServiceOptionsType" minOccurs="1" maxOccurs="unbounded"></xs:element>
+				<xs:element name="internationalShippingServiceOption" type="tns:InternationalShippingServiceOptionsType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+			</xs:sequence>
+			</xs:complexType>
+			
+	<xs:complexType name="ShippingServiceOptionsType">
+
+		<xs:sequence>
+			<xs:element name="shippingInsuranceCost" type="tns:AmountType" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingService" type="xs:token" minOccurs="0">
+			</xs:element>
+			<xs:element name="shippingServiceCost" type="tns:AmountType" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingServiceAdditionalCost" type="tns:AmountType" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingServicePriority" type="xs:int" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="expeditedService" type="xs:boolean" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingTimeMin" type="xs:int" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingTimeMax" type="xs:int" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingSurcharge" type="tns:AmountType" minOccurs="0">
+			</xs:element>
+			<xs:element name="freeShipping" type="xs:boolean" minOccurs="0">
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+			
+	<xs:complexType name="InternationalShippingServiceOptionsType">
+
+		<xs:sequence>
+			<xs:element name="shippingService" type="xs:token" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="shippingServiceCost" type="tns:AmountType" minOccurs="0">
+			</xs:element>
+			<xs:element name="shippingServiceAdditionalCost" type="tns:AmountType" minOccurs="0">
+			</xs:element>
+			<xs:element name="shippingServicePriority" type="xs:int" minOccurs="0">
+			</xs:element>
+			<xs:element name="shipToLocation" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="shippingInsuranceCost" type="tns:AmountType" minOccurs="0">
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:simpleType name="ShippingTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				The shipping cost model offered by the seller.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Flat">
+				<xs:annotation>
+					<xs:documentation>
+						Flat shipping model: the seller establishes the cost
+						of shipping and cost of shipping insurance, regardless of
+						what any buyer-selected shipping service might charge the
+						seller.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Calculated">
+				<xs:annotation>
+					<xs:documentation>
+						Calculated shipping model: the cost of shipping is
+						determined in large part by the seller-offered and
+						buyer-selected shipping service. The seller might assess an
+						additional fee via PackagingHandlingCosts.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Freight">
+				<xs:annotation>
+					<xs:documentation>
+						Freight shipping model: the cost of shipping is
+						determined by a third party, FreightQuote.com, based on the item
+						location (zip code). Currently, Freight can only be specified
+						on input via eBay Web site, not API.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Free">
+				<xs:annotation>
+					<xs:documentation>
+						Free shipping. Returned only by GetSearchResults and GetProducts.
+						This field is output-only so if you want to use AddItem to specify a free
+						Shipping Cost, specify 0 in
+						Item.ShippingDetails.ShippingServiceOptions.ShippingServiceCost.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NotSpecified">
+				<xs:annotation>
+					<xs:documentation>
+						The seller did not specify the shipping type.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FlatDomesticCalculatedInternational">
+				<xs:annotation>
+					<xs:documentation>
+						The seller specified one or more flat domestic shipping services
+						and one or more calculated international shipping services.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CalculatedDomesticFlatInternational">
+				<xs:annotation>
+					<xs:documentation>
+						The seller specified one or more calculated domestic shipping services
+						and one or more flat international shipping services.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FreightFlat">
+				<xs:annotation>
+					<xs:documentation>
+						Freight shipping model: freight shipping may be used when
+						flat or calculated shipping cannot be used due to the greater weight
+						of the item.  See "Specifying Freight Shipping" in the Shipping
+						chapter for details on freight shipping.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>	
+			
+			
+	<xs:complexType name="CategoryType">
+	
+		<xs:sequence>
+			<xs:element name="bestOfferEnabled" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="autoPayEnabled" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="b2BVATEnabled" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="catalogEnabled" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="categoryID" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="categoryLevel" type="xs:int" minOccurs="0">
+			</xs:element>
+			<xs:element name="categoryName" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="categoryParentID" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="categoryParentName" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="productSearchPageAvailable" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="expired" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="intlAutosFixedCat" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="leafCategory" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="virtual" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="numOfItems" type="xs:int" minOccurs="0">
+			</xs:element>
+			<xs:element name="sellerGuaranteeEligible" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="ORPA" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="ORRA" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="LSD" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="keywords" type="xs:string" minOccurs="0">
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="BusinessSellerDetailsType">
+		<xs:sequence>
+			<xs:element name="address" type="tns:AddressType" minOccurs="0">
+			</xs:element>
+			<xs:element name="fax" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="email" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="tradeRegistrationNumber" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="VATDetails" type="tns:VATDetailsType" minOccurs="0">
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="VATDetailsType">
+		<xs:sequence>
+			<xs:element name="businessSeller" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="restrictedToBusiness" type="xs:boolean" minOccurs="0">
+			</xs:element>
+			<xs:element name="VATPercent" type="xs:float" minOccurs="0">
+			</xs:element>
+			<xs:element name="VATSite" type="xs:string" minOccurs="0">
+			</xs:element>
+			<xs:element name="VATID" type="xs:string" minOccurs="0">
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="PictureDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				Contains the data for a picture associated with an item.
+				Replaces the deprecated SiteHostedPicture and
+				VendorHostedPicture.
+				Not applicable to Half.com.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+
+
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AddressType">
+	  <xs:sequence>
+		<xs:element name="name" type="xs:string" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="street" type="xs:string" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="street1" type="xs:string" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="street2" type="xs:string" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="cityName" type="xs:string" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="county" type="xs:string" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="stateOrProvince" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="country" type="xs:token" minOccurs="0">
+		</xs:element>
+		<xs:element name="countryName" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phone" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phoneCountryCode" type="xs:token" minOccurs="0">
+
+		</xs:element>
+		<xs:element name="phoneCountryPrefix" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phoneAreaOrCityCode" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phoneLocalNumber" type="xs:string" minOccurs="0">
+		</xs:element>
+		<!-- phone number set 2 -->
+		<xs:element name="phone2CountryCode" type="xs:token" minOccurs="0">
+		</xs:element>
+		<xs:element name="phone2CountryPrefix" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phone2AreaOrCityCode" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phone2LocalNumber" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="postalCode" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="addressID" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="addressOwner" type="tns:AddressOwnerCodeType" minOccurs="0">
+		</xs:element>
+		<xs:element name="addressStatus" type="tns:AddressStatusCodeType" minOccurs="0">
+		</xs:element>
+		<xs:element name="externalAddressID" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="internationalName" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="internationalStateAndCity" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="internationalStreet" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="companyName" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="addressRecordType" type="tns:AddressRecordTypeCodeType" minOccurs="0">
+		</xs:element>
+		<xs:element name="firstName" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="lastName" type="xs:string" minOccurs="0">
+		</xs:element>
+		<xs:element name="phone2" type="xs:string" minOccurs="0">
+		</xs:element>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="AddressOwnerCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				Indicates who owns the user's address.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="PayPal">
+				<xs:annotation>
+					<xs:documentation>
+						PayPal owns the address.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="eBay">
+				<xs:annotation>
+					<xs:documentation>
+						eBay owns the address.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						Reserved for internal or future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+<!--
+
+##### from file eBLBaseComponents/public/AddressRecordTypeCodeList.xsd #####
+
+-->
+	<xs:simpleType name="AddressRecordTypeCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				Codes indicate the address type.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Residential">
+			</xs:enumeration>
+			<xs:enumeration value="Business"/>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Reserved for internal or future use
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+<!--
+
+##### from file eBLBaseComponents/public/AddressStatusCodeList.xsd #####
+
+-->
+	<xs:simpleType name="AddressStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				PayPal address status.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="None"/>
+			<xs:enumeration value="Confirmed"/>
+			<xs:enumeration value="Unconfirmed"/>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Reserved for internal or future use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	
+	<xs:complexType name="SellingStatusType">
+
+		<xs:sequence>
+			<xs:element name="bidCount" type="xs:int" minOccurs="1">
+
+			</xs:element>
+			<xs:element name="bidIncrement" type="tns:AmountType" minOccurs="1">
+
+			</xs:element>
+			<xs:element name="convertedCurrentPrice" type="tns:AmountType" minOccurs="0">
+
+			</xs:element>
+			<xs:element name="currentPrice" type="tns:AmountType" minOccurs="1">
+			
+			</xs:element>
+			<xs:element name="highBidder" type="tns:UserType" minOccurs="0">
+			</xs:element>
+	
+			<xs:element name="minimumToBid" type="tns:AmountType" minOccurs="1">
+		
+			</xs:element>
+			<xs:element name="quantitySold" type="xs:int" minOccurs="1">
+			</xs:element>
+			<xs:element name="reserveMet" type="xs:boolean" minOccurs="1">
+			</xs:element>
+			<xs:element name="bidderCount" type="xs:long" minOccurs="1">
+			</xs:element>
+			<xs:element name="listingStatus" type="tns:ListingStatusCodeType" minOccurs="0">
+			</xs:element>
+		
+
+
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="ListingStatusCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Active">
+
+			</xs:enumeration>
+			<xs:enumeration value="Ended">
+	
+			</xs:enumeration>
+			<xs:enumeration value="Completed">
+
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+
+			</xs:enumeration>
+			<xs:enumeration value="Custom">
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="UserType">
+		<xs:annotation>
+			<xs:documentation>
+				Type to contain the data for one eBay user. Depending on the context, the user
+				might be the seller or the buyer in a transaction, or the bidder or winning bidder
+				in a listing. An object of this type is returned by a number of calls, including
+				the GetUser call.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+		
+			<xs:element name="email" type="xs:string" minOccurs="0">
+			
+			</xs:element>
+			<xs:element name="feedbackScore" type="xs:int" minOccurs="0">
+			
+			</xs:element>
+			<xs:element name="uniqueNegativeFeedbackCount" type="xs:int" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="uniquePositiveFeedbackCount" type="xs:int" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="positiveFeedbackPercent" type="xs:float" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="feedbackPrivate" type="xs:boolean" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="feedbackRatingStar" type="tns:FeedbackRatingStarCodeType" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="idVerified" type="xs:boolean" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="eBayGoodStanding" type="xs:boolean" minOccurs="0">
+			</xs:element>
+		
+			<xs:element name="site" type="xs:token" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="status" type="tns:UserStatusCodeType" minOccurs="0">
+				
+			</xs:element>
+			<xs:element name="userID" type="tns:UserIDType" minOccurs="0">
+			
+			</xs:element>
+		</xs:sequence>
+		</xs:complexType>
+		
+		
+		<xs:simpleType name="UserStatusCodeType">
+		<xs:annotation>
+			<xs:documentation>
+				These codes indicate the current state or status of a an eBay
+				user account.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Unknown">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User properties have never been set; this value should
+						seldom, if ever, be returned and typically represents a
+						problem
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Suspended">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has been suspended from selling and buying, such as
+						for violations of eBay terms or agreement
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Confirmed">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed online registration and has properly
+						responded to confirmation email; most users should fall
+						in this category
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unconfirmed">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed online registration, but has either
+						not responded to confirmation email or has not yet been
+						sent the confirmation email
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Ghost">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Registered users of AuctionWeb (pre-eBay) who never
+						re-registered on eBay
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="InMaintenance">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Temporary user record state indicating the record is in
+						the process of being changed by eBay; query user
+						information again to get new status
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Deleted">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Records for the specified user have been deleted
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CreditCardVerify">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed registration and confirmation, but is
+						pending a verification of credit card information
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AccountOnHold">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User's account is on hold, such as for non-payment of
+						amounts due eBay; user cannot sell or buy items
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Merged">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User record has been merged with another account record
+						for the same user
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RegistrationCodeMailOut">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed online registration and has been sent
+						the confirmation email, but has not yet responded to the
+						confirmation email
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TermPending">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has been scheduled for account closure (typically
+						when a user has requested to have their account closed)
+						A user in this state should not be considered an active
+						user
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnconfirmedHalfOptIn">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed the registration for Half.com and opted
+						to automatically also be registered with eBay, but the
+						registration confirmation is still pending
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CreditCardVerifyHalfOptIn">
+				<xs:annotation>
+					<xs:documentation>
+						(out) User has completed the registration for Half.com and opted
+						to automatically also be registered with eBay, but the
+						verification of credit card information is still pending
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnconfirmedPassport">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Signing in with Microsoft Passport is no longer supported.
+					</xs:documentation>
+					<xs:appinfo>
+						<DeprecationVersion>415</DeprecationVersion>
+						<DeletionVersion />
+						<EndOfLifeVersion />
+						<DeprecationDetails>NotReturned</DeprecationDetails>
+						<UseInstead />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CreditCardVerifyPassport">
+				<xs:annotation>
+					<xs:documentation>
+					 (out) Signing in with Microsoft Passport is no longer supported.
+					</xs:documentation>
+					<xs:appinfo>
+						<DeprecationVersion>415</DeprecationVersion>
+						<DeletionVersion />
+						<EndOfLifeVersion />
+						<DeprecationDetails>NotReturned</DeprecationDetails>
+						<UseInstead />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnconfirmedExpress">
+				<xs:annotation>
+					<xs:documentation>
+						(out) Half.com User; user has completed the registration for Half.com
+						and opted to automatically also be registered with eBay, but the
+						registration confirmation is still pending
+					</xs:documentation>
+					<xs:appinfo>
+						<DeprecationVersion>579</DeprecationVersion>
+						<DeprecationDetails>NoOp</DeprecationDetails>
+						<UseInstead/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Guest">
+				<xs:annotation>
+					<xs:documentation>
+						(out) The user is a guest user. The user has not added a password and has not confirmed an email address.
+						The user has not signed up as a regular user, but has agreed to the User Agreement and Privacy Policy.
+						The user has been through the buying flow for a guest;
+						the user has been through checkout using the streamlined Buy-It-Now flow.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CustomCode">
+				<xs:annotation>
+					<xs:documentation>
+						  (out) Reserved for internal or future use
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>				
+  
+	<element name="itemDetailRequest" type="tns:ItemDetailRequest">
+	</element>
+	
+	<element name="itemDetailResponse" type="tns:ItemDetailResponse">
+	</element>
+	
+	<complexType name="ItemDetailRequest">
+	  <xs:complexContent>
+			<xs:extension base="tns:BaseRequest">
+		<sequence>
+			<element name="itemID" type="string" maxOccurs="1">
+			</element>
+			<element name="errorLanguage" type="string" minOccurs="0" maxOccurs="1">
+			</element>
+		</sequence>
+		</xs:extension>
+		</xs:complexContent>
+	</complexType>
+	<complexType name="ItemDetailResponse">
+		<xs:complexContent>
+			<xs:extension base="tns:BaseResponse">
+				<sequence>
+					<element name="item" type="tns:ItemType" minOccurs="0" maxOccurs="1">
+					</element>
+				</sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</complexType>
+        
+        
+            <complexType name="PaymentDetailsType">
+            	<sequence>
+            		<element name="daysToFullPayment" type="int"
+            			minOccurs="0" maxOccurs="1" >
+            		</element>
+            		<element name="hoursToDeposit" type="int"
+            			minOccurs="0" maxOccurs="1" >
+            		</element>
+            	</sequence>
+            </complexType>
+    
+        </schema>
+    </types>
+  
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    
+    <message name="itemDetailRequest">
+    	<part name="payload" element="tns:itemDetailRequest"></part>
+    </message>
+    
+    <message name="itemDetailResponse">
+    	<part name="payload" element="tns:itemDetailResponse"></part>
+    </message>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- portType implemented by the AggService BPEL process -->
+    <portType name="RIMApplicationProcessServicePort">
+        <operation name="getItemDetail">
+        	<input message="tns:itemDetailRequest"></input>
+        	<output message="tns:itemDetailResponse"></output>
+        </operation>
+    </portType>
+
+
+   <binding name="RIMApplicationProcessServiceSOAPBinding" type="tns:RIMApplicationProcessServicePort">
+    	<soap:binding style="document"
+    		transport="http://schemas.xmlsoap.org/soap/http" />
+    	<operation name="getItemDetail">
+    		<soap:operation
+    			soapAction="http://www.ebay.com/marketplace/mobile/v1/services/getItemDetail" />
+    		<input>
+    			<soap:body use="literal" />
+    		</input>
+    		<output>
+    			<soap:body use="literal" />
+    		</output>
+    	</operation>
+    </binding>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+         the AggService partnerLinkType binds the provider and
+         requester portType into an synchronous conversation.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="RIMApplicationService">
+        <plnk:role name="AggServiceProvider" portType="tns:RIMApplicationProcessServicePort"/>
+    </plnk:partnerLinkType>   
+      
+     <service name="RIMApplicationProcessService">
+    	<port name="RIMApplicationProcessServiceSOAPPort" binding="tns:RIMApplicationProcessServiceSOAPBinding">
+    		<soap:address location="https://svcs.ebay.com/services/mobile/v1/RIMApplicationProcessService" />
+    	</port>
+    </service>
+
+</definitions>

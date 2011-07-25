@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="DeviceIdentificationService" targetNamespace="http://www.ebay.com/marketplace/security/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/security/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/security/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="checkDevicePropertyRequest" type="tns:CheckDevicePropertyRequest"/>
+			<xs:complexType name="CheckDevicePropertyRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="userReference" type="tns:UserReferenceType">
+							<xs:annotation>
+									<xs:documentation>
+										This is the unique reference for the client
+										or application
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="deviceProperty" type="tns:DevicePropertyType">
+								<xs:annotation>
+									<xs:documentation>
+										The deviceProperty used when the user requested an IAF token/tokenRef
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="deviceKey" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The deviceKey used when the user requested an IAF token/tokenRef
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="externalProperty" type="tns:ExternalPropertyType">
+								<xs:annotation>
+									<xs:documentation>
+										Denotes a list of External Properties that can be defined for this request, which are embedded in the user requested token. For e.g. connection properties  Carrier code, country code 
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="checkDevicePropertyResponse" type="tns:CheckDevicePropertyResponse"/>
+			<xs:complexType name="CheckDevicePropertyResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="deviceKey" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Retrieve corresponding deviceKey for deviceProperty.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="0" name="match" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+										True if eGUID matches else false.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="retrieveDeviceKeyRequest" type="tns:RetrieveDeviceKeyRequest"/>
+			<xs:complexType name="RetrieveDeviceKeyRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="1" name="deviceProperty" type="tns:DevicePropertyType">
+								<xs:annotation>
+									<xs:documentation>
+										The unique device property from
+										where the request came
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="retrieveDeviceKeyResponse" type="tns:RetrieveDeviceKeyResponse"/>
+			<xs:complexType name="RetrieveDeviceKeyResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="deviceKey" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Retrieve corresponding MGID for deviceTag.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createOrRefreshDeviceKeyRequest" type="tns:CreateOrRefreshDeviceKeyRequest"/>
+			<xs:complexType name="CreateOrRefreshDeviceKeyRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="userReference" type="tns:UserReferenceType">
+                                <xs:annotation>
+                                	<xs:documentation>This is the unique reference for the client
+										or application
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element minOccurs="1" name="deviceProperty" type="tns:DevicePropertyType">
+                                <xs:annotation>
+                                	<xs:documentation>The unique device property from where the request came</xs:documentation></xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="createOrRefreshDeviceKeyResponse" type="tns:CreateOrRefreshDeviceKeyResponse"/>
+			<xs:complexType name="CreateOrRefreshDeviceKeyResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="deviceKey" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Create new deviceKey, with the Property type for the device Property persist and return it
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ExternalPropertyType">
+				<xs:annotation>
+					<xs:appinfo/>
+					<xs:documentation>
+						External Properties that can be defined for this request, which are embedded in the user requested token. For e.g. connection properties  Carrier code, country code 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="propertyName" type="tns:ExternalPropertyNameType">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the property
+								</xs:documentation>
+							</xs:annotation>
+					</xs:element>
+					<xs:element name="propertyValue" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Value of the property
+								</xs:documentation>
+							</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DevicePropertyType">
+				<xs:annotation>
+					<xs:appinfo/>
+					<xs:documentation>
+						The deviceProperty used when the user requested an IAF token/tokenRef 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="propertyName" type="tns:DevicePropertyNameType">
+							<xs:annotation>
+								<xs:documentation>
+									Name of the property
+								</xs:documentation>
+							</xs:annotation>
+					</xs:element>
+					<xs:element name="propertyValue" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Value of the property
+								</xs:documentation>
+							</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="DevicePropertyNameType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="FLASH">
+						<xs:annotation>
+							<xs:documentation>
+								Flash identifier
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="HTTP">
+						<xs:annotation>
+							<xs:documentation>
+								HTTP unique identifier
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="EGUID">
+						<xs:annotation>
+							<xs:documentation>
+								unique identifier
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ExternalPropertyNameType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CARRIER_CODE">
+						<xs:annotation>
+							<xs:documentation>
+								Carrier Code
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="COUNTRY_CODE">
+						<xs:annotation>
+							<xs:documentation>
+								Country Code
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="UserReferenceType">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="referenceType" type="tns:UserReferenceTypeEnum">
+						<xs:annotation>
+							<xs:documentation>
+								 Enum containing the User realm such as userName
+							 </xs:documentation>
+							<xs:appinfo/>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="referenceValue" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								 Request reference value for the selected the User realm such as userName
+							 </xs:documentation>
+							<xs:appinfo/>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="UserReferenceTypeEnum">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="USER_ID"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+  </types>
+  <message name="checkDevicePropertyResponse">
+    <part name="params" element="tns:checkDevicePropertyResponse">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="createOrRefreshDeviceKeyRequest">
+    <part name="params" element="tns:createOrRefreshDeviceKeyRequest">
+    </part>
+  </message>
+  <message name="retrieveDeviceKeyRequest">
+    <part name="paras" element="tns:retrieveDeviceKeyRequest">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="checkDevicePropertyRequest">
+    <part name="params" element="tns:checkDevicePropertyRequest">
+    </part>
+  </message>
+  <message name="createOrRefreshDeviceKeyResponse">
+    <part name="params" element="tns:createOrRefreshDeviceKeyResponse">
+    </part>
+  </message>
+  <message name="retrieveDeviceKeyResponse">
+    <part name="params" element="tns:retrieveDeviceKeyResponse">
+    </part>
+  </message>
+  <portType name="DeviceIdentificationServicePort">
+    <operation name="getVersion">
+<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="checkDeviceProperty">
+<wsdl:documentation>
+				This operation will return true if the eGUID in the header X-EBAY3PP-DEVICE-ID matches the the device tag provided in this user’s IAF token context. It will return false if no match is found.
+			</wsdl:documentation>
+      <input message="tns:checkDevicePropertyRequest">
+    </input>
+      <output message="tns:checkDevicePropertyResponse">
+    </output>
+    </operation>
+    <operation name="retrieveDeviceKey">
+<wsdl:documentation>
+				This operation will return a MGID corresponding to the device tag provided by the caller.
+			</wsdl:documentation>
+      <input message="tns:retrieveDeviceKeyRequest">
+    </input>
+      <output message="tns:retrieveDeviceKeyResponse">
+    </output>
+    </operation>
+    <operation name="createOrRefreshDeviceKey">
+<wsdl:documentation>
+				This operation will create new MGID for the device tag provided by the caller, if one does not exist, else it will return the existing one.
+			</wsdl:documentation>
+      <input message="tns:createOrRefreshDeviceKeyRequest">
+    </input>
+      <output message="tns:createOrRefreshDeviceKeyResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="DeviceIdentificationServiceHttpBinding" type="tns:DeviceIdentificationServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="checkDeviceProperty">
+      <http:operation location="/checkDeviceProperty"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="retrieveDeviceKey">
+      <http:operation location="/retrieveDeviceKey"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="createOrRefreshDeviceKey">
+      <http:operation location="/createOrRefreshDeviceKey"/>
+      <input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content type="text/xml"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="DeviceIdentificationServiceSOAPBinding" type="tns:DeviceIdentificationServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="checkDeviceProperty">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/checkDeviceProperty"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="retrieveDeviceKey">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/retrieveDeviceKey"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="createOrRefreshDeviceKey">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/security/v1/services/createOrRefreshDeviceKey"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  
+  <service name="DeviceIdentificationService">
+<wsdl:documentation>
+			<Version>1.0.0</Version>
+			DeviceIdentityService will provide the machine tag validation and machine ID create/retrieve functionality.
+		</wsdl:documentation>
+    <port name="DeviceIdentificationServiceHttpPort" binding="tns:DeviceIdentificationServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/security/v1/DeviceIdentificationService"/>
+    </port>
+    <port name="DeviceIdentificationServiceSOAPPort" binding="tns:DeviceIdentificationServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/security/v1/DeviceIdentificationService"/>
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="FindItemService"
+	targetNamespace="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:services="http://www.ebay.com/marketplace/services"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<wsdl:types>
+
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/search/v1/services">
+			<xs:import
+				namespace="http://www.ebay.com/marketplace/services" />
+
+			<xs:element name="findItemsRequest"
+				type="tns:FindItemsRequest">
+			</xs:element>
+
+			<xs:element name="findItemsResponse"
+				type="tns:FindItemsResponse">
+			</xs:element>
+
+			<xs:complexType name="FindItemsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Searches for items based on given constraints
+						and returns details for matching items according
+						to required fields.
+					</xs:documentation>
+					<xs:appinfo>
+						<Summary>
+							Searches for eBay items based upon given
+							constraints and returns details for matching
+							items.
+						</Summary>
+						<TempInfo>samples</TempInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="services:BaseServiceRequest">
+						<xs:sequence>
+
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+			<xs:complexType name="FindItemsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						FindItemsResponse is used to define the response
+						for findItems operation.
+					</xs:documentation>
+					<xs:appinfo>
+						<CallInfo>
+							<CallName>findItems</CallName>
+						</CallInfo>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="services:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element maxOccurs="unbounded"
+								minOccurs="0" name="searchResultSet" type="tns:SearchRecord">
+								<xs:annotation>
+									<xs:documentation>
+										Contains result item
+										information.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+
+
+
+
+
+			<xs:complexType name="ShippingCostFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type contains aggregated shipping
+						information for an item.
+					</xs:documentation>
+					<xs:appinfo />
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipCost" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>
+								shipping cost
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="insuranceCost" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>
+								insurance cost
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="mailClass" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								mail class
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="errorCode" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								error code as defined by Search BE
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shipCostWithInsurance" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>
+								combined cost for shipping and insurance
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="shippingZone" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								shipping zone
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="TraitFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type contains aggregated information for a
+						trait of a MSKU item returned in search results.
+					</xs:documentation>
+					<xs:appinfo />
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="logicalName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the name of the trait.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="displayName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the display name of the trait.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="nameSpace" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the namespace of the trait.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="index"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								the index of the trait.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="SellerLogoFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type contains aggregated information about
+						seller logo.
+					</xs:documentation>
+					<xs:appinfo />
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="imageUrl" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The URL for the logo image.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="imageType" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The type for logo image.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+
+
+
+
+
+
+
+			<xs:complexType name="BooleanFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of boolean type.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								FieldValeus are used to hold values in
+								search results, they are mapped to the
+								Fields specified in ReadSet.
+								BooleanFieldValue is used to hold a
+								returned field value of Boolean type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DateFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of date type.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>
+								FieldValeus are used to hold values in
+								search results, they are mapped to the
+								Fields specified in ReadSet.
+								DateFieldValue is used to hold a
+								returned field value of dateTime type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:complexType name="DoubleFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of double type.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation>
+								FieldValeus are used to hold values in
+								search results, they are mapped to the
+								Fields specified in ReadSet.
+								DoubleFieldValue is used to hold a
+								returned field value of double type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="FieldValue">
+				<xs:choice>
+					<xs:element name="shippingCost"
+						type="tns:ShippingCostFieldValue" />
+					<xs:element name="trait" type="tns:TraitFieldValue" />
+					<xs:element name="sellerLogo"
+						type="tns:SellerLogoFieldValue" />
+					<xs:element name="booleanVal"
+						type="tns:BooleanFieldValue" />
+					<xs:element name="dateVal"
+						type="tns:DateFieldValue" />
+					<xs:element name="doubleVal"
+						type="tns:DoubleFieldValue" />
+					<xs:element name="longVal"
+						type="tns:LongFieldValue" />
+					<xs:element name="money" type="tns:MoneyFieldValue" />
+					<xs:element name="stringVal"
+						type="tns:StringFieldValue" />
+					<xs:element name="fitment"
+						type="tns:FitmentFieldValue" />
+				</xs:choice>
+			</xs:complexType>
+
+			<xs:complexType name="LongFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of long type.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:long">
+						<xs:annotation>
+							<xs:documentation>
+								FieldValeus are used to hold values in
+								search results, they are mapped to the
+								Fields specified in ReadSet.
+								LongFieldValue is used to hold a
+								returned field value of long type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Member">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines a member in a Dictionary. It
+						could be a static member defined in the
+						Dictionary such as Title, Category Id, or a
+						built-in function defined in the dictionary such
+						as Distance(), ShippingCost(). A Member can be
+						uniquely identified by its namespace and name.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Field">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="namespace" type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										The Namespace of the member. For
+										complete list of namespace
+										definitions, please check
+										com.ebay.finding.metadata.namespace.NamespaceEnum.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1"
+								name="name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The name of the Member.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="Field">
+				<xs:annotation>
+					<xs:documentation>
+						Filed is defined as an abstract type. It’s the
+						atomic unit which can be used in constraint or
+						read set. Field can be an item attribute,
+						aspect, or function. It has 2 subtypes which are
+						Member and Expression.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+
+			<xs:complexType name="MoneyFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of money type.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:double">
+						<xs:annotation>
+							<xs:documentation>
+								Money value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1"
+						name="currency" type="xs:token">
+						<xs:annotation>
+							<xs:documentation>
+								Money currency.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="SearchRecord">
+				<xs:annotation>
+					<xs:documentation>
+						Defines a single row or record as in the search
+						results.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="field" type="tns:Member" />
+					<xs:element name="fieldValue" type="tns:FieldValue" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="StringFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the field value of string
+						type.
+					</xs:documentation>
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="value"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The element of string type as the
+								operand.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="FitmentFieldValue">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo></xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="fitmentMatch" type="tns:BooleanFieldValue">
+						<xs:annotation>
+							<xs:documentation>
+								The list of boolean flags indicating if
+								each of the fitments defined in
+								FitmentData is matched in the search
+								record in result set.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax">
+					</xs:any>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="ack" type="services:AckValue">
+						<xs:annotation>
+							<xs:documentation>
+
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="services:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:any maxOccurs="unbounded" minOccurs="0"
+						processContents="lax">
+					</xs:any>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string">
+					</xs:element>
+					<xs:element name="severity"
+						type="services:ErrorSeverity">
+					</xs:element>
+					<xs:element name="category"
+						type="services:ErrorCategory">
+					</xs:element>
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token">
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="services:ErrorParameter">
+					</xs:element>
+				</xs:sequence>
+
+
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<!--
+					<xs:sequence> <xs:any maxOccurs="unbounded" minOccurs="0"
+					processContents="lax" /> </xs:sequence>
+				-->
+
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="services:ErrorData">
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional">
+						</xs:attribute>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services">
+						</typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="findItemsRequest">
+		<wsdl:part element="tns:findItemsRequest" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="findItemsResponse">
+		<wsdl:part element="tns:findItemsResponse" name="parameters" />
+	</wsdl:message>
+
+	<wsdl:portType name="FindItemServicePort">
+
+		<wsdl:operation name="findItems">
+			<wsdl:documentation>
+				findItems returns matching items and distribution
+				information according to conditions in request.
+			</wsdl:documentation>
+			<wsdl:input message="tns:findItemsRequest" />
+			<wsdl:output message="tns:findItemsResponse" />
+		</wsdl:operation>
+
+	</wsdl:portType>
+
+	<wsdl:binding name="FindItemServiceHttpBinding"
+		type="tns:FindItemServicePort">
+		<http:binding verb="POST" />
+		<wsdl:operation name="findItems">
+			<http:operation location="/findItems" />
+			<wsdl:input>
+				<mime:content part="parameters"
+					type="application/x-www-form-urlencoded" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="parameters" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="FindItemServiceSOAPBinding"
+		type="tns:FindItemServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="findItems">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/findItems" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="FindItemService">
+		<wsdl:documentation>
+			<Version>1.3.0</Version>
+			The FindItemService provides operations to fetch items and
+			related distribution information according specified
+			conditions. This is a Biz level service which contains
+			business logics.
+		</wsdl:documentation>
+		<wsdl:port binding="tns:FindItemServiceHttpBinding"
+			name="FindItemServiceHttpPort">
+			<http:address
+				location="http://svcs.ebay.com/services/search/FindItemService/v1" />
+		</wsdl:port>
+		<wsdl:port binding="tns:FindItemServiceSOAPBinding"
+			name="FindItemServiceSOAPPort">
+			<soap12:address
+				location="http://svcs.ebay.com/services/search/FindItemService/v1" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

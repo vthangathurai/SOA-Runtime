@@ -1,0 +1,257 @@
+package com.ebay.marketplace.error.v1.services.testservice ;
+
+option java_package = "com.ebay.marketplace.error.v1.services.testservice.proto" ;
+option java_outer_classname = "ErrorTestServiceV1" ;
+option optimize_for = SPEED ;
+
+
+// Documentation goes here 
+message ErrorParameter {
+
+    optional string value = 11 ;
+
+    optional string name = 12 ;
+}
+
+
+// Document goes here 
+message GetVersionRequest {
+
+    repeated ExtensionType extension = 1 ;
+}
+
+
+message ErrorSeverityEnum {
+    enum ErrorSeverity {
+
+        ERROR = 11 ;
+
+        WARNING = 12 ;
+    }
+}
+
+
+message ErrorCategoryEnum {
+    enum ErrorCategory {
+
+        SYSTEM = 11 ;
+
+        APPLICATION = 12 ;
+
+        REQUEST = 13 ;
+    }
+}
+
+
+message AckValueEnum {
+    enum AckValue {
+
+        // The request was processed successfully, but something occurred that 
+        // may affect your application or the user. 
+        SUCCESS = 11 ;
+
+        // The request that triggered the error was not processed successfully. 
+        // When a serious application-level error occurs, the error is returned 
+        // instead of the business data. 
+        FAILURE = 12 ;
+
+        // The request that triggered the error was processed successfully but 
+        // with some warnings. 
+        WARNING = 13 ;
+
+        // The request that triggered the error was processed successfully but 
+        // with some warnings. 
+        PARTIAL_FAILURE = 14 ;
+    }
+}
+
+
+// Document goes here 
+message GetVersionResponse {
+
+    required AckValueEnum.AckValue ack = 1 ;
+
+    // Information for an error or warning that occurred when eBay processed the 
+    // request. 
+    optional ErrorMessage errorMessage = 11 ;
+
+    optional string version = 12 ;
+
+    optional sint64 timestamp = 13 ;
+
+    repeated ExtensionType extension = 2 ;
+}
+
+
+// Document goes here 
+message PolyType {
+
+    required TestRequest poly = 1 ;
+}
+
+
+// Documentation goes here 
+message ErrorData {
+
+    required sint64 errorId = 1 ;
+
+    required string domain = 2 ;
+
+    optional string subdomain = 11 ;
+
+    required ErrorSeverityEnum.ErrorSeverity severity = 3 ;
+
+    required ErrorCategoryEnum.ErrorCategory category = 4 ;
+
+    required string message = 5 ;
+
+    optional string exceptionId = 12 ;
+
+    repeated ErrorParameter parameter = 6 ;
+}
+
+
+// Document goes here 
+message TestRequest {
+
+    repeated ExtensionType extension = 1 ;
+
+    required string test = 2 ;
+}
+
+
+// Document goes here 
+message GetErrorRequest {
+
+    repeated ExtensionType extension = 1 ;
+}
+
+
+message GetPolymorphismResponse {
+
+    required string out = 1 ;
+}
+
+
+// Documentation goes here 
+message ExtensionType {
+
+    required string id = 1 ;
+
+    required string version = 2 ;
+
+    required string contentType = 3 ;
+
+    required string value = 4 ;
+}
+
+
+// Document goes here 
+message GetErrorResponse {
+
+    required AckValueEnum.AckValue ack = 1 ;
+
+    // Information for an error or warning that occurred when eBay processed the 
+    // request. 
+    optional ErrorMessage errorMessage = 11 ;
+
+    optional string version = 12 ;
+
+    optional sint64 timestamp = 13 ;
+
+    repeated ExtensionType extension = 2 ;
+
+    required string output = 3 ;
+}
+
+
+// Document goes here 
+message TestRequest2 {
+
+    repeated ExtensionType extension = 1 ;
+
+    required string test = 2 ;
+}
+
+
+// Document goes here 
+message TestRequest1 {
+
+    repeated ExtensionType extension = 1 ;
+
+    required string test = 2 ;
+}
+
+
+// Documentation goes here 
+message ErrorMessage {
+
+    repeated ErrorData error = 1 ;
+}
+
+//PMD-PMD_DATA_START
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorRequest-LAST_REPEATED=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorRequest/extension/ExtensionType=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse-LAST_REPEATED=3
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse-LAST_SINGLE=13
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse/ack/AckValue=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse/errorMessage/ErrorMessage=11
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse/extension/ExtensionType=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse/output/string=3
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse/timestamp/dateTime=13
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetErrorResponse/version/string=12
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionRequest-LAST_REPEATED=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionRequest/extension/ExtensionType=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse-LAST_REPEATED=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse-LAST_SINGLE=13
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse/ack/AckValue=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse/errorMessage/ErrorMessage=11
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse/extension/ExtensionType=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse/timestamp/dateTime=13
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}GetVersionResponse/version/string=12
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}PolyType-LAST_REPEATED=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}PolyType/poly/TestRequest=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest-LAST_REPEATED=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest/extension/ExtensionType=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest/test/string=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest1-LAST_REPEATED=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest1/extension/ExtensionType=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest1/test/string=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest2-LAST_REPEATED=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest2/extension/ExtensionType=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}TestRequest2/test/string=2
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}getPolymorphismResponse-LAST_REPEATED=1
+//PMD-{http://www.ebay.com/marketplace/error/v1/services}getPolymorphismResponse/out/string=1
+//PMD-{http://www.ebay.com/marketplace/services}AckValue-LAST_SINGLE=14
+//PMD-{http://www.ebay.com/marketplace/services}AckValue/Failure/string=12
+//PMD-{http://www.ebay.com/marketplace/services}AckValue/PartialFailure/string=14
+//PMD-{http://www.ebay.com/marketplace/services}AckValue/Success/string=11
+//PMD-{http://www.ebay.com/marketplace/services}AckValue/Warning/string=13
+//PMD-{http://www.ebay.com/marketplace/services}ErrorCategory-LAST_SINGLE=13
+//PMD-{http://www.ebay.com/marketplace/services}ErrorCategory/Application/token=12
+//PMD-{http://www.ebay.com/marketplace/services}ErrorCategory/Request/token=13
+//PMD-{http://www.ebay.com/marketplace/services}ErrorCategory/System/token=11
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData-LAST_REPEATED=6
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData-LAST_SINGLE=12
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/category/ErrorCategory=4
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/domain/string=2
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/errorId/long=1
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/exceptionId/token=12
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/message/string=5
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/parameter/ErrorParameter=6
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/severity/ErrorSeverity=3
+//PMD-{http://www.ebay.com/marketplace/services}ErrorData/subdomain/string=11
+//PMD-{http://www.ebay.com/marketplace/services}ErrorMessage-LAST_REPEATED=1
+//PMD-{http://www.ebay.com/marketplace/services}ErrorMessage/error/ErrorData=1
+//PMD-{http://www.ebay.com/marketplace/services}ErrorParameter-LAST_SINGLE=12
+//PMD-{http://www.ebay.com/marketplace/services}ErrorParameter/@name/string=12
+//PMD-{http://www.ebay.com/marketplace/services}ErrorParameter/value/string=11
+//PMD-{http://www.ebay.com/marketplace/services}ErrorSeverity-LAST_SINGLE=12
+//PMD-{http://www.ebay.com/marketplace/services}ErrorSeverity/Error/token=11
+//PMD-{http://www.ebay.com/marketplace/services}ErrorSeverity/Warning/token=12
+//PMD-{http://www.ebay.com/marketplace/services}ExtensionType-LAST_REPEATED=4
+//PMD-{http://www.ebay.com/marketplace/services}ExtensionType/contentType/string=3
+//PMD-{http://www.ebay.com/marketplace/services}ExtensionType/id/positiveInteger=1
+//PMD-{http://www.ebay.com/marketplace/services}ExtensionType/value/string=4
+//PMD-{http://www.ebay.com/marketplace/services}ExtensionType/version/string=2
+//PMD-PMD_DATA_END

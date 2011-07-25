@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ProductCandidateService" targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.ebay.com/marketplace/catalog/v1/services" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/catalog/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger"/>
+					<xs:element name="version" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
+					<xs:element name="value" type="xs:string"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:element name="addProductCandidatesRequest" type="tns:AddProductCandidatesRequest">
+
+                <xs:annotation>
+                	<xs:documentation>
+                		batch Request which captures input for
+                		addProductCandidates operation and consists of
+                		one or more AddProductCandidateRequest
+                	</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="addProductCandidatesResponse" type="tns:AddProductCandidatesResponse">
+
+                <xs:annotation>
+                	<xs:documentation>
+                		batch Response which holds one or more
+                		AddProductCandidateResponse
+                	</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="getProductCandidatesRequest" type="tns:GetProductCandidatesRequest">
+
+                <xs:annotation>
+                	<xs:documentation>
+                		batch Request which captures the input for
+                		getProductCandidates operation and consists of
+                		one or more GetProductCandidateRequest
+                	</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="getProductCandidatesResponse" type="tns:GetProductCandidatesResponse">
+
+                <xs:annotation>
+                	<xs:documentation>
+                		batch Response which holds one or more
+                		GetProductCandidateResponse
+                	</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+
+
+			<xs:complexType name="AddProductCandidatesRequest">
+                <xs:annotation>
+                	<xs:documentation>
+                		a list of AddProductCandidateRequest for batch
+                		operation
+                	</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence >
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="addProductCandidateRequest" type="tns:AddProductCandidateRequest">
+                                <xs:annotation>
+                                	<xs:documentation>
+                                		batch API which takes a list of
+                                		AddProductCandidateRequest
+                                	</xs:documentation>
+                                </xs:annotation>
+							</xs:element>
+						</xs:sequence>
+
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AddProductCandidatesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="addProductCandidateResponse" type="tns:AddProductCandidateResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProductCandidatesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="getProductCandidateRequest" type="tns:GetProductCandidateRequest">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="GetProductCandidatesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="getProductCandidateResponse" type="tns:GetProductCandidateResponse">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+
+			<xs:complexType name="AddProductCandidateRequest">
+                <xs:annotation>
+                	<xs:documentation>
+                		single Request for AddProductCandidates
+                		operation
+                	</xs:documentation>
+                </xs:annotation>
+                <xs:complexContent>
+            		<xs:extension base="tns:BaseProductCandidateRequest">
+            			<xs:sequence>
+
+
+                            <xs:element name="catalogName" type="xs:string" maxOccurs="1" minOccurs="1">
+            				</xs:element>
+                            <xs:element name="locale" type="tns:Locale" maxOccurs="1" minOccurs="1">
+                                <xs:annotation>
+                                	<xs:documentation>
+                                		Valid values are: US_EN, DE_DE,
+                                		GB_EN, FR_FR, NL_NL, IT_IT,
+                                		CN_ZH, AU_EN, ES_ES, IN_IN,
+                                		CA_FR, BE_FR
+                                	</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1"
+            					name="dataProviderIdentifier"
+            					type="tns:DataProviderIdentifier">
+            					<xs:annotation>
+            						<xs:documentation>
+            							Provider encapsulates provider
+            							information, which includes
+            							providerType and providerId.
+            						</xs:documentation>
+            					</xs:annotation>
+            				</xs:element>
+            				<xs:element maxOccurs="unbounded"
+            					minOccurs="1" name="propertyValue"
+            					type="tns:PropertyValue">
+            					<xs:annotation>
+            						<xs:documentation>
+            							one or more PropertyValue in the
+            							request
+            						</xs:documentation>
+            					</xs:annotation>
+            				</xs:element>
+
+
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="BaseProductCandidateRequest">
+            	<xs:sequence>
+            		<xs:element maxOccurs="1" minOccurs="1" name="invocationId" type="xs:string"/>
+            	</xs:sequence>
+            </xs:complexType>
+		
+
+            <xs:complexType name="DataProviderIdentifier">
+            	<xs:sequence>
+            		<xs:element maxOccurs="1" minOccurs="1" name="providerName" type="xs:string">
+            			<xs:annotation>
+            				<xs:documentation>
+            					name of this data provider. List of
+            					valid values are: Community, C3Passive
+            				</xs:documentation>
+            			</xs:annotation></xs:element>
+            		<xs:element maxOccurs="1" minOccurs="0" name="userId" type="xs:string"/>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="PropertyValue">
+            	<xs:sequence>
+            		<xs:element maxOccurs="1" minOccurs="1" name="property" type="tns:Property"/>
+            		<xs:element maxOccurs="unbounded" minOccurs="0" name="value" type="tns:Value"/>
+            	</xs:sequence>
+            </xs:complexType>
+            
+		
+            <xs:complexType name="Property">
+            	<xs:sequence>
+            		<xs:element maxOccurs="1" minOccurs="1" name="canonicalName" type="xs:string"/>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="Value">
+            	<xs:sequence>
+            		<xs:choice>
+            			<xs:element name="stringValue" type="tns:StringValue">
+            			</xs:element>
+            			<xs:element name="numericValue" type="tns:NumericValue">
+            			</xs:element>
+            			<xs:element name="uriValue" type="tns:URIValue">
+            			</xs:element>
+            		</xs:choice>
+
+
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="StringValue">
+            	<xs:sequence>
+            		<xs:element name="value" type="xs:string"/>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="NumericValue">
+            	<xs:sequence>
+            		<xs:element name="value" type="xs:string"/>
+            		<xs:element name="unitOfMeasure" type="tns:UnitOfMeasure"/>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="URIValue">
+            	<xs:sequence>
+
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="UnitOfMeasure">
+                <xs:annotation>
+                	<xs:documentation>
+                		UOM of this value. List of valid values are:
+                		bps, kbps, bit, byte, kb, MB, mW, W, Hz, kHz, m,
+                		mm, rph, hr, min, ms, ns, sec, g, lbs
+                	</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"/>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+            <xs:complexType name="Locale">
+                <xs:annotation>
+                	<xs:documentation>
+                		Valid values are: US_EN, DE_DE, GB_EN, FR_FR,
+                		NL_NL, IT_IT, CN_ZH, AU_EN, ES_ES, IN_IN, CA_FR,
+                		BE_FR
+                	</xs:documentation>
+                </xs:annotation>
+                <xs:simpleContent>
+            		<xs:extension base="xs:token"/>
+            	</xs:simpleContent>
+            </xs:complexType>
+		
+            <xs:complexType name="AddProductCandidateResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseProductCandidateResponse">
+            			<xs:sequence>
+            				<xs:element maxOccurs="1" minOccurs="0"
+            					name="productState" type="xs:token">
+            				</xs:element>
+            				<xs:element maxOccurs="1" minOccurs="0"
+            					name="productReason" type="xs:token">
+            				</xs:element>
+
+            				<xs:element name="productReasonDetail"
+            					type="xs:token" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element maxOccurs="1" minOccurs="0"
+            					name="ebayCoreProductId" type="xs:string">
+            				</xs:element>
+            				<xs:element maxOccurs="1" minOccurs="0"
+            					name="productCandidateId" type="xs:string">
+            				</xs:element>
+
+            				<xs:element name="duplicateContext"
+            					type="xs:token" maxOccurs="1" minOccurs="0">
+            					<xs:annotation>
+            						<xs:documentation>
+            							duplicateContext would be null
+            							if the request is not duplicate;
+            							otherwise, duplicateContext can
+            							have the below possible values:
+            							PREPRODUCTION, BUILDDB.
+            						</xs:documentation>
+            					</xs:annotation>
+            				</xs:element>
+
+            				<xs:element name="merged"
+            					type="xs:boolean" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="BaseProductCandidateResponse">
+            	<xs:sequence>
+            		<xs:element maxOccurs="1" minOccurs="1" name="invocationId" type="xs:string"/>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="GetProductCandidateRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseProductCandidateRequest">
+            			<xs:sequence>
+            				<xs:element maxOccurs="1" minOccurs="1" name="productCandidateId" type="xs:string">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="GetProductCandidateResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseProductCandidateResponse">
+            			<xs:sequence>
+            				<xs:element maxOccurs="1" minOccurs="1"
+            					name="catalogName" type="xs:string">
+            				</xs:element>
+            				<xs:element name="locale" type="tns:Locale"
+            					maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="ebayCoreProductId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element maxOccurs="1" minOccurs="1"
+            					name="action" type="xs:token">
+            				</xs:element>
+            				<xs:element maxOccurs="1" minOccurs="1"
+            					name="dataProviderIdentifier"
+            					type="tns:DataProviderIdentifier">
+            				</xs:element>
+                            <xs:element maxOccurs="unbounded" minOccurs="1" name="propertyValue" type="tns:PropertyValue">
+            				</xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1"
+            					name="status" type="xs:token">
+            				</xs:element>
+
+
+
+                            <xs:element name="reason"
+            					type="xs:token" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+		
+		
+            <xs:element name="correctProductCandidatesRequest" type="tns:CorrectProductCandidatesRequest">
+
+            </xs:element>
+            <xs:element name="correctProductCandidatesResponse"
+            	type="tns:CorrectProductCandidatesResponse">
+
+            </xs:element>
+            <xs:complexType
+            	name="CorrectProductCandidatesRequest">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRequest">
+            			<xs:sequence>
+
+
+
+            				<xs:element
+            					name="correctProductCandidateRequest"
+            					type="tns:CorrectionProductCandidateRequest"
+            					maxOccurs="unbounded" minOccurs="1">
+            				</xs:element>
+            			</xs:sequence>
+
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType
+            	name="CorrectionProductCandidateRequest">
+            	<xs:complexContent>
+            		<xs:extension
+            			base="tns:BaseProductCandidateRequest">
+            			<xs:sequence>
+            				<xs:element name="ebayCoreProductId"
+            					type="xs:string" maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="locale" type="tns:Locale"
+            					maxOccurs="1" minOccurs="1">
+            				</xs:element>
+            				<xs:element name="dataProviderIdentifier"
+            					type="tns:DataProviderIdentifier" maxOccurs="1"
+            					minOccurs="1">
+            				</xs:element>
+            				<xs:element name="propertyValue"
+            					type="tns:PropertyValue" maxOccurs="unbounded"
+            					minOccurs="1">
+                                <xs:annotation>
+                                	<xs:documentation>
+                                		only the list of propertyValue
+                                		listed here will get updated,
+                                		the rest stays unchanged.
+                                	</xs:documentation>
+                                </xs:annotation>
+            				</xs:element>
+            			</xs:sequence>
+
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    
+            <xs:complexType name="CorrectProductCandidatesResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseResponse">
+            			<xs:sequence>
+            				<xs:element
+            					name="correctProductCandidateResponse"
+            					type="tns:CorrectProductCandidateResponse"
+            					maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="CorrectProductCandidateResponse">
+            	<xs:complexContent>
+            		<xs:extension
+            			base="tns:BaseProductCandidateResponse">
+            			<xs:sequence>
+            				<xs:element name="ebayCoreProductId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="productCandidateId"
+            					type="xs:string" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="productCandidateState"
+            					type="xs:token" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="productCandidateReason"
+            					type="xs:token" maxOccurs="1" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="getProductCandidatesResponse">
+    <part name="parameters" element="tns:getProductCandidatesResponse">
+    </part>
+  </message>
+  <message name="addProductCandidatesResponse">
+    <part name="parameters" element="tns:addProductCandidatesResponse">
+    </part>
+  </message>
+  <message name="getVersionRequest">
+    <part name="params" element="tns:getVersionRequest">
+    </part>
+  </message>
+  <message name="getVersionResponse">
+    <part name="params" element="tns:getVersionResponse">
+    </part>
+  </message>
+  <message name="addProductCandidatesRequest">
+    <part name="parameters" element="tns:addProductCandidatesRequest">
+    </part>
+  </message>
+  <message name="getProductCandidatesRequest">
+    <part name="parameters" element="tns:getProductCandidatesRequest">
+    </part>
+  </message>
+  <wsdl:message name="correctProductCandidatesRequest">
+  	<wsdl:part name="parameters" element="tns:correctProductCandidatesRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="correctProductCandidatesResponse">
+  	<wsdl:part name="parameters" element="tns:correctProductCandidatesResponse"></wsdl:part>
+  </wsdl:message>
+  <portType name="ProductCandidateServicePort">
+    <operation name="getVersion">
+<wsdl:documentation>			Used for ensuring that a service is available (availability monitoring), and
+			ensuring that the metrics relating to a service can be accessed for monitoring.
+<Version>1.0.0</Version>
+			Used for ensuring that a service is available (availability monitoring), and
+			ensuring that the metrics relating to a service can be accessed for monitoring.
+		</wsdl:documentation>
+      <input message="tns:getVersionRequest">
+    </input>
+      <output message="tns:getVersionResponse">
+    </output>
+    </operation>
+    <operation name="addProductCandidates">
+<wsdl:documentation>
+				This method adds Addition type of product candidates. It will normalize values from
+				the input, try to find duplicates, then if no duplicates found, add into BuildDB environment. Addition type of product candidates are used to make new addition to
+				ebay so that new Product can be generated.
+			</wsdl:documentation>
+      <input message="tns:addProductCandidatesRequest">
+    </input>
+      <output message="tns:addProductCandidatesResponse">
+    </output>
+    </operation>
+    <operation name="getProductCandidates">
+<wsdl:documentation>
+				This method retrieves product candidates details. 
+			</wsdl:documentation>
+      <input message="tns:getProductCandidatesRequest">
+    </input>
+      <output message="tns:getProductCandidatesResponse">
+    </output>
+    </operation>
+
+    <wsdl:operation name="correctProductCandidates">
+    <wsdl:documentation>
+				This method adds Correction type of product candidates. It will normalize values from
+				the input, try to find duplicates, then if no duplicates found, add into BuildDB environment. Correction type of product candidates are used to make corrections to
+				existing product data in eBay, so that existing product data can be corrected.
+			</wsdl:documentation>
+    	<wsdl:input message="tns:correctProductCandidatesRequest"></wsdl:input>
+    	<wsdl:output message="tns:correctProductCandidatesResponse"></wsdl:output>
+    </wsdl:operation>
+  </portType>
+  <binding name="ProductCandidateServiceSOAPBinding" type="tns:ProductCandidateServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getVersion">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/catalog/v1/services/getVersion"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addProductCandidates">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/catalog/v1/services/addProductCandidates"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getProductCandidates">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/catalog/v1/services/getProductCandidates"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="correctProductCandidates">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/catalog/v1/services/correctProductCandidates"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="ProductCandidateServiceHttpBinding" type="tns:ProductCandidateServicePort">
+    <http:binding verb="POST"/>
+    <operation name="getVersion">
+      <http:operation location="/getVersion"/>
+      <input>
+        <mime:content part="params" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="params" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="addProductCandidates">
+      <http:operation location="/addProductCandidates"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="getProductCandidates">
+      <http:operation location="/getProductCandidates"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="correctProductCandidates">
+      <http:operation location="/correctProductCandidates"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+
+  </binding>
+  <service name="ProductCandidateService">
+<wsdl:documentation>
+		<Version>1.0.0</Version>
+		ProductCandidateService is the interface for applications that provide product candidate information. ProductCandidateService provides operations to add product candidate and retrieve information of product candidate. When add a Product Candidate, ProductCandidateService will normalize and dedup, merge the request product candidate if needed. If no duplicate found, a Product Candidate would be created in BuildDB where asynchronized review/approval process would take place before the Product can be created in Tambourine.
+	</wsdl:documentation>
+    <port name="ProductCandidateServiceHttp" binding="tns:ProductCandidateServiceHttpBinding">
+      <http:address location="https://svcs.ebay.com/services/catalog/v1/ProductCandidateService"/>
+    </port>
+    <port name="ProductCandidateServiceSOAP" binding="tns:ProductCandidateServiceSOAPBinding">
+      <soap12:address location="https://svcs.ebay.com/services/catalog/v1/ProductCandidateService"/>
+      <soap:address location="https://svcs.ebay.com/services/catalog/v1/ProductCandidateService"/>
+    </port>
+  </service>
+</definitions>

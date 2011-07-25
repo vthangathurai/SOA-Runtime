@@ -1,0 +1,2536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/search/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" name="FindProductService"
+	targetNamespace="http://www.ebay.com/marketplace/search/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/search/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning)
+						that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but
+								something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not
+								processed successfully. When a
+								serious application-level error
+								occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType  name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType  name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension"
+						type="tns:ExtensionType" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain" type="xs:string" />
+					<xs:element name="severity" type="tns:ErrorSeverity" />
+					<xs:element name="category" type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"
+						type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!--
+
+					processContents="lax" /> </xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error"
+						type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ExtensionType">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:positiveInteger" />
+					<xs:element name="version" type="xs:string" />
+					<xs:element name="contentType" type="xs:string" />
+					<xs:element name="value" type="xs:string" />
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest" />
+			<xs:complexType name="GetVersionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse" />
+			<xs:complexType name="GetVersionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findProductsRequest" type="tns:FindProductsRequest" />
+			<xs:complexType name="FindProductsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="serviceContext" type="tns:ServiceContext"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="constraint" type="tns:Constraint"
+								maxOccurs="unbounded" minOccurs="1">
+							</xs:element>
+							<xs:element name="readSet" type="tns:Field" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="fetchSize" type="xs:int" maxOccurs="1"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="fetchOffset" type="xs:int"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="includeDiagnosticInfo" type="xs:boolean"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="sortBy" type="tns:SortBy" maxOccurs="unbounded"
+								minOccurs="0">
+							</xs:element>
+							<xs:element name="distribution" type="tns:AbstractDistributionRequest"
+								maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="bucket" type="tns:BucketRequest"
+								maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findProductsResponse" type="tns:FindProductsResponse" />
+			<xs:complexType name="FindProductsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element name="resultSummary" type="tns:ResultSummaryInfo"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="record" type="tns:SearchRecord"
+								maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="diagnosticInfo" type="tns:DiagnosticInfo"
+								maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="distributionResultSet" type="tns:AbstractDistributionResponse"
+								maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="bucketResultSet" type="tns:BucketResponse"
+								maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="executionTime" type="xs:long">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findProductsByIdsRequest" type="tns:FindProductsByIdsRequest" />
+			<xs:complexType name="FindProductsByIdsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseRequest">
+						<xs:sequence>
+							<xs:element name="serviceContext" type="tns:ServiceContext"
+								maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="readSet" type="tns:Field" maxOccurs="unbounded"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="id" type="xs:long" maxOccurs="unbounded"
+								minOccurs="1">
+							</xs:element>
+							<xs:element name="includeDiagnosticInfo" type="xs:boolean"
+								maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findProductsByIdsResponse" type="tns:FindProductsByIdsResponse" />
+			<xs:complexType name="FindProductsByIdsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Document goes here
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse">
+						<xs:sequence>
+
+							<xs:element name="searchResultSet"
+								type="tns:SearchRecord" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="diagnosticInfo"
+								type="tns:DiagnosticInfo" maxOccurs="unbounded" minOccurs="0">
+							</xs:element>
+							<xs:element name="executionTime"
+								type="xs:long" maxOccurs="1" minOccurs="1">
+							</xs:element>
+							<xs:element name="matchCount"
+								type="xs:int" maxOccurs="1" minOccurs="1">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ServiceContext">
+				<xs:annotation>
+					<xs:documentation>
+						Contextual information used by Search Services.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceContext">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="locale"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Locale in the format of
+										&quot;language,country,variant&quot;. Check
+										java.util.Locale
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="timeZone"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Time zone in the format of
+										&quot;GMT+/-hh:mm&quot; </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="currency"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Money currency. Check
+										com.ebay.af.common.types.Currency for the
+										available values.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="Constraint">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the voyager constraint.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="internalExpression"
+						type="tns:LogicalExpression">
+						<xs:annotation>
+							<xs:documentation>
+								The Logical Expression that evaluates to true
+								or false as the
+								internal expression
+								of the Constraint.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Member">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines a member in a Dictionary. It
+						could be a static
+						member
+						defined in the Dictionary such as Title,
+						Category Id, or a built-in
+						function defined in the dictionary
+						such
+						as Distance(), ShippingCost(). A Member can be uniquely
+						identified
+						by its namespace and name.
+				</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Field">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="namespace"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										The Namespace of the member. For complete
+										list of namespace
+										definitions,
+										please check
+										com.ebay.finding.metadata.namespace.NamespaceEnum.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="name"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The name of the Member.
+						</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="property"
+								type="tns:Property">
+								<xs:annotation>
+									<xs:documentation>
+										Additional properties of the Member, used
+										mainly for parameters of
+										built-in
+										function Members, such as the
+										postal code for Location and
+										ShippingCost.  							
+						</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType  name="Field">
+				<xs:annotation>
+					<xs:documentation>
+						Filed is defined as an abstract type.
+						It’s the
+						atomic unit which can be used in constraint or read set.
+						Field can
+						be an item attribute, aspect, or function.
+						It has 2 subtypes which
+						are Member and Expression.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType  name="Expression">
+				<xs:annotation>
+					<xs:documentation>
+						This is an abstract type which defines the
+						function used in voyager,
+						e.g, MACRO(ShowInSite5,0,0) and
+						EQ(StartTime, NOW).
+						It has two subtypes: LogicalExpression and
+						NumericExpression.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Field">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="name"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The name of the expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="CompositeLogicalExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the composite expression used
+						in voyager, e.g
+						AND(MACRO(SaleClass,1),LEQ(SafeStartTime,NOW)).
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:LogicalExpression">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operator"
+								type="tns:CompositeOperator">
+								<xs:annotation>
+									<xs:documentation>
+										The operator for the expression. The operator
+										should be one of
+										the
+										Composite Operators. 
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="operand"
+								type="tns:Operand">
+								<xs:annotation>
+									<xs:documentation>
+										The operand for the expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="KeywordLogicalExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This type define the keyword expression. Use this
+						type to construct a
+						query constraint.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:LogicalExpression">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operator"
+								type="tns:KeywordOperator">
+								<xs:annotation>
+									<xs:documentation>
+										The operator of the expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="member"
+								type="tns:Member">
+								<xs:annotation>
+									<xs:documentation>
+										The member denotes a different index other
+										than the default title
+										index.
+										It is optional. If it is not
+										presenting, the operation is
+										performed in
+										default title index.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="operand"
+								type="tns:TokenOperand">
+								<xs:annotation>
+									<xs:documentation>
+										The operand of the expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType  name="LogicalExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This is an abstract type which defines the
+						expression with Boolean
+						value.
+						It has StategyLogicalExpression,
+						SimpleLogicalExpression,
+						KeywordLogicalExpression and
+						CompositeLogicalExpression
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Expression">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SimpleLogicalExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the function with the format
+						Member Operator
+						Operand, e.g EQ(StartTime, NOW). 
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:LogicalExpression">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operator"
+								type="tns:AtomicOperator">
+								<xs:annotation>
+									<xs:documentation>
+										the operator for the expression
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="member"
+								type="tns:Member">
+								<xs:annotation>
+									<xs:documentation>
+										the member in the expression
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:choice>
+								<xs:element maxOccurs="1" minOccurs="0" name="longOperand"
+									type="tns:LongOperand">
+									<xs:annotation>
+										<xs:documentation>
+											operand of long type, e.g. GT(Bids, 5)
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+
+								<xs:element maxOccurs="1" minOccurs="0" name="doubleOperand"
+									type="tns:DoubleOperand">
+									<xs:annotation>
+										<xs:documentation>
+											operand of double type.
+								</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+
+								<xs:element maxOccurs="1" minOccurs="0" name="moneyOperand"
+									type="tns:MoneyOperand">
+									<xs:annotation>
+										<xs:documentation>
+											operand of money type, e.g. GT(CurrentPrice,
+											100) 	
+								</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+
+								<xs:element maxOccurs="1" minOccurs="0" name="tokenOperand"
+									type="tns:TokenOperand">
+									<xs:annotation>
+										<xs:documentation>
+											operand of token type. e.g. GT(StartTime,
+											NOW)	
+								</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element maxOccurs="1" minOccurs="0" name="dateOperand"
+									type="tns:DateOperand">
+									<xs:annotation>
+										<xs:documentation>
+											operand of date type, e.g. LE(EndTime,
+											20091225)	
+								</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element maxOccurs="1" minOccurs="0"
+									name="expressionOperand" type="tns:SimpleNumericExpression">
+									<xs:annotation>
+										<xs:documentation>
+											operand of expression type, e.g. LE(EndTime,
+											ADD(NOW,20))
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="StrategyLogicalExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the Macro function used in
+						voyager query, e.g,
+						MACRO(ShowInSite5,0,0).
+						In this type, it only
+						has one element: Member. If there is
+						parameter, it’s passed to
+						Member’s property.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:LogicalExpression">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="member"
+								type="tns:Member">
+								<xs:annotation>
+									<xs:documentation>
+										The member for the expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name="AggregateNumericOperator">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines aggregate functions that can be
+						used in distribution
+						requests to get distribution data.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MIN">
+						<xs:annotation>
+							<xs:documentation>
+								Corresponding to the min() aggregate function
+								defined in Search Backend.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MAX">
+						<xs:annotation>
+							<xs:documentation>
+								Corresponding to the max() aggregate function
+								defined in Search Backend
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SUM">
+						<xs:annotation>
+							<xs:documentation>
+								Corresponding to the sum() aggregate function
+								defined in Search Backend
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="COUNT">
+						<xs:annotation>
+							<xs:documentation>
+								Corresponding to the count() aggregate function
+								defined in Search Backend
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="UNIQUE">
+						<xs:annotation>
+							<xs:documentation>
+								Corresponding to the unique() aggregate
+								function defined in Search Backend
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PROJECT">
+						<xs:annotation>
+							<xs:documentation>
+								Corresponding to the project() aggregate
+								function defined in Search Backend
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="AtomicOperator">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the basic relation operators.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="EQ">
+						<xs:annotation>
+							<xs:documentation>equals</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NEQ">
+						<xs:annotation>
+							<xs:documentation>not equals</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="GT">
+						<xs:annotation>
+							<xs:documentation>greater than</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="GEQ">
+						<xs:annotation>
+							<xs:documentation>greater than or equals</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LT">
+						<xs:annotation>
+							<xs:documentation>less than</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="LEQ">
+						<xs:annotation>
+							<xs:documentation>less than or equals</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="HAS_ATTR">
+						<xs:annotation>
+							<xs:documentation>has attribute</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="CompositeOperator">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the 3 boolean operators that
+						can be used to
+						form composite constraints or functions.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="AND">
+						<xs:annotation>
+							<xs:documentation>and</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="OR">
+						<xs:annotation>
+							<xs:documentation>or</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="NOT">
+						<xs:annotation>
+							<xs:documentation>not</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="IF">
+						<xs:annotation>
+							<xs:documentation>if</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SIMILAR">
+						<xs:annotation>
+							<xs:documentation>similar(aspect expression1, aspect
+								expression2,...,weight,keyword1,keyword2,...)</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="SET_FIND">
+						<xs:annotation>
+							<xs:documentation>SetFindSetFind(AND(EQUAL(Make,&quot;Honda,fit&quot;),EQUAL(Model,&quot;Civic,fit&quot;))))
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="KeywordOperator">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CONTAINS">
+						<xs:annotation>
+							<xs:documentation>contains</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="CONTAINS_PHRASE">
+						<xs:annotation>
+							<xs:documentation>contains phrase</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+
+			<xs:complexType name="DateOperand">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines date operand. Set now to true
+						means current time.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Operand">
+						<xs:sequence>
+							<xs:choice>
+								<xs:element maxOccurs="1" minOccurs="0" name="now"
+									type="xs:boolean">
+									<xs:annotation>
+										<xs:documentation>
+											If this element is set to be true, the Date
+											Operand denotes
+											current time. 									 
+								</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element maxOccurs="1" minOccurs="0" name="operand"
+									type="xs:dateTime">
+									<xs:annotation>
+										<xs:documentation>
+											This element specifies a operand of dateTime
+											type, used in
+											expressions.				
+								</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DoubleOperand">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines double operand.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Operand">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operand"
+								type="xs:double">
+								<xs:annotation>
+									<xs:documentation>
+										Operand of type double that can be used in
+										expressions.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="FieldOperand">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field operand.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Operand">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operand"
+								type="tns:Field">
+								<xs:annotation>
+									<xs:documentation>
+										Operand of type Field that can be used in
+										Expressions.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="LongOperand">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines long operand.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Operand">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operand"
+								type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										Operand of type long that can be used in
+										expressions.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoneyOperand">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines money operand.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Operand">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:double">
+								<xs:annotation>
+									<xs:documentation>
+										Money value.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="currency"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Money currency.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType  name="Operand">
+				<xs:annotation>
+					<xs:documentation>
+						This is the abstract operand.			
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType name="TokenOperand">
+				<xs:annotation>
+					<xs:documentation>
+						A token operand is a string token with special
+						meanings in the
+						search system.
+						Examples: 'Now' for current time,
+						'LiloSellRadius' used in LISO search.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Operand">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operand"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										The element of token type as the operand.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ResultSummaryInfo">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="matchCount"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Total matching entries.
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="abridgedMatchCount"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Total matching entries after dedupe.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SearchRecord">
+				<xs:annotation>
+					<xs:documentation>
+						Defines a single row or record as in the search
+						results.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="mapping"
+						type="tns:FieldValuesPair">
+						<xs:annotation>
+							<xs:documentation>
+								A SearchRecord contains multiple mappings
+								between a Field and its
+								values.
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BooleanFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of boolean type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:FieldValue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+										FieldValeus are used to hold values in search
+										results, they are mapped to
+										the Fields
+										specified in ReadSet.
+										BooleanFieldValue is used to hold a returned
+										field value of
+										Boolean type.   
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DateFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of date type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:FieldValue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>
+										FieldValeus are used to hold values in search
+										results, they are mapped to
+										the Fields
+										specified in ReadSet.
+										DateFieldValue is used to hold a returned field
+										value of
+										dateTime type.   
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DoubleFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of double type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:FieldValue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:double">
+								<xs:annotation>
+									<xs:documentation>
+										FieldValeus are used to hold values in search
+										results, they are mapped to
+										the Fields
+										specified in ReadSet.
+										DoubleFieldValue is used to hold a returned field
+										value of
+										double type.   
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType  name="FieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This is the abstract type for field value.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType name="FieldValuesPair">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines a mapping between a Field and
+						its value(s) in the
+						search results.
+				</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="field"
+						type="tns:Field">
+						<xs:annotation>
+							<xs:documentation>
+								The field as the key.
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="fieldValue"
+						type="tns:FieldValue">
+						<xs:annotation>
+							<xs:documentation>
+								The values corresponding to the Field.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="LongFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of long type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:FieldValue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:long">
+								<xs:annotation>
+									<xs:documentation>
+										FieldValeus are used to hold values in search
+										results, they are mapped to
+										the Fields
+										specified in ReadSet.
+										LongFieldValue is used to hold a returned field
+										value of
+										long
+										type.   
+								</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="MoneyFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines field value of money type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:FieldValue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:double">
+								<xs:annotation>
+									<xs:documentation>
+										Money value.
+						</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="currency"
+								type="xs:token">
+								<xs:annotation>
+									<xs:documentation>
+										Money currency.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="StringFieldValue">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the field value of string type.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:FieldValue">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="value"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										The element of string type as the operand.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="BaseServiceContext">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="globalId"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The Global Id as defined in SOA platform e.g.
+								EBAY-US.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="partnerId"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The partner id as defined in ParnerEnum, in
+								most cases its value
+								should be 2 (ebay).
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Property">
+				<xs:annotation>
+					<xs:documentation>
+						Name value pair for defining properties
+						associated with entities.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name of the property.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="value"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The values of the property.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SimpleNumericExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This type define the simple numeric expression in
+						voyager, e.g
+						ADD(NOW,10).
+				</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:NumericExpression">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="operator"
+								type="tns:SimpleNumericOperator">
+								<xs:annotation>
+									<xs:documentation>
+										The operator of the Expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1" name="operand"
+								type="tns:Operand">
+								<xs:annotation>
+									<xs:documentation>
+										The operand of the Expression.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType  name="NumericExpression">
+				<xs:annotation>
+					<xs:documentation>
+						This the abstract type of numeric expression.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:Expression">
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DiagnosticInfo">
+				<xs:annotation>
+					<xs:documentation>
+						This type holds the logs returned from Voyager.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="sender"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name or id of the application or module
+								that generates the log.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="log" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name or id of the log.			
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="record"
+						type="tns:Property">
+						<xs:annotation>
+							<xs:documentation>
+								The logs as a list of name value pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:complexType name="BestMatchSortType">
+				<xs:annotation>
+					<xs:documentation />
+					<xs:appinfo />
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:SortType">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="0" name="profileId"
+								type="xs:int">
+								<xs:annotation>
+									<xs:documentation>
+										the raw profile data for BM sort
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="shiptocty"
+								type="xs:int">
+								<xs:annotation>
+									<xs:documentation>
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="zipcode"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+			<xs:complexType name="SortBy">
+				<xs:annotation>
+					<xs:documentation>
+						SortBy is used to define the order of result
+						entries.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:choice>
+						<xs:element maxOccurs="1" minOccurs="0" name="sortMember"
+							type="tns:Member">
+							<xs:annotation>
+								<xs:documentation>
+									The member which the sort operation is based
+									on.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0" name="sortExpression"
+							type="tns:Expression">
+							<xs:annotation>
+								<xs:documentation>
+									The expression which the sort operation is
+									based on.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="1" minOccurs="0" name="sortType"
+							type="tns:SortType">
+							<xs:annotation>
+								<xs:documentation>
+									This defines some predefined sort types.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:element maxOccurs="1" minOccurs="0" name="sortOrder"
+						type="tns:SortOrder">
+						<xs:annotation>
+							<xs:documentation>
+								The order of the sort.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="SortOrder">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines sort order.
+			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="INCREASING">
+						<xs:annotation>
+							<xs:documentation>increasing</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="DECREASING">
+						<xs:annotation>
+							<xs:documentation>decreasing</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType  name="SortType">
+				<xs:annotation>
+					<xs:documentation>
+						This is the abstract type of sorttype.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:complexType>
+			<xs:complexType name="DistributionField">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines the distribution field.
+						includeOtherValues is valid
+						if the distribution of this field is
+						range or enumeration and
+						includes &quot;others&quot;
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="field"
+						type="tns:Field">
+						<xs:annotation>
+							<xs:documentation>
+								The field that the distribution is based on, it
+								could be limited by
+								the range or enumeration value.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:choice>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="range"
+							type="tns:RangeValue">
+							<xs:annotation>
+								<xs:documentation>
+									All numeric ranges are represented using
+									DoubleRange.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="enumeration" type="tns:EnumerationValue">
+							<xs:annotation>
+								<xs:documentation>
+									All enumeration values are represented using
+									String enumeration.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:element maxOccurs="1" minOccurs="0" name="includeOtherValues"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Other values means values that are not
+								represented by the list of
+								range or enumeration in the
+								DistributionField.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DistributionRecord">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines distribution record.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="valueId"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								It's a list of value Id's for each distribution
+								record in the format
+								of Hex String
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="1"
+						name="aggregationValue" type="tns:FieldValue">
+						<xs:annotation>
+							<xs:documentation>
+								A list of aggregation values corresponding to
+								the input.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:complexType name="DistributionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines distribution request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:AbstractDistributionRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="distributionFields" type="tns:DistributionField">
+								<xs:annotation>
+									<xs:documentation>
+										The fields of the distribution request.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" minOccurs="1"
+								name="aggregateFunction" type="tns:AggregateNumericExpression">
+								<xs:annotation>
+									<xs:documentation>
+										The aggregate function used for the
+										Distribution.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="distributionSort"
+								type="tns:DistributionSortBy">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates the sort of the Distribution.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="requestHeader"
+								type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>
+										Indicates if header counts are requested for
+										aggregates.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DistributionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This type defines distribution response.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:AbstractDistributionResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="result"
+								type="tns:DistributionRecord">
+								<xs:annotation>
+									<xs:documentation>
+										The distribution data as a list of
+										tns:Distribution Records.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DistributionSortBy">
+				<xs:annotation>
+					<xs:documentation>
+						DistributionSortBy is used to define the order of
+						distribution result entries.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="sortStrategy"
+						type="tns:DistributionSortStrategy">
+						<xs:annotation>
+							<xs:documentation>
+								This defines some predefined sort types.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="sortType"
+						type="tns:DistributionSortType">
+						<xs:annotation>
+							<xs:documentation>
+								Indicate sort by first field or by first
+								aggregation function. Default
+								is ByField
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="sortOrder"
+						type="tns:SortOrder">
+						<xs:annotation>
+							<xs:documentation>
+								The order of the sort.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="sortbyvalue"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								sort by aggregation function.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+
+			</xs:complexType>
+			<xs:simpleType name="DistributionSortStrategy">
+				<xs:annotation>
+					<xs:documentation>
+						This defines some predefined sort strategy, e.g.
+						Supply,
+						DemandSupplyCoverage
+     		</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="DemandSupplyCoverage">
+						<xs:annotation>
+							<xs:documentation>
+								This is the type to choose if the distribution
+								needs to be sorted by
+								demand-supply aggregated coverage scores.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Supply">
+						<xs:annotation>
+							<xs:documentation>
+								This is the type to choose if the distribution
+								needs to be sorted by
+								supply only (no demand involved).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Demand">
+						<xs:annotation>
+							<xs:documentation>
+								This is the type to choose if the distribution
+								needs to be sorted by
+								demand only (no supply involved).
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="DistributionSortType">
+				<xs:annotation>
+					<xs:documentation>
+						Types of the sort, 2 values: ByField, ByValue. If
+						not specify, default
+						is ByField
+     		</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ByField">
+						<xs:annotation>
+							<xs:documentation>
+								This is the type to choose if the distribution
+								needs to be sorted on
+								the values of the field as in the
+								Distribution Request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="ByValue">
+						<xs:annotation>
+							<xs:documentation>
+								This is the type to choose if the distribution
+								needs to be sorted on
+								the values as in the Distribution Response.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="BucketRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Bucket requests provide required information for
+						returning items in
+						several split groups.
+						Each BucketRequest
+						represent one group of items.
+				</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name of the bucket. 
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="constraint"
+						type="tns:Constraint">
+						<xs:annotation>
+							<xs:documentation>
+								Only items meet the constraint are put in the
+								response for this
+								bucket. 
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element maxOccurs="1" minOccurs="1" name="fetchCount"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The count of items that are requited to be
+								returned for this
+								bucket. 
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BucketResponse">
+				<xs:annotation>
+					<xs:documentation>
+						The response for one Bucket request.
+					</xs:documentation>
+
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								The name is same as the name in corresponding
+								Bucket request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="totalCount"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								The matching item count for the Bucket request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="items"
+						type="tns:SearchRecord">
+						<xs:annotation>
+							<xs:documentation>
+								A list of item records, which contains
+								requested item
+								information.
+						</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType  name="AbstractDistributionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the abstract type of distribution
+						request.
+				</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								the name of the distribution request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="fetchOffset"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								the fetch offset of the distribution request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="0" name="fetchSize"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								the fetch size of the distribution request.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType 
+				name="AbstractDistributionResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This is the abstract type of distribution
+						response.
+        			</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="name"
+						type="xs:string"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SimpleCountDistributionRecord">
+				<xs:annotation>
+					<xs:documentation>
+						Each record is a result record for the
+						Distribution for the
+						SimpleCountDistribution request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="1" name="valueId"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Field value in the format of Hex String.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="1" minOccurs="1" name="count"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								count 
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SimpleCountDistributionRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the simple Distribution request assuming
+						the aggregate
+						function as
+						'COUNT', and with a single field to get
+						distribution for. It also assumes
+						descending order sort by supply.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:AbstractDistributionRequest">
+						<xs:sequence>
+							<xs:element maxOccurs="1" minOccurs="1" name="field"
+								type="tns:Field">
+								<xs:annotation>
+									<xs:documentation>
+										The only field to get the COUNT distribution
+										for.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="1" name="sortOrder"
+								type="tns:SortOrder">
+								<xs:annotation>
+									<xs:documentation>
+										The order of the sort.
+						</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element maxOccurs="1" minOccurs="0" name="sortType"
+								type="tns:DistributionSortType">
+								<xs:annotation>
+									<xs:documentation>
+										Indicate sort by first field or by first
+										aggregation function. Default
+										is ByField
+						</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SimpleCountDistributionResponse">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SearchServicesTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:AbstractDistributionResponse">
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" minOccurs="0" name="result"
+								type="tns:SimpleCountDistributionRecord">
+								<xs:annotation>
+									<xs:documentation>
+										The distribution results.
+							</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="RangeValue">
+		<xs:annotation>
+			<xs:documentation>
+				A type that specifies a range bounded by lower and upper bounds. 
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" minOccurs="1" name="lowerBound" type="xs:double">
+				<xs:annotation>
+					<xs:documentation>
+						The lower bound of the range.
+					</xs:documentation>
+				</xs:annotation>			
+			</xs:element>
+			<xs:element maxOccurs="1" minOccurs="1" name="upperBound" type="xs:double">
+				<xs:annotation>
+					<xs:documentation>
+						The upper bound of the range.
+					</xs:documentation>
+				</xs:annotation>			
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:complexType name="AggregateNumericExpression">
+			<xs:annotation>
+				<xs:documentation>	 
+					This type defines the aggregate numeric expression, e.g: COUNT, SUM(Quantity).
+					The operator is defined in AggregateNumericOperator.
+				</xs:documentation> 
+			<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="tns:NumericExpression">
+					<xs:sequence>
+						<xs:element maxOccurs="1" minOccurs="1" name="operator" type="tns:AggregateNumericOperator">
+							<xs:annotation>
+								<xs:documentation>
+									The operator for the expression.
+								</xs:documentation>
+							</xs:annotation>						
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="operand" type="tns:Operand">
+							<xs:annotation>
+								<xs:documentation>
+									The operand of the expression.
+								</xs:documentation>
+							</xs:annotation>				
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>				
+			</xs:complexContent>
+	</xs:complexType><xs:complexType name="EnumerationValue">
+		<xs:annotation>
+			<xs:documentation>
+				This type defines enumeration values.
+			</xs:documentation>
+		<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="enumValue" type="xs:token">
+				<xs:annotation>
+					<xs:documentation>
+						A list of enumeration values of string type.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType><xs:simpleType name="SimpleNumericOperator">
+			<xs:annotation>
+				<xs:documentation>	
+					This type defines the mathematical operators and other operators that
+					yields a numeric result on operands.		
+				</xs:documentation>
+			<xs:appinfo><typeLibrarySource library="SearchServicesTypeLibrary" namespace="http://www.ebay.com/marketplace/search/v1/typelibrary"></typeLibrarySource></xs:appinfo></xs:annotation>
+			
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="ADD">
+					<xs:annotation>
+						<xs:documentation>add</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>				
+				<xs:enumeration value="SUBTRACT">
+					<xs:annotation>
+						<xs:documentation>subtract</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>				
+				<xs:enumeration value="MULTIPLY">
+					<xs:annotation>
+						<xs:documentation>multiply</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>				
+				<xs:enumeration value="DIVIDE">
+					<xs:annotation>
+						<xs:documentation>in</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>	
+				<xs:enumeration value="UNIQUE_BY_HASH">
+					<xs:annotation>
+						<xs:documentation>unique-by hash</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="CONST">
+					<xs:annotation>
+						<xs:documentation>const</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BITAND">
+					<xs:annotation>
+						<xs:documentation>bit and</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BITOR">
+					<xs:annotation>
+						<xs:documentation>bit or</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="BITXOR">
+					<xs:annotation>
+						<xs:documentation>bit xor</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType></xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getVersionRequest">
+		<wsdl:part element="tns:getVersionRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="getVersionResponse">
+		<wsdl:part element="tns:getVersionResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findProductsRequest">
+		<wsdl:part element="tns:findProductsRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findProductsResponse">
+		<wsdl:part element="tns:findProductsResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findProductsByIdsRequest">
+		<wsdl:part element="tns:findProductsByIdsRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findProductsByIdsResponse">
+		<wsdl:part element="tns:findProductsByIdsResponse" name="params" />
+	</wsdl:message>
+	<wsdl:portType name="FindProductServicePort">
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:getVersionRequest" />
+			<wsdl:output message="tns:getVersionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findProducts">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:findProductsRequest" />
+			<wsdl:output message="tns:findProductsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findProductsByIds">
+			<wsdl:documentation>
+				Documentation goes here.
+			</wsdl:documentation>
+			<wsdl:input message="tns:findProductsByIdsRequest" />
+			<wsdl:output message="tns:findProductsByIdsResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="FindProductServiceHttpBinding" type="tns:FindProductServicePort">
+
+		<http:binding verb="POST" />
+		<wsdl:operation name="getVersion">
+
+			<http:operation location="/getVersion" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findProducts">
+
+			<http:operation location="/findProducts" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findProductsByIds">
+
+			<http:operation location="/findProductsByIds" />
+			<wsdl:input>
+				<mime:content type="application/x-www-form-urlencoded" />
+
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" />
+
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="FindProductServiceSOAPBinding" type="tns:FindProductServicePort">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getVersion">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/getVersion" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findProducts">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/findProducts" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findProductsByIds">
+
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/search/v1/services/findProductsByIds" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="FindProductService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+		</wsdl:documentation>
+		<wsdl:port binding="tns:FindProductServiceHttpBinding" name="FindProductServiceHttpPort">
+			<http:address
+				location="https://svcs.ebay.com/services/search/v1/FindProductService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:FindProductServiceSOAPBinding" name="FindProductServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/services/search/v1/FindProductService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

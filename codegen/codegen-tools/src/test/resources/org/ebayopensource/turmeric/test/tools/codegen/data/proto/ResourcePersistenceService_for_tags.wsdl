@@ -1,0 +1,1989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://www.ebay.com/marketplace/infrastructure/v1/services"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	name="ResourcePersistenceService"
+	targetNamespace="http://www.ebay.com/marketplace/infrastructure/v1/services">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://www.ebay.com/marketplace/infrastructure/v1/services">
+			<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType abstract="true" name="BaseServiceRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="BaseServiceResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="MarketPlaceServiceCommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage"
+						type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp"
+						type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation />
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+
+						processContents="lax" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System" />
+					<xs:enumeration value="Application" />
+					<xs:enumeration value="Request" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long" />
+					<xs:element name="domain" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain"
+						type="xs:string" />
+					<xs:element name="severity"
+						type="tns:ErrorSeverity" />
+					<xs:element name="category"
+						type="tns:ErrorCategory" />
+					<xs:element name="message" type="xs:string" />
+					<xs:element minOccurs="0" name="exceptionId"
+						type="xs:token" />
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="parameter" type="tns:ErrorParameter" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0"
+						name="error" type="tns:ErrorData" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string"
+							use="optional" />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource
+							library="SOACommonTypeLibrary"
+							namespace="http://www.ebay.com/marketplace/services" />
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error" />
+					<xs:enumeration value="Warning" />
+				</xs:restriction>
+			</xs:simpleType>
+
+
+
+
+			<xs:element name="deleteChangeSetRequest"
+				type="tns:DeleteChangeSetRequest" />
+			<xs:complexType name="DeleteChangeSetRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+                            <xs:element  name="changeSetId" type="xs:long" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="deleteChangeSetResponse"
+				type="tns:DeleteChangeSetResponse" />
+			<xs:complexType name="DeleteChangeSetResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+
+							<xs:element name="status"
+								type="xs:string">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="deleteResourceRequest"
+				type="tns:DeleteResourceRequest" />
+			<xs:complexType name="DeleteResourceRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element 
+								name="resourceId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="deleteResourceResponse"
+				type="tns:DeleteResourceResponse" />
+			<xs:complexType name="DeleteResourceResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="status" type="xs:string" >
+				  				<xs:annotation>
+				 					<xs:documentation>
+				 					Returns 'Success' or 'Failure' based on the result of the operation.
+									</xs:documentation>	 
+				  				</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findChangeSetByIdRequest"
+				type="tns:FindChangeSetByIdRequest" />
+			<xs:complexType name="FindChangeSetByIdRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="changeSetId"
+								type="xs:long" minOccurs="1" maxOccurs="1" />
+							<xs:element name="readOnlyHint"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findChangeSetByIdResponse"
+				type="tns:FindChangeSetByIdResponse" />
+			<xs:complexType name="FindChangeSetByIdResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element 
+								name="changeSet" type="tns:ChangeSet" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findChangeSetsRequest"
+				type="tns:FindChangeSetsRequest" />
+			<xs:complexType name="FindChangeSetsRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="domain" type="xs:string"
+								minOccurs="1" maxOccurs="unbounded">
+							</xs:element>
+							<xs:element name="scope" type="xs:string"
+								minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										Contains request type for
+										filtering like css, js,
+										configxml...
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="state" type="tns:State"
+								minOccurs="1" maxOccurs="unbounded" />
+							<xs:element name="release" type="xs:string"
+								minOccurs="1" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>
+										Contains the build id for this
+										resource. In case of eBay market
+										place it contains the train id.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="since" type="xs:long"
+								minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>
+										Contains the datetime (in long)
+										from when to search for the
+										changeset.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+							<xs:element name="maxCount" type="xs:int"
+								minOccurs="0" maxOccurs="1">
+							</xs:element>
+							<xs:element name="readOnlyHint"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="includeProjects"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findChangeSetsResponse"
+				type="tns:FindChangeSetsResponse" />
+			<xs:complexType name="FindChangeSetsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+						<xs:sequence>
+							<xs:element name="changesSet" type="tns:ChangeSet" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="findResourceByIdsRequest" type="tns:FindResourceByIdsRequest">
+
+			</xs:element>
+			<xs:element name="findResourceByIdsResponse"
+				type="tns:FindResourceByIdsResponse">
+			</xs:element>
+			<xs:element name="findResourcesResponse"
+				type="tns:FindResourcesResponse">
+			</xs:element>
+			<xs:element name="findResourcesRequest"
+				type="tns:FindResourcesRequest">
+			</xs:element>
+
+			<xs:complexType name="FindResourcesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+
+
+
+							<xs:element name="query" type="tns:PmQuery"
+								minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="readSet"
+								type="tns:ReadSet" minOccurs="1" maxOccurs="1">
+							</xs:element>
+
+							<xs:element name="offset" type="xs:int"
+								minOccurs="0" maxOccurs="1">
+							</xs:element>
+							<xs:element name="count" type="xs:int"
+								minOccurs="0" maxOccurs="1">
+							</xs:element>
+
+							<xs:element name="includeChangeSetState"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="readOnlyHint"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+
+
+            <xs:element name="getSupportedTypesRequest"
+            	type="tns:GetSupportedTypesRequest">
+            </xs:element>
+            <xs:element name="getSupportedTypesResponse"
+            	type="tns:GetSupportedTypesResponse">
+            </xs:element>
+            
+            <xs:complexType name="GetSupportedTypesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="supportedType" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+	            </xs:complexContent>
+            </xs:complexType>
+
+
+
+            <xs:element name="insertChangeSetRequest"
+            	type="tns:InsertChangeSetRequest">
+            </xs:element>
+            <xs:element name="insertChangeSetResponse"
+            	type="tns:InsertChangeSetResponse">
+            </xs:element>
+            
+            <xs:complexType name="InsertChangeSetRequest">
+				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+		            	<xs:sequence>
+		            		<xs:element name="changeSet" type="tns:ChangeSet" minOccurs="1" maxOccurs="1"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="InsertChangeSetResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="changeSetId" type="xs:long"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+
+
+            <xs:element name="updateChangeSetRequest"
+            	type="tns:UpdateChangeSetRequest">
+            </xs:element>
+            <xs:element name="updateChangeSetResponse"
+            	type="tns:UpdateChangeSetResponse">
+            </xs:element>
+            
+            <xs:complexType name="UpdateChangeSetRequest">
+				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+		            	<xs:sequence>
+		            		<xs:element name="changeSet" type="tns:ChangeSet" minOccurs="1" maxOccurs="1"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="UpdateChangeSetResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="status"
+            					type="xs:string">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:element name="updateResourceRequest"
+            	type="tns:UpdateResourceRequest">
+            </xs:element>
+            <xs:element name="updateResourceResponse"
+            	type="tns:UpdateResourceResponse">
+            </xs:element>
+            
+            <xs:complexType name="UpdateResourceRequest">
+				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+		            	<xs:sequence>
+		            		<xs:element name="resource" type="tns:Resource" minOccurs="1" maxOccurs="1"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+
+            <xs:element name="getDeploymentKeysRequest"
+            	type="tns:GetDeploymentKeysRequest">
+            </xs:element>
+            <xs:element name="getDeploymentKeysResponse"
+            	type="tns:GetDeploymentKeysResponse">
+            </xs:element>
+            
+            <xs:complexType name="GetDeploymentKeysRequest">
+				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+		            	<xs:sequence>
+		            		<xs:element name="varConstraint"
+		            			type="tns:VariationConstraint" minOccurs="0"
+		            			maxOccurs="1">
+		            		</xs:element>
+		            		<xs:element name="deploymentConstraint"
+		            			type="tns:DeploymentConstraint" minOccurs="0"
+		            			maxOccurs="1">
+		            		</xs:element>
+		            		<xs:element name="readOnlyHint"
+		            			type="xs:boolean" maxOccurs="1" minOccurs="0">
+		            		</xs:element>
+		            	</xs:sequence>
+	            	</xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="GetDeploymentKeysResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="deploymentKey" type="tns:DeploymentKey" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+
+
+
+            <xs:complexType name="ChangeSet">
+ 				<xs:annotation>
+ 					<xs:documentation>
+						Contains all the information to be captured on each changes made on a resource
+					</xs:documentation>	 
+				</xs:annotation>
+ 				<xs:sequence>
+ 					<xs:element name="changeSetId" type="xs:long"
+ 						minOccurs="0" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="parentChangeSetId" type="xs:long"
+ 						minOccurs="0" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="domain" type="xs:string"
+ 						minOccurs="1" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="scope" type="xs:string"
+ 						minOccurs="1" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="releaseId" type="xs:string"
+ 						minOccurs="0" maxOccurs="1">
+ 						<xs:annotation>
+ 							<xs:documentation>
+ 								Contains the build id for this
+ 								resource. In case of eBay market place
+ 								it contains the train id.
+ 							</xs:documentation>
+ 						</xs:annotation>
+ 					</xs:element>
+ 					<xs:element name="name" type="xs:string"
+ 						minOccurs="1" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="lastModifiedTime" type="xs:long"
+ 						minOccurs="0" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="creationTime" type="xs:long"
+ 						minOccurs="0" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="state" type="tns:State"
+ 						minOccurs="1" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="dataSourceId" type="xs:string"
+ 						minOccurs="0" maxOccurs="1">
+ 					</xs:element>
+ 					<xs:element name="versionId" type="xs:long"
+ 						minOccurs="0" maxOccurs="1">
+ 					</xs:element>
+
+ 					<xs:element name="notes" type="xs:string"
+ 						maxOccurs="1" minOccurs="0">
+ 					</xs:element>
+ 					<xs:element name="resourceTotal" type="xs:int"
+ 						maxOccurs="1" minOccurs="0">
+ 					</xs:element>
+ 					<xs:element name="resourceDelta" type="xs:string"
+ 						maxOccurs="1" minOccurs="0">
+ 					</xs:element>
+ 					<xs:element name="projects" type="xs:string" maxOccurs="unbounded" minOccurs="0"></xs:element>
+ 				</xs:sequence>
+            </xs:complexType>
+		
+            <xs:simpleType name="State">
+				<xs:annotation>
+ 					<xs:documentation>
+						Represents the state of the changeset. Valid values are DEPLOYING(1), ROLLED_BACK(2), ACTIVE(3) and SCRATCH(4) 
+					</xs:documentation>	 
+				</xs:annotation>
+            	<xs:restriction base="xs:int">
+            		<xs:enumeration value="1"></xs:enumeration>
+            		<xs:enumeration value="2"></xs:enumeration>
+            		<xs:enumeration value="3"></xs:enumeration>
+            		<xs:enumeration value="4"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+		
+		
+            <xs:simpleType name="Type">
+				<xs:annotation>
+	 				<xs:documentation>
+						Represents the of type resource data to be persisted. Currently supported types are Xml(1) and Bin(2)  
+					</xs:documentation>	 
+				</xs:annotation>
+            	<xs:restriction base="xs:int">
+            		<xs:enumeration value="1"></xs:enumeration>
+            		<xs:enumeration value="2"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+		
+            <xs:complexType name="Resource">
+				<xs:annotation>
+ 					<xs:documentation>
+						Represents the Object to be persisted along with the metadata, version, deployment and other additional information pertaining
+						to the object being stored
+					</xs:documentation>	 
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="id" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+					</xs:element>
+					<xs:element name="type" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="subType" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="resourcePath"
+						type="tns:ResourcePath" minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="target" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Represent the locale or site for which
+								the resouce belongs to. In case of eBay
+								market place it contains permutation.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="language" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="stringVar" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="numberVar" type="xs:long"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="compatibilityKey" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="changeSetId" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="dataRef" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Represents application domain that owns
+								the resource like ebay marketplace, ebox
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="dataRefEntry" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Represents application domain that owns
+								the resource like ebay marketplace, ebox
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="payload" type="xs:base64Binary"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="payloadType" type="tns:Type"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="dataSourceId" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Represents the data source to use to
+								persist this resource.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domain" type="xs:string"
+						minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Represents application domain that owns
+								the resource like ebay marketplace, ebox
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="state" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+					</xs:element>
+					<xs:element name="notes" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="versionNumber" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="checksum" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Used for payload content check
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="creationTime" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="lastModifiedTime" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="payloadSource" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+					</xs:element>
+					<xs:element name="extRef" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="lastModifiedUser" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="creationUser" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="owner" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="permission" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="parentId" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="changeSetState" type="tns:State" maxOccurs="1" minOccurs="0"></xs:element>
+				</xs:sequence>
+            </xs:complexType>
+		
+		
+        
+            <xs:simpleType name="Operator">
+ 				<xs:annotation>
+ 					<xs:documentation>
+						Represents list of valid compare operations supported in filtering based on variations defined for that object
+					</xs:documentation>	 
+				</xs:annotation>
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="EQUAL"></xs:enumeration>
+            		<xs:enumeration value="GREATER_EQUAL"></xs:enumeration>
+            		<xs:enumeration value="LESS_EQUAL"></xs:enumeration>
+            		<xs:enumeration value="GREATER"></xs:enumeration>
+            		<xs:enumeration value="LESS"></xs:enumeration>
+            		<xs:enumeration value="NOT_EQUAL"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+		
+            <xs:simpleType name="FieldType">
+            	<xs:annotation>
+            		<xs:documentation>
+            			Defines the type of the variation used for
+            			filtering
+            		</xs:documentation>
+            	</xs:annotation>
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="NUMBER"></xs:enumeration>
+            		<xs:enumeration value="STRING"></xs:enumeration>
+            		<xs:enumeration value="REFERENCE"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+
+            <xs:complexType name="VariationFilter">
+ 				<xs:annotation>
+ 					<xs:documentation>
+						Contains information used for filtering based on Variation
+					</xs:documentation>	 
+				</xs:annotation>
+            	<xs:sequence>
+            		<xs:element name="fieldType" type="tns:FieldType" minOccurs="1" maxOccurs="1"></xs:element>
+            		<xs:element name="operator" type="tns:Operator" minOccurs="1" maxOccurs="1"></xs:element>
+            		<xs:element name="index" type="xs:int" minOccurs="1" maxOccurs="1"></xs:element>
+            		<xs:element name="value" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="VariationConstraint">
+ 				<xs:annotation>
+ 					<xs:documentation>
+						Represents the constraints to be applied for each resource
+					</xs:documentation>	 
+				</xs:annotation>
+            	<xs:sequence>
+            		<xs:element name="variationFilter"
+            			type="tns:VariationFilter" minOccurs="0"
+            			maxOccurs="unbounded">
+            		</xs:element>
+            		<xs:element name="language" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            		<xs:element name="target" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:complexType name="DeploymentKey">
+ 				<xs:annotation>
+ 					<xs:documentation>
+						Represents the combination of different resource metadata information which uniquely identify a deployment
+						version of that resource.
+					</xs:documentation>	 
+				</xs:annotation>
+            	<xs:sequence>
+            		<xs:element name="resourceType" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+            		<xs:element name="language" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            		<xs:element name="target" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            		<xs:element name="changeSet" type="xs:long" minOccurs="0" maxOccurs="1"></xs:element>
+            		<xs:element name="dataSource" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+            		<xs:element name="domain" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+		
+            <xs:simpleType name="ReadSet">
+  				<xs:annotation>
+ 					<xs:documentation>
+						Represents the type of reads which can be performed on a resource. This is used when querying for an object
+					</xs:documentation>	 
+				</xs:annotation>
+           	<xs:restriction base="xs:string">
+            		<xs:enumeration value="IdOnly">
+		 				<xs:annotation>
+		 					<xs:documentation>
+		 						Return only resourceId
+							</xs:documentation>	 
+						</xs:annotation>
+            		</xs:enumeration>
+            		<xs:enumeration value="MetaDataOnly">
+		 				<xs:annotation>
+		 					<xs:documentation>
+		 						Returns all resource metadata
+							</xs:documentation>	 
+						</xs:annotation>
+            		</xs:enumeration>
+            		<xs:enumeration value="Full">
+		 				<xs:annotation>
+		 					<xs:documentation>
+		 						all resource metadata, plus resource data
+							</xs:documentation>	 
+						</xs:annotation>
+            		</xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+		
+            <xs:complexType name="DeploymentConstraint">
+  				<xs:annotation>
+ 					<xs:documentation>
+ 					Contains unique attributes to identify a resource based for deployment
+					</xs:documentation>	 
+  				</xs:annotation>
+  				<xs:sequence>
+  					<xs:element name="changeSetId" type="xs:long"
+  						minOccurs="0" maxOccurs="1">
+  					</xs:element>
+  					<xs:element name="dataSource" type="xs:string"
+  						minOccurs="0" maxOccurs="1">
+  					</xs:element>
+  					<xs:element name="compatibilityKey"
+  						type="xs:string" minOccurs="0" maxOccurs="1">
+  						<xs:annotation>
+  							<xs:documentation>
+  								Key used to verify whether the
+  								resource is in sync with java code.
+  							</xs:documentation>
+  						</xs:annotation>
+  					</xs:element>
+  					<xs:element name="domain" type="xs:string"
+  						minOccurs="0" maxOccurs="1">
+  					</xs:element>
+  					<xs:element name="scope" type="xs:string"
+  						minOccurs="0" maxOccurs="1">
+  					</xs:element>
+  					<xs:element name="name" type="xs:string"
+  						minOccurs="0" maxOccurs="1">
+  					</xs:element>
+  					<xs:element name="releaseId" type="xs:string"
+  						minOccurs="0" maxOccurs="1">
+  					</xs:element>
+  					<xs:element name="changeSetState" type="tns:State"
+  						maxOccurs="unbounded" minOccurs="0">
+  					</xs:element>
+  					<xs:element name="uptoTimestamp" type="xs:long"
+  						maxOccurs="1" minOccurs="0">
+  					</xs:element>
+
+  					<xs:element name="sinceTimestamp" type="xs:long" maxOccurs="1" minOccurs="0"></xs:element>
+  				</xs:sequence>
+            </xs:complexType>
+
+		
+            <xs:complexType name="QueryResult">
+   				<xs:annotation>
+ 					<xs:documentation>
+	  					Contains list of resources and their ids matching the query condition along with the count and timestamp information. 
+					</xs:documentation>	 
+				</xs:annotation>
+   				<xs:sequence>
+   					<xs:element name="resource" type="tns:Resource"
+   						minOccurs="0" maxOccurs="unbounded">
+   					</xs:element>
+   					<xs:element name="total" type="xs:int"></xs:element>
+   					<xs:element name="offset" type="xs:int"></xs:element>
+   					<xs:element name="timestamp" type="xs:long"></xs:element>
+   					<xs:element name="deploymentKey" type="tns:DeploymentKey" maxOccurs="unbounded" minOccurs="0"></xs:element>
+   				</xs:sequence>
+            </xs:complexType>
+            
+            <xs:complexType name="ResourceStatus">
+            	<xs:sequence>
+            		<xs:element name="status" type="xs:string"
+            			minOccurs="1" maxOccurs="1">
+            			<xs:annotation>
+            				<xs:documentation>
+            					Returns 'Success' or 'Failure' based on
+            					the result of the operation
+            				</xs:documentation>
+            			</xs:annotation>
+            		</xs:element>
+
+
+            		<xs:choice><xs:element name="resourceId" type="xs:string" minOccurs="1" maxOccurs="1">
+            		</xs:element><xs:element name="error" type="tns:ErrorData" minOccurs="1" maxOccurs="1">
+            		</xs:element></xs:choice>
+            	</xs:sequence>
+            </xs:complexType>
+
+		
+            <xs:complexType name="FindResourceByIdsRequest">
+  				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+						<xs:sequence>
+							<xs:element name="resourceId"
+								type="xs:string" minOccurs="1" maxOccurs="unbounded">
+							</xs:element>
+							<xs:element name="readSet"
+								type="tns:ReadSet" minOccurs="1" maxOccurs="1">
+							</xs:element>
+							<xs:element name="includeChangeSetState"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+							<xs:element name="readOnlyHint"
+								type="xs:boolean" maxOccurs="1" minOccurs="0">
+							</xs:element>
+						</xs:sequence>
+	            	</xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="GetSupportedTypesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+					</xs:extension>
+				</xs:complexContent>
+				            
+            </xs:complexType>
+        
+            <xs:complexType name="UpdateResourceResponse">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="status"
+            					type="xs:string">
+            				</xs:element>
+            				<xs:element name="handle"
+            					type="xs:string">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            <xs:element name="insertResourcesResponse"
+            	type="tns:InsertResourcesResponse">
+
+            </xs:element>
+            <xs:element name="insertResourcesRequest"
+            	type="tns:InsertResourcesRequest">
+            </xs:element>
+
+            <xs:element name="deleteResourcesResponse"
+            	type="tns:DeleteResourcesResponse">
+
+            </xs:element>
+            <xs:element name="deleteResourcesRequest"
+            	type="tns:DeleteResourcesRequest">
+            </xs:element>
+            
+            <xs:complexType name="InsertResourcesRequest">
+				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+		            	<xs:sequence>
+		            		<xs:element name="resource"
+		            			type="tns:Resource" minOccurs="1"
+		            			maxOccurs="unbounded">
+		            		</xs:element>
+		            		<xs:element name="bundleSizeHint"
+		            			type="xs:long" minOccurs="0" maxOccurs="1">
+		            		</xs:element>
+		            		<xs:element name="policy"
+		            			type="tns:ErrorHandlingPolicy" minOccurs="0" maxOccurs="1">
+		            		</xs:element>
+		            	</xs:sequence>
+	            	</xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="InsertResourcesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="resourceStatus" type="tns:ResourceStatus" minOccurs="1" maxOccurs="unbounded"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="DeleteResourcesRequest">
+				<xs:complexContent>
+	            	<xs:extension base="tns:BaseServiceRequest">
+		            	<xs:sequence>
+		            		<xs:element name="resourceId"
+		            			type="xs:string" minOccurs="0" maxOccurs="unbounded">
+		            		</xs:element>
+		            		<xs:element name="policy"
+		            			type="tns:ErrorHandlingPolicy">
+		            		</xs:element>
+		            	</xs:sequence>
+	            	</xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="DeleteResourcesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="resourceStatus" type="tns:ResourceStatus" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+            <xs:element name="getChildrenNamesResponse"
+            	type="tns:GetChildrenNamesResponse">
+
+            </xs:element>
+            <xs:element name="getChildrenNamesRequest"
+            	type="tns:GetChildrenNamesRequest">
+            </xs:element>
+            
+            <xs:complexType name="GetChildrenNamesRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">            
+		            	<xs:sequence>
+		            		<xs:element name="deploymentKey"
+		            			type="tns:DeploymentKey" minOccurs="0" maxOccurs="1">
+		            		</xs:element>
+		            		<xs:element name="parent"
+		            			type="tns:ResourcePath" minOccurs="0" maxOccurs="1">
+		            		</xs:element>
+		            		<xs:element name="readOnlyHint"
+		            			type="xs:boolean" maxOccurs="1" minOccurs="0">
+		            		</xs:element>
+		            	</xs:sequence>
+					</xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="GetChildrenNamesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="children" type="tns:ResourcePath" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="FindResourceByIdsResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="resource" type="tns:Resource" maxOccurs="unbounded" minOccurs="0"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:complexType name="FindResourcesResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="queryResult" type="tns:QueryResult" maxOccurs="unbounded" minOccurs="1"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+		
+            <xs:simpleType name="ErrorHandlingPolicy">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="FailFast">
+		 				<xs:annotation>
+		 					<xs:documentation>
+		 						Fail the entire batch on the first failure
+							</xs:documentation>	 
+						</xs:annotation>
+            		</xs:enumeration>
+            		<xs:enumeration value="BestEffort">
+		 				<xs:annotation>
+		 					<xs:documentation>
+		 						Continue with the rest of the data in case of failure
+							</xs:documentation>	 
+						</xs:annotation>
+            		</xs:enumeration>
+            		<xs:enumeration value="Rollback">
+		 				<xs:annotation>
+		 					<xs:documentation>
+		 						Try to clean up changes in case of failure
+							</xs:documentation>	 
+						</xs:annotation>
+            		</xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+            <xs:element name="findChangeSetByNameResponse"
+            	type="tns:FindChangeSetByNameResponse">
+
+            </xs:element>
+            <xs:element name="findChangeSetByNameRequest"
+            	type="tns:FindChangeSetByNameRequest">
+            </xs:element>
+            <xs:element name="getDefaultDomainResponse"
+            	type="tns:GetDefaultDomainResponse">
+
+            </xs:element>
+            <xs:element name="getDefaultDomainRequest"
+            	type="tns:GetDefaultDomainRequest">
+            </xs:element>
+            
+        
+            <xs:complexType name="FindChangeSetByNameRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">            
+		            	<xs:sequence>
+		            		<xs:element name="changeSetName"
+		            			type="xs:string" minOccurs="1" maxOccurs="1">
+		            		</xs:element>
+		            		<xs:element name="readOnlyHint"
+		            			type="xs:boolean" maxOccurs="1" minOccurs="0">
+		            		</xs:element>
+		            	</xs:sequence>
+					</xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="FindChangeSetByNameResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="changeSet" type="tns:ChangeSet"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="GetDefaultDomainRequest">
+   				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceRequest">            
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+        
+            <xs:complexType name="GetDefaultDomainResponse">
+   				<xs:complexContent>
+					<xs:extension base="tns:BaseServiceResponse">
+		            	<xs:sequence>
+		            		<xs:element name="defaultDomain" type="xs:string"></xs:element>
+		            	</xs:sequence>
+		            </xs:extension>
+		        </xs:complexContent>
+            </xs:complexType>
+            
+			<xs:element name="getVersionRequest" type="tns:GetVersionRequest"/>
+			<xs:element name="getVersionResponse" type="tns:GetVersionResponse"/>
+
+			<xs:complexType name="GetVersionRequest">
+			  <xs:complexContent>
+			  <xs:extension base="tns:BaseServiceRequest"/>
+			  </xs:complexContent>
+			</xs:complexType>
+			 
+			<xs:complexType name="GetVersionResponse">
+			  <xs:complexContent>
+			  <xs:extension base="tns:BaseServiceResponse"/>
+			  </xs:complexContent>
+			</xs:complexType>
+        
+			<xs:complexType name="ResourcePath">
+				<xs:sequence>
+					<xs:element name="part" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="leaf" type="xs:boolean" minOccurs="1" maxOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="PmQuery">
+				<xs:sequence>
+					<xs:element name="logicalKeyFilterPart"
+						type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="variationFilter"
+						type="tns:VariationFilter" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="deploymentKey"
+						type="tns:DeploymentKey" minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="compatibilityKey" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="findResourcesBatch">
+				<xs:complexType>
+					<xs:sequence>
+
+						<xs:element name="query" type="tns:PmBatchQuery"
+							maxOccurs="1" minOccurs="1">
+						</xs:element>
+						<xs:element name="readSet" type="tns:ReadSet"
+							maxOccurs="1" minOccurs="1">
+						</xs:element>
+						<xs:element name="includeChangeSetState"
+							type="xs:boolean" maxOccurs="1" minOccurs="0">
+						</xs:element>
+						<xs:element name="readOnlyHint"
+							type="xs:boolean" maxOccurs="1" minOccurs="0">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="findResourcesBatchResponse">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="tns:BaseServiceResponse">
+							<xs:sequence>
+								<xs:element name="queryResult"
+									type="tns:QueryResult" maxOccurs="unbounded" minOccurs="0">
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		
+			<xs:complexType name="PmBatchQuery">
+				<xs:sequence>
+					<xs:element name="logicalKeyConstraint"
+						type="tns:LogicalQuery" maxOccurs="unbounded" minOccurs="1">
+					</xs:element>
+					<xs:element name="variationConstraint"
+						type="tns:VariationConstraint" maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="deploymentConstraint" type="tns:DeploymentConstraint" maxOccurs="1" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		
+			<xs:complexType name="LogicalQuery">
+				<xs:sequence>
+					<xs:element name="logicalKeyFilter" type="xs:string"
+						maxOccurs="unbounded" minOccurs="1">
+					</xs:element>
+					<xs:element name="compatibilityKey" type="xs:string"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="offset" type="xs:int"
+						maxOccurs="1" minOccurs="0">
+					</xs:element>
+					<xs:element name="length" type="xs:int" maxOccurs="1" minOccurs="0"></xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="deleteChangeSetRequest">
+		<wsdl:part element="tns:deleteChangeSetRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="deleteChangeSetResponse">
+		<wsdl:part element="tns:deleteChangeSetResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="deleteResourceRequest">
+		<wsdl:part element="tns:deleteResourceRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="deleteResourceResponse">
+		<wsdl:part element="tns:deleteResourceResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findChangeSetByIdRequest">
+		<wsdl:part element="tns:findChangeSetByIdRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findChangeSetByIdResponse">
+		<wsdl:part element="tns:findChangeSetByIdResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findChangeSetsRequest">
+		<wsdl:part element="tns:findChangeSetsRequest" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findChangeSetsResponse">
+		<wsdl:part element="tns:findChangeSetsResponse" name="params" />
+	</wsdl:message>
+	<wsdl:message name="findResourceByIdsRequest">
+		<wsdl:part name="params" element="tns:findResourceByIdsRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findResourceByIdsResponse">
+		<wsdl:part name="params" element="tns:findResourceByIdsResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findResourcesRequest">
+		<wsdl:part name="params" element="tns:findResourcesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findResourcesResponse">
+		<wsdl:part name="params" element="tns:findResourcesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSupportedTypesRequest">
+		<wsdl:part name="params" element="tns:getSupportedTypesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getSupportedTypesResponse">
+		<wsdl:part name="params" element="tns:getSupportedTypesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="insertChangeSetRequest">
+		<wsdl:part name="params" element="tns:insertChangeSetRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="insertChangeSetResponse">
+		<wsdl:part name="params" element="tns:insertChangeSetResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateChangeSetRequest">
+		<wsdl:part name="params" element="tns:updateChangeSetRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateChangeSetResponse">
+		<wsdl:part name="params" element="tns:updateChangeSetResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateResourceRequest">
+		<wsdl:part name="params" element="tns:updateResourceRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateResourceResponse">
+		<wsdl:part name="params" element="tns:updateResourceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDeploymentKeysRequest">
+		<wsdl:part name="params" element="tns:getDeploymentKeysRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDeploymentKeysResponse">
+		<wsdl:part name="params" element="tns:getDeploymentKeysResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="insertResourcesRequest">
+		<wsdl:part name="params" element="tns:insertResourcesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="insertResourcesResponse">
+		<wsdl:part name="params" element="tns:insertResourcesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="deleteResourcesRequest">
+		<wsdl:part name="params" element="tns:deleteResourcesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="deleteResourcesResponse">
+		<wsdl:part name="params" element="tns:deleteResourcesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getChildrenNamesRequest">
+		<wsdl:part name="params" element="tns:getChildrenNamesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getChildrenNamesResponse">
+		<wsdl:part name="params" element="tns:getChildrenNamesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findChangeSetByNameRequest">
+		<wsdl:part name="params" element="tns:findChangeSetByNameRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findChangeSetByNameResponse">
+		<wsdl:part name="params" element="tns:findChangeSetByNameResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDefaultDomainRequest">
+		<wsdl:part name="params" element="tns:getDefaultDomainRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDefaultDomainResponse">
+		<wsdl:part name="params" element="tns:getDefaultDomainResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getVersionRequest">
+	  <wsdl:part name="messageParameters" element="tns:getVersionRequest"/>
+	</wsdl:message>
+	 <wsdl:message name="getVersionResponse">
+	  <wsdl:part name="messageParameters" element="tns:getVersionResponse"/>
+	</wsdl:message>
+
+
+	 <wsdl:message name="findResourcesBatchRequest">
+	 	<wsdl:part name="parameters" element="tns:findResourcesBatch"></wsdl:part>
+	 </wsdl:message>
+	 <wsdl:message name="findResourcesBatchResponse">
+	 	<wsdl:part name="parameters" element="tns:findResourcesBatchResponse"></wsdl:part>
+	 </wsdl:message>
+	 <wsdl:portType name="ResourcePersistenceServicePort">
+
+		<wsdl:operation name="deleteChangeSet">
+			<wsdl:documentation>
+				Delete a change set by change set id
+			</wsdl:documentation>
+				<wsdl:input message="tns:deleteChangeSetRequest" />
+			<wsdl:output message="tns:deleteChangeSetResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteResource">
+			<wsdl:documentation>
+				Delete a resource based on resource id
+			</wsdl:documentation>
+			<wsdl:input message="tns:deleteResourceRequest" />
+			<wsdl:output message="tns:deleteResourceResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findChangeSetById">
+			<wsdl:documentation>
+				Query change set by change set id
+			</wsdl:documentation>
+			<wsdl:input message="tns:findChangeSetByIdRequest" />
+			<wsdl:output message="tns:findChangeSetByIdResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findChangeSets">
+			<wsdl:documentation>
+				Find all change sets for a specific type, state, and release level
+      			- adaptors can use change set type to distinguish each other
+     			- state is managed by adaptors, if state is null, will find latest from all states 
+     			- release is optional.
+			</wsdl:documentation>
+			<wsdl:input message="tns:findChangeSetsRequest" />
+			<wsdl:output message="tns:findChangeSetsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="findResourceByIds">
+			<wsdl:documentation>
+			     Find a resource by its physical id. Physical id is implementation/deployment specific and is not globally unique. 
+			     Physical id will be retured when the resource is persisted using insert operation.
+			</wsdl:documentation>
+			<wsdl:input message="tns:findResourceByIdsRequest"></wsdl:input>
+			<wsdl:output message="tns:findResourceByIdsResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findResources">
+			<wsdl:documentation>
+			     Find a resource based on logical key, variation constraints and deployment constraints
+			</wsdl:documentation>
+			<wsdl:input message="tns:findResourcesRequest"></wsdl:input>
+			<wsdl:output message="tns:findResourcesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSupportedTypes">
+			<wsdl:documentation>
+			     Get supported types of resources
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSupportedTypesRequest"></wsdl:input>
+			<wsdl:output message="tns:getSupportedTypesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="insertChangeSet">
+			<wsdl:documentation>
+			     Get supported types of resources
+			</wsdl:documentation>
+			<wsdl:input message="tns:insertChangeSetRequest"></wsdl:input>
+			<wsdl:output message="tns:insertChangeSetResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateChangeSet">
+			<wsdl:documentation>
+			     Update a change set using changeset id. Properties like creation date will be ignored
+			</wsdl:documentation>
+			<wsdl:input message="tns:updateChangeSetRequest"></wsdl:input>
+			<wsdl:output message="tns:updateChangeSetResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateResource">
+			<wsdl:documentation>
+			     Update a resource object based on the resource id passed
+			</wsdl:documentation>
+			<wsdl:input message="tns:updateResourceRequest"></wsdl:input>
+			<wsdl:output message="tns:updateResourceResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeploymentKeys">
+			<wsdl:documentation>
+			     Return a list of deployment keys that correspond to specified constraints
+			</wsdl:documentation>
+			<wsdl:input message="tns:getDeploymentKeysRequest"></wsdl:input>
+			<wsdl:output message="tns:getDeploymentKeysResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="insertResources">
+			<wsdl:documentation>
+			     Inserts all the resources in to the persistence storage. This operation is used for batch inserts.
+			</wsdl:documentation>
+			<wsdl:input message="tns:insertResourcesRequest"></wsdl:input>
+			<wsdl:output message="tns:insertResourcesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteResources">
+			<wsdl:documentation>
+			     Deletes all the resources corresponding to the list of resource ids passed.
+			</wsdl:documentation>		
+			<wsdl:input message="tns:deleteResourcesRequest"></wsdl:input>
+			<wsdl:output message="tns:deleteResourcesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getChildrenNames">
+			<wsdl:documentation>
+			     Returns a list of child names that match deployment and logical keys
+			</wsdl:documentation>		
+			<wsdl:input message="tns:getChildrenNamesRequest"></wsdl:input>
+			<wsdl:output message="tns:getChildrenNamesResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findChangeSetByName">
+			<wsdl:documentation>
+			    Searches change set by name. The different between change set id and change set name is that, change set id is system generated,
+			    whereas change set name is user provided. for example, if we store build id inside the change set name, this method effectively becomes findChangeSetByBuildId, which is pretty useful.
+			</wsdl:documentation>		
+			<wsdl:input message="tns:findChangeSetByNameRequest"></wsdl:input>
+			<wsdl:output message="tns:findChangeSetByNameResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDefaultDomain">
+			<wsdl:documentation>
+			     Returns  default domain of this persistence manager
+			</wsdl:documentation>		
+			<wsdl:input message="tns:getDefaultDomainRequest"></wsdl:input>
+			<wsdl:output message="tns:getDefaultDomainResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<wsdl:documentation>
+			     Method used to monitor the service
+			</wsdl:documentation>		
+		  <wsdl:input message="tns:getVersionRequest"/>
+		  <wsdl:output message="tns:getVersionResponse"/>
+		</wsdl:operation>
+
+
+		<wsdl:operation name="findResourcesBatch">
+			<wsdl:input message="tns:findResourcesBatchRequest"></wsdl:input>
+			<wsdl:output message="tns:findResourcesBatchResponse"></wsdl:output>
+		</wsdl:operation>
+	 </wsdl:portType>
+	 <wsdl:binding name="ResourcePersistenceServiceHttpBinding"
+	 	type="tns:ResourcePersistenceServicePort">
+
+	 	<http:binding verb="POST" />
+	 	<wsdl:operation name="deleteChangeSet">
+
+	 		<http:operation location="/deleteChangeSet" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="deleteResource">
+
+	 		<http:operation location="/deleteResource" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="findChangeSetById">
+
+	 		<http:operation location="/findChangeSetById" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="findChangeSets">
+	 		<http:operation location="/findChangeSets" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="findResourceByIds">
+	 		<http:operation location="/findResourceByIds" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="findResources">
+	 		<http:operation location="/findResources" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="parameters" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="getSupportedTypes">
+	 		<http:operation location="/getSupportedTypes" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="insertChangeSet">
+	 		<http:operation location="/insertChangeSet" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="updateChangeSet">
+	 		<http:operation location="/updateChangeSet" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="updateResource">
+	 		<http:operation location="/updateResource" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="getDeploymentKeys">
+	 		<http:operation location="/getDeploymentKeys" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="insertResources">
+	 		<http:operation location="/insertResources" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="deleteResources">
+	 		<http:operation location="/deleteResources" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="getChildrenNames">
+	 		<http:operation location="/getChildrenNames" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="findChangeSetByName">
+	 		<http:operation location="/getChangeSetByName" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="getDefaultDomain">
+	 		<http:operation location="/getDefaultDomain" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 	<wsdl:operation name="getVersion">
+	 		<http:operation location="/getVersion" />
+	 		<wsdl:input>
+	 			<mime:content part="params"
+	 				type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content part="params" type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+
+	 	<wsdl:operation name="findResourcesBatch">
+	 		<http:operation location="/findResourcesBatch" />
+	 		<wsdl:input>
+	 			<mime:content type="application/x-www-form-urlencoded" />
+	 		</wsdl:input>
+	 		<wsdl:output>
+	 			<mime:content type="text/xml" />
+	 		</wsdl:output>
+	 	</wsdl:operation>
+	 </wsdl:binding>
+	 <wsdl:binding name="ResourcePersistenceServiceSOAPBinding"
+		type="tns:ResourcePersistenceServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="deleteChangeSet">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/deleteChangeSet" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteResource">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/deleteResource" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findChangeSetById">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/findChangeSetById" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findChangeSets">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/findChangeSets" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findResourceByIds">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/findResourceByIds" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findResources">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/findResources" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSupportedTypes">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/getSupportedTypes" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="insertChangeSet">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/insertChangeSet" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateChangeSet">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/updateChangeSet" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateResource">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/updateResource" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeploymentKeys">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/getDeploymentKeys" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="insertResources">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/insertResources" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deleteResources">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/deleteResources" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getChildrenNames">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/getChildrenNames" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="findChangeSetByName">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/getChangeSetByName" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDefaultDomain">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/getDefaultDomain" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getVersion">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/getVersion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="findResourcesBatch">
+			<soap:operation
+				soapAction="http://www.ebay.com/marketplace/infrastructure/v1/services/findResourcesBatch" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ResourcePersistenceService">
+		<wsdl:documentation>
+			<Version>1.0.0</Version>
+				Resource Persistence API provide a mechanism to store all the site and user generated resources in a central storage mechanism. API 
+				in addition	to resource persistence functionality provides addition features like changeset maintenance and storage and query of 
+				metadata for the resource persisted, version tracking, etc..
+		</wsdl:documentation>
+		<wsdl:port binding="tns:ResourcePersistenceServiceHttpBinding"
+			name="ResourcePersistenceServiceHttpPort">
+			<http:address
+				location="http://svcs.ebay.com/infrastructure/v1/ResourcePersistenceService" />
+		</wsdl:port>
+		<wsdl:port binding="tns:ResourcePersistenceServiceSOAPBinding"
+			name="ResourcePersistenceServiceSOAPPort">
+			<soap12:address
+				location="https://svcs.ebay.com/infrastructure/v1/ResourcePersistenceService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
+

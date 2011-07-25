@@ -284,7 +284,7 @@ public class CustomHttpHeadersTest {
 		List<String> response = client.getTransportHeaders(param0).getOut();
 		
 		Map<String, String> respHeaders = svc.getResponseContext().getTransportHeaders();
-		System.out.println("Vasudha " + respHeaders.get(header1));
+		
 		Assert.assertEquals("testNegKnownSOAServiceNameHeader", respHeaders.get(header1));
 		Assert.assertEquals("80", respHeaders.get(header2));	
 		System.out.println("-- testNegKnownSOAServiceNameHeader --");
@@ -304,7 +304,7 @@ public class CustomHttpHeadersTest {
 		param0.getIn().add(1, header2);
 		
 		svc.setSessionTransportHeader(header1, "testNegKnownSOARequestDataBindingHeader");
-		svc.setSessionTransportHeader(header2, "80");
+		svc.setSessionTransportHeader(header2, "100");
 		List<String> response = client.getTransportHeaders(param0).getOut();
 		Map<String, String> respHeaders = svc.getResponseContext().getTransportHeaders();
 
@@ -332,8 +332,8 @@ public class CustomHttpHeadersTest {
 		System.out.println(response.get(0));
 		System.out.println(response.get(1));
 		Map<String, String> respHeaders = svc.getResponseContext().getTransportHeaders();
-		System.out.println("Vasudha - " + respHeaders.get(header1));
-		Assert.assertEquals("text/xml; charset=UTF-8", respHeaders.get(header1));
+		
+		Assert.assertEquals("testNegKnownHTTPHeader", respHeaders.get(header1));
 		Assert.assertEquals("100", respHeaders.get(header2));
 		System.out.println("-- testNegKnownHTTPHeader --");
 			

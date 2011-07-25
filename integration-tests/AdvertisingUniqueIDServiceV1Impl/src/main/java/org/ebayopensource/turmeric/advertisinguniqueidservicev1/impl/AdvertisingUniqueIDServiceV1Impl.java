@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.Response;
 
@@ -52,6 +53,7 @@ import org.ebayopensource.turmeric.runtime.common.exceptions.ServiceException;
 import org.ebayopensource.turmeric.runtime.common.pipeline.Message;
 import org.ebayopensource.turmeric.runtime.common.pipeline.MessageContextAccessor;
 import org.ebayopensource.turmeric.runtime.tests.AdvertisingUniqueIDServiceV1;
+import org.ebayopensource.turmeric.runtime.tests.common.util.QEFileUtils;
 
 
 public class AdvertisingUniqueIDServiceV1Impl
@@ -71,10 +73,18 @@ implements AdvertisingUniqueIDServiceV1
 			Message request = MessageContextAccessor.getContext().getRequestMessage();
 			Map<String, String> requestHeaders = null;
 			requestHeaders = request.getTransportHeaders();
+			
+			String customHeader = requestHeaders.get("CLIENT-FAILOVER");
+			if (customHeader == null || customHeader.isEmpty()) {
 			res.setGuid(requestHeaders.get("X-TURMERIC-REQUEST-GUID"));
 			res.setRequestID(requestHeaders.get("X-TURMERIC-REQUEST-ID"));
 //			AdvertisingServiceV2NestedClient client = new AdvertisingServiceV2NestedClient("UniqueIDServiceV2Client","dev");
 //			res.setRequestID(client.getNestedServiceRequestID().getNestedSrvcRequestID());
+			}else {
+				//AdvertisingServiceV2NestedClient client = 
+					//	new AdvertisingServiceV2NestedClient("UniqueIDServiceV2Client", customHeader);
+					//res.setRequestID(client.getNestedServiceRequestID().getNestedSrvcRequestID());
+				}
 
 		} catch (ServiceException e) {
 
@@ -210,17 +220,64 @@ implements AdvertisingUniqueIDServiceV1
 
 	@Override
 	public TestAttachmentResponse testAttachment(TestAttachment testAttachment) {
+		
 		long MAX_SIZE = 15 * 1024 * 1024;
 		int CHUNK_SIZE = 4096;
 		long sizeCounter = 0;
 		BufferedInputStream br = null;
+		String  clientFileName = "TestFileClient";
+		String  serverFileName = "TestFileServer";
+		String currentDir = System.getProperty("user.dir");
+		String fileName = testAttachment.getIn().getFileName();
 		FileOutputStream out = null;
 		boolean bRet = false;
 		byte[] dataBuf = new byte[4096];
 		TestAttachmentResponse response = new TestAttachmentResponse();
+		FileAttachmentType responseAttachment = new FileAttachmentType();
 		FileAttachmentType attachment = testAttachment.getIn();
+		File f1 = null;
 		try {
-			out = new FileOutputStream(new File("C:\\temp\\"+ attachment
+			
+			
+			if (attachment.getData() == null) {
+				
+				
+				//			download to client
+				f1 = new File(currentDir + fileName);
+				if (!f1.exists()) QEFileUtils.createFileForTest(Integer.valueOf(attachment.getSize().intValue()), f1);
+				DataHandler dh = new DataHandler(new FileDataSource(f1));
+				responseAttachment.setData(dh);
+				responseAttachment.setFileName(clientFileName);
+				responseAttachment.setFilePath("");
+				responseAttachment.setSize(4096L);
+				response.setOut(responseAttachment);
+				return response;
+			} 
+			else if (attachment.isType()) {
+				//				Upload to server
+				System.out.println(currentDir + serverFileName);
+				DataHandler dataHandler = attachment.getData();
+				InputStream in = dataHandler.getInputStream();
+				QEFileUtils.writeData(in, CHUNK_SIZE, attachment.getSize(), currentDir + serverFileName);
+				responseAttachment.setFileName(serverFileName);
+				responseAttachment.setSize(attachment.getSize());
+				response.setOut(responseAttachment);
+			}
+			else {
+				//				Both upload and download
+				DataHandler dataHandler = attachment.getData();
+				InputStream in = dataHandler.getInputStream();
+				QEFileUtils.writeData(in, CHUNK_SIZE, attachment.getSize(), currentDir + serverFileName);
+				DataHandler dh = new DataHandler(new FileDataSource(new File(currentDir + serverFileName)));
+				responseAttachment.setData(dh);
+				responseAttachment.setFileName(clientFileName);
+				responseAttachment.setFilePath("");
+				responseAttachment.setSize(attachment.getSize());
+				response.setOut(responseAttachment);
+				return response;
+			}
+			
+			/*out = new FileOutputStream(new File("C:\\temp\\"+ attachment
 					.getFileName()));
 			DataHandler dataHandler = attachment.getData();
 			InputStream in = dataHandler.getInputStream();
@@ -234,7 +291,7 @@ implements AdvertisingUniqueIDServiceV1
 					break;
 				}
 			}
-			response.setOut(attachment);
+			response.setOut(attachment);*/
 			return response;
 		} catch (FileNotFoundException e) {
 			System.out.println(e);

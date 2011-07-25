@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ClassifiedAdAdminService" targetNamespace="http://www.ebay.com/marketplace/classifiedad/v1/services" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:services="http://www.ebay.com/marketplace/services" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.ebay.com/marketplace/classifiedad/v1/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/classifiedad/v1/services">
+
+    <xs:element name="getVersionRequest"  type="tns:GetVersionRequest"/>
+<xs:element name="getVersionResponse"  type="tns:GetVersionResponse"/>
+
+<xs:complexType name="GetVersionRequest">
+  <xs:complexContent>
+ <xs:extension base="tns:BaseRequest"/>
+  </xs:complexContent>
+</xs:complexType>
+ 
+<xs:complexType name="GetVersionResponse">
+  <xs:complexContent>
+	<xs:extension base="tns:BaseResponse"/>
+  </xs:complexContent>
+</xs:complexType>
+
+    		<xs:simpleType name="AckValue">
+				<xs:annotation>
+					<xs:documentation>
+						Indicates whether the error is a severe error
+						(causing the request to fail) or an
+						informational error (a warning) that should be
+						communicated to the user.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Success">
+						<xs:annotation>
+							<xs:documentation>
+								The request was processed successfully,
+								but something occurred that may affect
+								your application or the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Failure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								not processed successfully. When a
+								serious application-level error occurs,
+								the error is returned instead of the
+								business data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Warning">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="PartialFailure">
+						<xs:annotation>
+							<xs:documentation>
+								The request that triggered the error was
+								processed successfully but with some
+								warnings.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			
+			<xs:complexType abstract="true" name="BaseRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all service operations.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>				
+				</xs:sequence>
+			</xs:complexType>	
+			<xs:complexType name="ExtensionType">
+			<xs:annotation>
+			<xs:documentation>
+				Documentation goes here
+			</xs:documentation>
+			<xs:appinfo>
+			<typeLibrarySource
+			 library="MarketPlaceServiceCommonTypeLibrary"
+					namespace="http://www.ebay.com/marketplace/services">
+			</typeLibrarySource>
+			</xs:appinfo>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="id" type="xs:positiveInteger"></xs:element>
+				<xs:element name="version" type="xs:string"></xs:element>
+					<xs:element name="contentType" type="xs:string"></xs:element>
+					<xs:element name="value" type="xs:string"></xs:element>
+
+						processContents="lax">
+
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType abstract="true" name="BaseResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Base response container for all service
+						operations. Contains error information
+						associated with the request.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="MarketPlaceServiceCommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="ack" type="tns:AckValue">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="errorMessage" type="tns:ErrorMessage">
+						<xs:annotation>
+							<xs:documentation>
+								Information for an error or warning that
+								occurred when eBay processed the
+								request.
+							</xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Conditionally</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="version" type="xs:string">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="timestamp" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation/>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls/>
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="tns:ExtensionType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="ErrorCategory">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="System"/>
+					<xs:enumeration value="Application"/>
+					<xs:enumeration value="Request"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="ErrorData">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="errorId" type="xs:long"/>
+					<xs:element name="domain" type="xs:string"/>
+					<xs:element minOccurs="0" name="subdomain" type="xs:string"/>
+					<xs:element name="severity" type="tns:ErrorSeverity"/>
+					<xs:element name="category" type="tns:ErrorCategory"/>
+					<xs:element name="message" type="xs:string"/>
+					<xs:element minOccurs="0" name="exceptionId" type="xs:token"/>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:ErrorParameter"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorMessage">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<!-- 
+					<xs:sequence>
+
+					processContents="lax" />
+					</xs:sequence>
+				-->
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="error" type="tns:ErrorData"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ErrorParameter">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:simpleType name="ErrorSeverity">
+				<xs:annotation>
+					<xs:documentation>
+						Documentation goes here.
+					</xs:documentation>
+					<xs:appinfo>
+						<typeLibrarySource library="SOACommonTypeLibrary" namespace="http://www.ebay.com/marketplace/services"/>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Error"/>
+					<xs:enumeration value="Warning"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="getAdminAdResponse"  type="tns:AdminAdResponse"/>
+			<xs:complexType name="AdminAdResponse">
+				<xs:annotation>
+					<xs:documentation/>
+					<xs:appinfo/>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tns:BaseResponse"/>
+				</xs:complexContent>
+			</xs:complexType>			
+			
+			<xs:element name="getAdminAdRequest"  type="tns:AdminAdRequest"/>
+			<xs:complexType name="AdminAdRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This is the base class for request container for
+						all ClassifiedAdAdminService operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+				<xs:extension base="tns:BaseRequest">
+				<xs:sequence>
+					<xs:element name="scratchId" type="xs:long"/>
+					<xs:element name="status" type="xs:int"/>
+					<xs:element name="agentName" type="xs:string"/>
+					<xs:element name="siteId" type="xs:string"/>
+					<xs:element name="comment" type="xs:string"/>
+				</xs:sequence>
+				</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getAdminEditAdRequest"  type="tns:AdminEditAdRequest"/>
+			<xs:complexType name="AdminEditAdRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This request is used to perform single edit operations
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+				<xs:extension base="tns:AdminAdRequest">
+				<xs:sequence>
+					<xs:element name="categoryId" type="xs:long"/>
+				</xs:sequence>
+				</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getAdminAdReasonRequest"  type="tns:AdminAdReasonRequest"/>
+			<xs:complexType name="AdminAdReasonRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This request is used to perform single delete operations using the delete template
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+				<xs:extension base="tns:AdminAdRequest">
+				<xs:sequence>
+					<xs:element name="tokenId" type="xs:long"/>
+					<xs:element name="templateType" type="xs:int"/>
+				</xs:sequence>
+				</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getBulkAdminAdRequest"  type="tns:BulkAdminAdRequest"/>
+			<xs:complexType name="BulkAdminAdRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This request is used to perform single bulk approve and delete operations
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+				<xs:extension base="tns:BaseRequest">
+				<xs:sequence>
+					<xs:element name="status" type="xs:int"/>
+					<xs:element maxOccurs="unbounded" minOccurs="1" name="scratchIdList" type="xs:long"/>
+					<xs:element name="comment" type="xs:string"/>
+					<xs:element name="agentName" type="xs:string"/>
+					<xs:element name="siteId" type="xs:string"/>
+				</xs:sequence>
+				</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:element name="getBulkEditAdRequest"  type="tns:BulkEditAdRequest"/>
+			<xs:complexType name="BulkEditAdRequest">
+				<xs:annotation>
+					<xs:documentation>
+						This request is used to perform bulk edit operations
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+				<xs:extension base="tns:BulkAdminAdRequest">
+				<xs:sequence>
+					<xs:element name="categoryId" type="xs:long"/>
+				</xs:sequence>
+				</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+  </wsdl:types>
+  <message name="getVersionRequest">
+  <part name="messageParameters" element="tns:getVersionRequest"/>
+</message>
+ <message name="getVersionResponse">
+  <part name="messageParameters" element="tns:getVersionResponse"/>
+</message>
+
+  <message name="getBulkAdminAdRequest">
+    <part name="params" element="tns:getBulkAdminAdRequest">
+    </part>
+  </message>
+  <message name="getAdminAdRequest">
+    <part name="params" element="tns:getAdminAdRequest">
+    </part>
+  </message>
+  <message name="getAdminEditAdRequest">
+    <part name="params" element="tns:getAdminEditAdRequest">
+    </part>
+  </message>
+  <message name="getAdminAdReasonRequest">
+    <part name="params" element="tns:getAdminAdReasonRequest">
+    </part>
+  </message>
+   <message name="getBulkEditAdRequest">
+    <part name="params" element="tns:getBulkEditAdRequest">
+    </part>
+  </message>
+  <message name="getAdminAdResponse">
+    <part name="params" element="tns:getAdminAdResponse">
+    </part>
+  </message>
+  <wsdl:portType name="ClassifiedAdAdminServicePort">
+
+<operation name="getVersion">
+  <input name="getVersionRequest" message="tns:getVersionRequest"/>
+  <output name="getVersionResponse" message="tns:getVersionResponse"/>
+</operation>
+
+    <operation name="approveAd">
+      <input message="tns:getAdminAdRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+    <operation name="deleteAd">
+      <input message="tns:getAdminAdRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+    <operation name="deleteAdReason">
+      <input message="tns:getAdminAdReasonRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+    <operation name="bulkApproveAd">
+      <input message="tns:getBulkAdminAdRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+    <operation name="bulkDeleteAd">
+      <input message="tns:getBulkAdminAdRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+    <operation name="editAd">
+      <input message="tns:getAdminEditAdRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+    <operation name="bulkEdit">
+      <input message="tns:getBulkEditAdRequest">
+    </input>
+      <output message="tns:getAdminAdResponse">
+    </output>
+    </operation>
+  </wsdl:portType>
+  <wsdl:binding name="ClassifiedAdAdminServiceHttpBinding" type="tns:ClassifiedAdAdminServicePort">
+    <http:binding verb="POST"/>
+    <operation name="approveAd">
+      <http:operation location="/approveAd"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="deleteAd">
+      <http:operation location="/deleteAd"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="deleteAdReason">
+      <http:operation location="/deleteAdReason"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="bulkApproveAd">
+      <http:operation location="/bulkApproveAd"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="bulkDeleteAd">
+      <http:operation location="/bulkDeleteAd"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="editAd">
+      <http:operation location="/editAd"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+    <operation name="bulkEdit">
+      <http:operation location="/bulkEdit"/>
+      <input>
+        <mime:content part="parameters" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output>
+        <mime:content part="parameters" type="text/xml"/>
+      </output>
+    </operation>
+     <operation name="getVersion">
+   		<http:operation location="getVersion" />
+   		<input>
+         <mime:content part="parameters" type="application/x-www-form-urlencoded" />
+   		</input>
+   		<output>
+        	<mime:content part="parameters" type="text/xml" />
+   		</output>
+  	 </operation>
+  </wsdl:binding>
+  <wsdl:binding name="ClassifiedAdAdminServiceSOAPBinding" type="tns:ClassifiedAdAdminServicePort">
+
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <operation name="approveAd">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/approveAd"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteAd">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/deleteAd"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteAdReason">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/deleteAdReason"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="bulkApproveAd">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/bulkApproveAd"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="bulkDeleteAd">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/bulkDeleteAd"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="editAd">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/editAd"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="bulkEdit">
+      <soap:operation soapAction="http://www.ebay.com/marketplace/services/bulkEdit"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getVersion">
+  		<soap:operation soapAction="urn:getVersion"/>
+    	<input>
+      		<soap:body use="literal"/>
+    		</input>
+    	<output>
+      		<soap:body use="literal"/>
+    	</output>
+	</operation>
+  </wsdl:binding>
+  <wsdl:service name="ClassifiedAdAdminService">
+  	<wsdl:documentation>
+  		<version>1.0.0</version>
+  	</wsdl:documentation>  
+    <wsdl:port name="ClassifiedAdAdminServiceHttpPort" binding="tns:ClassifiedAdAdminServiceHttpBinding">
+      <http:address location="http://svcs.ebay.com/services/classifiedad/ClassifiedAdAdminService/v1"/>
+    </wsdl:port>
+    <wsdl:port name="ClassifiedAdAdminServiceSOAPPort" binding="tns:ClassifiedAdAdminServiceSOAPBinding">
+      <soap12:address location="http://svcs.ebay.com/services/classifiedad/ClassifiedAdAdminService/v1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

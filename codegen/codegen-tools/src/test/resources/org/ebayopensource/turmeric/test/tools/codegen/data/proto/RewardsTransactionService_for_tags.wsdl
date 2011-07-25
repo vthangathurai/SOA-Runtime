@@ -1,0 +1,1450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+  name="RewardsTransactionService"
+  targetNamespace="http://www.ebay.com/marketplace/services"
+  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:tns="http://www.ebay.com/marketplace/services"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<wsdl:types>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ebay.com/marketplace/services" xmlns:tns="http://www.ebay.com/marketplace/services">
+
+            <xs:complexType abstract="true" name="BaseServiceRequest">
+	<xs:annotation>
+		<xs:documentation>
+			This is the base class for request container for all service operations.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType abstract="true" name="BaseServiceResponse">
+	<xs:annotation>
+		<xs:documentation>
+			Base response container for all service operations. Contains error information
+			associated with the request.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="errors" type="xs:boolean">
+			<xs:annotation>
+				<xs:documentation>
+					If true, errors occurred when the request was
+					processed and there is error or warning information
+					to process in the response. Information for an
+					individual error and warning is returned in
+					errorMessage.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls />
+						<Returned>Always</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="errorMessage"
+			type="tns:ErrorMessage">
+			<xs:annotation>
+				<xs:documentation>
+					Information for an error or warning that occurred
+					when eBay processed the request.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls />
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+
+			processContents="lax" />
+
+										<xs:element name="version" type="xs:string"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="timestamp" type="xs:dateTime"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+							<xs:appinfo>
+								<CallInfo>
+									<AllCalls />
+									<Returned>Always</Returned>
+								</CallInfo>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+			
+		<xs:element name="ack" type="tns:AckValue"></xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType abstract="true" name="BaseRewardsServiceRequest">
+	<xs:complexContent>
+		<xs:extension base="tns:BaseServiceRequest">
+			<xs:sequence>
+				<xs:element name="logId" type="xs:string">
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType abstract="true" name="BaseRewardsServiceResponse">
+	<xs:complexContent>
+		<xs:extension base="tns:BaseServiceResponse">
+			<xs:sequence>
+				<xs:element name="logId" type="xs:string">
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ErrorMessage">
+	<xs:annotation>
+		<xs:documentation>
+			ErrorMessage to indicate any Error/Warning occured as part of service call.
+			Any run time error will not be reported here, but will be reported aspart of
+			soap fault.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="error"  type="tns:ErrorData">
+			<xs:annotation>
+				<xs:documentation>
+					Details about a single error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="ErrorData">
+	<xs:annotation>
+		<xs:documentation>
+			This represents error details.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:sequence>
+		<xs:element name="errorId" type="xs:long">
+			<xs:annotation>
+				<xs:documentation>
+					A unique code that identifies the particular error condition that occurred.
+					Your application can use error codes as identifiers in your customized
+					error-handling algorithms.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="domain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the domain upon which the error occurred. 
+					&lt;dl&gt;
+					&lt;lh&gt;Domains include:&lt;/lh&gt;
+					&lt;dt&gt;
+						Marketplace
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						A business or validation error occurred for the Merchandising Service.
+					&lt;/dd&gt;
+					&lt;dt&gt;
+						SOA
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						An exception occurred in the Service Oriented Architecture (SOA) framework.
+					&lt;/dd&gt;
+					&lt;/dl&gt;
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="severity" type="tns:ErrorSeverity">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates whether the error caused the request to fail (Error) or not
+					(Warning).
+					&lt;br&gt;&lt;br&gt;
+					If the request fails and the source of the problem is within the application
+					(such as a missing required element), please change the application before you
+					retry the request. If the problem is due to end-user input data, please alert
+					the end-user to the problem and provide the means for them to correct the data.
+					Once the problem in the application or data is resolved, you can attempt to re-
+					send the request to eBay.
+					&lt;br&gt;&lt;br&gt;
+					If the source of the problem is on eBay's side, you can retry the request as-is
+					a reasonable number of times (eBay recommends twice). If the error persists,
+					contact Developer Technical Support. Once the problem has been resolved, the
+					request may be resent in its original form.
+					&lt;br&gt;&lt;br&gt;
+					When a warning occurs, the error is returned in addition to the business data.
+					In this case, you do not need to retry the request (as the original request was
+					successful). However, depending on the cause or nature of the warning, you
+					might need to contact either the end user or eBay to effect a long term
+					solution to the problem to prevent it from reoccurring in the future.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="category" type="tns:ErrorCategory">
+			<xs:annotation>
+				<xs:documentation>
+					There are three categories of errors: request errors, application errors, and
+					system errors.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element name="message" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					A detailed description of the condition that resulted in the error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="subdomain" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+					Name of the subdomain upon which the error occurred. 
+					&lt;dl&gt;
+					&lt;lh&gt;Subdomains include:&lt;/lh&gt;
+					&lt;dt&gt;
+						Merchandising
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						The error is specific to the Merchandising service.
+					&lt;/dd&gt;
+					&lt;dt&gt;
+						MarketplaceCommon
+					&lt;/dt&gt;
+					&lt;dd&gt;
+						The error is common to all Marketplace services.
+					&lt;/dd&gt;
+					&lt;/dl&gt;
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element minOccurs="0" name="exceptionId" type="xs:token">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for an exception associated with an error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="parameter"  type="tns:ErrorParameter">
+			<xs:annotation>
+				<xs:documentation>
+					Some warning and error messages return one or more variables that contain
+					contextual information about the error. This is often the field or value that
+					triggered the error.
+				</xs:documentation>
+				<xs:appinfo>
+					<CallInfo>
+						<AllCalls/>
+						<Returned>Conditionally</Returned>
+					</CallInfo>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="ErrorParameter">
+	<xs:annotation>
+		<xs:documentation>
+			Contextual information associated with an error.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleContent>
+		<xs:extension base="xs:string">
+			<xs:attribute name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						The name of the parameter in the list of parameter types returned
+						within the error type.
+					</xs:documentation>
+						<xs:appinfo>
+							<CallInfo>
+								<AllCalls/>
+								<Returned>Conditionally</Returned>
+							</CallInfo>
+						</xs:appinfo>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:extension>
+	</xs:simpleContent>
+</xs:complexType>
+
+
+<xs:simpleType name="ErrorSeverity">
+	<xs:annotation>
+		<xs:documentation>
+			Indicates whether the error is a severe error (causing the request to fail)
+			or an informational error (a warning) that should be communicated to the
+			user.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="Error">
+			<xs:annotation>
+				<xs:documentation>
+					The request that triggered the error was not processed successfully.
+					When a serious application-level error occurs, the error is returned
+					instead of the business data.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Warning">
+			<xs:annotation>
+				<xs:documentation>
+					The request was processed successfully, but something occurred that may
+					affect your application or the user. For example, eBay may have changed a
+					value the user sent in. In this case, eBay returns a normal, successful
+					response and also returns the warning.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="ErrorCategory">
+	<xs:annotation>
+		<xs:documentation>
+			There are three categories of error: request errors, application errors,
+			and system errors. Request and application errors are caused primarily by
+			invalid data passed in the request. System errors are caused primarily by
+			application failures and cannot be corrected by changing request values.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="System">
+			<xs:annotation>
+				<xs:documentation>
+					Indicates that an error has occurred on the eBay system side, such as a
+					database or server down. An application can retry the request as-is a
+					reasonable number of times (eBay recommends twice). If the error
+					persists, contact Developer Technical Support. Once the problem has been
+					resolved, the request may be resent in its original form.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Application">
+			<xs:annotation>
+				<xs:documentation>
+					An error occurred due to a problem with the request, such as missing or
+					invalid fields. The problem must be corrected before the request can be
+					made again. If the problem is due to something in the application (such
+					as a missing required field), the application must be changed. Once the
+					problem in the application or data is resolved, resend the corrected
+					request to eBay.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+		<xs:enumeration value="Request">
+			<xs:annotation>
+				<xs:documentation>
+					An error occurred due to a problem with the request, such as invalid or
+					missing data. The problem must be corrected before the request can be
+					made again. If the problem is a result of end-user data, the application
+					must alert the end-user to the problem and provide the means for the
+					end-user to correct the data. Once the problem in the data is resolved,
+					resend the request to eBay with the corrected data.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:enumeration>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="AckValue">
+    <xs:annotation>
+     <xs:documentation>
+   Indicates whether the error is a severe error (causing the request to fail)
+   or an informational error (a warning) that should be communicated to the
+   user.
+  </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+     <xs:enumeration value="Success">
+      <xs:annotation>
+       <xs:documentation>
+     The request was processed successfully, but something occurred that may
+     affect your application or the user.    
+    </xs:documentation>
+      </xs:annotation>
+     </xs:enumeration>
+     <xs:enumeration value="Failure">
+      <xs:annotation>
+       <xs:documentation>
+     The request that triggered the error was not processed successfully.
+     When a serious application-level error occurs, the error is returned
+     instead of the business data.
+    </xs:documentation>
+      </xs:annotation>
+     </xs:enumeration>
+     <xs:enumeration value="Warning">
+      <xs:annotation>
+       <xs:documentation>
+     The request that triggered the error was processed successfully but with some warnings.
+    </xs:documentation>
+      </xs:annotation>
+     </xs:enumeration>
+     <xs:enumeration value="PartialFailure">
+      <xs:annotation>
+       <xs:documentation>
+     The request that triggered the error was processed successfully but with some warnings.    </xs:documentation>
+      </xs:annotation>
+     </xs:enumeration>
+    </xs:restriction>
+   </xs:simpleType>
+
+            <xs:element name="calculateRewardsRequest"
+            	type="tns:CalculateRewardsRequestType">
+            </xs:element>
+            <xs:element name="calculateRewardsResponse"
+            	type="tns:CalculateRewardsResponseType">
+            </xs:element>
+            
+            <xs:complexType name="CalculateRewardsRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId" type="xs:long">
+            				</xs:element>
+            				<xs:element name="clientName" type="xs:string"></xs:element>
+            				<xs:element name="clientDetailsPayloadList"
+            					type="xs:string" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="testUser" type="xs:boolean">
+            				</xs:element>            				
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+
+<xs:complexType name="RewardsResultType">
+  <xs:sequence>
+  	<xs:element name="payloadIdentifier" type="xs:long"></xs:element>
+  	<xs:element name="rewardsAmount" type="tns:RewardsAmountType"></xs:element>
+  	<xs:element name="reasonCode"
+  		type="tns:RewardsTransactionReasonCodeType">
+  	</xs:element>
+  	<xs:element name="transactionId" type="xs:long"></xs:element>
+  	<xs:element name="promotionType" type="tns:PromotionType"></xs:element>
+  	<xs:element name="ruleDescription" type="xs:string"></xs:element>
+	<xs:element name="includesBooster"
+		type="xs:boolean">
+	</xs:element>  	
+  </xs:sequence>
+</xs:complexType>
+
+            <xs:complexType name="CalculateRewardsResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+		            		<xs:element name="enrollmentStatus"
+		            			type="tns:RewardsEnrollmentType">
+		            		</xs:element>
+		            		<xs:element name="rewardsResultList"
+		            			type="tns:RewardsResultType"
+		            			maxOccurs="unbounded" minOccurs="0">
+		            		</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            <xs:element name="addRewardsTransactionResponse" type="tns:AddRewardsTransactionResponseType">
+            </xs:element>
+            <xs:element name="addRewardsTransactionRequest" type="tns:AddRewardsTransactionRequestType"></xs:element>
+       
+                   <xs:simpleType name="PromotionType">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="GlobalPref"></xs:enumeration>
+            		<xs:enumeration value="BaseOffer"></xs:enumeration>
+            		<xs:enumeration value="BoosterOffer"></xs:enumeration>
+            		<xs:enumeration value="ForcedOffer"></xs:enumeration>
+            		<xs:enumeration value="NonStackableBoosterOffer"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+
+           <xs:simpleType name="RewardsTransactionDetailStatusType">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="Active"></xs:enumeration>
+            		<xs:enumeration value="Inactive"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+
+            <xs:complexType name="RewardsTransactionType">
+            	<xs:sequence>
+            		<xs:element name="transactionId" type="xs:long"></xs:element>
+            		<xs:element name="clientName" type="xs:string"></xs:element>
+            		<xs:element name="programName" type="xs:string"></xs:element>
+            		<xs:element name="memberId" type="xs:long"></xs:element>
+            		<xs:element name="clientDetailsPayload"
+            			type="xs:string">
+            		</xs:element>
+            		<xs:element name="status"
+            			type="tns:RewardsTransactionStatusType">
+            		</xs:element>
+            		<xs:element name="rewardsAmount"
+            			type="tns:RewardsAmountType">
+            		</xs:element>
+            		<xs:element name="clientTransactionId"
+            			type="xs:string">
+            		</xs:element>
+            		<xs:element name="transactionDate"
+            			type="xs:dateTime">
+            		</xs:element>
+            		<xs:element name="transactionEvent"
+            			type="tns:RewardsTransactionEventType">
+            		</xs:element>
+            		<xs:element name="transactionAmount"
+            			type="xs:double">
+            		</xs:element>
+            		<xs:element name="rewardsTransactionDetails"
+            			type="tns:RewardsTransactionDetailsType"
+            			maxOccurs="unbounded" minOccurs="0">
+            		</xs:element>
+            		<xs:element name="reasonCode" type="tns:RewardsTransactionReasonCodeType"></xs:element>
+            		<xs:element name="title" type="xs:string"></xs:element>
+            		<xs:element name="refund" type="xs:boolean"></xs:element>            		
+					<xs:element name="includesBooster" type="xs:boolean"></xs:element>  	            		
+            	</xs:sequence>
+            </xs:complexType>
+
+
+            <xs:simpleType name="RewardsTransactionStatusType">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="Completed"></xs:enumeration>
+            		<xs:enumeration value="Client_Pending"></xs:enumeration>
+            		<xs:enumeration value="Cancelled"></xs:enumeration>
+            		<xs:enumeration value="Refunded"></xs:enumeration>
+            		<xs:enumeration value="Rewards_Pending"></xs:enumeration>            		
+            	</xs:restriction>
+            </xs:simpleType>
+
+		<xs:simpleType name="RewardsTransactionReasonCodeType">
+		  <xs:restriction base="xs:string">
+		    <xs:enumeration value="UNKNOWN"></xs:enumeration>		  
+		    <xs:enumeration value="MAX_SPEND_REACHED"></xs:enumeration>
+		    <xs:enumeration value="PAID_IN_NEXT_CYCLE"></xs:enumeration>
+		    <xs:enumeration value="DISABLED_CYCLE"></xs:enumeration>
+		    <xs:enumeration value="REFUND_FROM_PREVIOUS_CYCLE"></xs:enumeration>
+		    <xs:enumeration value="MAX_EARN_REACHED"></xs:enumeration>
+		    <xs:enumeration value="REFUNDED"></xs:enumeration>
+		    <xs:enumeration value="USER_BANNED"></xs:enumeration>
+		    <xs:enumeration value="DISABLED_PROGRAM"></xs:enumeration>
+		    <xs:enumeration value="USER_SUSPENDED"></xs:enumeration>
+		    <xs:enumeration value="GLOBAL_PREF"></xs:enumeration>
+		    <xs:enumeration value="INVALID_CATEGORY"></xs:enumeration>
+		    <xs:enumeration value="TNS_PENDING"></xs:enumeration>
+		    <xs:enumeration value="USER_OPTEDOUT"></xs:enumeration>
+		    <xs:enumeration value="BASE_UNAVAILABLE"></xs:enumeration>
+		    <xs:enumeration value="INVALID_LISTINGTYPE"></xs:enumeration>
+		    <xs:enumeration value="AMOUNT_REDUCED"></xs:enumeration>
+		    <xs:enumeration value="INVALID_PAYMENTTYPE"></xs:enumeration>
+		    <xs:enumeration value="EARN_REDUCED"></xs:enumeration>
+		    <xs:enumeration value="CS_CANCELLED"></xs:enumeration>
+		    <xs:enumeration value="EARN_LESS_THAN_ONE"></xs:enumeration>
+		  </xs:restriction>
+		</xs:simpleType>
+
+            <xs:complexType name="AddRewardsTransactionRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="transactionList"
+            					type="tns:RewardsTransactionType"  maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            				<xs:element name="testUser" type="xs:boolean">
+            				</xs:element>            				
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+<xs:complexType name="AddRewardsTransactionResponseType">
+  <xs:complexContent>
+    <xs:extension base="tns:BaseRewardsServiceResponse">
+      <xs:sequence>
+        <xs:element name="cycleBalance"
+          type="tns:RewardsAmountType">
+        </xs:element>
+        <xs:element name="rewardsResultList"
+          type="tns:RewardsResultType"
+          maxOccurs="unbounded" minOccurs="0">
+        </xs:element>        
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+
+            <xs:element name="getRewardsTransactionsByMemberIdResponse"
+            	type="tns:GetRewardsTransactionsByMemberIdResponseType">
+            </xs:element>
+            <xs:element name="getRewardsTransactionsByMemberIdRequest"
+            	type="tns:GetRewardsTransactionsByMemberIdRequestType">
+            </xs:element>
+            
+
+            <xs:element
+            	name="getRewardsTransactionsByMemberAndCycleResponse"
+            	type="tns:GetRewardsTransactionsByMemberAndCycleResponseType">
+            </xs:element>
+            <xs:element name="getRewardsTransactionsByMemberAndCycleRequest" type="tns:GetRewardsTransactionsByMemberAndCycleRequestType"></xs:element>
+        
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberIdRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId"
+            					type="xs:long">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberIdResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="transaction"
+            					type="tns:RewardsTransactionType" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberAndCycleRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId" type="xs:long">
+            				</xs:element>
+            				<xs:element name="cycleId" type="xs:long">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberAndCycleResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="transaction"
+            					type="tns:RewardsTransactionType" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            <xs:element name="getRewardsTransactionsByMemberAndDateRangeResponse" type="tns:GetRewardsTransactionsByMemberAndDateRangeResponseType">
+            </xs:element>
+            <xs:element name="getRewardsTransactionsByMemberAndDateRangeRequest" type="tns:GetRewardsTransactionsByMemberAndDateRangeRequestType"></xs:element>
+        
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberAndDateRangeRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId" type="xs:long">
+            				</xs:element>
+            				<xs:element name="startTime"
+            					type="xs:dateTime">
+            				</xs:element>
+            				<xs:element name="endTime"
+            					type="xs:dateTime">
+            				</xs:element>
+            				<xs:element name="maxRecords"
+            					type="xs:long">
+            				</xs:element>            				
+            				<xs:element name="includeDetails"
+            					type="xs:boolean">
+            				</xs:element>       
+            				
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:simpleType name="RewardsEnrollmentType">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="Active"></xs:enumeration>
+            		<xs:enumeration value="Suspended"></xs:enumeration>
+            		<xs:enumeration value="Banned"></xs:enumeration>            		
+            		<xs:enumeration value="Closed"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+            
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberAndDateRangeResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="transaction"
+            					type="tns:RewardsTransactionType" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            		<xs:element name="enrollmentStatus"
+            			type="tns:RewardsEnrollmentType">
+            		</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+        
+            <xs:element name="getRewardsBalanceByMemberAndCycleResponse" type="tns:GetRewardsBalanceByMemberAndCycleResponseType">
+            </xs:element>
+            <xs:element name="getRewardsBalanceByMemberAndCycleRequest"
+            	type="tns:GetRewardsBalanceByMemberAndCycleRequestType">
+            </xs:element>
+            
+            <xs:complexType
+            	name="GetRewardsBalanceByMemberAndCycleRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId" type="xs:long">
+            				</xs:element>
+            				<xs:element name="cycleId"
+            					type="xs:long">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType
+            	name="GetRewardsBalanceByMemberAndCycleResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="balanceAmount"
+            					type="tns:RewardsAmountType">
+            				</xs:element>
+		            		<xs:element name="enrollmentStatus"
+		            			type="tns:RewardsEnrollmentType">
+		            		</xs:element>            				
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+        
+            
+            <xs:element name="getRewardsPendingTransactionsByMemberResponse" type="tns:GetRewardsPendingTransactionsByMemberResponseType">
+            </xs:element>
+            <xs:element name="getRewardsPendingTransactionsByMemberRequest" type="tns:GetRewardsPendingTransactionsByMemberRequestType"></xs:element>
+        
+            <xs:complexType
+            	name="GetRewardsPendingTransactionsByMemberRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId"
+            					type="xs:long">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType
+            	name="GetRewardsPendingTransactionsByMemberResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="transaction"
+            					type="tns:RewardsTransactionType" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            <xs:element name="getRewardsTransactionRequest" type="tns:GetRewardsTransactionRequestType">
+            </xs:element>
+            <xs:element name="getRewardsTransactionResponse"
+            	type="tns:GetRewardsTransactionResponseType">
+            </xs:element>
+            
+            <xs:complexType name="GetRewardsTransactionRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="transactionId"
+            					type="xs:long">
+            				</xs:element>
+            				<xs:element name="memberId"
+            					type="xs:long">
+            				</xs:element>            				
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType name="GetRewardsTransactionResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="transaction"
+            					type="tns:RewardsTransactionType">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="RewardsAmountType">
+            	<xs:sequence>
+            		<xs:element name="programCurrencyId"
+            			type="xs:long">
+            		</xs:element>
+            		<xs:element name="rewardsAmount" type="xs:double"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+
+
+            <xs:simpleType name="RewardsTransactionEventType">
+            	<xs:restriction base="xs:string">
+            		<xs:enumeration value="Purchase"></xs:enumeration>
+            		<xs:enumeration value="Grant"></xs:enumeration>
+            		<xs:enumeration value="System_Purchase"></xs:enumeration>
+            		<xs:enumeration value="System_Refund"></xs:enumeration>
+            	</xs:restriction>
+            </xs:simpleType>
+            
+            <xs:element name="getRewardsTransactionsByMemberAndClientTransactionIdResponse" type="tns:GetRewardsTransactionsByMemberAndClientTransactionIdResponseType">
+            </xs:element>
+            <xs:element name="getRewardsTransactionsByMemberAndClientTransactionIdRequest" type="tns:GetRewardsTransactionsByMemberAndClientTransactionIdRequestType"></xs:element>
+        
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberAndClientTransactionIdRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId"
+            					type="xs:long">
+            				</xs:element>
+            				<xs:element name="clientTransactionId"
+            					type="xs:string">
+            				</xs:element>
+            				<xs:element name="clientTransactionDate"
+            					type="xs:dateTime">
+            				</xs:element>            				
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType
+            	name="GetRewardsTransactionsByMemberAndClientTransactionIdResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="rewardsTransaction"
+            					type="tns:RewardsTransactionType" maxOccurs="unbounded" minOccurs="0">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="RewardsTransactionDetailsType">
+            	<xs:sequence>
+            		<xs:element name="transactionDetailId"
+            			type="xs:long">
+            		</xs:element>
+            		<xs:element name="ruleId" type="xs:long"></xs:element>
+            		<xs:element name="rewardsEarned" type="tns:RewardsAmountType"></xs:element>
+            		<xs:element name="promotionType" type="tns:PromotionType"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="RewardsClientTransactionType">
+            	<xs:sequence>
+            		<xs:element name="clientTransactionId"
+            			type="xs:long">
+            		</xs:element>
+            		<xs:element name="rewardsTransactionId" type="xs:long"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            
+            <xs:element name="getRewardsBalanceByMemberAndPreviousCyclesResponse" type="tns:GetRewardsBalanceByMemberAndPreviousCyclesResponseType"></xs:element>
+            <xs:element name="getRewardsBalanceByMemberAndPreviousCyclesRequest" type="tns:GetRewardsBalanceByMemberAndPreviousCyclesRequestType"></xs:element>
+        
+            <xs:complexType
+            	name="GetRewardsBalanceByMemberAndPreviousCyclesRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId"
+            					type="xs:long">
+            				</xs:element>
+		            		<xs:element name="startDate" type="xs:dateTime"></xs:element>
+            				<xs:element name="endDate" type="xs:dateTime"></xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType
+            	name="GetRewardsBalanceByMemberAndPreviousCyclesResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="cycleBalanceList" type="tns:CycleBalanceType" maxOccurs="unbounded" minOccurs="0"></xs:element>
+		            		<xs:element name="enrollmentStatus"
+		            			type="tns:RewardsEnrollmentType">
+		            		</xs:element>            			
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="CycleBalanceType">
+            	<xs:sequence>
+            		<xs:element name="cycleId" type="xs:long"></xs:element>
+            		<xs:element name="startDate" type="xs:dateTime"></xs:element>
+            		<xs:element name="endDate" type="xs:dateTime"></xs:element>
+            		<xs:element name="cycleBalance" type="tns:RewardsAmountType"></xs:element>
+            	</xs:sequence>
+            </xs:complexType>
+            <xs:element name="getTransactionsByMultipleClientTransactionIdRequest" type="tns:GetTransactionsByMultipleClientTransactionIdRequestType">
+            </xs:element>
+            <xs:element name="getTransactionsByMultipleClientTransactionIdResponse" type="tns:GetTransactionsByMultipleClientTransactionIdResponseType">
+            </xs:element>
+
+            <xs:complexType
+            	name="GetTransactionsByMultipleClientTransactionIdRequestType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceRequest">
+            			<xs:sequence>
+            				<xs:element name="memberId"
+            					type="xs:long">
+            				</xs:element>
+            				<xs:element name="clientTransactionIdList"
+            					type="xs:string" minOccurs="1" maxOccurs="unbounded">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+            
+            <xs:complexType
+            	name="GetTransactionsByMultipleClientTransactionIdResponseType">
+            	<xs:complexContent>
+            		<xs:extension base="tns:BaseRewardsServiceResponse">
+            			<xs:sequence>
+            				<xs:element name="rewardsTransactionsList"
+            					type="tns:RewardsTransactionType" minOccurs="0" maxOccurs="unbounded">
+            				</xs:element>
+            			</xs:sequence>
+            		</xs:extension>
+            	</xs:complexContent>
+            </xs:complexType>
+
+</xs:schema>
+</wsdl:types>
+    
+    <wsdl:message name="calculateRewardsRequest">
+    	<wsdl:part name="calculateRewardsRequest"
+    		element="tns:calculateRewardsRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    
+    <wsdl:message name="calculateRewardsResponse">
+    	<wsdl:part name="calculateRewardsResponse"
+    		element="tns:calculateRewardsResponse">
+    	</wsdl:part>
+    </wsdl:message>
+    
+    <wsdl:message name="addRewardsTransactionRequest">
+    	<wsdl:part name="addRewardsTransactionRequest"
+    		element="tns:addRewardsTransactionRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="addRewardsTransactionResponse">
+    	<wsdl:part name="addRewardsTransactionResponse" element="tns:addRewardsTransactionResponse"></wsdl:part>
+    </wsdl:message>
+    
+    <wsdl:message name="getRewardsTransactionsByMemberIdRequest">
+    	<wsdl:part name="getRewardsTransactionsByMemberIdRequest"
+    		element="tns:getRewardsTransactionsByMemberIdRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberIdResponse">
+    	<wsdl:part name="getRewardsTransactionsByMemberIdResponse" element="tns:getRewardsTransactionsByMemberIdResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberAndCycleRequest">
+    	<wsdl:part name="getRewardsTransactionsByMemberAndCycleRequest"
+    		element="tns:getRewardsTransactionsByMemberAndCycleRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberAndCycleResponse">
+    	<wsdl:part name="getRewardsTransactionsByMemberAndCycleResponse" element="tns:getRewardsTransactionsByMemberAndCycleResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberAndDateRangeRequest">
+    	<wsdl:part
+    		name="getRewardsTransactionsByMemberAndDateRangeRequest"
+    		element="tns:getRewardsTransactionsByMemberAndDateRangeRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberAndDateRangeResponse">
+    	<wsdl:part name="getRewardsTransactionsByMemberAndDateRangeResponse" element="tns:getRewardsTransactionsByMemberAndDateRangeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsBalanceByMemberAndCycleRequest">
+    	<wsdl:part name="getRewardsBalanceByMemberAndCycleRequest"
+    		element="tns:getRewardsBalanceByMemberAndCycleRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsBalanceByMemberAndCycleResponse">
+    	<wsdl:part name="getRewardsBalanceByMemberAndCycleResponse" element="tns:getRewardsBalanceByMemberAndCycleResponse"></wsdl:part>
+    </wsdl:message>
+        
+    <wsdl:message name="getRewardsPendingTransactionsByMemberRequest">
+    	<wsdl:part name="getRewardsPendingTransactionsByMemberRequest"
+    		element="tns:getRewardsPendingTransactionsByMemberRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsPendingTransactionsByMemberResponse">
+    	<wsdl:part name="getRewardsPendingTransactionsByMemberResponse" element="tns:getRewardsPendingTransactionsByMemberResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionRequest">
+    	<wsdl:part name="getRewardsTransactionRequest"
+    		element="tns:getRewardsTransactionRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionResponse">
+    	<wsdl:part name="getRewardsTransactionResponse" element="tns:getRewardsTransactionResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberAndClientTransactionIdRequest">
+    	<wsdl:part
+    		name="getRewardsTransactionsByMemberAndClientTransactionIdRequest"
+    		element="tns:getRewardsTransactionsByMemberAndClientTransactionIdRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsTransactionsByMemberAndClientTransactionIdResponse">
+    	<wsdl:part name="getRewardsTransactionsByMemberAndClientTransactionIdResponse" element="tns:getRewardsTransactionsByMemberAndClientTransactionIdResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsBalanceByMemberAndPreviousCyclesRequest">
+    	<wsdl:part
+    		name="getRewardsBalanceByMemberAndPreviousCyclesRequest"
+    		element="tns:getRewardsBalanceByMemberAndPreviousCyclesRequest">
+    	</wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getRewardsBalanceByMemberAndPreviousCyclesResponse">
+    	<wsdl:part name="getRewardsBalanceByMemberAndPreviousCyclesResponse" element="tns:getRewardsBalanceByMemberAndPreviousCyclesResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getTransactionsByMultipleClientTransactionIdRequest">
+    	<wsdl:part name="getTransactionsByMultipleClientTransactionIdRequest" element="tns:getTransactionsByMultipleClientTransactionIdRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getTransactionsByMultipleClientTransactionIdResponse">
+    	<wsdl:part name="getTransactionsByMultipleClientTransactionIdResponse" element="tns:getTransactionsByMultipleClientTransactionIdResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="RewardsTransactionServicePort">
+        <wsdl:operation name="calculateRewards">
+        	<wsdl:input message="tns:calculateRewardsRequest"></wsdl:input>
+        	<wsdl:output message="tns:calculateRewardsResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addRewardsTransaction">
+        	<wsdl:input message="tns:addRewardsTransactionRequest"></wsdl:input>
+        	<wsdl:output message="tns:addRewardsTransactionResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsTransactionsByMemberId">
+        	<wsdl:input message="tns:getRewardsTransactionsByMemberIdRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsTransactionsByMemberIdResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsTransactionsByMemberAndCycle">
+        	<wsdl:input message="tns:getRewardsTransactionsByMemberAndCycleRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsTransactionsByMemberAndCycleResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsTransactionsByMemberAndDateRange">
+        	<wsdl:input message="tns:getRewardsTransactionsByMemberAndDateRangeRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsTransactionsByMemberAndDateRangeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsBalanceByMemberAndCycle">
+        	<wsdl:input message="tns:getRewardsBalanceByMemberAndCycleRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsBalanceByMemberAndCycleResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsPendingTransactionsByMember">
+        	<wsdl:input message="tns:getRewardsPendingTransactionsByMemberRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsPendingTransactionsByMemberResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsTransactionsByMemberAndClientTransactionId">
+        	<wsdl:input message="tns:getRewardsTransactionsByMemberAndClientTransactionIdRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsTransactionsByMemberAndClientTransactionIdResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRewardsBalanceByMemberAndPreviousCycles">
+        	<wsdl:input message="tns:getRewardsBalanceByMemberAndPreviousCyclesRequest"></wsdl:input>
+        	<wsdl:output message="tns:getRewardsBalanceByMemberAndPreviousCyclesResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getTransactionsByMultipleClientTransactionId">
+        	<wsdl:input message="tns:getTransactionsByMultipleClientTransactionIdRequest"></wsdl:input>
+        	<wsdl:output message="tns:getTransactionsByMultipleClientTransactionIdResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+  
+	<wsdl:binding name="RewardsTransactionServiceHttpBinding" type="tns:RewardsTransactionServicePort">
+		<http:binding verb="POST"/>		
+		
+		<wsdl:operation name="calculateRewards">
+			<http:operation
+				location="RewardsTransactionService/calculateRewards" />
+			<wsdl:input>
+				<mime:content part="calculateRewardsRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="calculateRewardsResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="addRewardsTransaction">
+			<http:operation
+				location="RewardsTransactionService/addRewardsTransaction" />
+			<wsdl:input>
+				<mime:content part="addRewardsTransactionRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="addRewardsTransactionResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsTransactionsByMemberId">
+			<http:operation
+				location="RewardsTransactionService/getRewardsTransactionsByMemberId" />
+			<wsdl:input>
+				<mime:content part="getRewardsTransactionsByMemberIdRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsTransactionsByMemberIdResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getRewardsTransactionsByMemberAndCycle">
+			<http:operation
+				location="RewardsTransactionService/getRewardsTransactionsByMemberAndCycle" />
+			<wsdl:input>
+				<mime:content part="getRewardsTransactionsByMemberAndCycleRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsTransactionsByMemberAndCycleResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+
+		<wsdl:operation name="getRewardsTransactionsByMemberAndDateRange">
+			<http:operation
+				location="RewardsTransactionService/getRewardsTransactionsByMemberAndDateRange" />
+			<wsdl:input>
+				<mime:content part="getRewardsTransactionsByMemberAndDateRangeRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsTransactionsByMemberAndDateRangeResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+
+		<wsdl:operation name="getRewardsBalanceByMemberAndCycle">
+			<http:operation
+				location="RewardsTransactionService/getRewardsBalanceByMemberAndCycle" />
+			<wsdl:input>
+				<mime:content part="getRewardsBalanceByMemberAndCycleRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsBalanceByMemberAndCycleResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+
+		<wsdl:operation name="getRewardsPendingTransactionsByMember">
+			<http:operation
+				location="RewardsTransactionService/getRewardsPendingTransactionsByMember" />
+			<wsdl:input>
+				<mime:content part="getRewardsPendingTransactionsByMemberRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsPendingTransactionsByMemberResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>		
+
+		<wsdl:operation name="getRewardsTransactionsByMemberAndClientTransactionId">
+			<http:operation
+				location="RewardsTransactionService/getRewardsTransactionsByMemberAndClientTransactionId" />
+			<wsdl:input>
+				<mime:content part="getRewardsTransactionsByMemberAndClientTransactionIdRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsTransactionsByMemberAndClientTransactionIdResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsBalanceByMemberAndPreviousCycles">
+			<http:operation
+				location="RewardsTransactionService/getRewardsBalanceByMemberAndPreviousCycles" />
+			<wsdl:input>
+				<mime:content part="getRewardsBalanceByMemberAndPreviousCyclesRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getRewardsBalanceByMemberAndPreviousCyclesResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getTransactionsByMultipleClientTransactionId">
+			<http:operation
+				location="RewardsTransactionService/getTransactionsByMultipleClientTransactionId" />
+			<wsdl:input>
+				<mime:content part="getTransactionsByMultipleClientTransactionIdRequest" type="text/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="getTransactionsByMultipleClientTransactionIdResponse" type="text/xml" />
+			</wsdl:output>
+		</wsdl:operation>
+									
+	</wsdl:binding>
+	
+  <wsdl:binding name="RewardsTransactionServiceSOAPBinding" type="tns:RewardsTransactionServicePort">
+		<soap12:binding xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		
+		<wsdl:operation name="calculateRewards">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:calculateRewards" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>		
+
+		<wsdl:operation name="addRewardsTransaction">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:addRewardsTransaction" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsTransactionsByMemberId">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsTransactionsByMemberId" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsTransactionsByMemberAndCycle">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsTransactionsByMemberAndCycle" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsTransactionsByMemberAndDateRange">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsTransactionsByMemberAndDateRange" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsBalanceByMemberAndCycle">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsBalanceByMemberAndCycle" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+
+		<wsdl:operation name="getRewardsPendingTransactionsByMember">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsPendingTransactionsByMember" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsTransactionsByMemberAndClientTransactionId">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsTransactionsByMemberAndClientTransactionId" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getRewardsBalanceByMemberAndPreviousCycles">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getRewardsBalanceByMemberAndPreviousCycles" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getTransactionsByMultipleClientTransactionId">
+			<soap12:operation
+				xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				soapAction="urn:getTransactionsByMultipleClientTransactionId" style="document" />
+			<wsdl:input>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body
+					xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+				
+  </wsdl:binding>
+  
+	<wsdl:service name="RewardsTransactionService">
+		<wsdl:port name="RewardsTransactionServiceHttp" binding="tns:RewardsTransactionServiceHttpBinding">
+			<http:address location="http://svcs.ebay.com/RewardsTransactionService"/>
+		</wsdl:port>
+		<wsdl:port name="RewardsTransactionServiceSOAP" binding="tns:RewardsTransactionServiceSOAPBinding">
+			<soap12:address xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" location="http://svcs.ebay.com/RewardsTransactionService"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
